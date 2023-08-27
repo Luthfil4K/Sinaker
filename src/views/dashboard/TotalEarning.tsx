@@ -125,7 +125,7 @@ const TotalEarning = () => {
                   <Typography variant='body2' sx={{ mb: 2, fontWeight: 600, color: 'text.primary' }}>
                     {item.amount}
                   </Typography>
-                  <LinearProgress color={item.color} value={item.progress} variant='determinate' />
+                  <LinearProgress color={item.color} value={10} variant='determinate' />
                 </Box>
               </Box>
             </Box>
