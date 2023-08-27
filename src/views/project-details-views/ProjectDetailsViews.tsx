@@ -6,7 +6,7 @@ import Grid from '@mui/material/Grid'
 import Button from '@mui/material/Button'
 
 import CardProjectDetail from 'src/views/cards/CardProjectDetail'
-import CardProjectDetailTask from 'src/views/cards/CardProjectDetailTask'
+import TableProjectDetailTask from 'src/views/tables/TableProjectDetailTask'
 import CardProjectDetailProgress from 'src/views/cards/CardProjectDetailProgress'
 
 // icon
@@ -22,7 +22,7 @@ const ProjectDetailsViews = () => {
           <CardProjectDetailProgress></CardProjectDetailProgress>
         </Grid>
         <Grid item sm={12} md={12}>
-          <CardProjectDetailTask />
+          <TableProjectDetailTask />
         </Grid>
       </Grid>
       <Grid mt={2} container>

@@ -1,33 +1,10 @@
-// ** React Imports
-import { SyntheticEvent, useState } from 'react'
-
 // ** MUI Imports
-import Tab from '@mui/material/Tab'
+
 import Card from '@mui/material/Card'
-import TabList from '@mui/lab/TabList'
-import TabPanel from '@mui/lab/TabPanel'
-import Button from '@mui/material/Button'
-import TabContext from '@mui/lab/TabContext'
-import Typography from '@mui/material/Typography'
-import CardContent from '@mui/material/CardContent'
-import Box from '@mui/material/Box'
 import Grid from '@mui/material/Grid'
-import Avatar from '@mui/material/Avatar'
-import Divider from '@mui/material/Divider'
-import LinearProgress from '@mui/material/LinearProgress'
-import CardHeader from '@mui/material/CardHeader'
+
 import * as React from 'react'
 import { DataGrid } from '@mui/x-data-grid'
-
-// icon
-import ClipboardCheck from 'mdi-material-ui/ClipboardCheck'
-import CurrencyUsd from 'mdi-material-ui/CurrencyUsd'
-import AccountCog from 'mdi-material-ui/AccountCog'
-import AccountGroup from 'mdi-material-ui/AccountGroup'
-import { height } from '@mui/system'
-
-// circular bar
-import CircularProgress from '@mui/material/CircularProgress'
 
 const columns = [
   { field: 'id', headerName: 'No', type: 'string', width: 70 },
@@ -46,7 +23,7 @@ const rows = [
   { id: 5, task: 'task ke sekian', assignto: 'Davis', priority: 'Michael', status: 'done', deadline: '22/09/2023' }
 ]
 
-const CardProjectDetailTask = () => {
+const TableProjectDetailTask = () => {
   return (
     <>
       <Grid item md={12}>
@@ -70,4 +47,4 @@ const CardProjectDetailTask = () => {
   )
 }
 
-export default CardProjectDetailTask
+export default TableProjectDetailTask

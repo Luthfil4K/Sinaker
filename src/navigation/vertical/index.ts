@@ -93,6 +93,11 @@ const navigation = (): VerticalNavItemsType => {
       title: 'Project List',
       icon: Login,
       path: '/project-list'
+    },
+    {
+      title: 'People',
+      icon: Login,
+      path: '/people'
     }
   ]
 }
