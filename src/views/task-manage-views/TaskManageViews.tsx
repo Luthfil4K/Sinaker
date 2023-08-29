@@ -6,7 +6,7 @@ import Typography from '@mui/material/Typography'
 import Grid from '@mui/material/Grid'
 import Button from '@mui/material/Button'
 
-const ManageTaskViews = () => {
+const TaskManageViews = () => {
   return (
     <>
       <Grid container spacing={4}>
@@ -39,4 +39,4 @@ const ManageTaskViews = () => {
   )
 }
 
-export default ManageTaskViews
+export default TaskManageViews

@@ -3,7 +3,10 @@ import 'react-datepicker/dist/react-datepicker.css'
 
 // Mui Import
 import Grid from '@mui/material/Grid'
+import Link from '@mui/material/Link'
 import Button from '@mui/material/Button'
+
+import { useRouter } from 'next/dist/client/router'
 
 import CardProjectDetail from 'src/views/cards/CardProjectDetail'
 import TableProjectDetailTask from 'src/views/tables/TableProjectDetailTask'
@@ -12,6 +15,7 @@ import CardProjectDetailProgress from 'src/views/cards/CardProjectDetailProgress
 // icon
 
 const ProjectDetailsViews = () => {
+  const router = useRouter()
   return (
     <>
       <Grid container spacing={4}>
@@ -27,9 +31,11 @@ const ProjectDetailsViews = () => {
       </Grid>
       <Grid mt={2} container>
         <Grid item md={12} display={'flex'} justifyContent={'end'} flexDirection={'row'}>
-          <Button size='medium' variant={'contained'} sx={{ margin: 2 }}>
-            Edit
-          </Button>
+          <Link onClick={e => router.push('/project-edit')}>
+            <Button size='medium' variant={'contained'} sx={{ margin: 2 }}>
+              Edit
+            </Button>
+          </Link>
           <Button size='medium' variant={'contained'} sx={{ margin: 2 }}>
             Delete
           </Button>
