@@ -14,22 +14,8 @@ import Card from '@mui/material/Card'
 import Grid from '@mui/material/Grid'
 import Button from '@mui/material/Button'
 import Divider from '@mui/material/Divider'
-import MenuItem from '@mui/material/MenuItem'
 import TextField from '@mui/material/TextField'
-import FormControlLabel from '@mui/material/FormControlLabel'
-import Checkbox from '@mui/material/Checkbox'
-import CardHeader from '@mui/material/CardHeader'
-import InputLabel from '@mui/material/InputLabel'
-import IconButton from '@mui/material/IconButton'
 import Typography from '@mui/material/Typography'
-import CardContent from '@mui/material/CardContent'
-import CardActions from '@mui/material/CardActions'
-import FormControl from '@mui/material/FormControl'
-import OutlinedInput from '@mui/material/OutlinedInput'
-import InputAdornment from '@mui/material/InputAdornment'
-import Select from '@mui/material/Select'
-import Link from '@mui/material/Link'
-import Box from '@mui/material/Box'
 import Table from '@mui/material/Table'
 import TableRow from '@mui/material/TableRow'
 import TableHead from '@mui/material/TableHead'
@@ -39,8 +25,7 @@ import Paper from '@mui/material/Paper'
 import TableContainer from '@mui/material/TableContainer'
 import { Autocomplete } from '@mui/lab'
 
-import CardNavigationCenter from 'src/views/cards/CardNavigationCenter'
-import CardHorizontalRatings from 'src/views/cards/CardHorizontalRatings'
+import TableAddParticipant from 'src/views/tables/TableAddParticipant'
 
 const CustomInputStart = forwardRef((props, ref) => {
   return <TextField fullWidth {...props} inputRef={ref} label='Start Date' autoComplete='on' />
@@ -77,9 +62,7 @@ const CreateProjectViews = () => {
         <Grid item xs={12}>
           <Typography variant='h5'>Create Project</Typography>
         </Grid>
-        {/* <Grid item xs={12} md={6}>
-          <TextField fullWidth label='Project Name' placeholder='carterLeonard' />
-        </Grid> */}
+
         <Grid item xs={12} md={12}>
           <Autocomplete
             disablePortal
@@ -126,39 +109,7 @@ const CreateProjectViews = () => {
             renderInput={params => <TextField {...params} label='Project Leader' />}
           />
         </Grid>
-        <TableContainer component={Paper}>
-          <Table sx={{ minWidth: 650 }} aria-label='simple table'>
-            <TableHead>
-              <TableRow>
-                <TableCell>Dessert (100g serving)</TableCell>
-                <TableCell align='right'>Calories</TableCell>
-                <TableCell align='right'>Fat (g)</TableCell>
-                <TableCell align='right'>Carbs (g)</TableCell>
-                <TableCell align='right'>Protein (g)</TableCell>
-              </TableRow>
-            </TableHead>
-            <TableBody>
-              {rows.map(row => (
-                <TableRow
-                  key={row.name}
-                  sx={{
-                    '&:last-of-type td, &:last-of-type th': {
-                      border: 0
-                    }
-                  }}
-                >
-                  <TableCell component='th' scope='row'>
-                    {row.name}
-                  </TableCell>
-                  <TableCell align='right'>{row.calories}</TableCell>
-                  <TableCell align='right'>{row.fat}</TableCell>
-                  <TableCell align='right'>{row.carbs}</TableCell>
-                  <TableCell align='right'>{row.protein}</TableCell>
-                </TableRow>
-              ))}
-            </TableBody>
-          </Table>
-        </TableContainer>
+        <TableAddParticipant></TableAddParticipant>
         <Divider sx={{ margin: 0 }} />
         <Grid item xs={12} md={3} lg={3}>
           <Button size='medium' type='submit' variant='contained'>

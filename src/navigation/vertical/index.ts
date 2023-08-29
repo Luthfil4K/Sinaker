@@ -98,6 +98,11 @@ const navigation = (): VerticalNavItemsType => {
       title: 'People',
       icon: Login,
       path: '/people'
+    },
+    {
+      title: 'Task',
+      icon: Login,
+      path: '/task'
     }
   ]
 }

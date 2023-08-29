@@ -251,9 +251,9 @@ const CardProjectDetail = () => {
                 </Button>
               </Grid>
               <Grid item>
-                <Button component='div' variant='contained'>
+                {/* <Button component='div' variant='contained'>
                   Buat rapat
-                </Button>
+                </Button> */}
               </Grid>
             </Grid>
           </CardContent>

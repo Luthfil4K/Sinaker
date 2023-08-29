@@ -2,6 +2,7 @@
 
 import Card from '@mui/material/Card'
 import Grid from '@mui/material/Grid'
+import Link from '@mui/material/Link'
 
 import * as React from 'react'
 import { DataGrid } from '@mui/x-data-grid'
@@ -26,7 +27,7 @@ const rows = [
 const TableProjectDetailTask = () => {
   return (
     <>
-      <Grid item md={12}>
+      <Grid item md={12} xs={12}>
         <Card>
           <DataGrid
             initialState={{
@@ -36,10 +37,7 @@ const TableProjectDetailTask = () => {
             }}
             rows={rows}
             columns={columns}
-            sx={{
-              overflowY: 'auto',
-              width: '100%'
-            }}
+            sx={{ overflowX: 'auto' }}
           />
         </Card>
       </Grid>
