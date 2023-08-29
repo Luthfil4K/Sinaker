@@ -10,21 +10,20 @@ import Button from '@mui/material/Button'
 import TabContext from '@mui/lab/TabContext'
 import Typography from '@mui/material/Typography'
 import CardContent from '@mui/material/CardContent'
-import Box from '@mui/material/Box'
 import Grid from '@mui/material/Grid'
 import Avatar from '@mui/material/Avatar'
 import Divider from '@mui/material/Divider'
+import Link from '@mui/material/Link'
 import LinearProgress from '@mui/material/LinearProgress'
-import CardHeader from '@mui/material/CardHeader'
 import * as React from 'react'
-import { DataGrid } from '@mui/x-data-grid'
+
+// next
+import { useRouter } from 'next/dist/client/router'
 
 // icon
 import ClipboardCheck from 'mdi-material-ui/ClipboardCheck'
-import CurrencyUsd from 'mdi-material-ui/CurrencyUsd'
 import AccountCog from 'mdi-material-ui/AccountCog'
 import AccountGroup from 'mdi-material-ui/AccountGroup'
-import { height } from '@mui/system'
 
 // circular bar
 import CircularProgress from '@mui/material/CircularProgress'
@@ -211,6 +210,7 @@ const TabPanel4 = () => {
 }
 
 const CardProjectDetail = () => {
+  const router = useRouter()
   // ** State
   const [value, setValue] = useState<string>('1')
 
@@ -246,9 +246,11 @@ const CardProjectDetail = () => {
 
             <Grid container sx={{ mt: 3 }} spacing={4}>
               <Grid item>
-                <Button component='div' variant='contained'>
-                  Pengaturan Tugas
-                </Button>
+                <Link onClick={e => router.push('/manage-task')}>
+                  <Button component='div' variant='contained'>
+                    Pengaturan Tugas
+                  </Button>
+                </Link>
               </Grid>
               <Grid item>
                 {/* <Button component='div' variant='contained'>
