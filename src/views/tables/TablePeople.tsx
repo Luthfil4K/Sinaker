@@ -10,64 +10,16 @@ import InputLabel from '@mui/material/InputLabel'
 import Select from '@mui/material/Select'
 import MenuItem from '@mui/material/MenuItem'
 
-// other
+// other, swall
 import { DataGrid } from '@mui/x-data-grid'
+import Swal from 'sweetalert2'
+import { useRouter } from 'next/dist/client/router'
 
 // icon
+
 import PencilOutline from 'mdi-material-ui/PencilOutline'
 import DeleteOutline from 'mdi-material-ui/DeleteOutline'
-
-const columns = [
-  { field: 'id', headerName: 'No', type: 'string', width: 40 },
-  { field: 'nama', headerName: 'Nama', width: 130 },
-  { field: 'nip', headerName: 'NIP', width: 100 },
-  { field: 'fungsi', headerName: 'Fungsi', type: 'string', width: 100 },
-  { field: 'projectAssign', headerName: 'ProjectAssign', width: 160 },
-  { field: 'taskAssign', headerName: 'TaskAssign', type: 'string', width: 140 },
-  {
-    field: 'role',
-    renderHeader: () => (
-      <Typography sx={{ fontWeight: 900, fontSize: '0.875rem !important', textAlign: 'center' }}>Role</Typography>
-    ),
-    minWidth: 160,
-    flex: 1,
-    renderCell: () => (
-      <form>
-        <FormControl fullWidth>
-          <InputLabel id='form-layouts-separator-select-label'>role</InputLabel>
-          <Select
-            sx={{ height: 50 }}
-            label='role'
-            id='form-layouts-separator-role'
-            labelId='form-layouts-separator-role-label'
-          >
-            <MenuItem value='admin'>Supervisor</MenuItem>
-            <MenuItem value='employee'>Staff</MenuItem>
-          </Select>
-        </FormControl>
-      </form>
-    )
-  },
-  {
-    field: 'action',
-    renderHeader: () => (
-      <Typography sx={{ fontWeight: 900, fontSize: '0.875rem !important', textAlign: 'center' }}>Action</Typography>
-    ),
-    minWidth: 215,
-    flex: 1,
-    renderCell: () => (
-      <>
-        <Button type='submit' sx={{ mr: 1 }} color='info' variant='text'>
-          <PencilOutline />
-        </Button>
-
-        <Button type='submit' sx={{ mr: 1 }} color='error' variant='text'>
-          <DeleteOutline />
-        </Button>
-      </>
-    )
-  }
-]
+import router from 'next/router'
 
 const rows = [
   {
@@ -113,6 +65,93 @@ const rows = [
 ]
 
 const TablePeople = () => {
+  const columns = [
+    { field: 'id', headerName: 'No', type: 'string', width: 40 },
+    { field: 'nama', headerName: 'Nama', width: 130 },
+    { field: 'nip', headerName: 'NIP', width: 100 },
+    { field: 'fungsi', headerName: 'Fungsi', type: 'string', width: 100 },
+    { field: 'projectAssign', headerName: 'ProjectAssign', width: 160 },
+    { field: 'taskAssign', headerName: 'TaskAssign', type: 'string', width: 140 },
+    {
+      field: 'role',
+      renderHeader: () => (
+        <Typography sx={{ fontWeight: 900, fontSize: '0.875rem !important', textAlign: 'center' }}>Role</Typography>
+      ),
+      minWidth: 160,
+      flex: 1,
+      renderCell: () => (
+        <form>
+          <FormControl fullWidth>
+            <InputLabel id='form-layouts-separator-select-label'>role</InputLabel>
+            <Select
+              sx={{ height: 50 }}
+              label='role'
+              id='form-layouts-separator-role'
+              labelId='form-layouts-separator-role-label'
+            >
+              <MenuItem value='admin'>Supervisor</MenuItem>
+              <MenuItem value='employee'>Staff</MenuItem>
+            </Select>
+          </FormControl>
+        </form>
+      )
+    },
+    {
+      field: 'action',
+      renderHeader: () => (
+        <Typography sx={{ fontWeight: 900, fontSize: '0.875rem !important', textAlign: 'center' }}>Action</Typography>
+      ),
+      minWidth: 215,
+      flex: 1,
+      renderCell: () => (
+        <>
+          <Button
+            onClick={e => {
+              router.push('/people-edit')
+            }}
+            type='submit'
+            sx={{ mr: 1 }}
+            color='info'
+            variant='text'
+          >
+            <PencilOutline />
+          </Button>
+
+          <Button onClick={handleDelete} type='submit' sx={{ mr: 1 }} color='error' variant='text'>
+            <DeleteOutline />
+          </Button>
+        </>
+      )
+    }
+  ]
+
+  // const router = useRouter()
+  // const handleEdit = () => {
+  //   Swal.fire({
+  //     title: 'Input email address',
+  //     input: 'email',
+  //     inputLabel: 'Your email address',
+  //     inputPlaceholder: 'Enter your email address'
+  //   })
+  // }
+  const handleDelete = () => {
+    Swal.fire({
+      title: 'Are you sure?',
+      text: 'Untuk menghapus akun ini!',
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Yes, Hapus akun !'
+    }).then(result => {
+      if (result.isConfirmed) {
+        router.push('/people')
+      } else {
+        router.push('/pople')
+      }
+    })
+  }
+
   return (
     <>
       <Grid item md={12}>

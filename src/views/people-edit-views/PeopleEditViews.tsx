@@ -5,6 +5,10 @@ import { ChangeEvent, MouseEvent, ReactNode, useState } from 'react'
 import Link from 'next/link'
 import { useRouter } from 'next/router'
 
+// swall
+
+import Swal from 'sweetalert2'
+
 // ** MUI Components
 import Card from '@mui/material/Card'
 import Box from '@mui/material/Box'
@@ -27,13 +31,31 @@ import InputAdornment from '@mui/material/InputAdornment'
 
 import EyeOffOutline from 'mdi-material-ui/EyeOffOutline'
 
-const AddPeopleViews = () => {
+const PeopleAddViews = () => {
+  const router = useRouter()
+  const handleEdit = () => {
+    Swal.fire({
+      title: 'Are you sure?',
+      text: 'Untuk mengedit akun ini!',
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Yes, edit akun !'
+    }).then(result => {
+      if (result.isConfirmed) {
+        router.push('/people')
+      } else {
+        router.push('/pople')
+      }
+    })
+  }
   return (
     <>
       <Card sx={{ padding: 4 }}>
         <Box sx={{ mb: 6 }}>
           <Typography variant='h5' sx={{ fontWeight: 600, marginBottom: 1.5 }}>
-            Add People
+            Edit People
           </Typography>
           <Typography variant='body2'>Fill this blank field below</Typography>
         </Box>
@@ -47,6 +69,7 @@ const AddPeopleViews = () => {
               label='Fungsi'
               id='form-layouts-separator-fungsi'
               labelId='form-layouts-separator-fungsi-label'
+              defaultChecked
             >
               <MenuItem value='umum'>Umum</MenuItem>
               <MenuItem value='ipds'>Ipds</MenuItem>
@@ -73,8 +96,8 @@ const AddPeopleViews = () => {
             />
           </FormControl>
 
-          <Button fullWidth size='medium' variant='contained' sx={{ marginTop: 4 }}>
-            Login
+          <Button onClick={handleEdit} fullWidth size='medium' variant='contained' sx={{ marginTop: 4 }}>
+            Edit
           </Button>
         </form>
       </Card>
@@ -82,4 +105,4 @@ const AddPeopleViews = () => {
   )
 }
 
-export default AddPeopleViews
+export default PeopleAddViews

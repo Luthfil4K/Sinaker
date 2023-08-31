@@ -12,10 +12,61 @@ import CardProjectDetail from 'src/views/cards/CardProjectDetail'
 import TableProjectDetailTask from 'src/views/tables/TableProjectDetailTask'
 import CardProjectDetailProgress from 'src/views/cards/CardProjectDetailProgress'
 
-// icon
+// swall
+import Swal from 'sweetalert2'
 
 const ProjectDetailsViews = () => {
   const router = useRouter()
+  const handleEdit = () => {
+    Swal.fire({
+      title: 'Are you sure?',
+      text: 'You will not be able to recover this action!',
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Yes, archive it!'
+    }).then(result => {
+      if (result.isConfirmed) {
+        router.push('/project-edit')
+      } else {
+        router.push('/project-detail')
+      }
+    })
+  }
+  const handleDelete = () => {
+    Swal.fire({
+      title: 'Apa anda yakin?',
+      text: 'Untuk menghapus project ini?',
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Yes, Hapus'
+    }).then(result => {
+      if (result.isConfirmed) {
+        Swal.fire('project di hapus')
+        router.push('/project-detail')
+      } else {
+        router.push('/project-detail')
+      }
+    })
+  }
+  const handleArchieve = () => {
+    Swal.fire({
+      title: 'Are you sure?',
+      text: 'You will not be able to recover this action!',
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Ya, arsipkan!'
+    }).then(result => {
+      if (result.isConfirmed) {
+        Swal.fire('project di arsipkan')
+      }
+    })
+  }
   return (
     <>
       <Grid container spacing={4}>
@@ -31,15 +82,19 @@ const ProjectDetailsViews = () => {
       </Grid>
       <Grid mt={2} container>
         <Grid item md={12} display={'flex'} justifyContent={'end'} flexDirection={'row'}>
-          <Link onClick={e => router.push('/project-edit')}>
-            <Button size='medium' variant={'contained'} sx={{ margin: 2 }}>
+          <Button onClick={handleEdit} size='medium' variant={'contained'} sx={{ margin: 2 }}>
+            Edit
+          </Button>
+
+          {/* <Link onClick={e => router.push('/project-edit')}>
+            <Button onClick={handleEdit} size='medium' variant={'contained'} sx={{ margin: 2 }}>
               Edit
             </Button>
-          </Link>
-          <Button size='medium' variant={'contained'} sx={{ margin: 2 }}>
+          </Link> */}
+          <Button onClick={handleDelete} size='medium' variant={'contained'} sx={{ margin: 2 }}>
             Delete
           </Button>
-          <Button size='medium' variant={'contained'} sx={{ margin: 2 }}>
+          <Button onClick={handleArchieve} size='medium' variant={'contained'} sx={{ margin: 2 }}>
             Archieve
           </Button>
         </Grid>

@@ -1,10 +1,10 @@
 // view
-import AddPeopleViews from 'src/views/add-people-views/AddPeopleViews'
+import PeopleAddViews from 'src/views/people-add-views/PeopleAddViews'
 
 const AddPeople = () => {
   return (
     <>
-      <AddPeopleViews></AddPeopleViews>
+      <PeopleAddViews></PeopleAddViews>
     </>
   )
 }

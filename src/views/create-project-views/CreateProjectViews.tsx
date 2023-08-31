@@ -1,9 +1,8 @@
 // react import
 import { forwardRef, SetStateAction, useEffect, useState } from 'react'
 
-// ** Icons Imports
-import EyeOutline from 'mdi-material-ui/EyeOutline'
-import EyeOffOutline from 'mdi-material-ui/EyeOffOutline'
+// swall
+import Swal from 'sweetalert2'
 
 // ** Third Party Imports
 import DatePicker from 'react-datepicker'
@@ -16,35 +15,34 @@ import Button from '@mui/material/Button'
 import Divider from '@mui/material/Divider'
 import TextField from '@mui/material/TextField'
 import Typography from '@mui/material/Typography'
-import Table from '@mui/material/Table'
-import TableRow from '@mui/material/TableRow'
-import TableHead from '@mui/material/TableHead'
-import TableBody from '@mui/material/TableBody'
-import TableCell from '@mui/material/TableCell'
-import Paper from '@mui/material/Paper'
-import TableContainer from '@mui/material/TableContainer'
+
+import { useRouter } from 'next/dist/client/router'
 import { Autocomplete } from '@mui/lab'
 
 import TableAddParticipant from 'src/views/tables/TableAddParticipant'
 
-const CustomInputStart = forwardRef((props, ref) => {
-  return <TextField fullWidth {...props} inputRef={ref} label='Start Date' autoComplete='on' />
-})
-
-const createData = (name: string, calories: number, fat: number, carbs: number, protein: number) => {
-  return { name, calories, fat, carbs, protein }
-}
-
-const rows = [
-  createData('Frozen yoghurt', 159, 6.0, 24, 4.0),
-  createData('Ice cream sandwich', 237, 9.0, 37, 4.3),
-  createData('Eclair', 262, 16.0, 24, 6.0),
-  createData('Cupcake', 305, 3.7, 67, 4.3),
-  createData('Gingerbread', 356, 16.0, 49, 3.9)
-]
-
 const CreateProjectViews = () => {
   const [selectedDate, setSelectedDate] = useState(null)
+  const [selectedDateE, setSelectedDateE] = useState(null)
+  const router = useRouter()
+
+  const handleCreate = () => {
+    Swal.fire({
+      title: 'Apa anda yakin?',
+      text: 'Periksa kembali untuk memastikan tidak ada yang salah',
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Yes, Buat Kegiatan!'
+    }).then(result => {
+      if (result.isConfirmed) {
+        router.push('/project-list')
+      } else {
+        router.push('/create-project')
+      }
+    })
+  }
 
   const projectRutin = [
     'PENGELOLAAN WEB',
@@ -85,11 +83,11 @@ const CreateProjectViews = () => {
         </Grid>
         <Grid item xs={12} sm={12} lg={6}>
           <DatePicker
-            selected={selectedDate}
+            selected={selectedDateE}
             showYearDropdown
             showMonthDropdown
             placeholderText='DD-MM-YYYY'
-            onChange={setSelectedDate}
+            onChange={setSelectedDateE}
             dateFormat='dd/MM/yyyy'
             className='custom-datepicker'
           />
@@ -112,7 +110,7 @@ const CreateProjectViews = () => {
         <TableAddParticipant></TableAddParticipant>
         <Divider sx={{ margin: 0 }} />
         <Grid item xs={12} md={3} lg={3}>
-          <Button size='medium' type='submit' variant='contained'>
+          <Button onClick={handleCreate} size='medium' type='submit' variant='contained'>
             Create Project
           </Button>
         </Grid>
