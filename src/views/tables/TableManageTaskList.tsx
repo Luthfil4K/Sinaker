@@ -7,37 +7,12 @@ import Button from '@mui/material/Button'
 import * as React from 'react'
 import { DataGrid } from '@mui/x-data-grid'
 
+import { useRouter } from 'next/dist/client/router'
+import Swal from 'sweetalert2'
+
 // icon
 import PencilOutline from 'mdi-material-ui/PencilOutline'
 import DeleteOutline from 'mdi-material-ui/DeleteOutline'
-
-const columns = [
-  { field: 'id', headerName: 'No', type: 'string', width: 70 },
-  { field: 'task', headerName: 'Task', width: 150 },
-  { field: 'assignto', headerName: 'Assign To', width: 140 },
-  { field: 'priority', headerName: 'Priority', width: 100 },
-  { field: 'status', headerName: 'Status', type: 'string', width: 100 },
-  { field: 'deadline', headerName: 'Deadline', type: 'string', width: 180 },
-  {
-    field: 'action',
-    renderHeader: () => (
-      <Typography sx={{ fontWeight: 900, fontSize: '0.875rem !important', textAlign: 'center' }}>Action</Typography>
-    ),
-    minWidth: 215,
-    flex: 1,
-    renderCell: () => (
-      <>
-        <Button type='submit' sx={{ mr: 1 }} color='info' variant='text'>
-          <PencilOutline />
-        </Button>
-
-        <Button type='submit' sx={{ mr: 1 }} color='error' variant='text'>
-          <DeleteOutline />
-        </Button>
-      </>
-    )
-  }
-]
 
 const rows = [
   { id: 1, task: 'task ke1', assignto: 'Doe', priority: 'John', status: 'done', deadline: '22/09/2023' },
@@ -48,6 +23,48 @@ const rows = [
 ]
 
 const TableManageTaskList = () => {
+  const router = useRouter()
+  const handleDelete = () => {
+    return <></>
+  }
+  const columns = [
+    { field: 'id', headerName: 'No', type: 'string', width: 70 },
+    { field: 'task', headerName: 'Task', width: 150 },
+    { field: 'assignto', headerName: 'Assign To', width: 140 },
+    { field: 'priority', headerName: 'Priority', width: 100 },
+    { field: 'status', headerName: 'Status', type: 'string', width: 100 },
+    { field: 'deadline', headerName: 'Deadline', type: 'string', width: 180 },
+    {
+      field: 'action',
+      renderHeader: () => (
+        <Typography sx={{ fontWeight: 900, fontSize: '0.875rem !important', textAlign: 'center' }}>Action</Typography>
+      ),
+      minWidth: 215,
+      flex: 1,
+      renderCell: () => (
+        <>
+          <Link>
+            <Button
+              onClick={e => {
+                router.push('/task-manage-edit')
+              }}
+              type='submit'
+              sx={{ mr: 1 }}
+              color='info'
+              variant='text'
+            >
+              <PencilOutline />
+            </Button>
+          </Link>
+
+          <Button type='submit' sx={{ mr: 1 }} color='error' variant='text'>
+            <DeleteOutline />
+          </Button>
+        </>
+      )
+    }
+  ]
+
   return (
     <>
       <Grid item md={12} xs={12}>

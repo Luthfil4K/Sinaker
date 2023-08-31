@@ -5,8 +5,12 @@ import Card from '@mui/material/Card'
 import Typography from '@mui/material/Typography'
 import Grid from '@mui/material/Grid'
 import Button from '@mui/material/Button'
+import Link from '@mui/material/Link'
+
+import { useRouter } from 'next/dist/client/router'
 
 const TaskManageViews = () => {
+  const router = useRouter()
   return (
     <>
       <Grid container spacing={4}>
@@ -16,7 +20,16 @@ const TaskManageViews = () => {
           </Typography>
         </Grid>
         <Grid display={'flex'} justifyContent={'end'} item md={6} mb={4}>
-          <Button variant={'contained'}>Tambah Task</Button>
+          <Link>
+            <Button
+              onClick={e => {
+                router.push('/task-manage-add')
+              }}
+              variant={'contained'}
+            >
+              Tambah Task
+            </Button>
+          </Link>
         </Grid>
         <Grid item md={12} xs={12}>
           <Card sx={{ paddingTop: 2 }}>
