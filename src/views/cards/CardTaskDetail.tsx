@@ -1,10 +1,6 @@
-import Button from '@mui/material/Button'
-import TabContext from '@mui/lab/TabContext'
+import Chip from '@mui/material/Chip'
 import Typography from '@mui/material/Typography'
 import Card from '@mui/material/Card'
-import CardHeader from '@mui/material/CardHeader'
-import CardContent from '@mui/material/CardContent'
-import Box from '@mui/material/Box'
 import Grid from '@mui/material/Grid'
 import Divider from '@mui/material/Divider'
 
@@ -14,10 +10,23 @@ const CardTaskDetail = () => {
       <Card>
         {/* <CardHeader title='Nama Project' sx={{ color: 'primary.dark' }}></CardHeader> */}
         <Grid container p={4}>
-          <Grid item md={12}>
+          <Grid item md={10}>
             <Typography color={'primary.dark'} variant={'h4'}>
               Nama Task - Nama Projek
             </Typography>
+          </Grid>
+          <Grid item md={2}>
+            <Chip
+              label={'on progress'}
+              color={'success'}
+              sx={{
+                height: 24,
+                fontSize: '0.75rem',
+                width: 100,
+                textTransform: 'capitalize',
+                '& .MuiChip-label': { fontWeight: 500 }
+              }}
+            />
           </Grid>
           <Grid mt={1} item md={12}>
             <Typography variant={'body1'}>Pembuat Projek - tanggal dibuat</Typography>

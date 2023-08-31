@@ -41,7 +41,7 @@ const ProjectEditViews = () => {
     <Card>
       <CardProjectEdit></CardProjectEdit>
       <Grid container>
-        <Grid item md={12} xs={12} justifyContent={'end'} display={'flex'}>
+        <Grid item md={12} xs={12} justifyContent={'end'} display={'flex'} p={4}>
           <Button variant='contained'> Add Participant</Button>
         </Grid>
       </Grid>

@@ -84,7 +84,7 @@ const TableProjectEditParticipant = () => {
   return (
     <>
       <Grid item md={12}>
-        <Card>
+        <Card sx={{ padding: 4 }}>
           <DataGrid
             rowHeight={65}
             initialState={{

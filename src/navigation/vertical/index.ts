@@ -26,7 +26,7 @@ const navigation = (): VerticalNavItemsType => {
       path: '/account-settings'
     },
     {
-      sectionTitle: 'Pages'
+      sectionTitle: 'Pages '
     },
     {
       title: 'Login',
@@ -45,6 +45,44 @@ const navigation = (): VerticalNavItemsType => {
       icon: AlertCircleOutline,
       path: '/pages/error',
       openInNewTab: true
+    },
+    {
+      sectionTitle: 'Pages'
+    },
+    {
+      title: 'Dashboard2',
+      icon: HomeOutline,
+      path: '/dashboard2'
+    },
+    {
+      title: 'Create Project',
+      icon: Login,
+      path: '/create-project'
+    },
+    {
+      title: 'Project List',
+      icon: Login,
+      path: '/project-list'
+    },
+    {
+      title: 'People',
+      icon: Login,
+      path: '/people'
+    },
+    {
+      title: 'Task',
+      icon: Login,
+      path: '/task'
+    },
+    {
+      title: 'Induk Kegiatan',
+      icon: Login,
+      path: '/master-induk-kegiatan'
+    },
+    {
+      title: 'Kode',
+      icon: Login,
+      path: 'master-kode'
     },
     {
       sectionTitle: 'User Interface'
@@ -78,31 +116,6 @@ const navigation = (): VerticalNavItemsType => {
       icon: CubeOutline,
       title: 'iccon',
       path: '/iccon'
-    },
-    {
-      title: 'Dashboard2',
-      icon: HomeOutline,
-      path: '/dashboard2'
-    },
-    {
-      title: 'Create Project',
-      icon: Login,
-      path: '/create-project'
-    },
-    {
-      title: 'Project List',
-      icon: Login,
-      path: '/project-list'
-    },
-    {
-      title: 'People',
-      icon: Login,
-      path: '/people'
-    },
-    {
-      title: 'Task',
-      icon: Login,
-      path: '/task'
     }
   ]
 }

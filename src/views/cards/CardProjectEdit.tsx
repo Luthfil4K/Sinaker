@@ -21,7 +21,7 @@ const CardProjectEdit = () => {
   const pegawai = ['Pegawai1', 'Pegawai2', 'Pegawai3', 'Pegawai4']
   return (
     <>
-      <Grid container spacing={5} sx={{ padding: '32px' }}>
+      <Grid container spacing={5} sx={{ padding: 4 }}>
         <Grid item xs={12}>
           <Typography variant='h5'>Edit Project</Typography>
         </Grid>

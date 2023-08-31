@@ -246,7 +246,7 @@ const CardProjectDetail = () => {
 
             <Grid container sx={{ mt: 3 }} spacing={4}>
               <Grid item>
-                <Link onClick={e => router.push('/manage-task')}>
+                <Link onClick={e => router.push('/task-manage')}>
                   <Button component='div' variant='contained'>
                     Pengaturan Tugas
                   </Button>
