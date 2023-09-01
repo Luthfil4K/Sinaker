@@ -1,5 +1,5 @@
 // react import
-import { forwardRef, SetStateAction, useEffect, useState } from 'react'
+import { useState } from 'react'
 
 // swall
 import Swal from 'sweetalert2'
@@ -52,13 +52,14 @@ const CreateProjectViews = () => {
     'SAKERNAS SEMESTERAN',
     'SAKERNAS TAHUNAN'
   ]
+  const jenisKegiatan = ['Pengolahan', 'Pelaksanaan', 'evaluasi', 'persiapan']
 
   const pegawai = ['Pegawai1', 'Pegawai2', 'Pegawai3', 'Pegawai4']
   return (
     <Card>
       <Grid container spacing={5} sx={{ padding: '32px' }}>
         <Grid item xs={12}>
-          <Typography variant='h5'>Create Project</Typography>
+          <Typography variant='h5'>Buat Kegiatan</Typography>
         </Grid>
 
         <Grid item xs={12} md={12}>
@@ -71,25 +72,37 @@ const CreateProjectViews = () => {
         </Grid>
 
         <Grid item xs={12} sm={12} lg={6}>
-          <DatePicker
+          {/* <DatePicker
+            fullWidth
             selected={selectedDate}
             showYearDropdown
             showMonthDropdown
-            placeholderText='DD-MM-YYYY'
+            placeholderText='Tanggal Mulai'
             onChange={setSelectedDate}
             dateFormat='dd/MM/yyyy'
             className='custom-datepicker'
-          />
+          /> */}
+          <TextField fullWidth multiline label='Tanggal Dimulai' placeholder='Tanggal Dimulai' />
         </Grid>
         <Grid item xs={12} sm={12} lg={6}>
-          <DatePicker
+          {/* <DatePicker
+            fullWidth
             selected={selectedDateE}
             showYearDropdown
             showMonthDropdown
-            placeholderText='DD-MM-YYYY'
+            placeholderText='Tanggal Berakhir'
             onChange={setSelectedDateE}
             dateFormat='dd/MM/yyyy'
             className='custom-datepicker'
+          /> */}
+          <TextField fullWidth multiline label='Tanggal Berakhir' placeholder='Tanggal Berakhir' />
+        </Grid>
+        <Grid item xs={12} md={6}>
+          <Autocomplete
+            disablePortal
+            id='combo-box-demo'
+            options={jenisKegiatan}
+            renderInput={params => <TextField {...params} label='Jenis Kegiatan' />}
           />
         </Grid>
         <Grid item xs={12}>
@@ -98,13 +111,13 @@ const CreateProjectViews = () => {
 
         <Grid item xs={12} md={12}>
           <Typography variant='h6' sx={{ py: '5px' }}>
-            Project Manager
+            Penanggung Jawab Kegiatan
           </Typography>
           <Autocomplete
             disablePortal
             id='combo-box-demo'
             options={pegawai}
-            renderInput={params => <TextField {...params} label='Project Leader' />}
+            renderInput={params => <TextField {...params} label=' Penanggung Jawab Kegiatan' />}
           />
         </Grid>
         <TableAddParticipant></TableAddParticipant>

@@ -25,7 +25,7 @@ const TableProjectDetailTask = () => {
     {
       field: 'task',
       headerName: 'Task',
-      width: 250,
+      minwidth: 250,
       renderCell: () => (
         <Link
           onClick={async e => {

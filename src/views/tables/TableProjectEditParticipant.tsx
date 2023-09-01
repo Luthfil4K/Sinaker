@@ -24,14 +24,10 @@ const columns = [
   {
     field: 'checked',
     renderCell: () => (
-      <FormControlLabel
-        control={
-          <Checkbox
-            onChange={e => {
-              let checked = e.target.checked
-            }}
-          />
-        }
+      <Checkbox
+        onChange={e => {
+          let checked = e.target.checked
+        }}
       />
     ),
     headerName: 'All',

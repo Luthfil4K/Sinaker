@@ -1,6 +1,7 @@
 import TablePeople from 'src/views/tables/TablePeople'
 import Grid from '@mui/material/Grid'
 import Button from '@mui/material/Button'
+import Box from '@mui/material/Box'
 import Typography from '@mui/material/Typography'
 import Link from '@mui/material/Link'
 import { useRouter } from 'next/dist/client/router'
@@ -19,7 +20,9 @@ const PeopleViews = () => {
           </Link>
         </Grid>
         <Grid item md={12} xs={12}>
-          <TablePeople></TablePeople>
+          <Box sx={{ width: '100%' }}>
+            <TablePeople></TablePeople>
+          </Box>
         </Grid>
       </Grid>
     </>

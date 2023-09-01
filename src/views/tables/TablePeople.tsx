@@ -66,12 +66,12 @@ const rows = [
 
 const TablePeople = () => {
   const columns = [
-    { field: 'id', headerName: 'No', type: 'string', width: 40 },
-    { field: 'nama', headerName: 'Nama', width: 130 },
-    { field: 'nip', headerName: 'NIP', width: 100 },
-    { field: 'fungsi', headerName: 'Fungsi', type: 'string', width: 100 },
-    { field: 'projectAssign', headerName: 'ProjectAssign', width: 160 },
-    { field: 'taskAssign', headerName: 'TaskAssign', type: 'string', width: 140 },
+    { field: 'id', headerName: 'No', type: 'string', minWidth: 40 },
+    { field: 'nama', headerName: 'Nama', minWidth: 130 },
+    { field: 'nip', headerName: 'NIP', minWidth: 100 },
+    { field: 'fungsi', headerName: 'Fungsi', type: 'string', minWidth: 100 },
+    { field: 'projectAssign', headerName: 'ProjectAssign', minWidth: 160 },
+    { field: 'taskAssign', headerName: 'TaskAssign', type: 'string', minWidth: 140 },
     {
       field: 'role',
       renderHeader: () => (

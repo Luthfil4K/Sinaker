@@ -55,12 +55,12 @@ const navigation = (): VerticalNavItemsType => {
       path: '/dashboard2'
     },
     {
-      title: 'Create Project',
+      title: 'Buat Kegiatan',
       icon: Login,
       path: '/create-project'
     },
     {
-      title: 'Project List',
+      title: 'List Kegiatan',
       icon: Login,
       path: '/project-list'
     },
@@ -70,7 +70,7 @@ const navigation = (): VerticalNavItemsType => {
       path: '/people'
     },
     {
-      title: 'Task',
+      title: 'Sub Kegiatan',
       icon: Login,
       path: '/task'
     },
@@ -83,6 +83,11 @@ const navigation = (): VerticalNavItemsType => {
       title: 'Kode',
       icon: Login,
       path: 'master-kode'
+    },
+    {
+      title: 'Pengumuman',
+      icon: Login,
+      path: 'pengumuman'
     },
     {
       sectionTitle: 'User Interface'
