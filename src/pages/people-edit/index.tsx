@@ -1,4 +1,4 @@
-import PeopleEditViews from 'src/views/people-edit-views/PeopleEditViews'
+import PeopleEditViews from 'src/views/people-views/PeopleEditViews'
 
 const peopleEdit = () => {
   return (

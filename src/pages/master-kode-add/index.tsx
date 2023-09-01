@@ -1,11 +1,11 @@
-import MasterKodeViews from 'src/views/master-kode-views/MasterKodeViews'
+import MasterKodeAddViews from 'src/views/master-kode-views/MasterKodeAddViews'
 
-const MasterKode = () => {
+const MasterKodeAdd = () => {
   return (
     <>
-      <MasterKodeViews></MasterKodeViews>
+      <MasterKodeAddViews></MasterKodeAddViews>
     </>
   )
 }
 
-export default MasterKode
+export default MasterKodeAdd

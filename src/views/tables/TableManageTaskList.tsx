@@ -24,9 +24,25 @@ const rows = [
 
 const TableManageTaskList = () => {
   const router = useRouter()
+
   const handleDelete = () => {
-    return <></>
+    Swal.fire({
+      title: 'Are you sure?',
+      text: 'Untuk menghapus tugas ini!',
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Yes, Hapus tugas !'
+    }).then(result => {
+      if (result.isConfirmed) {
+        router.push('/people')
+      } else {
+        router.push('/pople')
+      }
+    })
   }
+
   const columns = [
     { field: 'id', headerName: 'No', type: 'string', width: 70 },
     { field: 'task', headerName: 'Task', width: 150 },
@@ -57,7 +73,7 @@ const TableManageTaskList = () => {
             </Button>
           </Link>
 
-          <Button type='submit' sx={{ mr: 1 }} color='error' variant='text'>
+          <Button onClick={handleDelete} type='submit' sx={{ mr: 1 }} color='error' variant='text'>
             <DeleteOutline />
           </Button>
         </>

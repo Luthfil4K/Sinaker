@@ -1,5 +1,5 @@
 // view
-import PeopleAddViews from 'src/views/people-add-views/PeopleAddViews'
+import PeopleAddViews from 'src/views/people-views/PeopleAddViews'
 
 const AddPeople = () => {
   return (

@@ -147,7 +147,7 @@ const TablePeople = () => {
       if (result.isConfirmed) {
         router.push('/people')
       } else {
-        router.push('/pople')
+        router.push('/people')
       }
     })
   }
