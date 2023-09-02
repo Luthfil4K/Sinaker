@@ -14,9 +14,10 @@
     "@typescript-eslint/no-non-null-assertion": "off",
     "react/no-unescaped-entities": "off",
     "@next/next/no-page-custom-font": "off",
+    "eslint import/newline-after-import": "off",
     // add new line above comment
     "lines-around-comment": [
-      "error",
+      "off",
       {
         "beforeLineComment": true,
         "beforeBlockComment": true,
@@ -27,10 +28,10 @@
       }
     ],
     // add new line above return
-    "newline-before-return": "error",
+    "newline-before-return": "off",
     // add new line below import
     "import/newline-after-import": [
-      "error",
+      "off",
       {
         "count": 1
       }

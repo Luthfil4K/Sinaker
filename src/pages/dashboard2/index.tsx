@@ -1,21 +1,17 @@
-// ** MUI Imports
 import Grid from '@mui/material/Grid'
 import Card from '@mui/material/Card'
 import Typography from '@mui/material/Typography'
 import Divider from '@mui/material/Divider'
-
 // ** Icons Imports
 // import Poll from 'mdi-material-ui/Poll'
 // import CurrencyUsd from 'mdi-material-ui/CurrencyUsd'
 // import HelpCircleOutline from 'mdi-material-ui/HelpCircleOutline'
 // import BriefcaseVariantOutline from 'mdi-material-ui/BriefcaseVariantOutline'
-
 // ** Custom Components Imports
 import CardStatisticsVerticalComponent from 'src/@core/components/card-statistics/card-stats-vertical'
 import TableTask from 'src/views/tables/TableTask'
 // ** Styled Component Import
 import ApexChartWrapper from 'src/@core/styles/libs/react-apexcharts'
-
 // ** Demo Components Imports
 // import Table from 'src/views/dashboard/Table'
 // import Trophy from 'src/views/dashboard/Trophy'
@@ -24,7 +20,6 @@ import ApexChartWrapper from 'src/@core/styles/libs/react-apexcharts'
 // import WeeklyOverview from 'src/views/dashboard/WeeklyOverview'
 // import DepositWithdraw from 'src/views/dashboard/DepositWithdraw'
 // import SalesByCountries from 'src/views/dashboard/SalesByCountries'
-
 const Dashboard = () => {
   return (
     <ApexChartWrapper>
