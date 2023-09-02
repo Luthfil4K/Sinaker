@@ -14,12 +14,12 @@ const FooterContent = () => {
       <Typography sx={{ mr: 2 }}>
         {`© ${new Date().getFullYear()}, Made with `}
         <Box component='span' sx={{ color: 'error.main' }}>
-          ❤️
+          Computer
         </Box>
-        {` by `}
-        <Link target='_blank' href='https://themeselection.com/'>
+        {/* {` by `} */}
+        {/* <Link target='_blank' href='https://themeselection.com/'>
           ThemeSelection
-        </Link>
+        </Link> */}
       </Typography>
       {hidden ? null : (
         <Box sx={{ display: 'flex', flexWrap: 'wrap', alignItems: 'center', '& :not(:last-child)': { mr: 4 } }}>
@@ -27,22 +27,22 @@ const FooterContent = () => {
             target='_blank'
             href='https://github.com/themeselection/materio-mui-react-nextjs-admin-template-free/blob/main/LICENSE'
           >
-            MIT License
+            {/* MIT License */}
           </Link>
           <Link target='_blank' href='https://themeselection.com/'>
-            More Themes
+            {/* More Themes */}
           </Link>
           <Link
             target='_blank'
             href='https://github.com/themeselection/materio-mui-react-nextjs-admin-template-free/blob/main/README.md'
           >
-            Documentation
+            {/* Documentation */}
           </Link>
           <Link
             target='_blank'
             href='https://github.com/themeselection/materio-mui-react-nextjs-admin-template-free/issues'
           >
-            Support
+            {/* Support */}
           </Link>
         </Box>
       )}

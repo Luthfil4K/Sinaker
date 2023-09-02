@@ -6,6 +6,7 @@ import Link from 'next/link'
 
 // ** MUI Imports
 import Box, { BoxProps } from '@mui/material/Box'
+import Grid from '@mui/material/Grid'
 import { styled, useTheme } from '@mui/material/styles'
 import Typography, { TypographyProps } from '@mui/material/Typography'
 
@@ -56,7 +57,10 @@ const VerticalNavHeader = (props: Props) => {
 
   return (
     <MenuHeaderWrapper className='nav-header' sx={{ pl: 6 }}>
-      {userVerticalNavMenuBranding ? (
+      <Grid bgcolor={'grey.300'}>
+        <Typography variant={'h5'}>Logo Sinaker</Typography>
+      </Grid>
+      {/* {userVerticalNavMenuBranding ? (
         userVerticalNavMenuBranding(props)
       ) : (
         <Link href='/' passHref>
@@ -125,7 +129,7 @@ const VerticalNavHeader = (props: Props) => {
             </HeaderTitle>
           </StyledLink>
         </Link>
-      )}
+      )} */}
     </MenuHeaderWrapper>
   )
 }

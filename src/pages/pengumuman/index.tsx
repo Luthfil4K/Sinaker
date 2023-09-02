@@ -1,5 +1,11 @@
+import PengumumanViews from 'src/views/pengumuman-views/PengumumanViews'
+
 const Pengumuman = () => {
-  return <></>
+  return (
+    <>
+      <PengumumanViews></PengumumanViews>
+    </>
+  )
 }
 
 export default Pengumuman

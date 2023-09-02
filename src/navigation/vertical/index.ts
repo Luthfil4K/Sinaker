@@ -15,40 +15,38 @@ import { VerticalNavItemsType } from 'src/@core/layouts/types'
 
 const navigation = (): VerticalNavItemsType => {
   return [
-    {
-      title: 'Dashboard',
-      icon: HomeOutline,
-      path: '/'
-    },
-    {
-      title: 'Account Settings',
-      icon: AccountCogOutline,
-      path: '/account-settings'
-    },
-    {
-      sectionTitle: 'Pages '
-    },
-    {
-      title: 'Login',
-      icon: Login,
-      path: '/pages/login',
-      openInNewTab: true
-    },
-    {
-      title: 'Register',
-      icon: AccountPlusOutline,
-      path: '/pages/register',
-      openInNewTab: true
-    },
-    {
-      title: 'Error',
-      icon: AlertCircleOutline,
-      path: '/pages/error',
-      openInNewTab: true
-    },
-    {
-      sectionTitle: 'Pages'
-    },
+    // {
+    //   title: 'Dashboard',
+    //   icon: HomeOutline,
+    //   path: '/'
+    // },
+    // {
+    //   title: 'Account Settings',
+    //   icon: AccountCogOutline,
+    //   path: '/account-settings'
+    // },
+    // {
+    //   sectionTitle: 'Pages '
+    // },
+    // {
+    //   title: 'Login',
+    //   icon: Login,
+    //   path: '/pages/login',
+    //   openInNewTab: true
+    // },
+    // {
+    //   title: 'Register',
+    //   icon: AccountPlusOutline,
+    //   path: '/pages/register',
+    //   openInNewTab: true
+    // },
+    // {
+    //   title: 'Error',
+    //   icon: AlertCircleOutline,
+    //   path: '/pages/error',
+    //   openInNewTab: true
+    // },
+
     {
       title: 'Dashboard2',
       icon: HomeOutline,
@@ -56,27 +54,36 @@ const navigation = (): VerticalNavItemsType => {
     },
     {
       title: 'Buat Kegiatan',
-      icon: Login,
+      icon: FormatLetterCase,
       path: '/create-project'
     },
     {
-      title: 'List Kegiatan',
+      title: 'Buat Rapat',
       icon: Login,
+      path: '/rapat-create'
+    },
+    {
+      sectionTitle: 'Kegiatan'
+    },
+
+    {
+      title: 'List Kegiatan',
+      icon: Table,
       path: '/project-list'
     },
     {
-      title: 'People',
+      title: 'Daftar Pegawai',
       icon: Login,
       path: '/people'
     },
     {
       title: 'Sub Kegiatan',
-      icon: Login,
+      icon: Table,
       path: '/task'
     },
     {
       title: 'Induk Kegiatan',
-      icon: Login,
+      icon: CubeOutline,
       path: '/master-induk-kegiatan'
     },
     {
@@ -85,9 +92,17 @@ const navigation = (): VerticalNavItemsType => {
       path: 'master-kode'
     },
     {
+      sectionTitle: 'Pengumuman'
+    },
+    {
       title: 'Pengumuman',
-      icon: Login,
+      icon: CubeOutline,
       path: 'pengumuman'
+    },
+    {
+      title: 'Daftar Rapat',
+      icon: GoogleCirclesExtended,
+      path: 'rapat-list'
     },
     {
       sectionTitle: 'User Interface'
