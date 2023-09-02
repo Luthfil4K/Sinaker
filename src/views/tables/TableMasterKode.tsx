@@ -43,7 +43,7 @@ const TableMasterKode = () => {
   const router = useRouter()
   const handleDelete = () => {
     Swal.fire({
-      title: 'Are you sure?',
+      title: 'Apa Anda Yakin?',
       text: 'Untuk menghapus kode kegiatan ini!',
       icon: 'warning',
       showCancelButton: true,

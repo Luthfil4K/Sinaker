@@ -35,7 +35,7 @@ const PeopleAddViews = () => {
   const router = useRouter()
   const handleEdit = () => {
     Swal.fire({
-      title: 'Are you sure?',
+      title: 'Apa Anda Yakin?',
       text: 'Untuk mengedit akun ini!',
       icon: 'warning',
       showCancelButton: true,
@@ -46,7 +46,7 @@ const PeopleAddViews = () => {
       if (result.isConfirmed) {
         router.push('/people')
       } else {
-        router.push('/pople')
+        router.push('/people')
       }
     })
   }

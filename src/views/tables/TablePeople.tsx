@@ -27,8 +27,8 @@ const rows = [
     nama: 'Doe ke1',
     nip: '22204511221',
     fungsi: 'IPDS',
-    projectAssign: 'John',
-    taskAssign: 'done',
+    jumlahKegiatan: '5',
+    jumlahSubkegiatan: '2',
     role: '22/09/2023',
     action: 'edit/delete'
   },
@@ -37,8 +37,8 @@ const rows = [
     nama: 'Doeasd',
     nip: '22223011221',
     fungsi: 'IPDS',
-    projectAssign: 'John',
-    taskAssign: 'done',
+    jumlahKegiatan: '6',
+    jumlahSubkegiatan: '4',
     role: '22/09/2023',
     action: 'edit/delete'
   },
@@ -47,8 +47,8 @@ const rows = [
     nama: 'Doeert',
     nip: '22201122311',
     fungsi: 'IPDS',
-    projectAssign: 'John',
-    taskAssign: 'done',
+    jumlahKegiatan: '3',
+    jumlahSubkegiatan: '8',
     role: '22/09/2023',
     action: 'edit/delete'
   },
@@ -57,8 +57,8 @@ const rows = [
     nama: 'apa',
     nip: '011221',
     fungsi: 'IPDS',
-    projectAssign: 'John',
-    taskAssign: 'done',
+    jumlahKegiatan: '2',
+    jumlahSubkegiatan: '7',
     role: '22/09/2023',
     action: 'edit/delete'
   }
@@ -70,8 +70,8 @@ const TablePeople = () => {
     { field: 'nama', headerName: 'Nama', minWidth: 130 },
     { field: 'nip', headerName: 'NIP', minWidth: 100 },
     { field: 'fungsi', headerName: 'Fungsi', type: 'string', minWidth: 100 },
-    { field: 'projectAssign', headerName: 'ProjectAssign', minWidth: 160 },
-    { field: 'taskAssign', headerName: 'TaskAssign', type: 'string', minWidth: 140 },
+    { field: 'jumlahKegiatan', headerName: 'Jumlah Kegiatan', minWidth: 160 },
+    { field: 'jumlahSubkegiatan', headerName: 'Jumlah Subkegiatan', type: 'string', minWidth: 140 },
     {
       field: 'role',
       renderHeader: () => (
@@ -136,7 +136,7 @@ const TablePeople = () => {
   // }
   const handleDelete = () => {
     Swal.fire({
-      title: 'Are you sure?',
+      title: 'Apa Anda Yakin?',
       text: 'Untuk menghapus akun ini!',
       icon: 'warning',
       showCancelButton: true,

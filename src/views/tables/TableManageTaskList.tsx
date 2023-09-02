@@ -27,7 +27,7 @@ const TableManageTaskList = () => {
 
   const handleDelete = () => {
     Swal.fire({
-      title: 'Are you sure?',
+      title: 'Apa Anda Yakin?',
       text: 'Untuk menghapus tugas ini!',
       icon: 'warning',
       showCancelButton: true,

@@ -2,6 +2,7 @@
 import Card from '@mui/material/Card'
 import Box from '@mui/material/Box'
 import Button from '@mui/material/Button'
+import Link from '@mui/material/Link'
 import Divider from '@mui/material/Divider'
 import Checkbox from '@mui/material/Checkbox'
 import Select from '@mui/material/Select'
@@ -25,6 +26,7 @@ import { useRouter } from 'next/dist/client/router'
 import TableMasterIndukKegiatan from 'src/views/tables/TableMasterIndukKegiatan'
 
 const MasterIndukKegiatanViews = () => {
+  const router = useRouter()
   return (
     <>
       <Card sx={{ padding: 4 }}>
@@ -53,9 +55,19 @@ const MasterIndukKegiatanViews = () => {
               <MenuItem value='sosial'>Sosial</MenuItem>
             </Select>
           </FormControl>
-          <Button fullWidth size='medium' variant='contained' sx={{ marginTop: 4 }}>
-            Edit Induk Kegiatan
-          </Button>
+          <Link>
+            <Button
+              onClick={e => {
+                router.push('/master-induk-kegiatan')
+              }}
+              fullWidth
+              size='medium'
+              variant='contained'
+              sx={{ marginTop: 4 }}
+            >
+              Edit Induk Kegiatan
+            </Button>
+          </Link>
         </form>
       </Card>
     </>

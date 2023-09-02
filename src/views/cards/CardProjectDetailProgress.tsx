@@ -60,7 +60,7 @@ const CardProjectDetailProgress = () => {
             "this is for quote lorem ipsum dolor dolor si Amet"
           </Typography>
           <Typography textAlign={'center'} variant={'body2'}>
-            - hayya
+            - aabbcc
           </Typography>
         </CardContent>
       </Card>

@@ -12,6 +12,7 @@ import Button from '@mui/material/Button'
 import Divider from '@mui/material/Divider'
 import TextField from '@mui/material/TextField'
 import Typography from '@mui/material/Typography'
+import { useRouter } from 'next/dist/client/router'
 
 import { Autocomplete } from '@mui/lab'
 
@@ -36,6 +37,7 @@ const rows = [
 
 const ProjectEditViews = () => {
   const [selectedDate, setSelectedDate] = useState(null)
+  const router = useRouter()
 
   return (
     <Card>
@@ -47,6 +49,19 @@ const ProjectEditViews = () => {
       </Grid>
 
       <TableProjectEditParticipant></TableProjectEditParticipant>
+      <Grid container mt={4}>
+        <Grid p={4} md={12} item display={'flex'} justifyContent={'end'}>
+          <Button
+            onClick={e => {
+              router.push('/project-detail')
+            }}
+            variant='contained'
+          >
+            {' '}
+            Edit Kegiatan
+          </Button>
+        </Grid>
+      </Grid>
     </Card>
   )
 }

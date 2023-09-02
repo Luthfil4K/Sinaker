@@ -19,7 +19,7 @@ const ProjectDetailsViews = () => {
   const router = useRouter()
   const handleEdit = () => {
     Swal.fire({
-      title: 'Are you sure?',
+      title: 'Apa Anda Yakin?',
       text: 'You will not be able to recover this action!',
       icon: 'warning',
       showCancelButton: true,
@@ -54,8 +54,8 @@ const ProjectDetailsViews = () => {
   }
   const handleArchieve = () => {
     Swal.fire({
-      title: 'Are you sure?',
-      text: 'You will not be able to recover this action!',
+      title: 'Apa Anda Yakin?',
+      text: 'Untuk Mengarsipkan Kegiatan Ini?',
       icon: 'warning',
       showCancelButton: true,
       confirmButtonColor: '#3085d6',
@@ -82,7 +82,14 @@ const ProjectDetailsViews = () => {
       </Grid>
       <Grid mt={2} container>
         <Grid item md={12} display={'flex'} justifyContent={'end'} flexDirection={'row'}>
-          <Button onClick={handleEdit} size='medium' variant={'contained'} sx={{ margin: 2 }}>
+          <Button
+            onClick={e => {
+              router.push('/project-edit')
+            }}
+            size='medium'
+            variant={'contained'}
+            sx={{ margin: 2 }}
+          >
             Edit
           </Button>
 

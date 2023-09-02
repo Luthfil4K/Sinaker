@@ -102,7 +102,7 @@ const ProjectCard = () => {
                     </span>
                     <span>Project Manager</span>
                   </Typography>
-                  <Button variant='contained'>View More</Button>
+                  <Button variant='contained'>Selengkapnya</Button>
                 </Box>
               </CardContent>
             </Grid>
@@ -140,13 +140,13 @@ const CardProject = () => {
               <Box sx={{ mb: 10, mt: 3, display: 'flex', alignItems: 'center' }}>
                 <LockOpenOutline sx={{ color: 'primary.main', marginRight: 2.25 }} fontSize='small' />
                 <Typography variant='body2' sx={{ fontSize: '12px' }}>
-                  Start Date: <strong>tanggal sekian</strong>
+                  Tanggal Dimulai: <strong>tanggal</strong>
                 </Typography>
               </Box>
               <Box sx={{ display: 'flex', alignItems: 'center' }}>
                 <AccountOutline sx={{ color: 'primary.main', marginRight: 2.25 }} fontSize='small' />
                 <Typography variant='body2' sx={{ fontSize: '12px' }}>
-                  Members: <strong>sekian People</strong>
+                  Jumlah Pegawai: <strong>30</strong>
                 </Typography>
               </Box>
             </StyledBox>
@@ -155,13 +155,13 @@ const CardProject = () => {
             <Box sx={{ mb: 10, mt: 3, display: 'flex', alignItems: 'center' }}>
               <LockOutline sx={{ color: 'primary.main', marginRight: 2.25 }} fontSize='small' />
               <Typography variant='body2' sx={{ fontSize: '12px' }}>
-                End Date: <strong>deadlne</strong>
+                Tanggal Berakhir: <strong>deadlne</strong>
               </Typography>
             </Box>
             <Box sx={{ display: 'flex', alignItems: 'center' }}>
               <ClipboardFileOutline sx={{ color: 'primary.main', marginRight: 2.25 }} fontSize='small' />
               <Typography variant='body2' sx={{ fontSize: '12px' }}>
-                Total Task: <strong>sekian Task</strong>
+                Total Sub Kegiatan: <strong>43</strong>
               </Typography>
             </Box>
           </Grid>
@@ -170,7 +170,7 @@ const CardProject = () => {
         <Grid justifyContent='end' display='flex'>
           <Link onClick={e => router.push(`/project-detail`)}>
             <Button sx={{ mt: 5 }} variant='contained'>
-              View More
+              Selengkapnya
             </Button>
           </Link>
         </Grid>

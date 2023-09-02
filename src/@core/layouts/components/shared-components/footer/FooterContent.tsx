@@ -13,9 +13,9 @@ const FooterContent = () => {
     <Box sx={{ display: 'flex', flexWrap: 'wrap', alignItems: 'center', justifyContent: 'space-between' }}>
       <Typography sx={{ mr: 2 }}>
         {`© ${new Date().getFullYear()}, Made with `}
-        <Box component='span' sx={{ color: 'error.main' }}>
+        {/* <Box component='span' sx={{ color: 'error.main' }}>
           Computer
-        </Box>
+        </Box> */}
         {/* {` by `} */}
         {/* <Link target='_blank' href='https://themeselection.com/'>
           ThemeSelection
@@ -43,6 +43,9 @@ const FooterContent = () => {
             href='https://github.com/themeselection/materio-mui-react-nextjs-admin-template-free/issues'
           >
             {/* Support */}
+            <Box component='span' sx={{ color: 'error.main' }}>
+              Computer
+            </Box>
           </Link>
         </Box>
       )}

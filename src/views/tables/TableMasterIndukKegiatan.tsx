@@ -54,7 +54,7 @@ const TableMasterIndukKegiatan = () => {
   const router = useRouter()
   const handleDelete = () => {
     Swal.fire({
-      title: 'Are you sure?',
+      title: 'Apa Anda Yakin?',
       text: 'Untuk menghapus induk kegiatan ini!',
       icon: 'warning',
       showCancelButton: true,

@@ -109,10 +109,10 @@ const TabPanel1 = () => {
             {<AccountGroup />}
           </Avatar>
           <Typography textAlign={'center'} variant='body2' component='span' sx={{ display: 'inline' }}>
-            Peserta proyek
+            Peserta Kegiatan
           </Typography>
           <Typography textAlign={'center'} variant='body1' component='span' sx={{ display: 'inline' }}>
-            Alabasta
+            10
           </Typography>
         </Grid>
         <Grid
@@ -195,7 +195,7 @@ const TabPanel4 = () => {
   return (
     <>
       <Typography variant='h6' sx={{ marginBottom: 2 }}>
-        Project Participant
+        Peserta Kegiatan
       </Typography>
       <Grid container spacing={2}>
         <ParticipantPeople />

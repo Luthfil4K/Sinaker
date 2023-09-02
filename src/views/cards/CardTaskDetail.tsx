@@ -12,7 +12,7 @@ const CardTaskDetail = () => {
         <Grid container p={4}>
           <Grid item md={10}>
             <Typography color={'primary.dark'} variant={'h4'}>
-              Nama Task - Nama Projek
+              Nama Sub - Nama Kegiatan
             </Typography>
           </Grid>
           <Grid item md={2}>
@@ -29,7 +29,7 @@ const CardTaskDetail = () => {
             />
           </Grid>
           <Grid mt={1} item md={12}>
-            <Typography variant={'body1'}>Pembuat Projek - tanggal dibuat</Typography>
+            <Typography variant={'body1'}>Pembuat Kegiatan - tanggal dibuat</Typography>
           </Grid>
           <Grid justifyContent={'end'} mt={2} item md={12}>
             <Typography textAlign={'end'} variant={'body2'}>
@@ -38,7 +38,7 @@ const CardTaskDetail = () => {
             <Divider sx={{ marginTop: 3.5 }} />
           </Grid>
           <Grid mt={2} item md={12}>
-            <Typography variant={'body1'}>Deskripsi Projek</Typography>
+            <Typography variant={'body1'}>Deskripsi Kegiatan</Typography>
             <Typography variant={'body2'}>
               Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et
               dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex

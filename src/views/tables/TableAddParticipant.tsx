@@ -37,42 +37,42 @@ const columns = [
   { field: 'nama', headerName: 'Nama', width: 230 },
   { field: 'nip', headerName: 'NIP', width: 200 },
   { field: 'fungsi', headerName: 'Fungsi', type: 'string', width: 100 },
-  { field: 'projectAssign', headerName: 'ProjectAssign', width: 160 },
-  { field: 'taskAssign', headerName: 'TaskAssign', type: 'string', width: 140 }
+  { field: 'jumlahKegiatan', headerName: 'Jumlah Kegiatan ', width: 160 },
+  { field: 'jumlahSubkegiatan', headerName: 'Jumlah Subkegiatan ', type: 'string', width: 140 }
 ]
 
 const rows = [
   {
     id: 1,
-    nama: 'Doe ke1',
+    nama: 'pegawai1',
     nip: '22204511221',
     fungsi: 'IPDS',
-    projectAssign: '3',
-    taskAssign: '7'
+    jumlahKegiatan: '3',
+    jumlahSubkegiatan: '7'
   },
   {
     id: 2,
-    nama: 'Doeasd',
+    nama: 'pegawai2',
     nip: '22223011221',
     fungsi: 'IPDS',
-    projectAssign: '5',
-    taskAssign: '5'
+    jumlahKegiatan: '5',
+    jumlahSubkegiatan: '5'
   },
   {
     id: 3,
-    nama: 'Doeert',
+    nama: 'pegawai3',
     nip: '22201122311',
     fungsi: 'IPDS',
-    projectAssign: '2',
-    taskAssign: '7'
+    jumlahKegiatan: '2',
+    jumlahSubkegiatan: '7'
   },
   {
     id: 4,
-    nama: 'apa',
+    nama: 'pegawai4',
     nip: '011221',
     fungsi: 'IPDS',
-    projectAssign: '5',
-    taskAssign: '4'
+    jumlahKegiatan: '5',
+    jumlahSubkegiatan: '4'
   }
 ]
 
@@ -80,6 +80,9 @@ const TableAddParticipant = () => {
   return (
     <>
       <Grid item md={12}>
+        <Typography variant={'h6'} mt={1} mb={1}>
+          Pilih pegawai
+        </Typography>
         <Card>
           <DataGrid
             rowHeight={65}
