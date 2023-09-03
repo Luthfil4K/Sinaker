@@ -28,7 +28,7 @@ const TaskManageAddViews = () => {
           <Typography variant='h5' sx={{ fontWeight: 600, marginBottom: 1.5 }}>
             Add Task
           </Typography>
-          <Typography variant='body2'>Fill this blank field below</Typography>
+          {/* <Typography variant='body2'>Fill this blank field below</Typography> */}
         </Box>
         <form noValidate autoComplete='off' onSubmit={e => e.preventDefault()}>
           <TextField autoFocus fullWidth id='namaTugas' label='Nama Tugas' sx={{ marginBottom: 4 }} />
