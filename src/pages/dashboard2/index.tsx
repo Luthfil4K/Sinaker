@@ -24,21 +24,21 @@ const Dashboard = () => {
   return (
     <ApexChartWrapper>
       <Grid container spacing={4}>
-        <Grid item md={8}>
+        <Grid item xs={12} md={8}>
           <Grid container spacing={4}>
-            <Grid item md={12}>
+            <Grid item xs={12} md={12}>
               <Card sx={{ padding: 4, height: 250 }}>
                 <Typography variant={'h5'}>Tugas hari ini</Typography>
                 <Divider></Divider>
               </Card>
             </Grid>
-            <Grid item md={6}>
+            <Grid item xs={6} md={6}>
               <Card sx={{ padding: 4, height: 200 }}>
                 <Typography variant={'h6'}>Pengumuman</Typography>
                 <Divider></Divider>
               </Card>
             </Grid>
-            <Grid item md={6}>
+            <Grid item xs={6} md={6}>
               <Card sx={{ padding: 4, height: 200 }}>
                 <Typography variant={'h6'}>Jadwal</Typography>
                 <Divider></Divider>
@@ -46,7 +46,7 @@ const Dashboard = () => {
             </Grid>
           </Grid>
         </Grid>
-        <Grid item md={4}>
+        <Grid item xs={12} md={4}>
           <Card sx={{ padding: 4, height: 465 }}>
             <Typography variant={'h6'}>Rapat hari ini</Typography>
             <Divider></Divider>
@@ -54,13 +54,13 @@ const Dashboard = () => {
         </Grid>
       </Grid>
       <Grid mt={1} container spacing={4}>
-        <Grid item md={6}>
+        <Grid item xs={12} md={6}>
           <Card sx={{ padding: 4, height: 250 }}>
             <Typography variant={'h6'}>Grafik</Typography>
             <Divider></Divider>
           </Card>
         </Grid>
-        <Grid item md={6}>
+        <Grid item xs={12} md={6}>
           <Card sx={{ padding: 4, height: 250 }}>
             <Typography variant={'h6'}>Grafik</Typography>
             <Divider></Divider>

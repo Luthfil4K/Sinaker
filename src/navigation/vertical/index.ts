@@ -89,7 +89,7 @@ const navigation = (): VerticalNavItemsType => {
     {
       title: 'Kode',
       icon: Login,
-      path: 'master-kode'
+      path: '/master-kode'
     },
     {
       sectionTitle: 'Pengumuman'
@@ -97,12 +97,12 @@ const navigation = (): VerticalNavItemsType => {
     {
       title: 'Pengumuman',
       icon: CubeOutline,
-      path: 'pengumuman'
+      path: '/pengumuman'
     },
     {
       title: 'Daftar Rapat',
       icon: GoogleCirclesExtended,
-      path: 'rapat-list'
+      path: '/rapat-list'
     }
     // {
     //   sectionTitle: 'User Interface'
