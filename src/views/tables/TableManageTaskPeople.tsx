@@ -23,38 +23,38 @@ const columns = [
 const rows = [
   {
     id: 1,
-    nama: 'Doe ke1',
+    nama: 'Pegawai1',
     nip: '22204511221',
     fungsi: 'Distribusi',
-    projectAssign: 'John',
-    taskAssign: 'done',
+    projectAssign: '5',
+    taskAssign: '6',
     role: '22/09/2023'
   },
   {
     id: 2,
-    nama: 'Doeasd',
+    nama: 'Pegawai2',
     nip: '22223011221',
     fungsi: 'IPDS',
-    projectAssign: 'John',
-    taskAssign: 'done',
+    projectAssign: '4',
+    taskAssign: '2',
     role: '22/09/2023'
   },
   {
     id: 3,
-    nama: 'Doeert',
+    nama: 'Pegawai3',
     nip: '22201122311',
     fungsi: 'IPDS',
-    projectAssign: 'John',
-    taskAssign: 'done',
+    projectAssign: '4',
+    taskAssign: '5',
     role: '22/09/2023'
   },
   {
     id: 4,
-    nama: 'apa',
+    nama: 'pegawai4',
     nip: '011221',
     fungsi: 'Produksi',
-    projectAssign: 'John',
-    taskAssign: 'done',
+    projectAssign: '2',
+    taskAssign: '4',
     role: '22/09/2023'
   }
 ]
