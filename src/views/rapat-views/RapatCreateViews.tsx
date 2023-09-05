@@ -14,7 +14,11 @@ import Grid from '@mui/material/Grid'
 import Button from '@mui/material/Button'
 import Divider from '@mui/material/Divider'
 import TextField from '@mui/material/TextField'
+import FormControl from '@mui/material/FormControl'
+import Select from '@mui/material/Select'
+import InputLabel from '@mui/material/InputLabel'
 import Typography from '@mui/material/Typography'
+import MenuItem from '@mui/material/MenuItem'
 
 import { useRouter } from 'next/dist/client/router'
 import { Autocomplete } from '@mui/lab'
@@ -98,6 +102,16 @@ const RapatCreateViews = () => {
           <TextField fullWidth multiline label='Waktu Selesai' placeholder='Waktu Selesai' />
         </Grid>
 
+        <Grid item xs={12}>
+          <FormControl fullWidth>
+            <InputLabel id='link'>Age</InputLabel>
+            <Select labelId='Link' id='demo-simple-select' label='Link'>
+              <MenuItem value={10}>Link 1</MenuItem>
+              <MenuItem value={20}>Link 2</MenuItem>
+              <MenuItem value={30}>Link 3</MenuItem>
+            </Select>
+          </FormControl>
+        </Grid>
         <Grid item xs={12}>
           <TextField fullWidth multiline minRows={3} label='Deskripsi Rapat' placeholder='Description' />
         </Grid>
