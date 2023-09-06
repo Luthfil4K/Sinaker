@@ -1,4 +1,4 @@
-import ProjectDetailsViews from 'src/views/project-details-views/ProjectDetailsViews'
+import ProjectDetailsViews from 'src/views/project-views/ProjectDetailsViews'
 
 const ProjectDetail = () => {
   return (

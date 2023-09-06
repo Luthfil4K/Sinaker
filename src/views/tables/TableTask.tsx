@@ -98,28 +98,26 @@ const TableTask = () => {
   ]
   return (
     <>
-      <Grid item md={12}>
-        <Typography variant={'h5'} mb={5}>
-          {' '}
-          Sub Kegiatan Anda
-        </Typography>
+      <Typography variant={'h5'} mb={5}>
+        {' '}
+        Sub Kegiatan Anda
+      </Typography>
 
-        <Card>
-          <DataGrid
-            initialState={{
-              sorting: {
-                sortModel: [{ field: 'deadline', sort: 'asc' }]
-              }
-            }}
-            rows={rows}
-            columns={columns}
-            sx={{
-              overflowY: 'auto',
-              width: '100%'
-            }}
-          />
-        </Card>
-      </Grid>
+      <Card>
+        <DataGrid
+          initialState={{
+            sorting: {
+              sortModel: [{ field: 'deadline', sort: 'asc' }]
+            }
+          }}
+          rows={rows}
+          columns={columns}
+          sx={{
+            overflowY: 'auto',
+            width: '100%'
+          }}
+        />
+      </Card>
     </>
   )
 }

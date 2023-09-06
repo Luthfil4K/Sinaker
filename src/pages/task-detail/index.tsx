@@ -1,4 +1,4 @@
-import TaskDetailViews from 'src/views/task-detail-views/TaskDetailViews'
+import TaskDetailViews from 'src/views/task-views/TaskDetailViews'
 
 const TaskDetail = () => {
   return (

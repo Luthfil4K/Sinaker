@@ -11,7 +11,7 @@ const MasterIndukKegiatanViews = () => {
   const router = useRouter()
   return (
     <>
-      <Grid container spacing={4}>
+      <Grid container spacing={4} mb={4}>
         <Grid item md={6}>
           <Typography variant={'h4'}>Master Induk Kegiatan</Typography>
         </Grid>
@@ -25,10 +25,8 @@ const MasterIndukKegiatanViews = () => {
             Tambah Induk Kegiatan
           </Button>
         </Grid>
-        <Grid item md={12}>
-          <TableMasterIndukKegiatan></TableMasterIndukKegiatan>
-        </Grid>
       </Grid>
+      <TableMasterIndukKegiatan></TableMasterIndukKegiatan>
     </>
   )
 }

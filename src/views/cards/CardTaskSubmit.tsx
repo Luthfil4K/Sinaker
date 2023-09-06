@@ -35,7 +35,7 @@ const CardTaskSubmit = () => {
               Laporan
             </Typography>
           </Grid>
-          <Grid mt={3} display={'flex'} justifyContent={'center'} item xs={12} md={12}>
+          {/* <Grid mt={3} display={'flex'} justifyContent={'center'} item xs={12} md={12}>
             <Box
               width={'100%'}
               sx={{ border: 1, borderColor: 'grey.300', borderRadius: 1 }}
@@ -47,23 +47,23 @@ const CardTaskSubmit = () => {
             >
               <Typography variant={'body2'}>File</Typography>
             </Box>
-          </Grid>
-          <Grid justifyContent={'center'} mt={2} item xs={12} md={12}>
+          </Grid> */}
+          {/* <Grid justifyContent={'center'} mt={2} item xs={12} md={12}>
             <Button variant={'contained'} fullWidth>
               Submit
             </Button>
-          </Grid>
+          </Grid> */}
           <Grid container spacing={3}>
-            <Grid justifyContent={'center'} mt={2} item xs={12} md={6}>
+            <Grid justifyContent={'center'} mt={2} item xs={12} md={12}>
               <Button variant={'contained'} fullWidth>
                 Terima
               </Button>
             </Grid>
-            <Grid justifyContent={'center'} mt={2} item xs={12} md={6}>
+            {/* <Grid justifyContent={'center'} mt={2} item xs={12} md={6}>
               <Button variant={'contained'} fullWidth>
                 Revisi
               </Button>
-            </Grid>
+            </Grid> */}
           </Grid>
         </Grid>
       </Card>

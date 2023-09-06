@@ -44,6 +44,7 @@ const CreateProjectViews = () => {
     })
   }
 
+  const projectJenis = ['Tahunan', 'Semesteran', 'Triwulanan', 'Bulanan']
   const projectRutin = [
     'PENGELOLAAN WEB',
     'SURVEI IBS BULANAN',
@@ -57,12 +58,20 @@ const CreateProjectViews = () => {
   const pegawai = ['Pegawai1', 'Pegawai2', 'Pegawai3', 'Pegawai4']
   return (
     <Card>
-      <Grid container spacing={5} sx={{ padding: '32px' }}>
+      <Grid container spacing={4} sx={{ padding: '32px' }}>
         <Grid item xs={12}>
           <Typography variant='h5'>Buat Kegiatan</Typography>
         </Grid>
 
-        <Grid item xs={12} md={12}>
+        <Grid item xs={12} md={6}>
+          <Autocomplete
+            disablePortal
+            id='combo-box-demo'
+            options={projectJenis}
+            renderInput={params => <TextField {...params} label='Rentang Kegiatan' />}
+          />
+        </Grid>
+        <Grid item xs={12} md={6}>
           <Autocomplete
             disablePortal
             id='combo-box-demo'
@@ -97,14 +106,14 @@ const CreateProjectViews = () => {
           /> */}
           <TextField fullWidth multiline label='Tanggal Berakhir' placeholder='Tanggal Berakhir' />
         </Grid>
-        <Grid item xs={12} md={6}>
+        {/* <Grid item xs={12} md={6}>
           <Autocomplete
             disablePortal
             id='combo-box-demo'
             options={jenisKegiatan}
             renderInput={params => <TextField {...params} label='Jenis Kegiatan' />}
           />
-        </Grid>
+        </Grid> */}
         <Grid item xs={12}>
           <TextField fullWidth multiline minRows={3} label='Project Description' placeholder='Description' />
         </Grid>
@@ -120,14 +129,13 @@ const CreateProjectViews = () => {
             renderInput={params => <TextField {...params} label=' Penanggung Jawab Kegiatan' />}
           />
         </Grid>
-        <TableAddParticipant></TableAddParticipant>
-        <Divider sx={{ margin: 0 }} />
-        <Grid item xs={12} md={3} lg={3}>
-          <Button onClick={handleCreate} size='medium' type='submit' variant='contained'>
-            Create Project
-          </Button>
-        </Grid>
+        <Grid item xs={12} md={3} lg={3}></Grid>
       </Grid>
+      <TableAddParticipant></TableAddParticipant>
+      <Divider sx={{ margin: 0 }} />
+      <Button onClick={handleCreate} size='medium' type='submit' variant='contained'>
+        Create Project
+      </Button>
     </Card>
   )
 }

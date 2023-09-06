@@ -35,8 +35,10 @@ const columns = [
     width: 80
   },
   { field: 'nama', headerName: 'Nama', width: 230 },
-  { field: 'nip', headerName: 'NIP', width: 200 },
-  { field: 'fungsi', headerName: 'Fungsi', type: 'string', width: 100 },
+  { field: 'gajiBulanan', headerName: 'Gaji Bulanan', width: 200 },
+  { field: 'gajiTriwulanan', headerName: 'Gaji Triwulanan', type: 'string', width: 100 },
+  { field: 'gajiSemesteran', headerName: 'Gaji Semesteran', type: 'string', width: 100 },
+  { field: 'gajiTahunan', headerName: 'Gaji Tahunan', type: 'string', width: 100 },
   { field: 'jumlahKegiatan', headerName: 'Jumlah Kegiatan ', width: 160 },
   { field: 'jumlahSubkegiatan', headerName: 'Jumlah Subkegiatan ', type: 'string', width: 140 }
 ]
@@ -44,33 +46,33 @@ const columns = [
 const rows = [
   {
     id: 1,
-    nama: 'pegawai1',
-    nip: '22204511221',
-    fungsi: 'IPDS',
+    nama: 'Mitra1',
+    gajiBulanan: '22204511221',
+    gajiTriwulanan: 'IPDS',
     jumlahKegiatan: '3',
     jumlahSubkegiatan: '7'
   },
   {
     id: 2,
-    nama: 'pegawai2',
-    nip: '22223011221',
-    fungsi: 'IPDS',
+    nama: 'Mitra2',
+    gajiBulanan: '22223011221',
+    gajiTriwulanan: 'IPDS',
     jumlahKegiatan: '5',
     jumlahSubkegiatan: '5'
   },
   {
     id: 3,
-    nama: 'pegawai3',
-    nip: '22201122311',
-    fungsi: 'IPDS',
+    nama: 'Mitra3',
+    gajiBulanan: '22201122311',
+    gajiTriwulanan: 'IPDS',
     jumlahKegiatan: '2',
     jumlahSubkegiatan: '7'
   },
   {
     id: 4,
-    nama: 'pegawai4',
-    nip: '011221',
-    fungsi: 'IPDS',
+    nama: 'Mitra4',
+    gajiBulanan: '011221',
+    gajiTriwulanan: 'IPDS',
     jumlahKegiatan: '5',
     jumlahSubkegiatan: '4'
   }
@@ -79,28 +81,26 @@ const rows = [
 const TableAddParticipant = () => {
   return (
     <>
-      <Grid item md={12}>
+      <Card sx={{ padding: 4 }}>
         <Typography variant={'h6'} mt={1} mb={1}>
-          Pilih pegawai
+          Pilih Mitra
         </Typography>
-        <Card>
-          <DataGrid
-            rowHeight={65}
-            initialState={{
-              sorting: {
-                sortModel: [{ field: 'deadline', sort: 'asc' }]
-              }
-            }}
-            rows={rows}
-            columns={columns}
-            sx={{
-              overflowY: 'auto',
-              width: '100%',
-              alignItems: 'start'
-            }}
-          />
-        </Card>
-      </Grid>
+        <DataGrid
+          rowHeight={65}
+          initialState={{
+            sorting: {
+              sortModel: [{ field: 'deadline', sort: 'asc' }]
+            }
+          }}
+          rows={rows}
+          columns={columns}
+          sx={{
+            overflowY: 'auto',
+            width: '100%',
+            alignItems: 'start'
+          }}
+        />
+      </Card>
     </>
   )
 }

@@ -1,5 +1,5 @@
 // view
-import CreateProjectViews from 'src/views/create-project-views/CreateProjectViews'
+import CreateProjectViews from 'src/views/project-views/CreateProjectViews'
 
 const CreateProject = () => {
   return <CreateProjectViews />

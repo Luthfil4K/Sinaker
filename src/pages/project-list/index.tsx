@@ -1,6 +1,6 @@
 // view
 
-import ProjectListViews from 'src/views/project-list-views/ProjectListViews'
+import ProjectListViews from 'src/views/project-views/ProjectListViews'
 
 const ProjectList = () => {
   return (

@@ -1,4 +1,4 @@
-import TaskManageAddViews from 'src/views/task-manage-add-views/TaskManageAddViews'
+import TaskManageAddViews from 'src/views/task-views/TaskManageAddViews'
 
 const TaskManageAdd = () => {
   return (

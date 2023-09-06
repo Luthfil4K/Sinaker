@@ -5,7 +5,7 @@
 import 'react-datepicker/dist/react-datepicker.css'
 
 // view
-import ProjectEditViews from 'src/views/project-edit-views/ProjectEditViews'
+import ProjectEditViews from 'src/views/project-views/ProjectEditViews'
 
 const ProjectEdit = () => {
   return <ProjectEditViews />

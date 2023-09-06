@@ -105,25 +105,22 @@ const TableMasterIndukKegiatan = () => {
   ]
   return (
     <>
-      <Grid item md={12}>
-        <Card>
-          <DataGrid
-            rowHeight={65}
-            initialState={{
-              sorting: {
-                sortModel: [{ field: 'deadline', sort: 'asc' }]
-              }
-            }}
-            rows={rows}
-            columns={columns}
-            sx={{
-              overflowY: 'auto',
-              width: '100%',
-              alignItems: 'center'
-            }}
-          />
-        </Card>
-      </Grid>
+      <Card>
+        <DataGrid
+          rowHeight={65}
+          initialState={{
+            sorting: {
+              sortModel: [{ field: 'deadline', sort: 'asc' }]
+            }
+          }}
+          rows={rows}
+          columns={columns}
+          sx={{
+            overflowY: 'auto',
+            width: '100%'
+          }}
+        />
+      </Card>
     </>
   )
 }

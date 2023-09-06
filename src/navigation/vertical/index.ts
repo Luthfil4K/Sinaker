@@ -58,10 +58,15 @@ const navigation = (): VerticalNavItemsType => {
       path: '/create-project'
     },
     {
-      title: 'Buat Rapat',
-      icon: Login,
-      path: '/rapat-create'
+      title: 'Pengumuman',
+      icon: CubeOutline,
+      path: '/pengumuman'
     },
+    // {
+    //   title: 'Buat Rapat',
+    //   icon: Login,
+    //   path: '/rapat-create'
+    // },
     {
       sectionTitle: 'Kegiatan'
     },
@@ -72,14 +77,23 @@ const navigation = (): VerticalNavItemsType => {
       path: '/project-list'
     },
     {
-      title: 'Daftar Pegawai',
-      icon: Login,
-      path: '/people'
+      title: 'Sub Kegiatan',
+      icon: CubeOutline,
+      path: '/task'
     },
     {
-      title: 'Sub Kegiatan',
-      icon: Table,
-      path: '/task'
+      title: 'Daftar Pegawai',
+      icon: Login,
+      path: '/pegawai'
+    },
+    {
+      title: 'Daftar Mitra',
+      icon: FormatLetterCase,
+      path: '/mitra'
+    },
+
+    {
+      sectionTitle: 'Pustaka'
     },
     {
       title: 'Induk Kegiatan',
@@ -90,20 +104,13 @@ const navigation = (): VerticalNavItemsType => {
       title: 'Kode',
       icon: Login,
       path: '/master-kode'
-    },
-    {
-      sectionTitle: 'Pengumuman'
-    },
-    {
-      title: 'Pengumuman',
-      icon: CubeOutline,
-      path: '/pengumuman'
-    },
-    {
-      title: 'Daftar Rapat',
-      icon: GoogleCirclesExtended,
-      path: '/rapat-list'
     }
+
+    // {
+    //   title: 'Daftar Rapat',
+    //   icon: GoogleCirclesExtended,
+    //   path: '/rapat-list'
+    // }
     // {
     //   sectionTitle: 'User Interface'
     // },
@@ -126,7 +133,7 @@ const navigation = (): VerticalNavItemsType => {
     //   title: 'Tables',
     //   icon: Table,
     //   path: '/tables'
-    // },
+    // }
     // {
     //   icon: CubeOutline,
     //   title: 'Form Layouts',
