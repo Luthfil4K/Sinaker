@@ -13,7 +13,7 @@ const MasterKodeViews = () => {
     <>
       <Grid container spacing={4}>
         <Grid item display={'flex'} md={6}>
-          <Typography variant={'h5'}>Master Kode</Typography>
+          <Typography variant={'h4'}>Master Kode</Typography>
         </Grid>
         <Grid item display={'flex'} justifyContent={'end'} md={6}>
           <Link>

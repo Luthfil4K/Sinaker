@@ -24,9 +24,14 @@ import router from 'next/router'
 const rows = [
   {
     id: 1,
-    nama: 'Doe ke1',
-    nip: '22204511221',
+    nama: 'Pegawai a',
+
     fungsi: 'IPDS',
+    totalGaji: 150000,
+    gajiBulanan: 95000,
+    gajiTriwulanan: 39000,
+    gajiSemesteran: 40000,
+    gajiTahunan: 100000,
     jumlahKegiatan: '5',
     jumlahSubkegiatan: '2',
     role: '22/09/2023',
@@ -34,9 +39,14 @@ const rows = [
   },
   {
     id: 2,
-    nama: 'Doeasd',
-    nip: '22223011221',
+    nama: 'Pegawai4',
+
     fungsi: 'IPDS',
+    gajiBulanan: 95000,
+    gajiTriwulanan: 39000,
+    gajiSemesteran: 40000,
+    gajiTahunan: 100000,
+    totalGaji: 290000,
     jumlahKegiatan: '6',
     jumlahSubkegiatan: '4',
     role: '22/09/2023',
@@ -44,9 +54,13 @@ const rows = [
   },
   {
     id: 3,
-    nama: 'Doeert',
-    nip: '22201122311',
-    fungsi: 'IPDS',
+    nama: 'PegawaiC',
+    fungsi: 'Umum',
+    totalGaji: 260000,
+    gajiBulanan: 95000,
+    gajiTriwulanan: 39000,
+    gajiSemesteran: 40000,
+    gajiTahunan: 100000,
     jumlahKegiatan: '3',
     jumlahSubkegiatan: '8',
     role: '22/09/2023',
@@ -54,9 +68,14 @@ const rows = [
   },
   {
     id: 4,
-    nama: 'apa',
-    nip: '011221',
-    fungsi: 'IPDS',
+    nama: 'pegawai',
+
+    fungsi: 'Neraca',
+    totalGaji: 370000,
+    gajiBulanan: 95000,
+    gajiTriwulanan: 39000,
+    gajiSemesteran: 40000,
+    gajiTahunan: 100000,
     jumlahKegiatan: '2',
     jumlahSubkegiatan: '7',
     role: '22/09/2023',
@@ -68,40 +87,44 @@ const TablePeople = () => {
   const columns = [
     { field: 'id', headerName: 'No', type: 'string', minWidth: 40 },
     { field: 'nama', headerName: 'Nama', minWidth: 130 },
-    { field: 'nip', headerName: 'NIP', minWidth: 100 },
     { field: 'fungsi', headerName: 'Fungsi', type: 'string', minWidth: 100 },
-    { field: 'jumlahKegiatan', headerName: 'Jumlah Kegiatan', minWidth: 160 },
-    { field: 'jumlahSubkegiatan', headerName: 'Jumlah Subkegiatan', type: 'string', minWidth: 140 },
-    {
-      field: 'role',
-      renderHeader: () => (
-        <Typography sx={{ fontWeight: 900, fontSize: '0.875rem !important', textAlign: 'center' }}>Role</Typography>
-      ),
-      minWidth: 160,
-      flex: 1,
-      renderCell: () => (
-        <form>
-          <FormControl fullWidth>
-            <InputLabel id='form-layouts-separator-select-label'>role</InputLabel>
-            <Select
-              sx={{ height: 50 }}
-              label='role'
-              id='form-layouts-separator-role'
-              labelId='form-layouts-separator-role-label'
-            >
-              <MenuItem value='admin'>Supervisor</MenuItem>
-              <MenuItem value='employee'>Staff</MenuItem>
-            </Select>
-          </FormControl>
-        </form>
-      )
-    },
+    { field: 'totalGaji', headerName: 'Total Gaji', type: 'string', minWidth: 170 },
+    { field: 'gajiBulanan', headerName: 'Gaji Bulanan', width: 150 },
+    { field: 'gajiTriwulanan', headerName: 'Gaji Triwulanan', type: 'string', width: 150 },
+    { field: 'gajiSemesteran', headerName: 'Gaji Semesteran', type: 'string', width: 150 },
+    { field: 'gajiTahunan', headerName: 'Gaji Tahunan', type: 'string', width: 150 },
+    { field: 'jumlahKegiatan', headerName: 'Jumlah Kegiatan', minWidth: 150 },
+    // { field: 'jumlahSubkegiatan', headerName: 'Jumlah Subkegiatan', type: 'string', minWidth: 150 },
+    // {
+    //   field: 'role',
+    //   renderHeader: () => (
+    //     <Typography sx={{ fontWeight: 900, fontSize: '0.875rem !important', textAlign: 'center' }}>Role</Typography>
+    //   ),
+    //   minWidth: 160,
+    //   flex: 1,
+    //   renderCell: () => (
+    //     <form>
+    //       <FormControl fullWidth>
+    //         <InputLabel id='form-layouts-separator-select-label'>role</InputLabel>
+    //         <Select
+    //           sx={{ height: 50 }}
+    //           label='role'
+    //           id='form-layouts-separator-role'
+    //           labelId='form-layouts-separator-role-label'
+    //         >
+    //           <MenuItem value='admin'>Supervisor</MenuItem>
+    //           <MenuItem value='employee'>Staff</MenuItem>
+    //         </Select>
+    //       </FormControl>
+    //     </form>
+    //   )
+    // },
     {
       field: 'action',
       renderHeader: () => (
         <Typography sx={{ fontWeight: 900, fontSize: '0.875rem !important', textAlign: 'center' }}>Action</Typography>
       ),
-      minWidth: 215,
+      minWidth: 250,
       flex: 1,
       renderCell: () => (
         <>

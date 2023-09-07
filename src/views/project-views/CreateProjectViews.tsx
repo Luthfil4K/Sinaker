@@ -106,6 +106,12 @@ const CreateProjectViews = () => {
           /> */}
           <TextField fullWidth multiline label='Tanggal Berakhir' placeholder='Tanggal Berakhir' />
         </Grid>
+        <Grid item xs={12} sm={12} lg={6}>
+          <TextField fullWidth multiline label='Gaji Satuan PML' />
+        </Grid>
+        <Grid item xs={12} sm={12} lg={6}>
+          <TextField fullWidth multiline label='Gaji Satuan PCL' />
+        </Grid>
         {/* <Grid item xs={12} md={6}>
           <Autocomplete
             disablePortal
@@ -131,11 +137,13 @@ const CreateProjectViews = () => {
         </Grid>
         <Grid item xs={12} md={3} lg={3}></Grid>
       </Grid>
-      <TableAddParticipant></TableAddParticipant>
+      {/* <TableAddParticipant></TableAddParticipant> */}
       <Divider sx={{ margin: 0 }} />
-      <Button onClick={handleCreate} size='medium' type='submit' variant='contained'>
-        Create Project
-      </Button>
+      <Grid item m={4}>
+        <Button onClick={handleCreate} size='medium' type='submit' variant='contained'>
+          Buat Kegiatan
+        </Button>
+      </Grid>
     </Card>
   )
 }

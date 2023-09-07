@@ -35,7 +35,7 @@ const columns = [
     width: 80
   },
   { field: 'nama', headerName: 'Nama', width: 230 },
-  { field: 'gajiBulanan', headerName: 'Gaji Bulanan', width: 200 },
+  { field: 'gajiBulanan', headerName: 'Gaji Bulanan', width: 100 },
   { field: 'gajiTriwulanan', headerName: 'Gaji Triwulanan', type: 'string', width: 100 },
   { field: 'gajiSemesteran', headerName: 'Gaji Semesteran', type: 'string', width: 100 },
   { field: 'gajiTahunan', headerName: 'Gaji Tahunan', type: 'string', width: 100 },
@@ -46,35 +46,43 @@ const columns = [
 const rows = [
   {
     id: 1,
-    nama: 'Mitra1',
-    gajiBulanan: '22204511221',
-    gajiTriwulanan: 'IPDS',
+    nama: 'Pegawai bisa jadi pcl?',
+    gajiBulanan: 40000,
+    gajiTriwulanan: 80000,
+    gajiSemesteran: 55000,
+    gajiTahunan: 95000,
     jumlahKegiatan: '3',
     jumlahSubkegiatan: '7'
   },
   {
     id: 2,
-    nama: 'Mitra2',
-    gajiBulanan: '22223011221',
-    gajiTriwulanan: 'IPDS',
-    jumlahKegiatan: '5',
-    jumlahSubkegiatan: '5'
+    nama: 'Mitra Cibinong',
+    gajiBulanan: 40000,
+    gajiTriwulanan: 21000,
+    gajiSemesteran: 67000,
+    gajiTahunan: 295000,
+    jumlahKegiatan: '3',
+    jumlahSubkegiatan: '7'
   },
   {
     id: 3,
-    nama: 'Mitra3',
-    gajiBulanan: '22201122311',
-    gajiTriwulanan: 'IPDS',
-    jumlahKegiatan: '2',
+    nama: 'Mitra Bojonggede',
+    gajiBulanan: 40000,
+    gajiTriwulanan: 80000,
+    gajiSemesteran: 59000,
+    gajiTahunan: 9000,
+    jumlahKegiatan: '3',
     jumlahSubkegiatan: '7'
   },
   {
     id: 4,
-    nama: 'Mitra4',
-    gajiBulanan: '011221',
-    gajiTriwulanan: 'IPDS',
-    jumlahKegiatan: '5',
-    jumlahSubkegiatan: '4'
+    nama: 'MitraJonggol',
+    gajiBulanan: 20000,
+    gajiTriwulanan: 30000,
+    gajiSemesteran: 25000,
+    gajiTahunan: 120000,
+    jumlahKegiatan: '3',
+    jumlahSubkegiatan: '7'
   }
 ]
 
@@ -83,7 +91,7 @@ const TableAddParticipant = () => {
     <>
       <Card sx={{ padding: 4 }}>
         <Typography variant={'h6'} mt={1} mb={1}>
-          Pilih Mitra
+          Pilih PCL
         </Typography>
         <DataGrid
           rowHeight={65}

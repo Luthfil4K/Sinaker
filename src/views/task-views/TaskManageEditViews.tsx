@@ -26,35 +26,35 @@ const TaskManageEditViews = () => {
       <Card sx={{ padding: 4 }}>
         <Box sx={{ mb: 6 }}>
           <Typography variant='h5' sx={{ fontWeight: 600, marginBottom: 1.5 }}>
-            Edit Task
+            Edit Tim
           </Typography>
-          <Typography variant='body2'>Fill this blank field below</Typography>
+          {/* <Typography variant='body2'>Fill this blank field below</Typography> */}
         </Box>
         <form noValidate autoComplete='off' onSubmit={e => e.preventDefault()}>
-          <TextField autoFocus fullWidth id='namaTugas' label='Nama Tugas' sx={{ marginBottom: 4 }} />
+          <TextField autoFocus fullWidth id='namaTim' label='Nama Tim' sx={{ marginBottom: 4 }} />
           <Autocomplete
             sx={{ marginBottom: 4 }}
             disablePortal
             id='combo-box-demo'
             options={ProjectParticipant}
-            renderInput={params => <TextField {...params} label='Tugaskan Kepada' />}
+            renderInput={params => <TextField {...params} label='PML' />}
           />
-          <TextField autoFocus fullWidth id='deadline' label='DeadLine' sx={{ marginBottom: 4 }} />
-          <FormControl fullWidth sx={{ marginBottom: 4 }}>
-            <InputLabel id='form-layouts-separator-select-label'>Prioritas</InputLabel>
-            <Select
-              sx={{ height: 50 }}
-              label='Prioritas'
-              id='form-layouts-separator-fungsi'
-              labelId='form-layouts-separator-fungsi-label'
-            >
-              <MenuItem value='Low'>Low</MenuItem>
-              <MenuItem value='Normal'>Normal</MenuItem>
-              <MenuItem value='High'>High</MenuItem>
-            </Select>
-          </FormControl>
-          <TextField fullWidth multiline minRows={3} label='Task Description' placeholder='Deskripsi Task' />
+          <Grid container spacing={4}>
+            <Grid item md={6} xs={12}>
+              <TextField autoFocus fullWidth id='target' label='Target' sx={{ marginBottom: 4 }} />
+            </Grid>
+            <Grid item md={6} xs={12}>
+              <TextField autoFocus fullWidth id='unitTarget' label='Unit Target' sx={{ marginBottom: 4 }} />
+            </Grid>
+          </Grid>
 
+          <Grid container spacing={4}>
+            <Grid item md={6} xs={12}>
+              <TextField autoFocus fullWidth id='deadline' label='Dead Line' sx={{ marginBottom: 4 }} />
+            </Grid>
+            <Grid item md={6} xs={12}></Grid>
+          </Grid>
+          <TextField fullWidth multiline minRows={3} label='Task Description' placeholder='Deskripsi Task' />
           <Button
             fullWidth
             onClick={e => {

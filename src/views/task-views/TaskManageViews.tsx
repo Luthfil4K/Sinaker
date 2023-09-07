@@ -16,7 +16,7 @@ const TaskManageViews = () => {
       <Grid container spacing={4}>
         <Grid display={'flex'} item md={6} mb={4}>
           <Typography fontWeight={500} variant={'h5'} mx={2} my={2}>
-            Pengaturan Tugas
+            Pengaturan Tim
           </Typography>
         </Grid>
         <Grid display={'flex'} justifyContent={'end'} item md={6} mb={4}>
@@ -27,14 +27,14 @@ const TaskManageViews = () => {
               }}
               variant={'contained'}
             >
-              Tambah Task
+              Tambah Tim
             </Button>
           </Link>
         </Grid>
         <Grid item md={12} xs={12}>
           <Card sx={{ paddingTop: 2 }}>
             <Typography fontWeight={500} variant={'h6'} mx={2} my={2}>
-              Daftar Tugas in this Project
+              Daftar Tim
             </Typography>
             <TableManageTaskList></TableManageTaskList>
           </Card>
@@ -42,7 +42,7 @@ const TaskManageViews = () => {
         <Grid item md={12} xs={12}>
           <Card sx={{ paddingTop: 2 }}>
             <Typography fontWeight={500} variant={'h6'} mx={2} my={2}>
-              Daftar Pegawai in this Project
+              Daftar peserta di kegiatan ini
             </Typography>
             <TableManageTaskPeople></TableManageTaskPeople>
           </Card>

@@ -14,47 +14,46 @@ import DeleteOutline from 'mdi-material-ui/DeleteOutline'
 const columns = [
   { field: 'id', headerName: 'No', type: 'string', width: 40 },
   { field: 'nama', headerName: 'Nama', width: 130 },
-  { field: 'nip', headerName: 'NIP', width: 200 },
-  { field: 'fungsi', headerName: 'Fungsi', type: 'string', width: 180 },
-  { field: 'projectAssign', headerName: 'ProjectAssign', width: 160 },
-  { field: 'taskAssign', headerName: 'TaskAssign', type: 'string', width: 140 }
+  { field: 'totalGaji', headerName: 'Total Gaji', type: 'string', width: 180 },
+  { field: 'jumlahKegiatan', headerName: 'Jumlah Kegiatan', width: 160 },
+  { field: 'totalGaji', headerName: 'Total Gaji ', type: 'string', width: 140 }
 ]
 
 const rows = [
   {
     id: 1,
     nama: 'Pegawai1',
-    nip: '22204511221',
+    totalGaji:320000,
     fungsi: 'Distribusi',
-    projectAssign: '5',
-    taskAssign: '6',
+    jumlahKegiatan: '5',
+    totalGaji: '6',
     role: '22/09/2023'
   },
   {
     id: 2,
     nama: 'Pegawai2',
-    nip: '22223011221',
+    totalGaji:440000,
     fungsi: 'IPDS',
-    projectAssign: '4',
-    taskAssign: '2',
+    jumlahKegiatan: '4',
+    totalGaji: '2',
     role: '22/09/2023'
   },
   {
     id: 3,
     nama: 'Pegawai3',
-    nip: '22201122311',
+    totalGaji:140000,
     fungsi: 'IPDS',
-    projectAssign: '4',
-    taskAssign: '5',
+    jumlahKegiatan: '4',
+    totalGaji: '5',
     role: '22/09/2023'
   },
   {
     id: 4,
     nama: 'pegawai4',
-    nip: '011221',
+    totalGaji:200000,
     fungsi: 'Produksi',
-    projectAssign: '2',
-    taskAssign: '4',
+    jumlahKegiatan: '2',
+    totalGaji: '4',
     role: '22/09/2023'
   }
 ]

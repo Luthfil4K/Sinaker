@@ -56,7 +56,7 @@ const CardTaskSubmit = () => {
           <Grid container spacing={3}>
             <Grid justifyContent={'center'} mt={2} item xs={12} md={12}>
               <Button variant={'contained'} fullWidth>
-                Terima
+                Simpan
               </Button>
             </Grid>
             {/* <Grid justifyContent={'center'} mt={2} item xs={12} md={6}>

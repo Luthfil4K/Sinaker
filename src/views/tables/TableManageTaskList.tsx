@@ -15,25 +15,25 @@ import PencilOutline from 'mdi-material-ui/PencilOutline'
 import DeleteOutline from 'mdi-material-ui/DeleteOutline'
 
 const rows = [
-  { id: 1, task: 'task ke1', assignto: 'Doe', priority: 'John', status: 'done', deadline: '22/09/2023' },
-  { id: 2, task: 'task ke sekian', assignto: 'Smith', priority: 'Jane', status: 'done', deadline: '22/09/2023' },
-  { id: 3, task: 'task ke sekian', assignto: 'Johnson', priority: 'James', status: 'done', deadline: '22/09/2023' },
-  { id: 4, task: 'task ke sekian', assignto: 'Brown', priority: 'Emily', status: 'done', deadline: '22/09/2023' },
-  { id: 5, task: 'task ke sekian', assignto: 'Davis', priority: 'Michael', status: 'done', deadline: '22/09/2023' }
+  { id: 1, tim: 'tim ke 1', pml: 'pegawai1', pcl: 20, deadline: '22/09/2023' },
+  { id: 2, tim: 'tim ke 2', pml: 'pegawai2', pcl: 30, deadline: '22/09/2023' },
+  { id: 3, tim: 'tim ke 3', pml: 'pegawai3', pcl: 7, deadline: '22/09/2023' },
+  { id: 4, tim: 'tim ke 4', pml: 'pegawai4', pcl: 15, deadline: '22/09/2023' },
+  { id: 5, tim: 'tim ke 5', pml: 'pegawai5', pcl: 12, deadline: '22/09/2023' }
 ]
 
 const TableManageTaskList = () => {
   const router = useRouter()
-
+  const tim = ['Tim']
   const handleDelete = () => {
     Swal.fire({
       title: 'Apa Anda Yakin?',
-      text: 'Untuk menghapus tugas ini!',
+      text: 'Untuk menghapus tim ini!',
       icon: 'warning',
       showCancelButton: true,
       confirmButtonColor: '#3085d6',
       cancelButtonColor: '#d33',
-      confirmButtonText: 'Yes, Hapus tugas !'
+      confirmButtonText: 'Yes, Hapus tim !'
     }).then(result => {
       if (result.isConfirmed) {
         router.push('/people')
@@ -45,10 +45,28 @@ const TableManageTaskList = () => {
 
   const columns = [
     { field: 'id', headerName: 'No', type: 'string', width: 70 },
-    { field: 'task', headerName: 'Task', width: 150 },
-    { field: 'assignto', headerName: 'Assign To', width: 140 },
-    { field: 'priority', headerName: 'Priority', width: 100 },
-    { field: 'status', headerName: 'Status', type: 'string', width: 100 },
+    {
+      field: 'tim',
+      headerName: 'Tim',
+      minwidth: 250,
+      flex: 1,
+      renderCell: () => (
+        <Link
+          onClick={async e => {
+            router.push(`/task-detail`)
+          }}
+          sx={{ cursor: 'pointer' }}
+        >
+          <Typography sx={{ fontWeight: 500, fontSize: '0.875rem !important' }}>
+            {tim.map(team => {
+              return `${team} ke-sekian`
+            })}
+          </Typography>
+        </Link>
+      )
+    },
+    { field: 'pml', headerName: 'PML', width: 140 },
+    { field: 'pcl', headerName: 'PCL', width: 100 },
     { field: 'deadline', headerName: 'Deadline', type: 'string', width: 180 },
     {
       field: 'action',

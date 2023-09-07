@@ -11,21 +11,21 @@ import * as React from 'react'
 import { DataGrid } from '@mui/x-data-grid'
 
 const rows = [
-  { id: 1, task: '', assignto: 'pegawai 1', priority: 'tinggi', status: 'selesai', deadline: '22/09/2023' },
-  { id: 2, task: '', assignto: 'pegawai 1', priority: 'normal', status: 'on progress', deadline: '22/09/2023' },
-  { id: 3, task: '', assignto: 'pegawai 1', priority: 'normal', status: 'selesai', deadline: '26/09/2023' },
-  { id: 4, task: '', assignto: 'pegawai 1', priority: 'tinggi', status: 'assigned', deadline: '28/09/2023' },
-  { id: 5, task: '', assignto: 'pegawai 1', priority: 'tinggi', status: 'selesai', deadline: '29/09/2023' }
+  { id: 1, tim: '', pml: 'pegawai 1', pcl: 40, realisasi: 'selesai', target: 33, deadline: '22/09/2023' },
+  { id: 2, tim: '', pml: 'pegawai 2', pcl: 20, realisasi: 'on progress', target: 75, deadline: '22/09/2023' },
+  { id: 3, tim: '', pml: 'pegawai 5', pcl: 20, realisasi: 'selesai', target: 130, deadline: '26/09/2023' },
+  { id: 4, tim: '', pml: 'pegawai 3', pcl: 60, realisasi: 'assigned', target: 27, deadline: '28/09/2023' },
+  { id: 5, tim: '', pml: 'pegawai 6', pcl: 60, realisasi: 'selesai', target: 10, deadline: '29/09/2023' }
 ]
 
 const TableProjectDetailTask = () => {
   const router = useRouter()
-  const tasks = ['Kegiatan A']
+  const tim = ['Tim']
   const columns = [
     { field: 'id', headerName: 'No', type: 'string', width: 70 },
     {
-      field: 'task',
-      headerName: 'Task',
+      field: 'tim',
+      headerName: 'Tim',
       minwidth: 250,
       flex: 1,
       renderCell: () => (
@@ -36,20 +36,20 @@ const TableProjectDetailTask = () => {
           sx={{ cursor: 'pointer' }}
         >
           <Typography sx={{ fontWeight: 500, fontSize: '0.875rem !important' }}>
-            {tasks.map(task => {
-              return `Sub ${task}`
+            {tim.map(team => {
+              return `${team} ke-sekian`
             })}
           </Typography>
         </Link>
       )
     },
-    { field: 'assignto', headerName: 'Assign To', width: 140 },
-    { field: 'priority', headerName: 'Prioritas', width: 160 },
+    { field: 'pml', headerName: 'PML', width: 150 },
+    { field: 'pcl', headerName: 'PCL', width: 70 },
     {
-      field: 'status',
+      field: 'realisasi',
       renderCell: () => (
         <Chip
-          label={'dikerjakan'}
+          label={'7'}
           color={'warning'}
           sx={{
             height: 24,
@@ -60,10 +60,11 @@ const TableProjectDetailTask = () => {
           }}
         />
       ),
-      headerName: 'Status',
+      headerName: 'Realisasi',
       type: 'string',
       width: 140
     },
+    { field: 'target', headerName: 'Target', type: 'string', width: 100 },
     { field: 'deadline', headerName: 'Deadline', type: 'string', width: 180 }
   ]
 

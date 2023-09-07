@@ -121,13 +121,13 @@ const CardProject = () => {
         <Grid container spacing={1}>
           <Grid item xs={6}>
             <Typography variant='h5' sx={{ marginBottom: 3.5, fontWeight: 600 }}>
-              Nama
+              Nama Kegiatan
             </Typography>
-            <Typography variant='body2'>Deskripsi kegiatan</Typography>
+            <Typography variant='body2'>Interval Waktu</Typography>
           </Grid>
-          <Grid item xs={6}>
-            <Box sx={{ mb: 3.5, display: 'flex', alignItems: 'flex-end', justifyContent: 'center' }}>
-              <Typography variant='h6' sx={{ lineHeight: 1, fontWeight: 600, fontSize: '3.75rem !important' }}>
+          <Grid item xs={6} display={'flex'} justifyContent={'center'} alignItems={'center'}>
+            <Box sx={{ mb: 3.5, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+              <Typography variant='h6' sx={{ lineHeight: 1, fontWeight: 600, fontSize: '3rem !important' }}>
                 {Math.round(Number(30))}%
               </Typography>
             </Box>
@@ -146,7 +146,7 @@ const CardProject = () => {
               <Box sx={{ display: 'flex', alignItems: 'center' }}>
                 <AccountOutline sx={{ color: 'primary.main', marginRight: 2.25 }} fontSize='small' />
                 <Typography variant='body2' sx={{ fontSize: '12px' }}>
-                  Jumlah Pegawai: <strong>30</strong>
+                  Jumlah Participant: <strong>30</strong>
                 </Typography>
               </Box>
             </StyledBox>
@@ -155,13 +155,13 @@ const CardProject = () => {
             <Box sx={{ mb: 10, mt: 3, display: 'flex', alignItems: 'center' }}>
               <LockOutline sx={{ color: 'primary.main', marginRight: 2.25 }} fontSize='small' />
               <Typography variant='body2' sx={{ fontSize: '12px' }}>
-                Tanggal Berakhir: <strong>deadlne</strong>
+                Tanggal Berakhir: <strong>deadline</strong>
               </Typography>
             </Box>
             <Box sx={{ display: 'flex', alignItems: 'center' }}>
               <ClipboardFileOutline sx={{ color: 'primary.main', marginRight: 2.25 }} fontSize='small' />
               <Typography variant='body2' sx={{ fontSize: '12px' }}>
-                Total Sub Kegiatan: <strong>43</strong>
+                Total Tim: <strong>43</strong>
               </Typography>
             </Box>
           </Grid>

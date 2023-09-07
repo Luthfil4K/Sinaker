@@ -112,7 +112,7 @@ const TabPanel1 = () => {
             Peserta Kegiatan
           </Typography>
           <Typography textAlign={'center'} variant='body1' component='span' sx={{ display: 'inline' }}>
-            10
+            100
           </Typography>
         </Grid>
         <Grid
@@ -136,7 +136,7 @@ const TabPanel1 = () => {
             {<ClipboardCheck />}
           </Avatar>
           <Typography textAlign={'center'} variant='body2' component='span' sx={{ display: 'inline' }}>
-            Total Tugas
+            Total Tim
           </Typography>
           <Typography textAlign={'center'} variant='body1' component='span' sx={{ display: 'inline' }}>
             30
@@ -248,7 +248,7 @@ const CardProjectDetail = () => {
               <Grid item>
                 <Link onClick={e => router.push('/task-manage')}>
                   <Button component='div' variant='contained'>
-                    Pengaturan Tugas
+                    Pengaturan Tim
                   </Button>
                 </Link>
               </Grid>
