@@ -31,13 +31,13 @@ const TableTask = () => {
       width: 250
     },
     { field: 'project', headerName: 'Kegiatan', width: 140 },
-    { field: 'priority', headerName: 'Priority', width: 160 },
+
     {
       field: 'status',
       renderCell: () => (
         <Chip
-          label={'selesai'}
-          color={'success'}
+          label={'on progress'}
+          color={'warning'}
           sx={{
             height: 24,
             fontSize: '0.75rem',
