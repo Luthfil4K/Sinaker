@@ -12,13 +12,13 @@ const CardTaskDetail = () => {
         <Grid container p={4}>
           <Grid item md={10}>
             <Typography color={'primary.dark'} variant={'h4'}>
-              Nama Tim - Nama Kegiatan
+              Nama Sub Kegiatan - Nama Kegiatan
             </Typography>
           </Grid>
           <Grid item md={2}>
             <Chip
               label={'on progress'}
-              color={'success'}
+              color={'warning'}
               sx={{
                 height: 24,
                 fontSize: '0.75rem',
@@ -29,11 +29,11 @@ const CardTaskDetail = () => {
             />
           </Grid>
           <Grid mt={1} item md={12}>
-            <Typography variant={'body1'}>Nama PML - no WA</Typography>
+            <Typography variant={'body1'}></Typography>
           </Grid>
           <Grid justifyContent={'start'} mt={2} xs={6} item md={6}>
             <Typography textAlign={'start'} variant={'body1'}>
-              Target Tim : 90
+              {/* Target Kegiatan : 900 */}
             </Typography>
           </Grid>
           <Grid justifyContent={'end'} mt={2} xs={6} item md={6}>

@@ -22,7 +22,7 @@ const CardTaskComent = () => {
           </Grid>
           <Grid item md={11} display={'inline'}>
             <Typography color={'primary.dark'} variant={'body1'}>
-              Tim Note
+              Note
             </Typography>
           </Grid>
           <Grid mt={1} display={'flex'} justifyContent={'center'} item md={12}>

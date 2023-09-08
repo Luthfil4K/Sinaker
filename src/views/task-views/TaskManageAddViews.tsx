@@ -13,24 +13,24 @@ import TableAddParticipant from 'src/views/tables/TableAddParticipant'
 
 const TaskManageAddViews = () => {
   const router = useRouter()
-  const ProjectParticipant = ['pegawai1', 'pegawai2', 'pegawai3']
+  const ProjectParticipant = ['Persiapan', 'Pelaksanaan', 'Pengawasan', 'Pengolahan', 'Evaluasi', 'Diseminasi']
   return (
     <>
       <Card sx={{ padding: 4 }}>
         <Box sx={{ mb: 6 }}>
           <Typography variant='h5' sx={{ fontWeight: 600, marginBottom: 1.5 }}>
-            Tambah Tim
+            Tambah Kegiatan
           </Typography>
           {/* <Typography variant='body2'>Fill this blank field below</Typography> */}
         </Box>
         <form noValidate autoComplete='off' onSubmit={e => e.preventDefault()}>
-          <TextField autoFocus fullWidth id='namaTim' label='Nama Tim' sx={{ marginBottom: 4 }} />
+          <TextField autoFocus fullWidth id='namaKegiatan' label='Nama Sub Kegiatan' sx={{ marginBottom: 4 }} />
           <Autocomplete
             sx={{ marginBottom: 4 }}
             disablePortal
             id='combo-box-demo'
             options={ProjectParticipant}
-            renderInput={params => <TextField {...params} label='PML' />}
+            renderInput={params => <TextField {...params} label='Jenis Kegiatan' />}
           />
           <Grid container spacing={4}>
             <Grid item md={6} xs={12}>
@@ -58,7 +58,7 @@ const TaskManageAddViews = () => {
             variant='contained'
             sx={{ marginTop: 4 }}
           >
-            Buat Tim
+            Buat Kegiatan
           </Button>
         </form>
       </Card>

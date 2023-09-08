@@ -1,6 +1,7 @@
 import Card from '@mui/material/Card'
 import Grid from '@mui/material/Grid'
 import Link from '@mui/material/Link'
+import Chip from '@mui/material/Chip'
 import Typography from '@mui/material/Typography'
 import Button from '@mui/material/Button'
 
@@ -15,11 +16,11 @@ import PencilOutline from 'mdi-material-ui/PencilOutline'
 import DeleteOutline from 'mdi-material-ui/DeleteOutline'
 
 const rows = [
-  { id: 1, tim: 'tim ke 1', pml: 'pegawai1', pcl: 20, deadline: '22/09/2023' },
-  { id: 2, tim: 'tim ke 2', pml: 'pegawai2', pcl: 30, deadline: '22/09/2023' },
-  { id: 3, tim: 'tim ke 3', pml: 'pegawai3', pcl: 7, deadline: '22/09/2023' },
-  { id: 4, tim: 'tim ke 4', pml: 'pegawai4', pcl: 15, deadline: '22/09/2023' },
-  { id: 5, tim: 'tim ke 5', pml: 'pegawai5', pcl: 12, deadline: '22/09/2023' }
+  { id: 1, tim: 'tim ke 1', jenisKegiatan: 'Pengawasan', target: 80, deadline: '22/09/2023' },
+  { id: 2, tim: 'tim ke 2', jenisKegiatan: 'pengolahan', target: 10, deadline: '22/09/2023' },
+  { id: 3, tim: 'tim ke 3', jenisKegiatan: 'evaluasi', target: 50, deadline: '22/09/2023' },
+  { id: 4, tim: 'tim ke 4', jenisKegiatan: 'diseminasi', target: 20, deadline: '22/09/2023' },
+  { id: 5, tim: 'tim ke 5', jenisKegiatan: 'pengolahan', target: 60, deadline: '22/09/2023' }
 ]
 
 const TableManageTaskList = () => {
@@ -42,13 +43,14 @@ const TableManageTaskList = () => {
       }
     })
   }
+  const subKegiatan = ['Sub Kegiatan']
 
   const columns = [
     { field: 'id', headerName: 'No', type: 'string', width: 70 },
     {
-      field: 'tim',
-      headerName: 'Tim',
-      minwidth: 250,
+      field: 'subKegiatan',
+      headerName: 'Sub Kegiatan',
+      width: 250,
       flex: 1,
       renderCell: () => (
         <Link
@@ -58,16 +60,36 @@ const TableManageTaskList = () => {
           sx={{ cursor: 'pointer' }}
         >
           <Typography sx={{ fontWeight: 500, fontSize: '0.875rem !important' }}>
-            {tim.map(team => {
-              return `${team} ke-sekian`
+            {subKegiatan.map(team => {
+              return `${team} `
             })}
           </Typography>
         </Link>
       )
     },
-    { field: 'pml', headerName: 'PML', width: 140 },
-    { field: 'pcl', headerName: 'PCL', width: 100 },
-    { field: 'deadline', headerName: 'Deadline', type: 'string', width: 180 },
+    { field: 'jenisKegiatan', headerName: 'Jenis Kegiatan', width: 150 },
+
+    {
+      field: 'realisasi',
+      renderCell: () => (
+        <Chip
+          label={'7'}
+          color={'warning'}
+          sx={{
+            height: 24,
+            fontSize: '0.75rem',
+            width: 100,
+            textTransform: 'capitalize',
+            '& .MuiChip-label': { fontWeight: 500 }
+          }}
+        />
+      ),
+      headerName: 'Realisasi',
+      type: 'string',
+      width: 100
+    },
+    { field: 'target', headerName: 'Target', type: 'string', width: 100 },
+    { field: 'deadline', headerName: 'Deadline', type: 'string', width: 140 },
     {
       field: 'action',
       renderHeader: () => (

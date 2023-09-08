@@ -49,9 +49,9 @@ const CardProjectDetailProgress = () => {
                     zIndex: 1
                   }}
                 >
-                  {Math.round(Number(30))}%
+                  {Math.round(Number(60))}%
                 </Typography>
-                <CircularProgress size={170} value={80} variant='indeterminate' sx={{ marginBottom: 1 }} />
+                <CircularProgress size={170} value={60} variant='determinate' sx={{ marginBottom: 1 }} />
               </Grid>
             </Grid>
           </Grid>

@@ -136,10 +136,10 @@ const TabPanel1 = () => {
             {<ClipboardCheck />}
           </Avatar>
           <Typography textAlign={'center'} variant='body2' component='span' sx={{ display: 'inline' }}>
-            Total Tim
+            Total Sub Kegiatan
           </Typography>
           <Typography textAlign={'center'} variant='body1' component='span' sx={{ display: 'inline' }}>
-            30
+            3
           </Typography>
         </Grid>
       </Grid>
@@ -248,7 +248,7 @@ const CardProjectDetail = () => {
               <Grid item>
                 <Link onClick={e => router.push('/task-manage')}>
                   <Button component='div' variant='contained'>
-                    Pengaturan Tim
+                    Pengaturan Sub Kegiatan
                   </Button>
                 </Link>
               </Grid>

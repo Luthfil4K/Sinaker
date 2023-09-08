@@ -16,7 +16,7 @@ const TaskManageViews = () => {
       <Grid container spacing={4}>
         <Grid display={'flex'} item md={6} mb={4}>
           <Typography fontWeight={500} variant={'h5'} mx={2} my={2}>
-            Pengaturan Tim
+            Pengaturan Sub Kegiatan
           </Typography>
         </Grid>
         <Grid display={'flex'} justifyContent={'end'} item md={6} mb={4}>
@@ -27,7 +27,7 @@ const TaskManageViews = () => {
               }}
               variant={'contained'}
             >
-              Tambah Tim
+              Tambah Sub Kegiatan
             </Button>
           </Link>
         </Grid>

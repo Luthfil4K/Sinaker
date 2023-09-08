@@ -11,21 +11,61 @@ import * as React from 'react'
 import { DataGrid } from '@mui/x-data-grid'
 
 const rows = [
-  { id: 1, tim: '', pml: 'pegawai 1', pcl: 40, realisasi: 'selesai', target: 33, deadline: '22/09/2023' },
-  { id: 2, tim: '', pml: 'pegawai 2', pcl: 20, realisasi: 'on progress', target: 75, deadline: '22/09/2023' },
-  { id: 3, tim: '', pml: 'pegawai 5', pcl: 20, realisasi: 'selesai', target: 130, deadline: '26/09/2023' },
-  { id: 4, tim: '', pml: 'pegawai 3', pcl: 60, realisasi: 'assigned', target: 27, deadline: '28/09/2023' },
-  { id: 5, tim: '', pml: 'pegawai 6', pcl: 60, realisasi: 'selesai', target: 10, deadline: '29/09/2023' }
+  {
+    id: 1,
+    subKegiatan: '',
+    jenisKegiatan: 'Persiapan ',
+    pcl: 40,
+    realisasi: 'selesai',
+    target: 33,
+    deadline: '22/09/2023'
+  },
+  {
+    id: 2,
+    subKegiatan: '',
+    jenisKegiatan: 'Diseminasi ',
+    pcl: 20,
+    realisasi: 'on progress',
+    target: 75,
+    deadline: '22/09/2023'
+  },
+  {
+    id: 3,
+    subKegiatan: '',
+    jenisKegiatan: 'pengolahan',
+    pcl: 20,
+    realisasi: 'selesai',
+    target: 130,
+    deadline: '26/09/2023'
+  },
+  {
+    id: 4,
+    subKegiatan: '',
+    jenisKegiatan: 'pengolahan',
+    pcl: 60,
+    realisasi: 'assigned',
+    target: 27,
+    deadline: '28/09/2023'
+  },
+  {
+    id: 5,
+    subKegiatan: '',
+    jenisKegiatan: 'Pengawasan',
+    pcl: 60,
+    realisasi: 'selesai',
+    target: 10,
+    deadline: '29/09/2023'
+  }
 ]
 
 const TableProjectDetailTask = () => {
   const router = useRouter()
-  const tim = ['Tim']
+  const subKegiatan = ['Sub Kegiatan']
   const columns = [
     { field: 'id', headerName: 'No', type: 'string', width: 70 },
     {
-      field: 'tim',
-      headerName: 'Tim',
+      field: 'subKegiatan',
+      headerName: 'Sub Kegiatan',
       minwidth: 250,
       flex: 1,
       renderCell: () => (
@@ -36,15 +76,15 @@ const TableProjectDetailTask = () => {
           sx={{ cursor: 'pointer' }}
         >
           <Typography sx={{ fontWeight: 500, fontSize: '0.875rem !important' }}>
-            {tim.map(team => {
-              return `${team} ke-sekian`
+            {subKegiatan.map(team => {
+              return `${team} `
             })}
           </Typography>
         </Link>
       )
     },
-    { field: 'pml', headerName: 'PML', width: 150 },
-    { field: 'pcl', headerName: 'PCL', width: 70 },
+    { field: 'jenisKegiatan', headerName: 'Jenis Kegiatan', width: 150 },
+
     {
       field: 'realisasi',
       renderCell: () => (
