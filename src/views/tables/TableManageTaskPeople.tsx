@@ -23,37 +23,37 @@ const rows = [
   {
     id: 1,
     nama: 'Pegawai1',
-    totalGaji:320000,
+    totalGaji: 320000,
     fungsi: 'Distribusi',
     jumlahKegiatan: '5',
-    totalGaji: '6',
+
     role: '22/09/2023'
   },
   {
     id: 2,
     nama: 'Pegawai2',
-    totalGaji:440000,
+    totalGaji: 440000,
     fungsi: 'IPDS',
     jumlahKegiatan: '4',
-    totalGaji: '2',
+
     role: '22/09/2023'
   },
   {
     id: 3,
     nama: 'Pegawai3',
-    totalGaji:140000,
+    totalGaji: 140000,
     fungsi: 'IPDS',
     jumlahKegiatan: '4',
-    totalGaji: '5',
+
     role: '22/09/2023'
   },
   {
     id: 4,
     nama: 'pegawai4',
-    totalGaji:200000,
+    totalGaji: 200000,
     fungsi: 'Produksi',
     jumlahKegiatan: '2',
-    totalGaji: '4',
+
     role: '22/09/2023'
   }
 ]
