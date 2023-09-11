@@ -121,6 +121,7 @@ const TableMitra = () => {
         <>
           <Button
             onClick={e => {
+              e.preventDefault()
               router.push('/mitra-edit')
             }}
             type='submit'

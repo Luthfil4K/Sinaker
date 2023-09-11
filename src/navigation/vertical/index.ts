@@ -62,6 +62,11 @@ const navigation = (): VerticalNavItemsType => {
       icon: CubeOutline,
       path: '/pengumuman'
     },
+    {
+      title: 'Timeline',
+      icon: CubeOutline,
+      path: '/timeline'
+    },
     // {
     //   title: 'Buat Rapat',
     //   icon: Login,

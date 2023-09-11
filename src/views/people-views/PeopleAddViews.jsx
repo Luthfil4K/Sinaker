@@ -20,6 +20,11 @@ import EyeOffOutline from 'mdi-material-ui/EyeOffOutline'
 import InputAdornment from '@mui/material/InputAdornment'
 
 const PeopleAddViews = () => {
+  const handleAddPegawai = event => {
+    event.preventDefault()
+    console.log(event.target.nama.value)
+  }
+
   return (
     <>
       <Card sx={{ padding: 4 }}>
@@ -29,8 +34,10 @@ const PeopleAddViews = () => {
           </Typography>
           <Typography variant='body2'>Fill this blank field below</Typography>
         </Box>
-        <form noValidate autoComplete='off' onSubmit={e => e.preventDefault()}>
-          <TextField autoFocus fullWidth id='nama' label='Nama' sx={{ marginBottom: 4 }} />
+        <form noValidate autoComplete='off' onSubmit={handleAddPegawai}>
+          <FormControl fullWidth>
+            <TextField autoFocus fullWidth name='nama' id='nama' label='Nama' sx={{ marginBottom: 4 }} />
+          </FormControl>
           <TextField autoFocus fullWidth id='nip' label='Nip' sx={{ marginBottom: 4 }} />
           <FormControl fullWidth sx={{ marginBottom: 4 }}>
             <InputLabel id='form-layouts-separator-select-label'>Fungsi</InputLabel>
@@ -65,7 +72,7 @@ const PeopleAddViews = () => {
             />
           </FormControl>
 
-          <Button fullWidth size='medium' variant='contained' sx={{ marginTop: 4 }}>
+          <Button type='submit' fullWidth size='medium' variant='contained' sx={{ marginTop: 4 }}>
             Login
           </Button>
         </form>

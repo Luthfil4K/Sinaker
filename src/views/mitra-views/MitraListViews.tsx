@@ -11,6 +11,7 @@ import TableMitra from 'src/views/tables/TableMitra'
 
 const MitraListViews = () => {
   const router = useRouter()
+  // const gaji = 90000
   return (
     <>
       <Grid container spacing={5}>
@@ -22,6 +23,7 @@ const MitraListViews = () => {
             <Button variant={'contained'}> Tambah Mitra</Button>
           </Link>
         </Grid>
+        {/* <Typography>{gaji.toLocaleString('id-ID', { currency: 'IDR' })}</Typography> */}
         <Grid item md={12} xs={12}>
           <Box sx={{ width: '100%' }}>
             <TableMitra></TableMitra>
