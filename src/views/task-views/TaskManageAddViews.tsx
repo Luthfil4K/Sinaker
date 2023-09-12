@@ -13,7 +13,7 @@ import TableAddParticipant from 'src/views/tables/TableAddParticipant'
 
 const TaskManageAddViews = () => {
   const router = useRouter()
-  const ProjectParticipant = ['Persiapan', 'Pelaksanaan', 'Pengawasan', 'Pengolahan', 'Evaluasi', 'Diseminasi']
+  const jenisSubKegiatan = ['Persiapan', 'Pelaksanaan', 'Pengawasan', 'Pengolahan', 'Evaluasi', 'Diseminasi']
   return (
     <>
       <Card sx={{ padding: 4 }}>
@@ -29,7 +29,7 @@ const TaskManageAddViews = () => {
             sx={{ marginBottom: 4 }}
             disablePortal
             id='combo-box-demo'
-            options={ProjectParticipant}
+            options={jenisSubKegiatan}
             renderInput={params => <TextField {...params} label='Jenis Kegiatan' />}
           />
           <Grid container spacing={4}>

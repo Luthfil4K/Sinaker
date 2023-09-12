@@ -23,7 +23,7 @@ const CardProjectDetailProgress = () => {
     <>
       <Card sx={{ height: 350, overflowY: 'scroll' }}>
         <CardHeader
-          title='Project Progress'
+          title='Progress Kegiatan'
           titleTypographyProps={{ sx: { lineHeight: '1.2 !important', letterSpacing: '0.31px !important' } }}
         />
         <CardContent>

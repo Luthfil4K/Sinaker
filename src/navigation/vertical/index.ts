@@ -50,7 +50,7 @@ const navigation = (): VerticalNavItemsType => {
     {
       title: 'Dashboard2',
       icon: HomeOutline,
-      path: '/dashboard2'
+      path: '/'
     },
     {
       title: 'Buat Kegiatan',
@@ -109,7 +109,7 @@ const navigation = (): VerticalNavItemsType => {
       title: 'Kode',
       icon: Login,
       path: '/master-kode'
-    }
+    },
 
     // {
     //   title: 'Daftar Rapat',
@@ -139,11 +139,11 @@ const navigation = (): VerticalNavItemsType => {
     //   icon: Table,
     //   path: '/tables'
     // }
-    // {
-    //   icon: CubeOutline,
-    //   title: 'Form Layouts',
-    //   path: '/form-layouts'
-    // },
+    {
+      icon: CubeOutline,
+      title: 'Form Layouts',
+      path: '/form-layouts'
+    }
     // {
     //   icon: CubeOutline,
     //   title: 'iccon',

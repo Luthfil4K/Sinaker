@@ -8,7 +8,7 @@ import { hexToRGBA } from 'src/@core/utils/hex-to-rgba'
 const DatePickerWrapper = styled(Box)<BoxProps>(({ theme }) => {
   return {
     '& .react-datepicker-popper': {
-      zIndex: 5
+      zIndex: 50
     },
     '& .react-datepicker-wrapper': {
       width: '100%'
