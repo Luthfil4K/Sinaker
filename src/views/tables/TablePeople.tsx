@@ -94,31 +94,31 @@ const TablePeople = () => {
     { field: 'gajiSemesteran', headerName: 'Gaji Semesteran', type: 'string', width: 150 },
     { field: 'gajiTahunan', headerName: 'Gaji Tahunan', type: 'string', width: 150 },
     { field: 'jumlahKegiatan', headerName: 'Jumlah Kegiatan', minWidth: 150 },
-    // { field: 'jumlahSubkegiatan', headerName: 'Jumlah Subkegiatan', type: 'string', minWidth: 150 },
-    // {
-    //   field: 'role',
-    //   renderHeader: () => (
-    //     <Typography sx={{ fontWeight: 900, fontSize: '0.875rem !important', textAlign: 'center' }}>Role</Typography>
-    //   ),
-    //   minWidth: 160,
-    //   flex: 1,
-    //   renderCell: () => (
-    //     <form>
-    //       <FormControl fullWidth>
-    //         <InputLabel id='form-layouts-separator-select-label'>role</InputLabel>
-    //         <Select
-    //           sx={{ height: 50 }}
-    //           label='role'
-    //           id='form-layouts-separator-role'
-    //           labelId='form-layouts-separator-role-label'
-    //         >
-    //           <MenuItem value='admin'>Supervisor</MenuItem>
-    //           <MenuItem value='employee'>Staff</MenuItem>
-    //         </Select>
-    //       </FormControl>
-    //     </form>
-    //   )
-    // },
+    { field: 'jumlahSubkegiatan', headerName: 'Jumlah Subkegiatan', type: 'string', minWidth: 150 },
+    {
+      field: 'role',
+      renderHeader: () => (
+        <Typography sx={{ fontWeight: 900, fontSize: '0.875rem !important', textAlign: 'center' }}>Role</Typography>
+      ),
+      minWidth: 160,
+      flex: 1,
+      renderCell: () => (
+        <form>
+          <FormControl fullWidth>
+            <InputLabel id='form-layouts-separator-select-label'>role</InputLabel>
+            <Select
+              sx={{ height: 50 }}
+              label='role'
+              id='form-layouts-separator-role'
+              labelId='form-layouts-separator-role-label'
+            >
+              <MenuItem value='1'>Ketua Tim</MenuItem>
+              <MenuItem value='2'>Staff</MenuItem>
+            </Select>
+          </FormControl>
+        </form>
+      )
+    },
     {
       field: 'action',
       renderHeader: () => (
@@ -148,15 +148,6 @@ const TablePeople = () => {
     }
   ]
 
-  // const router = useRouter()
-  // const handleEdit = () => {
-  //   Swal.fire({
-  //     title: 'Input email address',
-  //     input: 'email',
-  //     inputLabel: 'Your email address',
-  //     inputPlaceholder: 'Enter your email address'
-  //   })
-  // }
   const handleDelete = () => {
     Swal.fire({
       title: 'Apa Anda Yakin?',
