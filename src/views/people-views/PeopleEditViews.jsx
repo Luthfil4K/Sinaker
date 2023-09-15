@@ -32,6 +32,27 @@ import InputAdornment from '@mui/material/InputAdornment'
 import EyeOffOutline from 'mdi-material-ui/EyeOffOutline'
 
 const PeopleAddViews = () => {
+  const [values, setValues] = useState({
+    pegawaiId: '',
+    pegawaiNama: '',
+    pegawaiFungsi: '',
+    pegawaiEmail: '',
+    pegawaiPassword: ''
+  })
+
+  const handleChange = props => event => {
+    setValues({ ...values, [props]: event.target.value })
+  }
+
+  const handleDropDownChange = event => {
+    setValues(values => ({
+      ...values,
+      pegawaiFungsi: event.target.value
+    }))
+  }
+
+  console.log(values)
+
   const router = useRouter()
   const handleEdit = () => {
     Swal.fire({
@@ -44,9 +65,9 @@ const PeopleAddViews = () => {
       confirmButtonText: 'Yes, edit akun !'
     }).then(result => {
       if (result.isConfirmed) {
-        router.push('/people')
+        router.push('/pegawai')
       } else {
-        router.push('/people')
+        router.push('/pegawai')
       }
     })
   }
@@ -55,37 +76,60 @@ const PeopleAddViews = () => {
       <Card sx={{ padding: 4 }}>
         <Box sx={{ mb: 6 }}>
           <Typography variant='h5' sx={{ fontWeight: 600, marginBottom: 1.5 }}>
-            Edit People
+            Edit Pegawai
           </Typography>
           <Typography variant='body2'>Fill this blank field below</Typography>
         </Box>
         <form noValidate autoComplete='off' onSubmit={e => e.preventDefault()}>
-          <TextField autoFocus fullWidth id='nama' label='Nama' sx={{ marginBottom: 4 }} />
-          <TextField autoFocus fullWidth id='nip' label='Nip' sx={{ marginBottom: 4 }} />
+          <TextField
+            name={'pegawaiNama'}
+            value={values.pegawiNama}
+            onChange={handleChange('pegawaiNama')}
+            autoFocus
+            fullWidth
+            id='nama'
+            label='Nama'
+            sx={{ marginBottom: 4 }}
+          />
           <FormControl fullWidth sx={{ marginBottom: 4 }}>
             <InputLabel id='form-layouts-separator-select-label'>Fungsi</InputLabel>
             <Select
+              name='pegawaiFungsi'
               sx={{ height: 50 }}
               label='Fungsi'
+              onChange={handleDropDownChange}
               id='form-layouts-separator-fungsi'
               labelId='form-layouts-separator-fungsi-label'
+              value={values.pegawaiFungsi}
               defaultChecked
             >
-              <MenuItem value='umum'>Umum</MenuItem>
-              <MenuItem value='ipds'>Ipds</MenuItem>
-              <MenuItem value='produksi'>Produksi</MenuItem>
-              <MenuItem value='neraca'>Neraca</MenuItem>
-              <MenuItem value='distribusi'>Distribusi</MenuItem>
-              <MenuItem value='sosial'>Sosial</MenuItem>
+              <MenuItem value={2}>Bagian Umum</MenuItem>
+              <MenuItem value={3}>Statistik Sosial </MenuItem>
+              <MenuItem value={4}>Statistik Produksi</MenuItem>
+              <MenuItem value={5}>Statistik Distribusi</MenuItem>
+              <MenuItem value={6}>Neraca Wilayah dan Analisis Statistik</MenuItem>
+              <MenuItem value={7}>Integrasi Pengolahan dan Diseminasi Statistik</MenuItem>
             </Select>
           </FormControl>
-          <TextField autoFocus fullWidth id='email' label='Email' sx={{}} />
+          <TextField
+            name='pegawaiEmail'
+            onChange={handleChange('pegawaiEmail')}
+            value={values.pegawaiEmail}
+            autoFocus
+            fullWidth
+            id='email'
+            label='Email'
+            sx={{}}
+          />
           <FormControl fullWidth sx={{ marginTop: 4 }}>
             <InputLabel htmlFor='auth-login-password'>Password</InputLabel>
             <OutlinedInput
+              name='pegawaiPassword'
               label='Password'
               id='auth-login-password'
               type={'password'}
+              onChange={handleChange('pegawaiPassword')}
+              value={values.pegawaiPassword}
               endAdornment={
                 <InputAdornment position='end'>
                   <IconButton edge='end' aria-label='toggle password visibility'>

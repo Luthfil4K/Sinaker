@@ -13,10 +13,9 @@ import DeleteOutline from 'mdi-material-ui/DeleteOutline'
 
 const columns = [
   { field: 'id', headerName: 'No', type: 'string', width: 40 },
-  { field: 'nama', headerName: 'Nama', width: 130 },
-  { field: 'totalGaji', headerName: 'Total Gaji', type: 'string', width: 180 },
-  { field: 'jumlahKegiatan', headerName: 'Jumlah Kegiatan', width: 160 },
-  { field: 'totalGaji', headerName: 'Total Gaji ', type: 'string', width: 140 }
+  { field: 'nama', headerName: 'Nama', width: 230 },
+  { field: 'totalGaji', headerName: 'Total Gaji', type: 'string', width: 280 },
+  { field: 'jumlahKegiatan', headerName: 'Jumlah Kegiatan', width: 260 }
 ]
 
 const rows = [
@@ -25,36 +24,28 @@ const rows = [
     nama: 'Pegawai1',
     totalGaji: 320000,
     fungsi: 'Distribusi',
-    jumlahKegiatan: '5',
-
-    role: '22/09/2023'
+    jumlahKegiatan: '5'
   },
   {
     id: 2,
     nama: 'Pegawai2',
     totalGaji: 440000,
     fungsi: 'IPDS',
-    jumlahKegiatan: '4',
-
-    role: '22/09/2023'
+    jumlahKegiatan: '4'
   },
   {
     id: 3,
     nama: 'Pegawai3',
     totalGaji: 140000,
     fungsi: 'IPDS',
-    jumlahKegiatan: '4',
-
-    role: '22/09/2023'
+    jumlahKegiatan: '4'
   },
   {
     id: 4,
     nama: 'pegawai4',
     totalGaji: 200000,
     fungsi: 'Produksi',
-    jumlahKegiatan: '2',
-
-    role: '22/09/2023'
+    jumlahKegiatan: '2'
   }
 ]
 

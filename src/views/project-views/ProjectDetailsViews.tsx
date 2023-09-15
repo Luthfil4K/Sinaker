@@ -8,12 +8,12 @@ import Button from '@mui/material/Button'
 
 import { useRouter } from 'next/dist/client/router'
 
+// swall
+import Swal from 'sweetalert2'
+
 import CardProjectDetail from 'src/views/cards/CardProjectDetail'
 import TableProjectDetailTask from 'src/views/tables/TableProjectDetailTask'
 import CardProjectDetailProgress from 'src/views/cards/CardProjectDetailProgress'
-
-// swall
-import Swal from 'sweetalert2'
 
 const ProjectDetailsViews = () => {
   const router = useRouter()
@@ -77,7 +77,7 @@ const ProjectDetailsViews = () => {
           <CardProjectDetailProgress></CardProjectDetailProgress>
         </Grid>
         <Grid item sm={12} md={12}>
-          <TableProjectDetailTask />
+          <TableProjectDetailTask></TableProjectDetailTask>
         </Grid>
       </Grid>
       <Grid mt={2} container>

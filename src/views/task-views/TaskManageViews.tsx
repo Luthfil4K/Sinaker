@@ -1,6 +1,3 @@
-import TableManageTaskList from 'src/views/tables/TableManageTaskList'
-import TableManageTaskPeople from 'src/views/tables/TableManageTaskPeople'
-
 import Card from '@mui/material/Card'
 import Typography from '@mui/material/Typography'
 import Grid from '@mui/material/Grid'
@@ -8,6 +5,9 @@ import Button from '@mui/material/Button'
 import Link from '@mui/material/Link'
 
 import { useRouter } from 'next/dist/client/router'
+
+import TableManageTaskList from 'src/views/tables/TableManageTaskList'
+import TableManageTaskPeople from 'src/views/tables/TableManageTaskPeople'
 
 const TaskManageViews = () => {
   const router = useRouter()
@@ -34,7 +34,7 @@ const TaskManageViews = () => {
         <Grid item md={12} xs={12}>
           <Card sx={{ paddingTop: 2 }}>
             <Typography fontWeight={500} variant={'h6'} mx={2} my={2}>
-              Daftar Tim
+              Daftar Sub Kegiatan
             </Typography>
             <TableManageTaskList></TableManageTaskList>
           </Card>

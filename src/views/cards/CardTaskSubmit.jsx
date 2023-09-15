@@ -8,7 +8,21 @@ import Card from '@mui/material/Card'
 import Divider from '@mui/material/Divider'
 import TextField from '@mui/material/TextField'
 
+import { useState } from 'react'
+
 const CardTaskSubmit = () => {
+  const [values, setValues] = useState({
+    target: 30,
+    realisasi: ''
+  })
+
+  const handleChange = props => event => {
+    setValues({ ...values, [props]: event.target.value })
+  }
+
+  const handleSimpan = () => {
+    console.log(values.realisasi)
+  }
   return (
     <>
       <Card>
@@ -20,7 +34,14 @@ const CardTaskSubmit = () => {
             </Typography>
           </Grid>
           <Grid item xs={9} md={9} mt={3}>
-            <TextField size='small' fullWidth multiline label='Realisasi' placeholder='Realisasi' />
+            <TextField
+              value={values.realisasi}
+              size='small'
+              fullWidth
+              label='Realisasi'
+              onChange={handleChange('realisasi')}
+              placeholder='Realisasi'
+            />
           </Grid>
           <Grid item xs={3} md={3} mt={3}>
             <Typography textAlign={'center'} variant={'body2'}>
@@ -28,7 +49,15 @@ const CardTaskSubmit = () => {
             </Typography>
           </Grid>
           <Grid item xs={9} md={9} mt={2}>
-            <TextField size='small' fullWidth multiline label='Target' value={30} placeholder='Target' />
+            <TextField
+              value={values.target}
+              size='small'
+              fullWidth
+              multiline
+              label='Target'
+              onChange={handleChange('target')}
+              placeholder='Target'
+            />
           </Grid>
           <Grid item xs={3} md={3} mt={2}>
             <Typography textAlign={'center'} variant={'body2'}>
@@ -55,7 +84,7 @@ const CardTaskSubmit = () => {
           </Grid> */}
           <Grid container spacing={3}>
             <Grid justifyContent={'center'} mt={2} item xs={12} md={12}>
-              <Button variant={'contained'} fullWidth>
+              <Button variant={'contained'} onClick={handleSimpan} fullWidth>
                 Simpan
               </Button>
             </Grid>
