@@ -46,7 +46,7 @@ const columns = [
 const rows = [
   {
     id: 1,
-    nama: 'Pegawai bisa jadi pcl?',
+    nama: 'Pegawai ',
     gajiBulanan: 40000,
     gajiTriwulanan: 80000,
     gajiSemesteran: 55000,
@@ -91,7 +91,7 @@ const TableAddParticipant = () => {
     <>
       <Card sx={{ padding: 4 }}>
         <Typography variant={'h6'} mt={1} mb={1}>
-          Pilih PCL
+          Pilih
         </Typography>
         <DataGrid
           rowHeight={65}

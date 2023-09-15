@@ -26,29 +26,41 @@ import Select, { SelectChangeEvent } from '@mui/material/Select'
 import InputLabel from '@mui/material/InputLabel'
 import MenuItem from '@mui/material/MenuItem'
 
-import TableAddParticipant from 'src/views/tables/TableAddParticipant'
+const CardProjectEdit = () => {
+  const projectRutin = [
+    'PENGELOLAAN WEB',
+    'SURVEI IBS BULANAN',
+    'SURVEI IBS TAHUNAN',
+    'SURVEI',
+    'SAKERNAS SEMESTERAN',
+    'SAKERNAS TAHUNAN'
+  ]
+  const jenisKegiatan = ['Pengolahan', 'Pelaksanaan', 'evaluasi', 'persiapan']
 
-const CreateProjectViews = () => {
   const [selectedDate, setSelectedDate] = useState(null)
   const [selectedDateE, setSelectedDateE] = useState(null)
+
+  const handlePJ = event => {
+    setValues(values => ({
+      ...values, // Pertahankan nilai properti lainnya
+      kegKetua: event.target.value // Perbarui nilai kegRentang
+    }))
+  }
+
+  const handleDateChangeE = date => {
+    setSelectedDateE(date)
+    console.log(date)
+  }
+
   const [values, setValues] = useState({
     kegNama: '',
     kegRentang: '',
     kegGajiPml: '',
     kegGajiPcl: '',
+    kegKetua: '',
     kegFungsi: '',
-    kegDesk: '',
-    kegKetua: ''
+    kegDesk: ''
   })
-
-  const handleDateChange = date => {
-    setSelectedDate(date)
-    console.log(date)
-  }
-  const handleDateChangeE = date => {
-    setSelectedDateE(date)
-    console.log(date)
-  }
 
   const handleChange = props => event => {
     setValues({ ...values, [props]: event.target.value })
@@ -62,8 +74,8 @@ const CreateProjectViews = () => {
     }))
   }
   console.log(values.kegRentang)
-  console.log(values.kegKetua)
   console.log(values.kegFungsi)
+
   const handleFungsiChange = event => {
     setValues(values => ({
       ...values, // Pertahankan nilai properti lainnya
@@ -71,54 +83,11 @@ const CreateProjectViews = () => {
     }))
   }
 
-  const handlePJ = event => {
-    setValues(values => ({
-      ...values, // Pertahankan nilai properti lainnya
-      kegKetua: event.target.value // Perbarui nilai kegRentang
-    }))
-  }
-  const handleCreate = () => {
-    Swal.fire({
-      title: 'Apa anda yakin?',
-      text: 'Periksa kembali untuk memastikan tidak ada yang salah',
-      icon: 'warning',
-      showCancelButton: true,
-      confirmButtonColor: '#3085d6',
-      cancelButtonColor: '#d33',
-      confirmButtonText: 'Yes, Buat Kegiatan!'
-    }).then(result => {
-      if (result.isConfirmed) {
-        router.push('/project-list')
-      } else {
-        router.push('/create-project')
-      }
-    })
-  }
-
-  const fungsi = ['Umum', 'Nerwilis', 'Produksi', 'Distribusi', 'IPDS', 'Sosial']
-  const ketuaTim = [
-    {
-      id: 1,
-      nama: 'ketua 1'
-    },
-
-    {
-      id: 3,
-      nama: 'ketua 3'
-    },
-    {
-      id: 2,
-      nama: 'ketua 2'
-    },
-    {
-      id: 5,
-      nama: 'ketua 5'
-    }
-  ]
-
   const router = useRouter()
+  const fungsi = ['Umum', 'Nerwilis', 'Produksi', 'Distribusi', 'IPDS', 'Sosial']
+
   return (
-    <Card>
+    <>
       <Grid container spacing={4} sx={{ padding: '32px' }}>
         <Grid item xs={12}>
           <Typography variant='h5'>Buat Kegiatan</Typography>
@@ -201,30 +170,12 @@ const CreateProjectViews = () => {
             label='Project Description'
             placeholder='Description'
             value={values.kegDesk}
-            onChange={handleChange('kegDesk')}
+            onChange={handleChange}
           />
         </Grid>
 
-        <Grid item xs={12} sm={12} lg={6} display={'flex'} justifyContent={'end'}>
-          <DatePickerWrapper>
-            <DatePicker
-              sx={{ width: 1000 }}
-              selected={selectedDate}
-              showYearDropdown
-              showMonthDropdown
-              placeholderText='Tanggal Mulai'
-              value={selectedDate}
-              onChange={handleDateChange}
-              dateFormat='dd/MM/yyyy'
-              className='custom-datepicker'
-              renderInput={params => <TextField {...params} fullWidth sx={{ width: 1000 }} />}
-            />
-          </DatePickerWrapper>
-          {/* <TextField fullWidth multiline label='Tanggal Dimulai' placeholder='Tanggal Dimulai' /> */}
-        </Grid>
-
-        <Grid item xs={12} sm={12} lg={6}>
-          <DatePickerWrapper>
+        <Grid item xs={12} sm={12} lg={12}>
+          <DatePickerWrapper fullwidth='true'>
             <DatePicker
               selected={selectedDateE}
               sx={{ width: 1000 }}
@@ -242,12 +193,6 @@ const CreateProjectViews = () => {
           <Typography variant='h6' sx={{ py: '5px' }}>
             Penanggung Jawab Kegiatan
           </Typography>
-          {/* <Autocomplete
-            disablePortal
-            id='combo-box-demo'
-            options={pegawai}
-            renderInput={params => <TextField {...params} label=' Penanggung Jawab Kegiatan' />}
-          /> */}
           <FormControl fullWidth>
             <InputLabel id='demo-simple-select-helper-label'>Penanggung Jawab</InputLabel>
             <Select
@@ -258,23 +203,29 @@ const CreateProjectViews = () => {
               onChange={handlePJ}
               label='Penanggung Jawab'
             >
-              {ketuaTim.map(item => (
-                <MenuItem value={item.id}>{item.nama}</MenuItem>
-              ))}
+              <MenuItem value={1}>Ketua 1</MenuItem>
+              <MenuItem value={2}>Ketua 2</MenuItem>
+              <MenuItem value={3}>Ketua 3</MenuItem>
+              <MenuItem value={4}>Ketua 4</MenuItem>
+              <MenuItem value={5}>Ketua 5</MenuItem>
+              <MenuItem value={6}>Ketua 6</MenuItem>
             </Select>
           </FormControl>
+          {/* <Autocomplete
+            disablePortal
+            id='combo-box-demo'
+            options={pegawai}
+            value={values.kegKetua}
+            onChange={(event, newValue) => {
+              setValues(newValue)
+            }}
+            renderInput={params => <TextField {...params} label=' Penanggung Jawab Kegiatan' />}
+          /> */}
         </Grid>
         <Grid item xs={12} md={3} lg={3}></Grid>
       </Grid>
-      {/* <TableAddParticipant></TableAddParticipant> */}
-      <Divider sx={{ margin: 0 }} />
-      <Grid item m={4}>
-        <Button onClick={handleCreate} size='medium' type='submit' variant='contained'>
-          Buat Kegiatan
-        </Button>
-      </Grid>
-    </Card>
+    </>
   )
 }
 
-export default CreateProjectViews
+export default CardProjectEdit

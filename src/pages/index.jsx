@@ -45,15 +45,63 @@ import SalesByCountries from 'src/views/dashboard/SalesByCountries'
 
 const Dashboard = () => {
   const dataawal = [12, 19, 3, 5, 2, 3, 8, 10, 6, 7, 14, 12]
+  const realisasiAwal = Array.from({ length: 12 }, () => Math.floor(Math.random() * 100))
   const [target, setTarget] = useState(dataawal)
-  const [valueDrop, setValueDrop] = useState(0)
   const [realisasi, setRealisasi] = useState(dataawal)
-  const handleChangeBar = event => {
-    // if(event.target.value === "objectkegiatan")
-    setTarget([122, 129, 23, 25, 22, 23, 82, 120, 62, 72, 142, 122])
-    setRealisasi([122, 129, 23, 25, 22, 32, 28, 210, 62, 7, 124, 122])
+
+  const [valueDropBar, setvalueDropBar] = useState(0)
+
+  const [valueDropLine, setvalueDropLine] = useState(0)
+  const [targetLine, setTargetLine] = useState(realisasiAwal)
+  const [realisasiLine, setRealisasiLine] = useState(dataawal)
+  const [bulan, SetBulan] = useState(1)
+
+  const handleChangeBulan = event => {
     console.log(event.target.value)
-    setValueDrop(event.target.value)
+    SetBulan(event.target.value)
+  }
+
+  const handleChangeBar = event => {
+    if (event.target.value === 10) {
+      setTarget([122, 129, 23, 25, 22, 23, 82, 120, 62, 72, 142, 122])
+      setRealisasi([122, 129, 23, 25, 22, 32, 28, 210, 62, 7, 124, 122])
+    } else if (event.target.value === 20) {
+      const randomTarget = Array.from({ length: 12 }, () => Math.floor(Math.random() * 100))
+      const randomRealisasi = Array.from({ length: 12 }, () => Math.floor(Math.random() * 100))
+      setTarget(randomTarget)
+      setRealisasi(randomRealisasi)
+    } else if (event.target.value === 30) {
+      const randomTarget = Array.from({ length: 12 }, () => Math.floor(Math.random() * 100))
+      const randomRealisasi = Array.from({ length: 12 }, () => Math.floor(Math.random() * 100))
+      setTarget(randomTarget)
+      console.log(randomTarget)
+      setRealisasi(randomRealisasi)
+    } else if (event.target.value === 40) {
+      const randomTarget = Array.from({ length: 12 }, () => Math.floor(Math.random() * 100))
+      const randomRealisasi = Array.from({ length: 12 }, () => Math.floor(Math.random() * 100))
+      setTarget(randomTarget)
+      setRealisasi(randomRealisasi)
+      console.log(randomTarget)
+    } else if (event.target.value === 50) {
+      const randomTarget = Array.from({ length: 12 }, () => Math.floor(Math.random() * 100))
+      const randomRealisasi = Array.from({ length: 12 }, () => Math.floor(Math.random() * 100))
+      setTarget(randomTarget)
+      setRealisasi(randomRealisasi)
+      console.log(randomTarget)
+    } else if (event.target.value === 60) {
+      const randomTarget = Array.from({ length: 12 }, () => Math.floor(Math.random() * 100))
+      const randomRealisasi = Array.from({ length: 12 }, () => Math.floor(Math.random() * 100))
+      setTarget(randomTarget)
+      setRealisasi(randomRealisasi)
+      console.log(randomTarget)
+    }
+    console.log(event.target.value)
+    setvalueDropBar(event.target.value)
+  }
+
+  const handleChangeLine = event => {
+    console.log(event.target.value)
+    setvalueDropLine(event.target.value)
   }
   const data = {
     labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'June', 'July', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
@@ -61,12 +109,12 @@ const Dashboard = () => {
       {
         label: 'Realisasi',
         data: target, // Tambahkan data sesuai bulan
-        backgroundColor: ['rgba(255, 99, 132, 0.9)']
+        backgroundColor: ['rgba(255, 99, 132, 1)']
       },
       {
         label: 'Target',
         data: realisasi, // Tambahkan data sesuai bulan
-        backgroundColor: ['rgba(255, 159, 64, 0.9)']
+        backgroundColor: ['rgba(255, 159, 64, 1)']
       }
     ]
   }
@@ -102,22 +150,49 @@ const Dashboard = () => {
           </Card>
         </Grid>
       </Grid>
-      <Grid mt={1} container spacing={4}>
-        <Grid item xs={12} md={6}>
+      <Grid mt={1} container spacing={2}>
+        <Grid item xs={12} md={12}>
           <Card sx={{ padding: 4, height: 350 }}>
             <Grid container spacing={2}>
-              <Grid item xs={6} md={6}>
+              <Grid item xs={6} md={8}>
                 <Typography variant={'h6'}>Grafik</Typography>
               </Grid>
-              <Grid item xs={6} md={6} display={'flex'} justifyContent={'end'} mb={4}>
+              <Grid item xs={3} md={2} display={'flex'} justifyContent={'end'} mb={4}>
+                <FormControl sx={{ m: 1, minWidth: 120 }}>
+                  <InputLabel id='demo-simple-select-helper-label'>Bulan</InputLabel>
+                  <Select
+                    labelId='demo-simple-select-helper-label'
+                    id='demo-simple-select-helper'
+                    value={bulan}
+                    label='Bulan'
+                    size={'small'}
+                    onChange={handleChangeBulan}
+                  >
+                    <MenuItem value={1}>Januari</MenuItem>
+                    <MenuItem value={2}>Februari</MenuItem>
+                    <MenuItem value={3}>Maret</MenuItem>
+                    <MenuItem value={4}>April</MenuItem>
+                    <MenuItem value={5}>Mei</MenuItem>
+                    <MenuItem value={6}>Juni</MenuItem>
+                    <MenuItem value={7}>Juli</MenuItem>
+                    <MenuItem value={8}>Agustus</MenuItem>
+                    <MenuItem value={9}>September</MenuItem>
+                    <MenuItem value={10}>Oktober</MenuItem>
+                    <MenuItem value={11}>November</MenuItem>
+                    <MenuItem value={12}>Desember</MenuItem>
+                  </Select>
+                </FormControl>
+              </Grid>
+              <Grid item xs={3} md={2} display={'flex'} justifyContent={'end'} mb={4}>
                 <FormControl sx={{ m: 1, minWidth: 120 }}>
                   <InputLabel id='demo-simple-select-helper-label'>Fungsi</InputLabel>
                   <Select
                     labelId='demo-simple-select-helper-label'
                     id='demo-simple-select-helper'
-                    value={valueDrop}
+                    value={valueDropLine}
                     label='Fungsi'
                     size={'small'}
+                    onChange={handleChangeLine}
                   >
                     <MenuItem value={10}>IPDS</MenuItem>
                     <MenuItem value={20}>Umum</MenuItem>
@@ -132,25 +207,28 @@ const Dashboard = () => {
             <Line
               datasetIdKey='id'
               data={{
-                labels: ['Jun', 'Jul', 'Aug'],
+                labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'June', 'July', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
                 datasets: [
                   {
-                    label: 's',
-                    data: [5, 6, 7]
+                    label: 'Target',
+                    data: targetLine,
+                    backgroundColor: ['rgba(255, 99, 132, 1)']
                   },
                   {
-                    label: 'w',
-                    data: [3, 2, 1]
+                    label: 'Realisasi',
+                    data: realisasiLine,
+                    backgroundColor: ['rgba(25, 19, 132, 1)']
                   }
                 ]
               }}
+              width={500}
+              height={160}
             />
-
             <Divider></Divider>
           </Card>
         </Grid>
-        <Grid item xs={12} md={6}>
-          <Card sx={{ padding: 4, height: 350 }}>
+        <Grid item xs={12} md={12}>
+          <Card sx={{ padding: 4, height: 450 }}>
             <Grid container spacing={2}>
               <Grid item xs={6} md={6}>
                 <Typography variant={'h6'}>Grafik</Typography>
@@ -161,7 +239,7 @@ const Dashboard = () => {
                   <Select
                     labelId='demo-simple-select-helper-label'
                     id='demo-simple-select-helper'
-                    value={valueDrop}
+                    value={valueDropBar}
                     label='Fungsi'
                     onChange={handleChangeBar}
                     size={'small'}
@@ -178,8 +256,8 @@ const Dashboard = () => {
             </Grid>
             <Bar
               data={data}
-              width={400}
-              height={200}
+              width={500}
+              height={160}
               options={{
                 responsive: true,
                 plugins: {
@@ -188,7 +266,7 @@ const Dashboard = () => {
                   },
                   title: {
                     display: true,
-                    text: 'Chart.js Bar Chart'
+                    text: 'Target dan Realisasi per Fungsi Tiap Bulan Tahun 2024'
                   }
                 }
               }}
