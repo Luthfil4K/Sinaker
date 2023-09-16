@@ -99,9 +99,9 @@ const CardProjectDetails = props => {
               Selengkapnya
             </Button>
           </Link>
-          <Button size={'small'} mt={4} variant={'contained'} onClick={() => justt(id)}>
+          {/* <Button size={'small'} mt={4} variant={'contained'} onClick={() => justt(id)}>
             justtry
-          </Button>
+          </Button> */}
         </Grid>
       </CardContent>
     </Card>

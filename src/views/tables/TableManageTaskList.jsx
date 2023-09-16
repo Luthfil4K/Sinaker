@@ -102,9 +102,9 @@ const TableManageTaskList = () => {
       confirmButtonText: 'Yes, Hapus tim !'
     }).then(result => {
       if (result.isConfirmed) {
-        router.push('/people')
+        router.push('/task-manage')
       } else {
-        router.push('/pople')
+        router.push('/task-manage')
       }
     })
   }

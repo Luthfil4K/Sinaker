@@ -61,9 +61,7 @@ const CreateProjectViews = () => {
       kegRentang: event.target.value // Perbarui nilai kegRentang
     }))
   }
-  console.log(values.kegRentang)
-  console.log(values.kegKetua)
-  console.log(values.kegFungsi)
+
   const handleFungsiChange = event => {
     setValues(values => ({
       ...values, // Pertahankan nilai properti lainnya
@@ -78,6 +76,7 @@ const CreateProjectViews = () => {
     }))
   }
   const handleCreate = () => {
+    console.log(values)
     Swal.fire({
       title: 'Apa anda yakin?',
       text: 'Periksa kembali untuk memastikan tidak ada yang salah',
@@ -134,6 +133,7 @@ const CreateProjectViews = () => {
               value={values.kegRentang}
               onChange={handleRentangChange}
               label='Rentang Waktu'
+              name='rentangWaktu'
             >
               <MenuItem value={59}>Bulanan</MenuItem>
               <MenuItem value={60}>Triwulanan</MenuItem>
@@ -151,6 +151,7 @@ const CreateProjectViews = () => {
             onChange={handleChange('kegNama')}
             multiline
             label='Nama Kegiatan'
+            name='namaKegiatan'
           />
         </Grid>
 
@@ -158,18 +159,20 @@ const CreateProjectViews = () => {
           <TextField
             fullWidth
             value={values.kegGajiPml}
+            type={'number'}
             onChange={handleChange('kegGajiPml')}
-            multiline
             label='Gaji Satuan PML'
+            name='gajiPML'
           />
         </Grid>
         <Grid item xs={12} sm={12} lg={6}>
           <TextField
             fullWidth
             value={values.kegGajiPcl}
+            type={'number'}
             onChange={handleChange('kegGajiPcl')}
-            multiline
             label='Gaji Satuan PCL'
+            name='gajiPCL'
           />
         </Grid>
         <Grid item xs={12} sm={12} lg={12}>
@@ -182,6 +185,7 @@ const CreateProjectViews = () => {
               value={values.kegFungsi}
               id='demo-simple-select-helper'
               label='Fungsi'
+              name='fungsi'
             >
               <MenuItem value={2}>Bagian Umum</MenuItem>
               <MenuItem value={3}>Statistik Sosial </MenuItem>
@@ -202,6 +206,7 @@ const CreateProjectViews = () => {
             placeholder='Description'
             value={values.kegDesk}
             onChange={handleChange('kegDesk')}
+            name='kegaitanDesk'
           />
         </Grid>
 
@@ -218,6 +223,7 @@ const CreateProjectViews = () => {
               dateFormat='dd/MM/yyyy'
               className='custom-datepicker'
               renderInput={params => <TextField {...params} fullWidth sx={{ width: 1000 }} />}
+              name='tanggalMulai'
             />
           </DatePickerWrapper>
           {/* <TextField fullWidth multiline label='Tanggal Dimulai' placeholder='Tanggal Dimulai' /> */}
@@ -235,6 +241,7 @@ const CreateProjectViews = () => {
               onChange={handleDateChangeE}
               dateFormat='dd/MM/yyyy'
               className='custom-datepicker'
+              name='tanggalBerakhir'
             />
           </DatePickerWrapper>
         </Grid>
@@ -257,9 +264,12 @@ const CreateProjectViews = () => {
               value={values.kegKetua}
               onChange={handlePJ}
               label='Penanggung Jawab'
+              name='penanggungJawab'
             >
               {ketuaTim.map(item => (
-                <MenuItem value={item.id}>{item.nama}</MenuItem>
+                <MenuItem key={item.id} value={item.id}>
+                  {item.nama}
+                </MenuItem>
               ))}
             </Select>
           </FormControl>
@@ -268,7 +278,7 @@ const CreateProjectViews = () => {
       </Grid>
       {/* <TableAddParticipant></TableAddParticipant> */}
       <Divider sx={{ margin: 0 }} />
-      <Grid item m={4}>
+      <Grid item m={4} display={'flex'} justifyContent={'end'}>
         <Button onClick={handleCreate} size='medium' type='submit' variant='contained'>
           Buat Kegiatan
         </Button>

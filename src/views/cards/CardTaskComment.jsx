@@ -1,4 +1,5 @@
 import Button from '@mui/material/Button'
+import { useState } from 'react'
 import TabContext from '@mui/lab/TabContext'
 import Typography from '@mui/material/Typography'
 import Grid from '@mui/material/Grid'
@@ -12,6 +13,17 @@ import SendIcon from 'mdi-material-ui/Send'
 import AccountIcon from 'mdi-material-ui/Account'
 
 const CardTaskComent = () => {
+  const [values, setValues] = useState({
+    notesSubKeg: ''
+  })
+
+  const handleChange = props => event => {
+    setValues({ ...values, [props]: event.target.value })
+  }
+
+  const handleSimpan = () => {
+    console.log(values.notesSubKeg)
+  }
   return (
     <>
       <Card sx={{ marginTop: 4 }}>
@@ -28,9 +40,12 @@ const CardTaskComent = () => {
           <Grid mt={1} display={'flex'} justifyContent={'center'} item md={12}>
             <FormControl fullWidth sx={{ overflowY: 'auto' }}>
               <OutlinedInput
+                name='notesSubKeg'
+                value={values.notesSubKeg}
+                onChange={handleChange('notesSubKeg')}
                 endAdornment={
                   <InputAdornment position='end'>
-                    <IconButton edge='end' aria-label='toggle password visibility'>
+                    <IconButton onClick={handleSimpan} edge='end' aria-label='toggle password visibility'>
                       <SendIcon></SendIcon>
                     </IconButton>
                   </InputAdornment>

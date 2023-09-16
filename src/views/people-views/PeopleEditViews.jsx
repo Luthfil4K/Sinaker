@@ -24,17 +24,25 @@ import IconButton from '@mui/material/IconButton'
 import CardContent from '@mui/material/CardContent'
 import FormControl from '@mui/material/FormControl'
 import OutlinedInput from '@mui/material/OutlinedInput'
-
 import InputAdornment from '@mui/material/InputAdornment'
+import Visibility from '@mui/icons-material/Visibility'
+import VisibilityOff from '@mui/icons-material/VisibilityOff'
 
 // ** Icons Imports
 
 import EyeOffOutline from 'mdi-material-ui/EyeOffOutline'
 
 const PeopleAddViews = () => {
+  const [showPassword, setShowPassword] = useState(false)
+  const handleClickShowPassword = () => setShowPassword(show => !show)
+  const handleMouseDownPassword = event => {
+    event.preventDefault()
+  }
+
   const [values, setValues] = useState({
     pegawaiId: '',
     pegawaiNama: '',
+    pegawaiNIP: '',
     pegawaiFungsi: '',
     pegawaiEmail: '',
     pegawaiPassword: ''
@@ -91,6 +99,17 @@ const PeopleAddViews = () => {
             label='Nama'
             sx={{ marginBottom: 4 }}
           />
+          <TextField
+            name='NIP'
+            value={values.pegawaiNIP}
+            onChange={handleChange('pegawaiNIP')}
+            autoFocus
+            fullWidth
+            type={'number'}
+            id='nip'
+            label='Nip'
+            sx={{ marginBottom: 4 }}
+          />
           <FormControl fullWidth sx={{ marginBottom: 4 }}>
             <InputLabel id='form-layouts-separator-select-label'>Fungsi</InputLabel>
             <Select
@@ -118,7 +137,7 @@ const PeopleAddViews = () => {
             autoFocus
             fullWidth
             id='email'
-            label='Email'
+            label='Email/Username'
             sx={{}}
           />
           <FormControl fullWidth sx={{ marginTop: 4 }}>
@@ -127,13 +146,18 @@ const PeopleAddViews = () => {
               name='pegawaiPassword'
               label='Password'
               id='auth-login-password'
-              type={'password'}
+              type={showPassword ? 'text' : 'password'}
               onChange={handleChange('pegawaiPassword')}
               value={values.pegawaiPassword}
               endAdornment={
                 <InputAdornment position='end'>
-                  <IconButton edge='end' aria-label='toggle password visibility'>
-                    <EyeOffOutline />
+                  <IconButton
+                    aria-label='toggle password visibility'
+                    onClick={handleClickShowPassword}
+                    onMouseDown={handleMouseDownPassword}
+                    edge='end'
+                  >
+                    {showPassword ? <VisibilityOff /> : <Visibility />}
                   </IconButton>
                 </InputAdornment>
               }

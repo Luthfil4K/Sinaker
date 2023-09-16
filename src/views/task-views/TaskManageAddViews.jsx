@@ -129,6 +129,7 @@ const TaskManageAddViews = () => {
                 value={values.subKegTarget}
                 onChange={handleChange('subKegTarget')}
                 autoFocus
+                type={'number'}
                 fullWidth
                 id='target'
                 label='Target'

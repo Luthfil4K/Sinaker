@@ -113,7 +113,7 @@ const ProjectListViews = () => {
         ))}
         <Grid item md={6} xs={12}>
           <Typography>{gaji}</Typography>
-          {cardP.map(item => {
+          {/* {cardP.map(item => {
             const keg = Kegiatan.find(kegiatan => kegiatan.id === item.id)
             return (
               <>
@@ -122,7 +122,7 @@ const ProjectListViews = () => {
                 </li>
               </>
             )
-          })}
+          })} */}
           {/* {cardPRef.current.map(item => {
             const keg = Kegiatan.find(kegiatan => kegiatan.id === item.id)
             return (
