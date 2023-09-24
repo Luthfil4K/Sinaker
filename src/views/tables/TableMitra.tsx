@@ -15,75 +15,48 @@ import Swal from 'sweetalert2'
 import PencilOutline from 'mdi-material-ui/PencilOutline'
 import DeleteOutline from 'mdi-material-ui/DeleteOutline'
 
-const data = [
+const rows = [
   {
     id: 1,
     nama: 'Mitra A',
-    kecamatan: 'Bojonggede',
-    desa: 'Bojonggede',
-    totalGaji: '7',
     gajiBulanan: 21000,
     gajiTriwulanan: 34000,
     gajiSemesteran: 76000,
     gajiTahunan: 67000,
-    jabatan: 'PML',
-    jumlahKegiatan: '3'
+    jumlahKegiatan: '3',
+    jumlahSubkegiatan: '7'
   },
   {
     id: 2,
     nama: 'Mitra B',
-    kecamatan: 'Bojonggede',
-    desa: 'Bojonggede',
-    totalGaji: '5',
     gajiBulanan: 95000,
     gajiTriwulanan: 39000,
     gajiSemesteran: 40000,
     gajiTahunan: 100000,
-    jabatan: 'PML',
-    jumlahKegiatan: '5'
+    jumlahKegiatan: '5',
+    jumlahSubkegiatan: '5'
   },
   {
     id: 3,
     nama: 'Mitra3',
-    kecamatan: 'Bojonggede',
-    desa: 'Bojonggede',
-    totalGaji: '7',
     gajiBulanan: 26000,
     gajiTriwulanan: 38000,
     gajiSemesteran: 19000,
     gajiTahunan: 69000,
-    jabatan: 'PML',
-    jumlahKegiatan: '2'
+    jumlahKegiatan: '2',
+    jumlahSubkegiatan: '7'
   },
   {
     id: 4,
     nama: 'Mitra4',
-    kecamatan: 'Bojonggede',
-    desa: 'Bojonggede',
-    totalGaji: '4',
     gajiBulanan: 28000,
     gajiTriwulanan: 39000,
     gajiSemesteran: 40000,
     gajiTahunan: 60000,
-    jabatan: 'PML',
-    jumlahKegiatan: '5'
+    jumlahKegiatan: '5',
+    jumlahSubkegiatan: '4'
   }
 ]
-
-const rows = data.map(row => ({
-  id: row.id,
-  nama: row.nama,
-  kecamatan: row.kecamatan,
-  desa: row.desa,
-  totalGaji: row.totalGaji,
-  gajiBulanan: row.gajiBulanan,
-  gajiTriwulanan: row.gajiTriwulanan,
-  gajiSemesteran: row.gajiSemesteran,
-  gajiTahunan: row.gajiTahunan,
-  jabatan: row.jabatan,
-  jumlahKegiatan: row.jumlahKegiatan
-  // jumlahSubkegiatan: row.jumlahSubkegiatan,
-}))
 
 const TableMitra = () => {
   const handleDelete = () => {
@@ -105,93 +78,14 @@ const TableMitra = () => {
   }
   const router = useRouter()
   const columns = [
-    {
-      field: 'id',
-      renderHeader: () => (
-        <Typography sx={{ fontWeight: 900, fontSize: '0.875rem !important', textAlign: 'center' }}>No</Typography>
-      ),
-      type: 'string',
-      width: 40
-    },
-    {
-      field: 'nama',
-      renderHeader: () => (
-        <Typography sx={{ fontWeight: 900, fontSize: '0.875rem !important', textAlign: 'center' }}>Nama</Typography>
-      ),
-      width: 200
-    },
-    {
-      field: 'kecamatan',
-      renderHeader: () => (
-        <Typography sx={{ fontWeight: 900, fontSize: '0.875rem !important', textAlign: 'center' }}>
-          Kecamatan
-        </Typography>
-      ),
-      width: 200
-    },
-    {
-      field: 'desa',
-      renderHeader: () => (
-        <Typography sx={{ fontWeight: 900, fontSize: '0.875rem !important', textAlign: 'center' }}>Desa</Typography>
-      ),
-      width: 200
-    },
-    {
-      field: 'gajiBulanan',
-      renderHeader: () => (
-        <Typography sx={{ fontWeight: 900, fontSize: '0.875rem !important', textAlign: 'center' }}>
-          Gaji Bulanan
-        </Typography>
-      ),
-      width: 150
-    },
-    {
-      field: 'gajiTriwulanan',
-      renderHeader: () => (
-        <Typography sx={{ fontWeight: 900, fontSize: '0.875rem !important', textAlign: 'center' }}>
-          Gaji Triwulan
-        </Typography>
-      ),
-      type: 'string',
-      width: 150
-    },
-    {
-      field: 'gajiSemesteran',
-      renderHeader: () => (
-        <Typography sx={{ fontWeight: 900, fontSize: '0.875rem !important', textAlign: 'center' }}>
-          Gaji Semesteran
-        </Typography>
-      ),
-      type: 'string',
-      width: 150
-    },
-    {
-      field: 'gajiTahunan',
-      renderHeader: () => (
-        <Typography sx={{ fontWeight: 900, fontSize: '0.875rem !important', textAlign: 'center' }}>
-          Gaji Tahunan
-        </Typography>
-      ),
-      type: 'string',
-      width: 150
-    },
-    {
-      field: 'jumlahKegiatan',
-      renderHeader: () => (
-        <Typography sx={{ fontWeight: 900, fontSize: '0.875rem !important', textAlign: 'center' }}>
-          Jumlah Kegiatan
-        </Typography>
-      ),
-      width: 160
-    },
-    {
-      field: 'jabatan',
-      renderHeader: () => (
-        <Typography sx={{ fontWeight: 900, fontSize: '0.875rem !important', textAlign: 'center' }}>Jabatan</Typography>
-      ),
-      type: 'string',
-      width: 140
-    },
+    { field: 'id', headerName: 'No', type: 'string', width: 40 },
+    { field: 'nama', headerName: 'Nama', width: 200 },
+    { field: 'gajiBulanan', headerName: 'Gaji Bulanan', width: 150 },
+    { field: 'gajiTriwulanan', headerName: 'Gaji Triwulanan', type: 'string', width: 150 },
+    { field: 'gajiSemesteran', headerName: 'Gaji Semesteran', type: 'string', width: 150 },
+    { field: 'gajiTahunan', headerName: 'Gaji Tahunan', type: 'string', width: 150 },
+    { field: 'jumlahKegiatan', headerName: 'Jumlah Kegiatan ', width: 160 },
+    { field: 'jumlahSubkegiatan', headerName: 'Jumlah Subkegiatan ', type: 'string', width: 140 },
     // {
     //   field: 'role',
     //   renderHeader: () => (

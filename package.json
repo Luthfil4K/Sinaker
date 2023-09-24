@@ -60,7 +60,6 @@
     "@popperjs/core": "^2.11.2",
     "@prisma/client": "^5.3.1",
     "apexcharts-clevision": "3.28.5",
-    "axios": "^1.5.0",
     "chart.js": "^4.4.0",
     "clsx": "^1.1.1",
     "dayjs": "^1.11.9",
