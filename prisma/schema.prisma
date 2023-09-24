@@ -1,0 +1,67 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id             Int            @id @default(autoincrement())
+  email          String         @unique
+  name           String         @db.VarChar(64)
+  nip            String         @unique @db.Char(18)
+  password       String         @db.VarChar(255)
+  role           String         @default("employee") @db.VarChar(64)
+  fungsi         String         @db.VarChar(64)
+  UserProject    UserProject[]
+  projectToLead  Project[]      @relation("projectToLead")
+  taskToDo       Task[]         @relation("taskToDo")
+  ProjectCreated Project[]
+
+}
+
+model Project {
+  id              Int           @id @default(autoincrement())
+  title           String        @db.VarChar(128)
+  rentangWaktu    String        @db.VarChar(128)
+  startdate       DateTime      @db.Date
+  enddate         DateTime      @db.Date
+  description     String?       @db.LongText
+  isArchived      Boolean       @db.TinyInt()
+  projectLeader   User          @relation("projectToLead", fields: [projectLeaderId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  projectLeaderId Int
+  UserProject     UserProject[]
+  Task            Task[]
+  createdBy       User          @relation(fields: [createdById], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  createdById     Int
+}
+
+model UserProject {
+  id        Int     @id @default(autoincrement())
+  user      User    @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  userId    Int
+  project   Project @relation(fields: [projectId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  projectId Int
+}
+
+model Task {
+  id          Int           @id @default(autoincrement())
+  title       String        @db.VarChar(128)
+  duedate     DateTime      @db.Date
+  description String?       @db.LongText
+  notes       String?       @db.LongText
+  target      Int           @db.Int
+  realisasi   Int           @db.Int
+  unitTarget  String        @db.VarChar(128)
+  project     Project       @relation(fields: [projectId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  projectId   Int
+  user        User          @relation("taskToDo", fields: [userId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  userId      Int
+}
+
+

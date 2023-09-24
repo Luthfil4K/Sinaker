@@ -59,7 +59,7 @@ const PeopleAddViews = () => {
     }))
   }
 
-  console.log(values)
+  // console.log(values)
 
   const router = useRouter()
   const handleEdit = () => {

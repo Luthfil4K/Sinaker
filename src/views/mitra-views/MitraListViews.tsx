@@ -1,3 +1,4 @@
+import { useState } from 'react'
 import Grid from '@mui/material/Grid'
 import Typography from '@mui/material/Typography'
 import Button from '@mui/material/Button'
@@ -10,6 +11,7 @@ import { useRouter } from 'next/dist/client/router'
 import TableMitra from 'src/views/tables/TableMitra'
 
 const MitraListViews = () => {
+  const data = []
   const router = useRouter()
   // const gaji = 90000
   return (
