@@ -35,7 +35,6 @@ const CardProjectDetails = props => {
     tanggalDimulai,
     tanggalBerakhir,
     jumlahParicipant,
-    justt,
     totalSubKegiatan,
     totalGaji
   } = props
@@ -66,13 +65,13 @@ const CardProjectDetails = props => {
               <Box sx={{ mb: 10, mt: 3, display: 'flex', alignItems: 'center' }}>
                 <LockOpenOutline sx={{ color: 'primary.main', marginRight: 2.25 }} fontSize='small' />
                 <Typography variant='body2' sx={{ fontSize: '12px' }}>
-                  Tanggal Dimulai: <strong>{tanggalDimulai}</strong>
+                  Tanggal Dimulai: <strong>{new Date(tanggalDimulai).toLocaleDateString('id')}</strong>
                 </Typography>
               </Box>
               <Box sx={{ display: 'flex', alignItems: 'center' }}>
                 <AccountOutline sx={{ color: 'primary.main', marginRight: 2.25 }} fontSize='small' />
                 <Typography variant='body2' sx={{ fontSize: '12px' }}>
-                  Jumlah Participant: <strong>{jumlahParicipant}</strong>
+                  Jumlah Participant: <strong>{jumlahParicipant.length}</strong>
                 </Typography>
               </Box>
             </StyledBox>
@@ -81,13 +80,13 @@ const CardProjectDetails = props => {
             <Box sx={{ mb: 10, mt: 3, display: 'flex', alignItems: 'center' }}>
               <LockOutline sx={{ color: 'primary.main', marginRight: 2.25 }} fontSize='small' />
               <Typography variant='body2' sx={{ fontSize: '12px' }}>
-                Tanggal Berakhir: <strong>{tanggalBerakhir}</strong>
+                Tanggal Berakhir: <strong>{new Date(tanggalBerakhir).toLocaleDateString('id')}</strong>
               </Typography>
             </Box>
             <Box sx={{ display: 'flex', alignItems: 'center' }}>
               <ClipboardFileOutline sx={{ color: 'primary.main', marginRight: 2.25 }} fontSize='small' />
               <Typography variant='body2' sx={{ fontSize: '12px' }}>
-                Total Sub Kegiatan: <strong>{totalSubKegiatan}</strong>
+                Total Sub Kegiatan: <strong>{totalSubKegiatan.length}</strong>
               </Typography>
             </Box>
           </Grid>
