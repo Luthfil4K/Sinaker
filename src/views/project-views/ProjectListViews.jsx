@@ -28,6 +28,7 @@ const ProjectListViews = props => {
   )
   console.log(props.data)
   console.log('asd')
+  console.log('asds')
   console.log(cardP)
 
   // useEffect(() => {
