@@ -43,8 +43,6 @@ import WeeklyOverview from 'src/views/dashboard/WeeklyOverview'
 import DepositWithdraw from 'src/views/dashboard/DepositWithdraw'
 import SalesByCountries from 'src/views/dashboard/SalesByCountries'
 
-import TableTask from 'src/views/tables/TableTask'
-
 const Dashboard = () => {
   const dataawal = [12, 19, 3, 5, 2, 3, 8, 10, 6, 7, 14, 12]
   const realisasiAwal = Array.from({ length: 12 }, () => Math.floor(Math.random() * 100))
@@ -126,10 +124,9 @@ const Dashboard = () => {
         <Grid item xs={12} md={8}>
           <Grid container spacing={4}>
             <Grid item xs={12} md={12}>
-              <Card sx={{ padding: 4, height: 350 }}>
-                <Typography variant={'h5'}>Tugas Bulan ini</Typography>
+              <Card sx={{ padding: 4, height: 250 }}>
+                <Typography variant={'h5'}>Tugas hari ini</Typography>
                 <Divider></Divider>
-                <TableTask></TableTask>
               </Card>
             </Grid>
             <Grid item xs={6} md={6}>
