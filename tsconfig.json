@@ -1,6 +1,13 @@
 {
   "compilerOptions": {
+    "declaration": false,
+    "sourceMap": true,
+    "outDir": "./dist",
+    "watch": true,
     "baseUrl": ".",
+    "skipLibCheck": true,
+    "noEmitOnError": true,
+    "types": [],
     "rootDir": "src",
     "target": "es6",
     "lib": [
@@ -9,7 +16,6 @@
       "esnext"
     ],
     "allowJs": true,
-    "skipLibCheck": true,
     "strict": true,
     "forceConsistentCasingInFileNames": true,
     "noEmit": true,

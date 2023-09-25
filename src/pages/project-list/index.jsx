@@ -38,7 +38,8 @@ export async function getServerSideProps() {
           isArchived: true,
           projectLeader: true,
           UserProject: true,
-          Task: true
+          Task: true,
+          createdById: true
         }
       }
     }

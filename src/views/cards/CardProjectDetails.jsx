@@ -47,7 +47,8 @@ const CardProjectDetails = props => {
               {namaKegiatan}
             </Typography>
             <Typography variant='body2'>
-              {intervalWaktu}-{totalGaji}
+              {intervalWaktu}
+              {totalGaji}
             </Typography>
           </Grid>
           <Grid item xs={6} display={'flex'} justifyContent={'center'} alignItems={'center'}>

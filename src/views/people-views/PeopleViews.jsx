@@ -6,8 +6,18 @@ import Typography from '@mui/material/Typography'
 import Link from '@mui/material/Link'
 import { useRouter } from 'next/dist/client/router'
 
-const PeopleViews = () => {
+import { useState, useEffect, useRef } from 'react'
+
+const PeopleViews = props => {
   const router = useRouter()
+  const [cardP, setCardP] = useState(
+    props.data.map(data => {
+      return {
+        ...data
+      }
+    })
+  )
+  // console.log(cardP)
   return (
     <>
       <Grid container spacing={5}>
@@ -21,7 +31,7 @@ const PeopleViews = () => {
         </Grid>
         <Grid item md={12} xs={12}>
           <Box sx={{ width: '100%' }}>
-            <TablePeople></TablePeople>
+            <TablePeople dataUser={cardP}></TablePeople>
           </Box>
         </Grid>
       </Grid>
