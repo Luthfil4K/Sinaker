@@ -2,7 +2,7 @@ import PeopleViews from 'src/views/people-views/PeopleViews'
 import prisma from '../../services/db'
 import { useState, useEffect, useRef } from 'react'
 
-const people = ({ data }) => {
+const People = ({ data }) => {
   const [user, setUser] = useState(JSON.parse(data))
   // console.log(user)
   // console.log('asd')
@@ -34,4 +34,4 @@ export async function getServerSideProps() {
   }
 }
 
-export default people
+export default People
