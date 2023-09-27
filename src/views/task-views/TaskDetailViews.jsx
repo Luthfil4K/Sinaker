@@ -6,16 +6,17 @@ import CardTaskDetail from 'src/views/cards/CardTaskDetail'
 import CardTaskSubmit from 'src/views/cards/CardTaskSubmit'
 import CardTaskComment from 'src/views/cards/CardTaskComment'
 
-const TaskDetailViews = () => {
+const TaskDetailViews = props => {
+  console.log(props.data)
   return (
     <>
       <Grid container spacing={4}>
         <Grid item md={8}>
-          <CardTaskDetail></CardTaskDetail>
+          <CardTaskDetail data={props.data}></CardTaskDetail>
         </Grid>
         <Grid item md={4}>
-          <CardTaskSubmit></CardTaskSubmit>
-          <CardTaskComment></CardTaskComment>
+          <CardTaskSubmit data={props.data}></CardTaskSubmit>
+          <CardTaskComment data={props.data}></CardTaskComment>
         </Grid>
       </Grid>
     </>

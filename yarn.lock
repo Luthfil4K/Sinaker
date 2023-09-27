@@ -727,22 +727,22 @@
   resolved "https://registry.npmjs.org/@popperjs/core/-/core-2.11.8.tgz"
   integrity sha512-P1st0aksCrn9sGZhp8GMYwBnQsbvAWsZAX44oXNNvLHGqAOcoVxmjZiohstwQ7SqKnbR47akdNi+uleWD8+g6A==
 
-"@prisma/client@^5.4.0-dev.31":
-  version "5.4.0-integration-libsql-adapter.5"
-  resolved "https://registry.npmjs.org/@prisma/client/-/client-5.4.0-integration-libsql-adapter.5.tgz"
-  integrity sha512-g5RrA8iE+3bB8FnL34AmQduLV+kuRQKlDLySQXIYym3YhEK6DdtTbKQsZfKi8gNKz1M7zLZyAIw6KAbiw2uUEw==
+"@prisma/client@^5.3.1":
+  version "5.3.1"
+  resolved "https://registry.npmjs.org/@prisma/client/-/client-5.3.1.tgz"
+  integrity sha512-ArOKjHwdFZIe1cGU56oIfy7wRuTn0FfZjGuU/AjgEBOQh+4rDkB6nF+AGHP8KaVpkBIiHGPQh3IpwQ3xDMdO0Q==
   dependencies:
-    "@prisma/engines-version" "5.4.0-17.libsql-adapter-4bdd9f5982a2a7e03a9d18b798a260989a71bb16"
+    "@prisma/engines-version" "5.3.1-2.61e140623197a131c2a6189271ffee05a7aa9a59"
 
-"@prisma/engines-version@5.4.0-17.libsql-adapter-4bdd9f5982a2a7e03a9d18b798a260989a71bb16":
-  version "5.4.0-17.libsql-adapter-4bdd9f5982a2a7e03a9d18b798a260989a71bb16"
-  resolved "https://registry.npmjs.org/@prisma/engines-version/-/engines-version-5.4.0-17.libsql-adapter-4bdd9f5982a2a7e03a9d18b798a260989a71bb16.tgz"
-  integrity sha512-VHALPt2kqwT59alfyvcPj5YcAP9Y+ayK9Tn4i+B/qsqVVj7mstJ93wFNTMzVUF8C3O/1DKxq8ggC9XRUyOOczA==
+"@prisma/engines-version@5.3.1-2.61e140623197a131c2a6189271ffee05a7aa9a59":
+  version "5.3.1-2.61e140623197a131c2a6189271ffee05a7aa9a59"
+  resolved "https://registry.npmjs.org/@prisma/engines-version/-/engines-version-5.3.1-2.61e140623197a131c2a6189271ffee05a7aa9a59.tgz"
+  integrity sha512-y5qbUi3ql2Xg7XraqcXEdMHh0MocBfnBzDn5GbV1xk23S3Mq8MGs+VjacTNiBh3dtEdUERCrUUG7Z3QaJ+h79w==
 
-"@prisma/engines@5.4.0-integration-libsql-adapter.5":
-  version "5.4.0-integration-libsql-adapter.5"
-  resolved "https://registry.npmjs.org/@prisma/engines/-/engines-5.4.0-integration-libsql-adapter.5.tgz"
-  integrity sha512-VUh/NLscFHYmbzlhE7RKv1wliBQWLGsM8VhTFGOn0ZeUhB/uLjoUW93cslJjYqB5vUL6HCMtZJomGkFglwdSsA==
+"@prisma/engines@5.3.1":
+  version "5.3.1"
+  resolved "https://registry.npmjs.org/@prisma/engines/-/engines-5.3.1.tgz"
+  integrity sha512-6QkILNyfeeN67BNEPEtkgh3Xo2tm6D7V+UhrkBbRHqKw9CTaz/vvTP/ROwYSP/3JT2MtIutZm/EnhxUiuOPVDA==
 
 "@rushstack/eslint-patch@^1.0.6":
   version "1.4.0"
@@ -4311,12 +4311,12 @@ prettier@2.5.1:
   resolved "https://registry.npmjs.org/prettier/-/prettier-2.5.1.tgz"
   integrity sha512-vBZcPRUR5MZJwoyi3ZoyQlc1rXeEck8KgeC9AwwOn+exuxLxq5toTRDTSaVrXHxelDMHy9zlicw8u66yxoSUFg==
 
-prisma@^5.4.0-dev.31:
-  version "5.4.0-integration-libsql-adapter.5"
-  resolved "https://registry.npmjs.org/prisma/-/prisma-5.4.0-integration-libsql-adapter.5.tgz"
-  integrity sha512-GJVNLJuAq1G5PSt1v1zRiAByOk8uyfBdxJS/A+SRZ7LUivmdyK8f3zB4UXuENMQW7TDkiCKHy6PkFcQIp/RU0Q==
+prisma@^5.3.1:
+  version "5.3.1"
+  resolved "https://registry.npmjs.org/prisma/-/prisma-5.3.1.tgz"
+  integrity sha512-Wp2msQIlMPHe+5k5Od6xnsI/WNG7UJGgFUJgqv/ygc7kOECZapcSz/iU4NIEzISs3H1W9sFLjAPbg/gOqqtB7A==
   dependencies:
-    "@prisma/engines" "5.4.0-integration-libsql-adapter.5"
+    "@prisma/engines" "5.3.1"
 
 proc-log@^3.0.0:
   version "3.0.0"

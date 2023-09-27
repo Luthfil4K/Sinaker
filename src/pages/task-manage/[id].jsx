@@ -1,14 +1,13 @@
 import prisma from '../../services/db'
 import { useState } from 'react'
 
-import ProjectDetailsViews from 'src/views/project-views/ProjectDetailsViews'
+import ManageTaskViews from 'src/views/task-views/TaskManageViews'
 
-const ProjectDetail = ({ data }) => {
+const TaskManage = ({ data }) => {
   const [project, setProject] = useState(JSON.parse(data))
-  // console.log(project)
   return (
     <>
-      <ProjectDetailsViews data={project} />
+      <ManageTaskViews data={project}></ManageTaskViews>
     </>
   )
 }
@@ -40,4 +39,4 @@ export async function getServerSideProps(context) {
   }
 }
 
-export default ProjectDetail
+export default TaskManage

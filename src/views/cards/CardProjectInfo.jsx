@@ -404,7 +404,7 @@ const CardProjectDetail = props => {
 
             <Grid container sx={{ mt: 3 }} spacing={4}>
               <Grid item>
-                <Link onClick={e => router.push('/task-manage')}>
+                <Link onClick={e => router.push(`/task-manage/${project.id}`)}>
                   <Button component='div' variant='contained'>
                     Pengaturan Sub Kegiatan
                   </Button>

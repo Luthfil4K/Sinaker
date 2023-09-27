@@ -9,7 +9,7 @@ import { useRouter } from 'next/dist/client/router'
 import TableManageTaskList from 'src/views/tables/TableManageTaskList'
 import TableManageTaskPeople from 'src/views/tables/TableManageTaskPeople'
 
-const TaskManageViews = () => {
+const TaskManageViews = props => {
   const router = useRouter()
   return (
     <>
@@ -36,7 +36,7 @@ const TaskManageViews = () => {
             <Typography fontWeight={500} variant={'h6'} mx={2} my={2}>
               Daftar Sub Kegiatan
             </Typography>
-            <TableManageTaskList></TableManageTaskList>
+            <TableManageTaskList data={props.data.Task}></TableManageTaskList>
           </Card>
         </Grid>
         <Grid item md={12} xs={12}>

@@ -4,7 +4,12 @@ import Card from '@mui/material/Card'
 import Grid from '@mui/material/Grid'
 import Divider from '@mui/material/Divider'
 
-const CardTaskDetail = () => {
+const statusObj = {
+  0: { color: 'warning', status: 'On Progress' },
+  1: { color: 'success', status: 'Done' }
+}
+
+const CardTaskDetail = props => {
   return (
     <>
       <Card>
@@ -12,13 +17,13 @@ const CardTaskDetail = () => {
         <Grid container p={4}>
           <Grid item md={10}>
             <Typography color={'primary.dark'} variant={'h4'}>
-              Nama Sub Kegiatan - Nama Kegiatan
+              {props.data.title}
             </Typography>
           </Grid>
           <Grid item md={2}>
             <Chip
-              label={'on progress'}
-              color={'warning'}
+              label={statusObj[props.data.target / props.data.realisasi === 1 ? 1 : 0].status}
+              color={statusObj[props.data.target / props.data.realisasi === 1 ? 1 : 0].color}
               sx={{
                 height: 24,
                 fontSize: '0.75rem',
@@ -38,20 +43,14 @@ const CardTaskDetail = () => {
           </Grid>
           <Grid justifyContent={'end'} mt={2} xs={6} item md={6}>
             <Typography textAlign={'end'} variant={'body2'}>
-              Due Apr 20, 2024
+              {new Date(props.data.duedate).toLocaleDateString('id')}
             </Typography>
           </Grid>
 
           <Grid mt={2} item md={12}>
             <Divider sx={{ marginTop: 3.5 }} />
             <Typography variant={'body1'}>Deskripsi Kegiatan</Typography>
-            <Typography variant={'body2'}>
-              Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et
-              dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex
-              ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu
-              fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt
-              mollit anim id est laborum.
-            </Typography>
+            <Typography variant={'body2'}>{props.data.description}</Typography>
           </Grid>
         </Grid>
       </Card>

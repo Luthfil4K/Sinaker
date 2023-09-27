@@ -10,10 +10,10 @@ import TextField from '@mui/material/TextField'
 
 import { useState } from 'react'
 
-const CardTaskSubmit = () => {
+const CardTaskSubmit = props => {
   const [values, setValues] = useState({
-    target: 30,
-    realisasi: ''
+    target: props.data.target,
+    realisasi: props.data.realisasi
   })
 
   const handleChange = props => event => {
@@ -45,7 +45,7 @@ const CardTaskSubmit = () => {
           </Grid>
           <Grid item xs={3} md={3} mt={3}>
             <Typography textAlign={'center'} variant={'body2'}>
-              Laporan
+              {props.data.unitTarget}
             </Typography>
           </Grid>
           <Grid item xs={9} md={9} mt={2}>
@@ -61,7 +61,7 @@ const CardTaskSubmit = () => {
           </Grid>
           <Grid item xs={3} md={3} mt={2}>
             <Typography textAlign={'center'} variant={'body2'}>
-              Laporan
+              {props.data.unitTarget}
             </Typography>
           </Grid>
           {/* <Grid mt={3} display={'flex'} justifyContent={'center'} item xs={12} md={12}>

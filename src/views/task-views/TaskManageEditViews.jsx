@@ -20,17 +20,17 @@ import DatePicker from 'react-datepicker'
 import 'react-datepicker/dist/react-datepicker.css'
 import DatePickerWrapper from 'src/@core/styles/libs/react-datepicker'
 
-const TaskManageEditViews = () => {
+const TaskManageEditViews = props => {
   const router = useRouter()
   const ProjectParticipant = ['pegawai1', 'pegawai2', 'pegawai3']
-  const [selectedDateE, setSelectedDateE] = useState(null)
+  const [selectedDateE, setSelectedDateE] = useState(new Date(props.data.duedate))
   const [values, setValues] = useState({
-    subKegNama: '',
-    subKegJenis: '',
-    subKegTarget: '',
-    subKegUnitTarget: '',
-    subKegDl: '',
-    subKegDesk: ''
+    subKegNama: props.data.title,
+    subKegJenis: props.data.jenisKeg,
+    subKegTarget: props.data.target,
+    subKegUnitTarget: props.data.unitTarget,
+    subKegDl: new Date(props.data.duedate),
+    subKegDesk: props.data.description
   })
 
   const handleChange = props => event => {
@@ -150,6 +150,7 @@ const TaskManageEditViews = () => {
                 <DatePicker
                   selected={selectedDateE}
                   sx={{ width: 1000 }}
+                  label='Tanggal Berakhir'
                   showYearDropdown
                   showMonthDropdown
                   placeholderText='Tanggal Berakhir'

@@ -7,7 +7,7 @@ import Button from '@mui/material/Button'
 
 import * as React from 'react'
 import { DataGrid } from '@mui/x-data-grid'
-
+import { useState } from 'react'
 import { useRouter } from 'next/dist/client/router'
 import Swal from 'sweetalert2'
 
@@ -63,16 +63,6 @@ const data = [
   }
 ]
 
-const rows = data.map(row => ({
-  id: row.id,
-  subKegiatan: row.subKegiatan,
-  jenisKegiatan: row.jenisKegiatan,
-  realisasi: row.realisasi,
-  target: row.target,
-  status: row.status,
-  deadline: row.deadline
-}))
-
 const jenisSub = {
   64: { namaJenisSub: 'Persiapan', color: 'warning' },
   66: { namaJenisSub: 'Pelaksanaan', color: 'warning' },
@@ -88,9 +78,19 @@ const statusObj = {
 
 console.log(statusObj[1].color)
 
-const TableManageTaskList = () => {
+const TableManageTaskList = props => {
+  const [subkeg, setSubKeg] = useState(props.data)
+  const rows = subkeg.map(row => ({
+    id: row.id,
+    subKegiatan: row.title,
+    jenisKegiatan: row.jenisKegiatan,
+    realisasi: row.realisasi,
+    target: row.target,
+    status: row.status,
+    deadline: new Date(row.duedate).toLocaleDateString('id')
+  }))
+
   const router = useRouter()
-  const tim = ['Tim']
   const handleDelete = () => {
     Swal.fire({
       title: 'Apa Anda Yakin?',
@@ -117,8 +117,8 @@ const TableManageTaskList = () => {
 
       renderCell: params => (
         <Link
-          onClick={async e => {
-            router.push(`/task-detail`)
+          onClick={e => {
+            router.push(`/task-detail/${params.row.id}`)
           }}
           sx={{ cursor: 'pointer' }}
         >
@@ -134,9 +134,7 @@ const TableManageTaskList = () => {
       headerName: 'Jenis Kegiatan',
       width: 150,
       renderCell: params => (
-        <Typography sx={{ fontWeight: 500, fontSize: '0.875rem !important' }}>
-          {jenisSub[params.row.jenisKegiatan].namaJenisSub}
-        </Typography>
+        <Typography sx={{ fontWeight: 500, fontSize: '0.875rem !important' }}>{jenisSub[65].namaJenisSub}</Typography>
       )
     },
 
@@ -152,8 +150,8 @@ const TableManageTaskList = () => {
       field: 'status',
       renderCell: params => (
         <Chip
-          label={statusObj[params.value].status}
-          color={statusObj[params.value].color}
+          label={statusObj[params.row.target / params.row.realisasi === 1 ? 1 : 0].status}
+          color={statusObj[params.row.target / params.row.realisasi === 1 ? 1 : 0].color}
           sx={{
             height: 24,
             fontSize: '0.75rem',
@@ -175,12 +173,12 @@ const TableManageTaskList = () => {
         <Typography sx={{ fontWeight: 900, fontSize: '0.875rem !important', textAlign: 'center' }}>Action</Typography>
       ),
 
-      renderCell: () => (
+      renderCell: params => (
         <>
           <Link>
             <Button
               onClick={e => {
-                router.push('/task-manage-edit')
+                router.push(`/task-manage-edit/ ${params.row.id}`)
               }}
               type='submit'
               sx={{ mr: 1 }}

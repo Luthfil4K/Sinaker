@@ -83,7 +83,7 @@ const TableProjectDetailTask = props => {
     realisasi: row.realisasi,
     target: row.target,
     status: row.status,
-    deadline: row.deadline
+    deadline: new Date(row.duedate).toLocaleDateString('id')
   }))
 
   const columns = [
@@ -95,7 +95,7 @@ const TableProjectDetailTask = props => {
       renderCell: params => (
         <Link
           onClick={async e => {
-            router.push(`/task-detail`)
+            router.push(`/task-detail/${params.row.id}`)
           }}
           sx={{ cursor: 'pointer' }}
         >
@@ -127,8 +127,8 @@ const TableProjectDetailTask = props => {
       field: 'status',
       renderCell: params => (
         <Chip
-          label={statusObj[1].status}
-          color={statusObj[1].color}
+          label={statusObj[params.row.target / params.row.realisasi === 1 ? 1 : 0].status}
+          color={statusObj[params.row.target / params.row.realisasi === 1 ? 1 : 0].color}
           sx={{
             height: 24,
             fontSize: '0.75rem',

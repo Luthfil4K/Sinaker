@@ -12,9 +12,9 @@ import IconButton from '@mui/material/IconButton'
 import SendIcon from 'mdi-material-ui/Send'
 import AccountIcon from 'mdi-material-ui/Account'
 
-const CardTaskComent = () => {
+const CardTaskComent = props => {
   const [values, setValues] = useState({
-    notesSubKeg: ''
+    notesSubKeg: props.data.notes
   })
 
   const handleChange = props => event => {

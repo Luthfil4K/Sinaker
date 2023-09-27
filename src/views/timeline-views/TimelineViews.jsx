@@ -142,6 +142,7 @@ const TimelineViews = props => {
   const router = useRouter()
 
   const [cardP, setCardP] = useState(props.data)
+  console.log(cardP)
   const appointments = cardP.map(task => ({
     title: (
       <>
@@ -149,14 +150,16 @@ const TimelineViews = props => {
           <Grid item md={12} display={'flex'}>
             <Link
               onClick={e => {
-                router.push('/project-detail')
+                router.push(`/project-detail/${task.project.id}`)
               }}
             >
-              <Typography variant='body2' color={'white'}>
+              <Typography variant='body2' sx={{ textDecoration: 'underline' }} color={'white'}>
                 {task.title}
               </Typography>
               <Typography variant='body2' color={'white'}>
-                50%
+                {Math.ceil(100 * (task.realisasi / task.target)) == 0
+                  ? 0
+                  : `${Math.ceil(100 * (task.realisasi / task.target))}%`}
               </Typography>
             </Link>
           </Grid>
