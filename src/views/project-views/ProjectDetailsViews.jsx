@@ -7,16 +7,18 @@ import Link from '@mui/material/Link'
 import Button from '@mui/material/Button'
 
 import { useRouter } from 'next/dist/client/router'
+import { useState } from 'react'
 
 // swall
 import Swal from 'sweetalert2'
 
-import CardProjectDetail from 'src/views/cards/CardProjectDetail'
+import CardProjectInfo from 'src/views/cards/CardProjectInfo'
 import TableProjectDetailTask from 'src/views/tables/TableProjectDetailTask'
 import CardProjectDetailProgress from 'src/views/cards/CardProjectDetailProgress'
 
-const ProjectDetailsViews = () => {
+const ProjectDetailsViews = props => {
   const router = useRouter()
+  const [project, setProject] = useState(props.data)
   const handleEdit = () => {
     Swal.fire({
       title: 'Apa Anda Yakin?',
@@ -71,13 +73,13 @@ const ProjectDetailsViews = () => {
     <>
       <Grid container spacing={4}>
         <Grid item sm={12} md={8}>
-          <CardProjectDetail></CardProjectDetail>
+          <CardProjectInfo data={project}></CardProjectInfo>
         </Grid>
         <Grid item sm={12} md={4}>
-          <CardProjectDetailProgress></CardProjectDetailProgress>
+          <CardProjectDetailProgress data={project}></CardProjectDetailProgress>
         </Grid>
         <Grid item sm={12} md={12}>
-          <TableProjectDetailTask></TableProjectDetailTask>
+          <TableProjectDetailTask data={project.Task}></TableProjectDetailTask>
         </Grid>
       </Grid>
       <Grid mt={2} container>

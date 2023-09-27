@@ -52,6 +52,7 @@ model UserProject {
 model Task {
   id          Int           @id @default(autoincrement())
   title       String        @db.VarChar(128)
+  jenisKeg       String        @db.VarChar(128)
   duedate     DateTime      @db.Date
   description String?       @db.LongText
   notes       String?       @db.LongText

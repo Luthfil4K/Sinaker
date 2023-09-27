@@ -1,10 +1,14 @@
 import prisma from '../../services/db'
+import { useState, useEffect, useRef } from 'react'
 
-import TimelineViews from 'src/views/timeline-views/TimelineViews'
-const Timeline = ({ data }) => {
+import TaskViews from 'src/views/task-views/TaskViews'
+
+const Task = ({ data }) => {
+  const [task, setTask] = useState(JSON.parse(data))
+
   return (
     <>
-      <TimelineViews data={JSON.parse(data)}></TimelineViews>
+      <TaskViews data={task} />
     </>
   )
 }
@@ -24,4 +28,4 @@ export async function getServerSideProps() {
   }
 }
 
-export default Timeline
+export default Task

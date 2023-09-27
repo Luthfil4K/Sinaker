@@ -17,7 +17,7 @@ const ProjectList = ({ data }) => {
   // }, [data])
   return (
     <>
-      <ProjectListViews data={JSON.parse(data)} />
+      <ProjectListViews data={projects} />
     </>
   )
 }

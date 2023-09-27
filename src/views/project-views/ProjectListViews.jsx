@@ -31,26 +31,6 @@ const ProjectListViews = props => {
   console.log('asds')
   console.log(cardP)
 
-  // useEffect(() => {
-  //   setCardP([{ id: 1 }])
-  // }, [])
-
-  // useEffect(() => {
-  //   const sum = cardP.reduce((acc, item) => {
-  //     const kegiatan = Kegiatan.find(kegiatan => kegiatan.id === item.id)
-  //     return kegiatan.totalGaji + acc
-  //   }, 0)
-  //   setGaji(sum)
-  // }, [cardP])
-
-  // const handleTanda = keg => {
-  //   setCardP([
-  //     ...cardP,
-  //     {
-  //       id: keg
-  //     }
-  //   ])
-  // }
   const handleTandaRef = id => {
     cardPRef.current = [...cardPRef.current, { id }]
   }
@@ -62,7 +42,7 @@ const ProjectListViews = props => {
           <>
             <Grid key={kegiatan.id} item md={6} xs={12}>
               <CardProjectDetails
-                id={kegiatan.id}
+                id={kegiatan.project.id}
                 namaKegiatan={kegiatan.project.title}
                 intervalWaktu={kegiatan.project.rentangWaktu}
                 tanggalDimulai={kegiatan.project.startdate}
@@ -75,7 +55,6 @@ const ProjectListViews = props => {
           </>
         ))}
         <Grid item md={6} xs={12}>
-          <Typography>{gaji}</Typography>
           {/* {cardP.map(item => {
             const keg = Kegiatan.find(kegiatan => kegiatan.id === item.id)
             return (

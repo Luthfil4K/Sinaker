@@ -28,7 +28,7 @@ import AccountGroup from 'mdi-material-ui/AccountGroup'
 // circular bar
 import CircularProgress from '@mui/material/CircularProgress'
 
-const ParticipantPeople = () => {
+const ParticipantPeople = props => {
   return (
     <Grid
       justifyContent='center'
@@ -52,7 +52,7 @@ const ParticipantPeople = () => {
         {<AccountGroup />}
       </Avatar>
       <Typography textAlign={'center'} variant='body2'>
-        Nama Peserta proyeks
+        {props.data.name}
       </Typography>
     </Grid>
   )
@@ -209,12 +209,25 @@ const TabPanel4 = () => {
   )
 }
 
-const CardProjectDetail = () => {
+const CardProjectDetail = props => {
+  const [project, setProject] = useState(props.data)
+  const [userProject, setUserProject] = useState(props.data.UserProject)
+  const valueProgressBar =
+    Math.ceil((new Date(project.enddate) - new Date()) / (1000 * 3600 * 24)) >= 0
+      ? parseInt(
+          `${Math.ceil(
+            (100 * ((new Date() - new Date(project.startdate)) / (1000 * 3600 * 24))) /
+              ((new Date(project.enddate) - new Date(project.startdate)) / (1000 * 3600 * 24))
+          )}`
+        )
+      : 100
+  console.log(valueProgressBar)
+  console.log(project)
   const router = useRouter()
   // ** State
-  const [value, setValue] = useState<string>('1')
+  const [value, setValue] = useState('1')
 
-  const handleChange = (event: SyntheticEvent, newValue: string) => {
+  const handleChange = (event, newValue) => {
     setValue(newValue)
   }
 
@@ -230,17 +243,162 @@ const CardProjectDetail = () => {
           </TabList>
           <CardContent>
             <TabPanel value='1' sx={{ p: 0, height: 170, overflowY: 'scroll' }}>
-              <TabPanel1 />
+              <Typography variant='h6' sx={{ marginBottom: 2 }}>
+                {project.title}
+              </Typography>
+              <Grid container display={'flex'} spacing={3}>
+                <Grid
+                  justifyContent='center'
+                  sx={{ alignContent: 'center', alignItems: 'center' }}
+                  item
+                  flexDirection={'column'}
+                  md={4}
+                  xs={12}
+                  display={'flex'}
+                >
+                  <Avatar
+                    sx={{
+                      boxShadow: 3,
+                      width: 60,
+                      height: 60,
+                      color: 'common.white',
+                      backgroundColor: `warning.main`
+                    }}
+                  >
+                    {<AccountCog />}
+                  </Avatar>
+                  <Typography variant='body2'>Penanggung Jawab</Typography>
+                  <Typography variant='body1'>{project.projectLeader.name}</Typography>
+                </Grid>
+                <Grid
+                  justifyContent='center'
+                  sx={{ alignContent: 'center', alignItems: 'center' }}
+                  item
+                  flexDirection={'column'}
+                  md={4}
+                  xs={12}
+                  display={'flex'}
+                >
+                  <Avatar
+                    sx={{
+                      boxShadow: 3,
+                      width: 60,
+                      height: 60,
+                      color: 'common.white',
+                      backgroundColor: `primary.main`
+                    }}
+                  >
+                    {<AccountGroup />}
+                  </Avatar>
+                  <Typography textAlign={'center'} variant='body2' component='span' sx={{ display: 'inline' }}>
+                    Peserta Kegiatan
+                  </Typography>
+                  <Typography textAlign={'center'} variant='body1' component='span' sx={{ display: 'inline' }}>
+                    {project.UserProject.length}
+                  </Typography>
+                </Grid>
+                <Grid
+                  justifyContent='center'
+                  sx={{ alignContent: 'center', alignItems: 'center' }}
+                  item
+                  flexDirection={'column'}
+                  md={4}
+                  xs={12}
+                  display={'flex'}
+                >
+                  <Avatar
+                    sx={{
+                      boxShadow: 3,
+                      width: 60,
+                      height: 60,
+                      color: 'common.white',
+                      backgroundColor: `success.main`
+                    }}
+                  >
+                    {<ClipboardCheck />}
+                  </Avatar>
+                  <Typography textAlign={'center'} variant='body2' component='span' sx={{ display: 'inline' }}>
+                    Total Sub Kegiatan
+                  </Typography>
+                  <Typography textAlign={'center'} variant='body1' component='span' sx={{ display: 'inline' }}>
+                    {project.Task.length}
+                  </Typography>
+                </Grid>
+              </Grid>
             </TabPanel>
 
             <TabPanel value='2' sx={{ p: 0, height: 170, overflowY: 'scroll' }}>
-              <TabPanel2 />
+              <Typography variant='h6' sx={{ marginBottom: 2 }}>
+                Timeline
+              </Typography>
+              <Grid container>
+                <Grid height={50} item xs={6}>
+                  <Typography variant='body1'>Date Started</Typography>
+                  <Typography variant='body2'>{new Date(project.startdate).toLocaleDateString('id')}</Typography>
+                </Grid>
+
+                <Grid height={50} item xs={6}>
+                  <Typography textAlign={'end'} variant='body1'>
+                    Date Ended
+                  </Typography>
+                  <Typography textAlign={'end'} variant='body2'>
+                    {new Date(project.enddate).toLocaleDateString('id')}
+                  </Typography>
+                </Grid>
+              </Grid>
+              <LinearProgress
+                sx={{ height: 10 }}
+                color='success'
+                value={valueProgressBar}
+                variant='determinate'
+              ></LinearProgress>
+              <Typography mt={5} variant='body1'>
+                Time Left :
+              </Typography>
+              <Typography variant='body2'>
+                {Math.ceil((new Date(project.enddate) - new Date()) / (1000 * 3600 * 24)) >= 0
+                  ? `${Math.ceil((new Date(project.enddate) - new Date()) / (1000 * 3600 * 24))} days`
+                  : 'Project has been finished'}
+              </Typography>
             </TabPanel>
             <TabPanel value='3' sx={{ p: 0, height: 170, overflowY: 'scroll' }}>
-              <TabPanel3 />
+              <Typography variant='h6' sx={{ marginBottom: 2 }}>
+                Deskripsi
+              </Typography>
+              <Typography variant='body2' sx={{ marginBottom: 4 }}>
+                {project.description}
+              </Typography>
             </TabPanel>
             <TabPanel value='4' sx={{ p: 0, height: 170, overflowY: 'scroll' }}>
-              <TabPanel4 />
+              {userProject.map(projek => (
+                <>
+                  <Grid
+                    justifyContent='center'
+                    sx={{ alignContent: 'center', alignItems: 'center' }}
+                    item
+                    flexDirection={'column'}
+                    xs={6}
+                    md={3}
+                    display={'flex'}
+                    // bgcolor={'secondary.dark'}
+                  >
+                    <Avatar
+                      sx={{
+                        boxShadow: 3,
+                        width: 60,
+                        height: 60,
+                        color: 'common.white',
+                        backgroundColor: `primary.main`
+                      }}
+                    >
+                      {<AccountGroup />}
+                    </Avatar>
+                    <Typography textAlign={'center'} variant='body2'>
+                      {projek.user.name}
+                    </Typography>
+                  </Grid>
+                </>
+              ))}
             </TabPanel>
             <Divider sx={{ marginTop: 3.5 }} />
 

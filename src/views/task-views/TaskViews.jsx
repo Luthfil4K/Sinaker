@@ -1,11 +1,11 @@
 import TableTask from '../tables/TableTask'
 import Grid from '@mui/material/Grid'
 
-const TaskViews = () => {
+const TaskViews = props => {
   return (
     <>
       <Grid container spacing={4}>
-        <TableTask></TableTask>
+        <TableTask data={props.data}></TableTask>
       </Grid>
     </>
   )

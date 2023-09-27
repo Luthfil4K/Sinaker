@@ -8,15 +8,18 @@ import { useRouter } from 'next/dist/client/router'
 
 import Typography from '@mui/material/Typography'
 import { DataGrid } from '@mui/x-data-grid'
+import { useState, useEffect, useRef } from 'react'
 
 const statusObj = {
   0: { color: 'warning', status: 'On Progress' },
   1: { color: 'success', status: 'Done' }
 }
 
-const TableTask = () => {
+const TableTask = props => {
   const router = useRouter()
+  const [task, setTask] = useState(props.data)
 
+  console.log(task)
   const columns = [
     { field: 'id', headerName: 'No', type: 'string', width: 70 },
     {
@@ -79,8 +82,8 @@ const TableTask = () => {
       field: 'status',
       renderCell: params => (
         <Chip
-          label={statusObj[params.value].status}
-          color={statusObj[params.value].color}
+          label={statusObj[params.row.target / params.row.realisasi === 1 ? 1 : 0].status}
+          color={statusObj[params.row.target / params.row.realisasi === 1 ? 1 : 0].color}
           sx={{
             height: 24,
             fontSize: '0.75rem',
@@ -105,79 +108,18 @@ const TableTask = () => {
     }
   ]
 
-  const data = [
-    {
-      id: 1,
-      task: 'task ke 2',
-      kegiatanName: 'Kegiatan L',
-      kegiatanId: 1,
-      priority: 'normal',
-      status: 1,
-      deadline: '22/10/2023',
-      userId: 2,
-      target: 10,
-      realisasi: 10
-    },
-    {
-      id: 2,
-      task: 'task abc',
-      kegiatanName: 'Kegiatan A',
-      kegiatanId: 1,
-      priority: 'tinggi',
-      status: 0,
-      deadline: '16/09/2023',
-      userId: 2,
-      target: 90,
-      realisasi: 10
-    },
-    {
-      id: 3,
-      task: 'task ke sekian',
-      kegiatanName: 'Kegiatan C',
-      kegiatanId: 1,
-      priority: 'normal',
-      status: 1,
-      deadline: '19/09/2023',
-      userId: 2,
-      target: 20,
-      realisasi: 20
-    },
-    {
-      id: 4,
-      task: 'task ke sekian',
-      kegiatanName: 'Kegiatan G',
-      kegiatanId: 1,
-      priority: 'rendah',
-      status: 0,
-      deadline: '27/09/2023',
-      userId: 2,
-      target: 90,
-      realisasi: 30
-    },
-    {
-      id: 5,
-      task: 'task ke sekian',
-      kegiatanName: 'Kegiatan B',
-      kegiatanId: 1,
-      priority: 'normal',
-      status: 1,
-      deadline: '22/09/2023',
-      userId: 2,
-      target: 90,
-      realisasi: 90
-    }
-  ]
+  const data = []
 
-  const rows = data.map(row => ({
-    id: row.id,
-    taskName: row.task,
-    kegiatanName: row.kegiatanName,
-    kegiatanNameid: row.kegiatanId,
-    target: row.target,
-    realisasi: row.realisasi,
-    status: row.status,
-    deadline: row.deadline,
-    userId: row.userId
+  const rows = task.map(task => ({
+    id: task.id,
+    taskName: task.title,
+    kegiatanName: task.project.title,
+    kegiatanNameid: task.project.id,
+    target: task.target,
+    realisasi: task.realisasi,
+    status: 'see',
+    deadline: new Date(task.duedate).toLocaleDateString('id'),
+    userId: task.userId
   }))
   return (
     <>

@@ -94,7 +94,7 @@ const CardProjectDetails = props => {
         </Grid>
         <Divider sx={{ marginTop: 4.5, marginBottom: 1.75 }} />
         <Grid justifyContent='end' display='flex'>
-          <Link onClick={e => router.push(`/project-detail`)}>
+          <Link onClick={e => router.push(`/project-detail/${id}`)}>
             <Button sx={{ mt: 5 }} variant='contained'>
               Selengkapnya
             </Button>

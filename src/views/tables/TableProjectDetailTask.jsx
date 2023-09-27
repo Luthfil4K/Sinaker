@@ -9,6 +9,7 @@ import { useRouter } from 'next/dist/client/router'
 
 import * as React from 'react'
 import { DataGrid } from '@mui/x-data-grid'
+import { useState } from 'react'
 
 const data = [
   {
@@ -58,16 +59,6 @@ const data = [
   }
 ]
 
-const rows = data.map(row => ({
-  id: row.id,
-  subKegiatan: row.subKegiatan,
-  jenisKegiatan: row.jenisKegiatan,
-  realisasi: row.realisasi,
-  target: row.target,
-  status: row.status,
-  deadline: row.deadline
-}))
-
 const jenisSub = {
   64: { namaJenisSub: 'Persiapan', color: 'warning' },
   66: { namaJenisSub: 'Pelaksanaan', color: 'warning' },
@@ -80,9 +71,21 @@ const statusObj = {
   0: { color: 'warning', status: 'On Progress' },
   1: { color: 'success', status: 'Done' }
 }
-const TableProjectDetailTask = () => {
+const TableProjectDetailTask = props => {
   const router = useRouter()
-  const subKegiatan = ['Sub Kegiatan']
+  const [subkeg, setSubKeg] = useState(props.data)
+  console.log(subkeg)
+
+  const rows = subkeg.map(row => ({
+    id: row.id,
+    subKegiatan: row.title,
+    jenisKegiatan: row.jenisKegiatan,
+    realisasi: row.realisasi,
+    target: row.target,
+    status: row.status,
+    deadline: row.deadline
+  }))
+
   const columns = [
     { field: 'id', headerName: 'No', type: 'string', width: 70 },
     {
@@ -108,9 +111,7 @@ const TableProjectDetailTask = () => {
       headerName: 'Jenis Kegiatan',
       width: 150,
       renderCell: params => (
-        <Typography sx={{ fontWeight: 500, fontSize: '0.875rem !important' }}>
-          {jenisSub[params.row.jenisKegiatan].namaJenisSub}
-        </Typography>
+        <Typography sx={{ fontWeight: 500, fontSize: '0.875rem !important' }}>{jenisSub[65].namaJenisSub}</Typography>
       )
     },
 
@@ -126,8 +127,8 @@ const TableProjectDetailTask = () => {
       field: 'status',
       renderCell: params => (
         <Chip
-          label={statusObj[params.value].status}
-          color={statusObj[params.value].color}
+          label={statusObj[1].status}
+          color={statusObj[1].color}
           sx={{
             height: 24,
             fontSize: '0.75rem',

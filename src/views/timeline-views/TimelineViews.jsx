@@ -18,6 +18,7 @@ import {
 } from '@devexpress/dx-react-scheduler-material-ui'
 
 import { useRouter } from 'next/dist/client/router'
+import { useState, useEffect, useRef } from 'react'
 
 // import { appointments } from 'src/demo-data/month-appointments'
 
@@ -130,95 +131,74 @@ const CellBase = React.memo(({ startDate, formatDate }) => {
 
 const TimeTableCell = CellBase
 
-const TimelineViews = () => {
+const TimelineViews = props => {
+  const [currentDate, setCurrentDate] = useState(new Date())
+
+  // const currentDate = '2023-07-23'
+  const currentDateChange = currentDate => {
+    setCurrentDate(currentDate)
+  }
+
   const router = useRouter()
-  const currentDate = '2023-07-23'
-  const appointments = [
-    {
-      title: (
-        <>
-          <Grid container>
-            <Grid item md={12} display={'flex'}>
-              <Link
-                onClick={e => {
-                  router.push('/project-detail')
-                }}
-              >
-                <Typography variant='body2' color={'white'}>
-                  STATISTIK POLITIK DAN KEAMANAN
-                </Typography>
-                <Typography variant='body2' color={'white'}>
-                  50%
-                </Typography>
-              </Link>
-            </Grid>
+
+  const [cardP, setCardP] = useState(props.data)
+  const appointments = cardP.map(task => ({
+    title: (
+      <>
+        <Grid container>
+          <Grid item md={12} display={'flex'}>
+            <Link
+              onClick={e => {
+                router.push('/project-detail')
+              }}
+            >
+              <Typography variant='body2' color={'white'}>
+                {task.title}
+              </Typography>
+              <Typography variant='body2' color={'white'}>
+                50%
+              </Typography>
+            </Link>
           </Grid>
-        </>
-      ),
-      startDate: new Date(2023, 6, 23, 9),
-      endDate: new Date(2023, 6, 23, 11)
-    },
-    {
-      title: (
-        <>
-          <Grid container>
-            <Grid item md={12} display={'flex'}>
-              <Link
-                onClick={e => {
-                  router.push('/project-detail')
-                }}
-              >
-                <Typography variant='body2' color={'white'}>
-                  SUSENAS KOR & KONSUMSI
-                </Typography>
-                <Typography variant='body2' color={'white'}>
-                  60%
-                </Typography>
-              </Link>
-            </Grid>
-          </Grid>
-        </>
-      ),
-      startDate: new Date(2023, 6, 23, 12),
-      endDate: new Date(2023, 6, 23, 13)
-    },
-    {
-      title: (
-        <Link
-          onClick={e => {
-            router.push('/project-detail')
-          }}
-        >
-          <Typography variant='body2' color={'white'}>
-            Sakernas Semesteran (pengolahan)
-          </Typography>
-        </Link>
-      ),
-      startDate: new Date(2023, 6, 12, 14),
-      endDate: new Date(2023, 6, 14, 15)
-    },
-    {
-      title: (
-        <Link
-          onClick={e => {
-            router.push('/project-detail')
-          }}
-        >
-          <Typography variant='body2' color={'white'}>
-            SUSENAS MKP
-          </Typography>
-        </Link>
-      ),
-      startDate: new Date(2023, 6, 24, 10),
-      endDate: new Date(2023, 6, 24, 11)
-    }
-  ]
+        </Grid>
+      </>
+    ),
+    startDate: new Date(task.duedate).setHours(7),
+    endDate: new Date(task.duedate).setHours(9)
+  }))
+
+  // {
+  // title: (
+  //   <>
+  //     <Grid container>
+  //       <Grid item md={12} display={'flex'}>
+  //         <Link
+  //           onClick={e => {
+  //             router.push('/project-detail')
+  //           }}
+  //         >
+  //           <Typography variant='body2' color={'white'}>
+  //             STATISTIK POLITIK DAN KEAMANAN
+  //           </Typography>
+  //           <Typography variant='body2' color={'white'}>
+  //             50%
+  //           </Typography>
+  //         </Link>
+  //       </Grid>
+  //     </Grid>
+  //   </>
+  // ),
+  //   startDate: new Date(2023, 6, 23, 9),
+  //   endDate: new Date(2023, 6, 23, 11)
+  // }
+
+  console.log(appointments)
 
   return (
     <>
       <Paper>
         <Scheduler data={appointments}>
-          <ViewState defaultCurrentDate={currentDate} />
+          <ViewState currentDate={currentDate} onCurrentDateChange={currentDateChange} />
           <MonthView timeTableCellComponent={TimeTableCell} />
           <Toolbar />
           <DateNavigator />
