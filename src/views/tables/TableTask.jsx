@@ -15,6 +15,15 @@ const statusObj = {
   1: { color: 'success', status: 'Done' }
 }
 
+const jenisSub = {
+  64: { namaJenisSub: 'Persiapan', color: 'warning' },
+  66: { namaJenisSub: 'Pelaksanaan', color: 'warning' },
+  65: { namaJenisSub: 'Pengawasan', color: 'warning' },
+  67: { namaJenisSub: 'Pengolahan', color: 'warning' },
+  68: { namaJenisSub: 'Evaluasi', color: 'warning' },
+  69: { namaJenisSub: 'Diseminasi', color: 'warning' }
+}
+
 const TableTask = props => {
   const router = useRouter()
   const [task, setTask] = useState(props.data)
@@ -98,10 +107,22 @@ const TableTask = props => {
       width: 140
     },
     {
+      field: 'jenisKegiatan',
+      headerName: 'Jenis Kegiatan',
+      renderCell: params => (
+        <Typography sx={{ fontWeight: 500, fontSize: '0.875rem !important' }}>
+          {' '}
+          {jenisSub[parseInt(params.row.jenisKegiatan)].namaJenisSub}
+        </Typography>
+      ),
+      type: 'string',
+      width: 180
+    },
+    {
       field: 'deadline',
       headerName: 'Deadline',
       renderCell: params => (
-        <Typography sx={{ fontWeight: 500, fontSize: '0.875rem !important' }}>{params.row.deadline}</Typography>
+        <Typography sx={{ fontWeight: 500, fontSize: '0.875rem !important' }}> {params.row.deadline}</Typography>
       ),
       type: 'string',
       width: 180
@@ -115,6 +136,7 @@ const TableTask = props => {
     taskName: task.title,
     kegiatanName: task.project.title,
     kegiatanNameid: task.project.id,
+    jenisKegiatan: task.jenisKeg,
     target: task.target,
     realisasi: task.realisasi,
     status: 'see',

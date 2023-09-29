@@ -26,10 +26,10 @@ const ProjectListViews = props => {
       }
     })
   )
-  console.log(props.data)
-  console.log('asd')
-  console.log('asds')
-  console.log(cardP)
+  // console.log(props.data)
+  // console.log('asd')
+  // console.log('asds')
+  // console.log(cardP)
 
   const handleTandaRef = id => {
     cardPRef.current = [...cardPRef.current, { id }]

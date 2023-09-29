@@ -15,54 +15,6 @@ import Swal from 'sweetalert2'
 import PencilOutline from 'mdi-material-ui/PencilOutline'
 import DeleteOutline from 'mdi-material-ui/DeleteOutline'
 
-const data = [
-  {
-    id: 1,
-    subKegiatan: 'Sub Kegiatan  1',
-    jenisKegiatan: 64,
-    realisasi: 10,
-    target: 80,
-    status: 0,
-    deadline: '22/09/2023'
-  },
-  {
-    id: 2,
-    subKegiatan: 'Sub Kegiatan  2',
-    jenisKegiatan: 67,
-    realisasi: 10,
-    target: 10,
-    status: 0,
-    deadline: '22/09/2023'
-  },
-  {
-    id: 3,
-    subKegiatan: 'Sub Kegiatan  3',
-    jenisKegiatan: 65,
-    realisasi: 30,
-    target: 50,
-    status: 0,
-    deadline: '22/09/2023'
-  },
-  {
-    id: 4,
-    subKegiatan: 'Sub Kegiatan  4',
-    jenisKegiatan: 66,
-    realisasi: 10,
-    target: 20,
-    status: 0,
-    deadline: '22/09/2023'
-  },
-  {
-    id: 5,
-    subKegiatan: 'Sub Kegiatan  5',
-    jenisKegiatan: 69,
-    realisasi: 60,
-    target: 60,
-    status: 1,
-    deadline: '22/09/2023'
-  }
-]
-
 const jenisSub = {
   64: { namaJenisSub: 'Persiapan', color: 'warning' },
   66: { namaJenisSub: 'Pelaksanaan', color: 'warning' },
@@ -83,7 +35,7 @@ const TableManageTaskList = props => {
   const rows = subkeg.map(row => ({
     id: row.id,
     subKegiatan: row.title,
-    jenisKegiatan: row.jenisKegiatan,
+    jenisKegiatan: row.jenisKeg,
     realisasi: row.realisasi,
     target: row.target,
     status: row.status,
@@ -91,10 +43,11 @@ const TableManageTaskList = props => {
   }))
 
   const router = useRouter()
-  const handleDelete = () => {
+  const handleDelete = props => {
+    console.log(props)
     Swal.fire({
       title: 'Apa Anda Yakin?',
-      text: 'Untuk menghapus tim ini!',
+      text: 'Untuk menghapus task ini!',
       icon: 'warning',
       showCancelButton: true,
       confirmButtonColor: '#3085d6',
@@ -102,9 +55,9 @@ const TableManageTaskList = props => {
       confirmButtonText: 'Yes, Hapus tim !'
     }).then(result => {
       if (result.isConfirmed) {
-        router.push('/task-manage')
+        router.push(`/task-manage/2}`)
       } else {
-        router.push('/task-manage')
+        router.push(`/task-manage/2`)
       }
     })
   }
@@ -134,7 +87,10 @@ const TableManageTaskList = props => {
       headerName: 'Jenis Kegiatan',
       width: 150,
       renderCell: params => (
-        <Typography sx={{ fontWeight: 500, fontSize: '0.875rem !important' }}>{jenisSub[65].namaJenisSub}</Typography>
+        <Typography sx={{ fontWeight: 500, fontSize: '0.875rem !important' }}>
+          {' '}
+          {jenisSub[parseInt(params.row.jenisKegiatan)].namaJenisSub}
+        </Typography>
       )
     },
 

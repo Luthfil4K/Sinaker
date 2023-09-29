@@ -79,7 +79,7 @@ const TableProjectDetailTask = props => {
   const rows = subkeg.map(row => ({
     id: row.id,
     subKegiatan: row.title,
-    jenisKegiatan: row.jenisKegiatan,
+    jenisKegiatan: parseInt(row.jenisKeg),
     realisasi: row.realisasi,
     target: row.target,
     status: row.status,
@@ -111,7 +111,9 @@ const TableProjectDetailTask = props => {
       headerName: 'Jenis Kegiatan',
       width: 150,
       renderCell: params => (
-        <Typography sx={{ fontWeight: 500, fontSize: '0.875rem !important' }}>{jenisSub[65].namaJenisSub}</Typography>
+        <Typography sx={{ fontWeight: 500, fontSize: '0.875rem !important' }}>
+          {jenisSub[parseInt(params.row.jenisKegiatan)].namaJenisSub}
+        </Typography>
       )
     },
 

@@ -76,7 +76,7 @@ const ProjectDetailsViews = props => {
           <CardProjectInfo data={project}></CardProjectInfo>
         </Grid>
         <Grid item sm={12} md={4}>
-          <CardProjectDetailProgress data={project}></CardProjectDetailProgress>
+          <CardProjectDetailProgress data={project.Task}></CardProjectDetailProgress>
         </Grid>
         <Grid item sm={12} md={12}>
           <TableProjectDetailTask data={project.Task}></TableProjectDetailTask>

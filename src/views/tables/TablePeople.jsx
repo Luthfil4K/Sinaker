@@ -21,6 +21,15 @@ import PencilOutline from 'mdi-material-ui/PencilOutline'
 import DeleteOutline from 'mdi-material-ui/DeleteOutline'
 import router from 'next/router'
 
+const jenisFungsi = {
+  2: { bagFungsi: 'Bagian', color: 'warning' },
+  3: { bagFungsi: 'Statistik Sosial', color: 'warning' },
+  4: { bagFungsi: 'Statistik Produksi', color: 'warning' },
+  5: { bagFungsi: 'Statistik Distribusi', color: 'warning' },
+  6: { bagFungsi: 'Neraca Wilayah dan Analisis Statistik', color: 'warning' },
+  7: { bagFungsi: 'Integrasi Pengolahan dan Diseminasi Statistik', color: 'warning' }
+}
+
 const data = [
   {
     id: 1,
@@ -75,7 +84,13 @@ const TablePeople = props => {
       field: 'fungsi',
       headerName: 'Fungsi',
 
-      minWidth: 100
+      minWidth: 170,
+      renderCell: params => (
+        <Typography sx={{ fontWeight: 500, fontSize: '0.875rem !important' }}>
+          {' '}
+          {jenisFungsi[parseInt(params.row.fungsi)].bagFungsi}
+        </Typography>
+      )
     },
     {
       field: 'totalGaji',
@@ -141,11 +156,11 @@ const TablePeople = props => {
       renderHeader: () => <Typography sx={{ fontSize: '0.875rem !important', textAlign: 'center' }}>Action</Typography>,
       minWidth: 250,
       flex: 1,
-      renderCell: () => (
+      renderCell: params => (
         <>
           <Button
             onClick={e => {
-              router.push('/people-edit')
+              router.push(`/people-edit/${params.row.id}`)
             }}
             type='submit'
             sx={{ mr: 1 }}

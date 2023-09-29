@@ -17,7 +17,7 @@ model User {
   nip            String         @unique @db.Char(18)
   password       String         @db.VarChar(255)
   role           String         @default("employee") @db.VarChar(64)
-  fungsi         String         @db.VarChar(64)
+  fungsi         Int            @db.Int
   UserProject    UserProject[]
   projectToLead  Project[]      @relation("projectToLead")
   taskToDo       Task[]         @relation("taskToDo")
@@ -52,7 +52,7 @@ model UserProject {
 model Task {
   id          Int           @id @default(autoincrement())
   title       String        @db.VarChar(128)
-  jenisKeg    String        @db.VarChar(128)
+  jenisKeg    Int           @db.Int
   duedate     DateTime      @db.Date
   description String?       @db.LongText
   notes       String?       @db.LongText

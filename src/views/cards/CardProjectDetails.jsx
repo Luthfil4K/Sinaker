@@ -27,7 +27,19 @@ const StyledBox = styled(Box)(({ theme }) => ({
   [theme.breakpoints.up('sm')]: {}
 }))
 const CardProjectDetails = props => {
+  const [task, setTask] = useState(props.totalSubKegiatan)
+  const totalRealisasi = task.reduce((accumulator, currentTask) => accumulator + currentTask.realisasi, 0)
+  const totalTarget = task.reduce((accumulator, currentTask) => accumulator + currentTask.target, 0)
+  const projectProgress =
+    task.realisasi !== undefined && task.realisasi !== null ? 100 * (totalRealisasi / totalTarget) : 0
+  const gabs =
+    task.reduce((acc, cur) => acc + cur.realisasi, 0) !== undefined &&
+    task.reduce((acc, cur) => acc + cur.realisasi, 0) !== null
+      ? 100 * (task.reduce((acc, cur) => acc + cur.realisasi, 0) / task.reduce((acc, cur) => acc + cur.target, 0))
+      : 0
   const router = useRouter()
+  console.log(totalRealisasi)
+  console.log(totalTarget)
   const {
     id,
     namaKegiatan,
@@ -54,7 +66,16 @@ const CardProjectDetails = props => {
           <Grid item xs={6} display={'flex'} justifyContent={'center'} alignItems={'center'}>
             <Box sx={{ mb: 3.5, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
               <Typography variant='h6' sx={{ lineHeight: 1, fontWeight: 600, fontSize: '3rem !important' }}>
-                {Math.round(Number(30))}%
+                {Math.round(
+                  totalSubKegiatan.length > 0 &&
+                    totalSubKegiatan.every(item => item.realisasi !== undefined && item.realisasi !== null) &&
+                    totalSubKegiatan.every(item => item.target !== undefined && item.target !== null)
+                    ? 100 *
+                        (totalSubKegiatan.reduce((acc, cur) => acc + cur.realisasi, 0) /
+                          totalSubKegiatan.reduce((acc, cur) => acc + cur.target, 0))
+                    : 0
+                )}
+                %
               </Typography>
             </Box>
           </Grid>

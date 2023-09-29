@@ -18,7 +18,15 @@ import * as React from 'react'
 // circular bar
 import CircularProgress from '@mui/material/CircularProgress'
 
-const CardProjectDetailProgress = () => {
+const CardProjectDetailProgress = props => {
+  const [task, setTask] = useState(props.data)
+  console.log('progres')
+  console.log(task)
+  const totalRealisasi = task.reduce((accumulator, currentTask) => accumulator + currentTask.realisasi, 0)
+  const totalTarget = task.reduce((accumulator, currentTask) => accumulator + currentTask.target, 0)
+  const projectProgress =
+    task.realisasi !== undefined && task.realisasi !== null ? 100 * (totalRealisasi / totalTarget) : 0
+
   return (
     <>
       <Card sx={{ height: 350, overflowY: 'scroll' }}>
@@ -49,9 +57,9 @@ const CardProjectDetailProgress = () => {
                     zIndex: 1
                   }}
                 >
-                  {Math.round(Number(60))}%
+                  {Math.round(projectProgress)}%
                 </Typography>
-                <CircularProgress size={170} value={60} variant='determinate' sx={{ marginBottom: 1 }} />
+                <CircularProgress size={170} value={projectProgress} variant='determinate' sx={{ marginBottom: 1 }} />
               </Grid>
             </Grid>
           </Grid>

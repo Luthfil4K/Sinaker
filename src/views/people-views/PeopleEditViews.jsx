@@ -32,20 +32,30 @@ import VisibilityOff from '@mui/icons-material/VisibilityOff'
 
 import EyeOffOutline from 'mdi-material-ui/EyeOffOutline'
 
-const PeopleAddViews = () => {
+const jenisSub = {
+  2: { bagFungsi: 'Bagian', color: 'warning' },
+  3: { bagFungsi: 'Statistik Sosial', color: 'warning' },
+  4: { bagFungsi: 'Statistik Produksi', color: 'warning' },
+  5: { bagFungsi: 'Statistik Distribusi', color: 'warning' },
+  6: { bagFungsi: 'Neraca Wilayah dan Analisis Statistik', color: 'warning' },
+  7: { bagFungsi: 'Integrasi Pengolahan dan Diseminasi Statistik', color: 'warning' }
+}
+
+const PeopleAddViews = props => {
   const [showPassword, setShowPassword] = useState(false)
   const handleClickShowPassword = () => setShowPassword(show => !show)
   const handleMouseDownPassword = event => {
     event.preventDefault()
   }
+  console.log(props.data)
 
   const [values, setValues] = useState({
-    pegawaiId: '',
-    pegawaiNama: '',
-    pegawaiNIP: '',
-    pegawaiFungsi: '',
-    pegawaiEmail: '',
-    pegawaiPassword: ''
+    pegawaiId: props.data.id,
+    pegawaiNama: props.data.name,
+    pegawaiNIP: props.data.nip,
+    pegawaiFungsi: props.data.fungsi,
+    pegawaiEmail: props.data.email,
+    pegawaiPassword: props.data.password
   })
 
   const handleChange = props => event => {
@@ -91,7 +101,7 @@ const PeopleAddViews = () => {
         <form noValidate autoComplete='off' onSubmit={e => e.preventDefault()}>
           <TextField
             name={'pegawaiNama'}
-            value={values.pegawiNama}
+            value={values.pegawaiNama}
             onChange={handleChange('pegawaiNama')}
             autoFocus
             fullWidth
