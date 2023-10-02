@@ -86,7 +86,7 @@ const ProjectDetailsViews = props => {
         <Grid item md={12} display={'flex'} justifyContent={'end'} flexDirection={'row'}>
           <Button
             onClick={e => {
-              router.push('/project-edit')
+              router.push(`/project-edit/${project.id}`)
             }}
             size='medium'
             variant={'contained'}

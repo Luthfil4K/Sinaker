@@ -23,6 +23,15 @@ import LockOpenOutline from 'mdi-material-ui/LockOpenOutline'
 import ClipboardFileOutline from 'mdi-material-ui/ClipboardFileOutline'
 import LockOutline from 'mdi-material-ui/LockOutline'
 
+const rentang = {
+  59: { waktu: 'Bulanan', color: 'warning' },
+  60: { waktu: 'Triwulanan', color: 'warning' },
+  61: { waktu: 'Semesteran', color: 'warning' },
+  62: { waktu: 'Tahunan', color: 'warning' },
+  70: { waktu: 'SubRound', color: 'warning' },
+  80: { waktu: 'Ad-Hok', color: 'warning' }
+}
+
 const StyledBox = styled(Box)(({ theme }) => ({
   [theme.breakpoints.up('sm')]: {}
 }))
@@ -58,10 +67,7 @@ const CardProjectDetails = props => {
             <Typography variant='h5' sx={{ marginBottom: 3.5, fontWeight: 600 }}>
               {namaKegiatan}
             </Typography>
-            <Typography variant='body2'>
-              {intervalWaktu}
-              {totalGaji}
-            </Typography>
+            <Typography variant='body2'>{rentang[intervalWaktu].waktu}</Typography>
           </Grid>
           <Grid item xs={6} display={'flex'} justifyContent={'center'} alignItems={'center'}>
             <Box sx={{ mb: 3.5, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>

@@ -334,7 +334,7 @@ const Dashboard = ({ dataTask }) => {
             </Grid>
             <Grid item md={12}>
               <Card sx={{ padding: 4, height: 410 }}>
-                <Typography variant={'h6'}>Rapat hari ini</Typography>
+                <Typography variant={'h6'}>Grafik</Typography>
                 <Divider></Divider>
                 <Doughnut
                   data={dataDoughnut}

@@ -1,4 +1,3 @@
-// react import
 import { useState } from 'react'
 import * as React from 'react'
 
@@ -22,28 +21,31 @@ import Divider from '@mui/material/Divider'
 import TextField from '@mui/material/TextField'
 import Typography from '@mui/material/Typography'
 import { styled } from '@mui/material/styles'
-import { useRouter } from 'next/dist/client/router'
 import { Autocomplete } from '@mui/lab'
 import FormControl from '@mui/material/FormControl'
 import Select, { SelectChangeEvent } from '@mui/material/Select'
 import InputLabel from '@mui/material/InputLabel'
 import MenuItem from '@mui/material/MenuItem'
 
-import TableAddParticipant from 'src/views/tables/TableAddParticipant'
+//router
+import { useRouter } from 'next/dist/client/router'
 
-const CreateProjectViews = props => {
-  const [dataUser, setDataUser] = useState(props.data)
+import TableProjectEditParticipant from 'src/views/tables/TableProjectEditParticipant'
+import CardProjectEdit from 'src/views/cards/CardProjectEdit'
+
+const ProjectEditViews = props => {
+  const [dataUser, setDataUser] = useState(props.data.user)
   console.log(dataUser)
-  const [selectedDate, setSelectedDate] = useState(null)
-  const [selectedDateE, setSelectedDateE] = useState(null)
+  const [selectedDate, setSelectedDate] = useState(new Date(props.data.project.startdate))
+  const [selectedDateE, setSelectedDateE] = useState(new Date(props.data.project.enddate))
   const [values, setValues] = useState({
-    kegNama: '',
-    kegRentang: '',
+    kegNama: props.data.project.title,
+    kegRentang: props.data.project.rentangWaktu,
     kegGajiPml: '',
     kegGajiPcl: '',
-    kegFungsi: '',
-    kegDesk: '',
-    kegKetua: ''
+    kegFungsi: props.data.project.fungsi,
+    kegDesk: props.data.project.description,
+    kegKetua: props.data.project.projectLeaderId
   })
 
   const handleDateChange = date => {
@@ -80,80 +82,14 @@ const CreateProjectViews = props => {
       kegKetua: event.target.value // Perbarui nilai kegRentang
     }))
   }
-
-  const handleProject = async e => {
-    e.preventDefault()
-    // console.log(
-    //   values.kegNama +
-    //     '||' +
-    //     values.kegRentang +
-    //     '||' +
-    //     selectedDate +
-    //     '||' +
-    //     selectedDateE +
-    //     '||' +
-    //     values.kegFungsi +
-    //     '||' +
-    //     values.kegDesk +
-    //     '||' +
-    //     values.kegKetua
-    // )
-    try {
-      while (true) {
-        const res = await axios.post('/project', {
-          title: values.kegNama,
-          rentangWaktu: values.kegRentang.toString(),
-          startdate: selectedDate,
-          enddate: selectedDateE,
-          fungsi: values.kegFungsi,
-          description: values.kegDesk,
-          projectLeaderId: values.kegKetua,
-          createdById: 2
-        })
-
-        if (res.status === 201) {
-          Swal.fire({
-            title: 'Create Project Success',
-            text: 'Press OK to continue',
-            icon: 'success',
-            confirmButtonColor: '#68B92E',
-            confirmButtonText: 'OK'
-          })
-
-          setValues({
-            kegNama: '',
-            kegRentang: '',
-            kegGajiPml: '',
-            kegGajiPcl: '',
-            kegFungsi: '',
-            kegDesk: '',
-            kegKetua: ''
-          })
-
-          setSelectedDate(new Date())
-          setSelectedDateE(null)
-        }
-
-        break
-      }
-    } catch (error) {
-      Swal.fire({
-        title: 'Create Project Failed',
-        text: error,
-        icon: 'error',
-        confirmButtonColor: '#d33',
-        confirmButtonText: 'OK'
-      })
-    }
-  }
-
   const router = useRouter()
+
   return (
     <Card>
       <form action='post' onSubmit={e => e.preventDefault()}>
         <Grid container spacing={4} sx={{ padding: '32px' }}>
           <Grid item xs={12}>
-            <Typography variant='h5'>Buat Kegiatan</Typography>
+            <Typography variant='h5'>Edit Kegiatan</Typography>
           </Grid>
 
           <Grid item xs={12} md={6}>
@@ -307,13 +243,31 @@ const CreateProjectViews = props => {
         {/* <TableAddParticipant></TableAddParticipant> */}
         <Divider sx={{ margin: 0 }} />
         <Grid item m={4} display={'flex'} justifyContent={'end'}>
-          <Button size='medium' type='submit' variant='contained' onClick={handleProject}>
-            Buat Kegiatan
+          <Button size='medium' type='submit' variant='contained'>
+            Edit Kegiatan
           </Button>
         </Grid>
       </form>
+      {/* <CardProjectEdit data={props.data}></CardProjectEdit>
+      <Grid container>
+        <Grid item md={12} xs={12} justifyContent={'end'} display={'flex'} p={4}></Grid>
+      </Grid>
+
+      <Grid container mt={4}>
+        <Grid p={4} md={12} item display={'flex'} justifyContent={'end'}>
+          <Button
+            onClick={e => {
+              router.push('/project-detail')
+            }}
+            variant='contained'
+          >
+            {' '}
+            Edit Kegiatan
+          </Button>
+        </Grid>
+      </Grid> */}
     </Card>
   )
 }
 
-export default CreateProjectViews
+export default ProjectEditViews
