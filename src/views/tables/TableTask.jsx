@@ -36,7 +36,7 @@ const TableTask = props => {
       renderCell: params => (
         <Link
           onClick={async e => {
-            router.push(`/task-detail`)
+            router.push(`/task-detail/${params.row.taskId}`)
           }}
           sx={{ cursor: 'pointer' }}
         >
@@ -55,7 +55,7 @@ const TableTask = props => {
       renderCell: params => (
         <Link
           onClick={async e => {
-            router.push(`/project-detail`)
+            router.push(`/project-detail/${params.row.kegiatanNameid}`)
           }}
           sx={{ cursor: 'pointer' }}
         >
@@ -131,9 +131,11 @@ const TableTask = props => {
 
   const data = []
 
+  let nobaris = 1
   const rows = task.map(task => ({
-    id: task.id,
+    id: nobaris++,
     taskName: task.title,
+    taskId: task.id,
     kegiatanName: task.project.title,
     kegiatanNameid: task.project.id,
     jenisKegiatan: task.jenisKeg,

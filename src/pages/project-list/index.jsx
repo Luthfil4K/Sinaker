@@ -6,7 +6,7 @@ import { useState, useEffect, useRef } from 'react'
 
 const ProjectList = ({ data }) => {
   const [projects, setProjects] = useState(JSON.parse(data))
-
+  console.log(projects)
   // useEffect(() => {
   //   setProjects(JSON.parse(data))
   //   setTimeout(() => {

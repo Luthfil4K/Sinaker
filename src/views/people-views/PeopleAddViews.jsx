@@ -1,6 +1,12 @@
 // ** React Imports
 import { ChangeEvent, MouseEvent, ReactNode, useState } from 'react'
 
+// axios
+import axios from 'src/pages/api/axios'
+
+// swall
+import Swal from 'sweetalert2'
+
 // ** MUI Components
 import Card from '@mui/material/Card'
 import Box from '@mui/material/Box'
@@ -59,8 +65,64 @@ const PeopleAddViews = () => {
     router.push('/pegawai')
   }
 
-  const handleAddPegawai = event => {
-    event.preventDefault()
+  const handleAddPegawai = async e => {
+    e.preventDefault()
+    // console.log(
+    //   values.kegNama +
+    //     '||' +
+    //     values.kegRentang +
+    //     '||' +
+    //     selectedDate +
+    //     '||' +
+    //     selectedDateE +
+    //     '||' +
+    //     values.kegFungsi +
+    //     '||' +
+    //     values.kegDesk +
+    //     '||' +
+    //     values.kegKetua
+    // )
+    try {
+      while (true) {
+        const res = await axios.post('/user', {
+          email: values.pegawaiEmail,
+          name: values.pegawaiNama,
+          nip: values.pegawaiNIP,
+          password: values.pegawaiPassword,
+          role: 'employee',
+          fungsi: values.pegawaiFungsi
+        })
+
+        if (res.status === 201) {
+          Swal.fire({
+            title: 'Tambah Pegawai Success',
+            text: 'Tekan OK untuk lanjut',
+            icon: 'success',
+            confirmButtonColor: '#68B92E',
+            confirmButtonText: 'OK'
+          })
+
+          setValues({
+            pegawaiId: '',
+            pegawaiNama: '',
+            pegawaiNIP: '',
+            pegawaiFungsi: '',
+            pegawaiEmail: '',
+            pegawaiPassword: ''
+          })
+        }
+
+        break
+      }
+    } catch (error) {
+      Swal.fire({
+        title: 'Tambah Pegawai Gagal',
+        text: error,
+        icon: 'error',
+        confirmButtonColor: '#d33',
+        confirmButtonText: 'OK'
+      })
+    }
   }
 
   return (

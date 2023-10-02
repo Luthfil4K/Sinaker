@@ -77,7 +77,7 @@ const TablePeople = props => {
     {
       field: 'nama',
       headerName: 'Nama',
-
+      width: 240,
       minWidth: 130
     },
     {
@@ -92,36 +92,36 @@ const TablePeople = props => {
         </Typography>
       )
     },
-    {
-      field: 'totalGaji',
-      headerName: 'Total Gaji',
+    // {
+    //   field: 'totalGaji',
+    //   headerName: 'Total Gaji',
 
-      minWidth: 170
-    },
-    {
-      field: 'gajiBulanan',
-      headerName: 'Gaji Bulanan',
+    //   minWidth: 170
+    // },
+    // {
+    //   field: 'gajiBulanan',
+    //   headerName: 'Gaji Bulanan',
 
-      width: 150
-    },
-    {
-      field: 'gajiTriwulanan',
-      headerName: 'Gaji Triwulanan',
+    //   width: 150
+    // },
+    // {
+    //   field: 'gajiTriwulanan',
+    //   headerName: 'Gaji Triwulanan',
 
-      width: 150
-    },
-    {
-      field: 'gajiSemesteran',
-      headerName: 'Gaji Semesteran',
+    //   width: 150
+    // },
+    // {
+    //   field: 'gajiSemesteran',
+    //   headerName: 'Gaji Semesteran',
 
-      width: 150
-    },
-    {
-      field: 'gajiTahunan',
-      headerName: 'Gaji Tahunan',
+    //   width: 150
+    // },
+    // {
+    //   field: 'gajiTahunan',
+    //   headerName: 'Gaji Tahunan',
 
-      width: 150
-    },
+    //   width: 150
+    // },
     {
       field: 'jumlahKegiatan',
       headerName: 'Jumlah Kegiatan',
@@ -198,7 +198,7 @@ const TablePeople = props => {
 
   return (
     <>
-      <Card>
+      <Card sx={{ padding: 4 }}>
         <DataGrid
           rowHeight={65}
           initialState={{

@@ -52,16 +52,12 @@ const navigation = (): VerticalNavItemsType => {
       icon: HomeOutline,
       path: '/'
     },
-    {
-      title: 'Buat Kegiatan',
-      icon: FormatLetterCase,
-      path: '/create-project'
-    },
-    {
-      title: 'Pengumuman',
-      icon: CubeOutline,
-      path: '/pengumuman'
-    },
+
+    // {
+    //   title: 'Pengumuman',
+    //   icon: CubeOutline,
+    //   path: '/pengumuman'
+    // },
     {
       title: 'Timeline',
       icon: CubeOutline,
@@ -74,6 +70,11 @@ const navigation = (): VerticalNavItemsType => {
     // },
     {
       sectionTitle: 'Kegiatan'
+    },
+    {
+      title: 'Buat Kegiatan',
+      icon: FormatLetterCase,
+      path: '/create-project'
     },
 
     {

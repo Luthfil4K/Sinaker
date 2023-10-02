@@ -1,5 +1,12 @@
 import * as React from 'react'
 import { useState } from 'react'
+
+// axios
+import axios from 'src/pages/api/axios'
+
+// swall
+import Swal from 'sweetalert2'
+
 // mui
 import Card from '@mui/material/Card'
 import Grid from '@mui/material/Grid'
@@ -23,7 +30,9 @@ import DatePickerWrapper from 'src/@core/styles/libs/react-datepicker'
 
 import TableAddParticipant from 'src/views/tables/TableAddParticipant'
 
-const TaskManageAddViews = () => {
+const TaskManageAddViews = propss => {
+  const [project, setProject] = useState(propss.data)
+  // console.log(project)
   const [selectedDateE, setSelectedDateE] = useState(null)
   const [values, setValues] = useState({
     subKegNama: '',
@@ -31,7 +40,11 @@ const TaskManageAddViews = () => {
     subKegTarget: '',
     subKegUnitTarget: '',
     subKegDl: '',
-    subKegDesk: ''
+    subKegDesk: '',
+    subKegProjectId: project.id,
+    subKegUserId: project.projectLeaderId,
+    subKegMonth: '',
+    subKegYear: ''
   })
 
   const handleChange = props => event => {
@@ -39,20 +52,80 @@ const TaskManageAddViews = () => {
   }
 
   const handleDateChangeE = date => {
+    const dates = new Date(date) // Ganti tanggal dengan tanggal yang sesuai
+    const localizedDateString = date.toLocaleDateString('id')
     setSelectedDateE(date)
     setValues(values => ({
       ...values, // Pertahankan nilai properti lainnya
+      // subKegMonth: dates.getMonth() + 1,
+      // subKegYear: dates.getFullYear(),
       subKegDl: date // Perbarui nilai kegRentang
     }))
-    console.log(date)
   }
-
+  console.log(values.subKegMonth)
+  console.log(values.subKegYear)
   const handleJenisSubKeg = eeee => {
     setValues(values => ({
       ...values,
       subKegJenis: eeee.target.value
     }))
   }
+  const handleAddTask = async e => {
+    e.preventDefault()
+
+    try {
+      while (true) {
+        const res = await axios.post('/task', {
+          title: values.subKegNama,
+          jenisKeg: values.subKegJenis,
+          target: parseInt(values.subKegTarget),
+          unitTarget: values.subKegUnitTarget,
+          duedate: values.subKegDl,
+          description: values.subKegDesk,
+          realisasi: 0,
+          month: parseInt(values.subKegMonth),
+          year: parseInt(values.subKegYear),
+          projectId: values.subKegProjectId,
+          userId: values.subKegUserId,
+          notes: '-'
+        })
+
+        if (res.status === 201) {
+          Swal.fire({
+            title: 'Tambah Pegawai Success',
+            text: 'Tekan OK untuk lanjut',
+            icon: 'success',
+            confirmButtonColor: '#68B92E',
+            confirmButtonText: 'OK'
+          })
+
+          setValues({
+            subKegNama: '',
+            subKegJenis: '',
+            subKegTarget: '',
+            subKegUnitTarget: '',
+            subKegDl: '',
+            subKegDesk: '',
+            subKegProjectId: project.id,
+            subKegUserId: project.projectLeaderId,
+            subKegMonth: '',
+            subKegYear: ''
+          })
+        }
+
+        break
+      }
+    } catch (error) {
+      Swal.fire({
+        title: 'Tambah Pegawai Gagal',
+        text: error,
+        icon: 'error',
+        confirmButtonColor: '#d33',
+        confirmButtonText: 'OK'
+      })
+    }
+  }
+
   const router = useRouter()
   const jenisSubKegiatan = [
     {
@@ -82,8 +155,8 @@ const TaskManageAddViews = () => {
   ]
 
   // a check b check c check
-  console.log(values.subKegJenis)
-  console.log(values)
+  // console.log(values.subKegJenis)
+  // console.log(values)
   return (
     <>
       <Card sx={{ padding: 4 }}>
@@ -177,15 +250,7 @@ const TaskManageAddViews = () => {
           </Grid>
 
           {/* <TableAddParticipant></TableAddParticipant> */}
-          <Button
-            fullWidth
-            onClick={e => {
-              router.push('/task-manage')
-            }}
-            size='medium'
-            variant='contained'
-            sx={{ marginTop: 4 }}
-          >
+          <Button fullWidth onClick={handleAddTask} size='medium' variant='contained' sx={{ marginTop: 4 }}>
             Buat Sub Kegiatan
           </Button>
         </form>

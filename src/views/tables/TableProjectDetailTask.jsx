@@ -149,20 +149,18 @@ const TableProjectDetailTask = props => {
 
   return (
     <>
-      <Grid item md={12} xs={12}>
-        <Card>
-          <DataGrid
-            initialState={{
-              sorting: {
-                sortModel: [{ field: 'deadline', sort: 'asc' }]
-              }
-            }}
-            rows={rows}
-            columns={columns}
-            sx={{ overflowX: 'auto' }}
-          />
-        </Card>
-      </Grid>
+      <Card>
+        <DataGrid
+          initialState={{
+            sorting: {
+              sortModel: [{ field: 'deadline', sort: 'asc' }]
+            }
+          }}
+          rows={rows}
+          columns={columns}
+          sx={{ overflowX: 'auto' }}
+        />
+      </Card>
     </>
   )
 }

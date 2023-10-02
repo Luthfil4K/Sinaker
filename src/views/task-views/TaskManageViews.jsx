@@ -10,6 +10,7 @@ import TableManageTaskList from 'src/views/tables/TableManageTaskList'
 import TableManageTaskPeople from 'src/views/tables/TableManageTaskPeople'
 
 const TaskManageViews = props => {
+  console.log(props.data)
   const router = useRouter()
   return (
     <>
@@ -23,7 +24,7 @@ const TaskManageViews = props => {
           <Link>
             <Button
               onClick={e => {
-                router.push('/task-manage-add')
+                router.push(`/task-manage-add/${props.data.id}`)
               }}
               variant={'contained'}
             >

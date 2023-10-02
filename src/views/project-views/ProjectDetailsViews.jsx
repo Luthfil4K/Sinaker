@@ -72,13 +72,13 @@ const ProjectDetailsViews = props => {
   return (
     <>
       <Grid container spacing={4}>
-        <Grid item sm={12} md={8}>
+        <Grid item xs={12} md={8}>
           <CardProjectInfo data={project}></CardProjectInfo>
         </Grid>
-        <Grid item sm={12} md={4}>
+        <Grid item xs={12} md={4}>
           <CardProjectDetailProgress data={project.Task}></CardProjectDetailProgress>
         </Grid>
-        <Grid item sm={12} md={12}>
+        <Grid item xs={12} md={12}>
           <TableProjectDetailTask data={project.Task}></TableProjectDetailTask>
         </Grid>
       </Grid>

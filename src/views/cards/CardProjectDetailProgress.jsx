@@ -57,9 +57,31 @@ const CardProjectDetailProgress = props => {
                     zIndex: 1
                   }}
                 >
-                  {Math.round(projectProgress)}%
+                  {Math.round(
+                    task.length > 0 &&
+                      task.every(item => item.realisasi !== undefined && item.realisasi !== null) &&
+                      task.every(item => item.target !== undefined && item.target !== null)
+                      ? 100 *
+                          (task.reduce((acc, cur) => acc + cur.realisasi, 0) /
+                            task.reduce((acc, cur) => acc + cur.target, 0))
+                      : 0
+                  )}
+                  %
                 </Typography>
-                <CircularProgress size={170} value={projectProgress} variant='determinate' sx={{ marginBottom: 1 }} />
+                <CircularProgress
+                  size={170}
+                  value={Math.round(
+                    task.length > 0 &&
+                      task.every(item => item.realisasi !== undefined && item.realisasi !== null) &&
+                      task.every(item => item.target !== undefined && item.target !== null)
+                      ? 100 *
+                          (task.reduce((acc, cur) => acc + cur.realisasi, 0) /
+                            task.reduce((acc, cur) => acc + cur.target, 0))
+                      : 0
+                  )}
+                  variant='determinate'
+                  sx={{ marginBottom: 1 }}
+                />
               </Grid>
             </Grid>
           </Grid>

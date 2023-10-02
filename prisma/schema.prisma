@@ -30,6 +30,7 @@ model Project {
   title           String        @db.VarChar(128)
   rentangWaktu    String        @db.VarChar(128)
   startdate       DateTime      @db.Date
+  fungsi          Int           @db.Int
   enddate         DateTime      @db.Date
   description     String?       @db.LongText
   isArchived      Boolean       @db.TinyInt()
@@ -56,6 +57,8 @@ model Task {
   duedate     DateTime      @db.Date
   description String?       @db.LongText
   notes       String?       @db.LongText
+  month       Int           @db.Int
+  year        Int           @db.Int
   target      Int           @db.Int
   realisasi   Int           @db.Int
   unitTarget  String        @db.VarChar(128)
@@ -64,4 +67,5 @@ model Task {
   user        User          @relation("taskToDo", fields: [userId], references: [id], onDelete: Cascade, onUpdate: Cascade)
   userId      Int
 }
+
 

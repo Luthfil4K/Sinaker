@@ -1,5 +1,6 @@
 import * as React from 'react'
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
+import prisma from '../services/db'
 
 // ** MUI Imports
 import InputLabel from '@mui/material/InputLabel'
@@ -17,107 +18,259 @@ import Divider from '@mui/material/Divider'
 // import { ChartContainer } from '@mui/x-charts/ChartContainer'
 
 // Chart js
-import { Line, Bar } from 'react-chartjs-2'
+import { Line, Bar, Doughnut } from 'react-chartjs-2'
 import { CategoryScale } from 'chart.js'
 import Chart from 'chart.js/auto'
 Chart.register(CategoryScale)
 
-// ** Icons Imports
-import Poll from 'mdi-material-ui/Poll'
-import CurrencyUsd from 'mdi-material-ui/CurrencyUsd'
-import HelpCircleOutline from 'mdi-material-ui/HelpCircleOutline'
-import BriefcaseVariantOutline from 'mdi-material-ui/BriefcaseVariantOutline'
-
-// ** Custom Components Imports
-import CardStatisticsVerticalComponent from 'src/@core/components/card-statistics/card-stats-vertical'
+import LinearProgress from '@mui/material/LinearProgress'
 
 // ** Styled Component Import
 import ApexChartWrapper from 'src/@core/styles/libs/react-apexcharts'
 
-// ** Demo Components Imports
-import Table from 'src/views/dashboard/Table'
-import Trophy from 'src/views/dashboard/Trophy'
-import TotalEarning from 'src/views/dashboard/TotalEarning'
-import StatisticsCard from 'src/views/dashboard/StatisticsCard'
-import WeeklyOverview from 'src/views/dashboard/WeeklyOverview'
-import DepositWithdraw from 'src/views/dashboard/DepositWithdraw'
-import SalesByCountries from 'src/views/dashboard/SalesByCountries'
-
-const Dashboard = () => {
+const Dashboard = ({ dataTask }) => {
+  const [task, setTask] = useState(JSON.parse(dataTask))
   const dataawal = [12, 19, 3, 5, 2, 3, 8, 10, 6, 7, 14, 12]
   const realisasiAwal = Array.from({ length: 12 }, () => Math.floor(Math.random() * 100))
-  const [target, setTarget] = useState(dataawal)
-  const [realisasi, setRealisasi] = useState(dataawal)
 
+  // State Bar
+  const [targetBar, setTargetBar] = useState(dataawal)
+  const [realisasiBar, setRealisasiBar] = useState(dataawal)
   const [valueDropBar, setvalueDropBar] = useState(0)
+  const [tahunBar, SetTahunBar] = useState(2023)
 
+  // State Line
+  const [bulan, SetBulan] = useState(1)
   const [valueDropLine, setvalueDropLine] = useState(0)
   const [targetLine, setTargetLine] = useState(realisasiAwal)
   const [realisasiLine, setRealisasiLine] = useState(dataawal)
-  const [bulan, SetBulan] = useState(1)
+  const [labelsLine, setLabelsLine] = useState(dataawal)
 
+  // State doughnut
+  const [doughnut, setDoughnut] = useState(0)
+
+  // state LineProgress
+  const [linearProgress, setLinearProgress] = useState(0)
+  const [totalTarget, setTotalTarget] = useState(0)
+  const [totalRealisasi, setTotalRealisasi] = useState(0)
+
+  // handle dropdown
   const handleChangeBulan = event => {
-    console.log(event.target.value)
     SetBulan(event.target.value)
   }
 
   const handleChangeBar = event => {
-    if (event.target.value === 10) {
-      setTarget([122, 129, 23, 25, 22, 23, 82, 120, 62, 72, 142, 122])
-      setRealisasi([122, 129, 23, 25, 22, 32, 28, 210, 62, 7, 124, 122])
-    } else if (event.target.value === 20) {
-      const randomTarget = Array.from({ length: 12 }, () => Math.floor(Math.random() * 100))
-      const randomRealisasi = Array.from({ length: 12 }, () => Math.floor(Math.random() * 100))
-      setTarget(randomTarget)
-      setRealisasi(randomRealisasi)
-    } else if (event.target.value === 30) {
-      const randomTarget = Array.from({ length: 12 }, () => Math.floor(Math.random() * 100))
-      const randomRealisasi = Array.from({ length: 12 }, () => Math.floor(Math.random() * 100))
-      setTarget(randomTarget)
-      console.log(randomTarget)
-      setRealisasi(randomRealisasi)
-    } else if (event.target.value === 40) {
-      const randomTarget = Array.from({ length: 12 }, () => Math.floor(Math.random() * 100))
-      const randomRealisasi = Array.from({ length: 12 }, () => Math.floor(Math.random() * 100))
-      setTarget(randomTarget)
-      setRealisasi(randomRealisasi)
-      console.log(randomTarget)
-    } else if (event.target.value === 50) {
-      const randomTarget = Array.from({ length: 12 }, () => Math.floor(Math.random() * 100))
-      const randomRealisasi = Array.from({ length: 12 }, () => Math.floor(Math.random() * 100))
-      setTarget(randomTarget)
-      setRealisasi(randomRealisasi)
-      console.log(randomTarget)
-    } else if (event.target.value === 60) {
-      const randomTarget = Array.from({ length: 12 }, () => Math.floor(Math.random() * 100))
-      const randomRealisasi = Array.from({ length: 12 }, () => Math.floor(Math.random() * 100))
-      setTarget(randomTarget)
-      setRealisasi(randomRealisasi)
-      console.log(randomTarget)
+    const untukTarget = []
+    const untukRealisasi = []
+
+    for (let value = 2; value <= 7; value++) {
+      if (event.target.value === value) {
+        let targetAccumulator = 0
+        let realisasiAccumulator = 0
+
+        for (let month = 1; month <= 12; month++) {
+          let monthlyTarget = 0
+          let monthlyRealisasi = 0
+
+          task.forEach(task => {
+            if (task.project.fungsi === value && task.month === month && task.year === tahunBar) {
+              monthlyTarget += task.target
+              monthlyRealisasi += task.realisasi
+            }
+          })
+
+          targetAccumulator += monthlyTarget
+          realisasiAccumulator += monthlyRealisasi
+
+          // console.log('Akumulasi Target:', targetAccumulator)
+          // console.log('Akumulasi Realisasi:', realisasiAccumulator)
+
+          untukTarget.push(targetAccumulator)
+          untukRealisasi.push(realisasiAccumulator)
+
+          // Mengatur ulang akumulator ke 0 untuk bulan selanjutnya
+          targetAccumulator = 0
+          realisasiAccumulator = 0
+        }
+
+        setTargetBar(untukTarget)
+        setRealisasiBar(untukRealisasi)
+
+        break // Keluar dari loop setelah menemukan nilai yang sesuai
+      }
     }
+
     console.log(event.target.value)
     setvalueDropBar(event.target.value)
+  }
+
+  const handleChangeBarTahun = event => {
+    SetTahunBar(event.target.value)
   }
 
   const handleChangeLine = event => {
     console.log(event.target.value)
     setvalueDropLine(event.target.value)
   }
-  const data = {
+
+  // UE here, refresh data
+  const calculateTargetAndRealisasi = () => {
+    const untukTarget = []
+    const untukRealisasi = []
+
+    let targetAccumulator = 0
+    let realisasiAccumulator = 0
+
+    for (let month = 1; month <= 12; month++) {
+      let monthlyTarget = 0
+      let monthlyRealisasi = 0
+
+      task.forEach(task => {
+        if (task.project.fungsi === valueDropBar && task.month === month && task.year === tahunBar) {
+          monthlyTarget += task.target
+          monthlyRealisasi += task.realisasi
+        }
+      })
+
+      targetAccumulator += monthlyTarget
+      realisasiAccumulator += monthlyRealisasi
+
+      // console.log('Akumulasi Target:', targetAccumulator)
+      // console.log('Akumulasi Realisasi:', realisasiAccumulator)
+
+      untukTarget.push(targetAccumulator)
+      untukRealisasi.push(realisasiAccumulator)
+
+      targetAccumulator = 0
+      realisasiAccumulator = 0
+    }
+
+    setTargetBar(untukTarget)
+    setRealisasiBar(untukRealisasi)
+  }
+
+  useEffect(() => {
+    calculateTargetAndRealisasi()
+  }, [tahunBar])
+
+  useEffect(() => {
+    let hasil = task.reduce(
+      (acc, angka) => {
+        if (angka.project.fungsi) {
+          if (angka.project.fungsi >= 1 && angka.project.fungsi <= 7) {
+            acc[angka.project.fungsi - 1]++
+          }
+        }
+        return acc
+      },
+      [0, 0, 0, 0, 0, 0, 0]
+    )
+    setDoughnut(hasil)
+    console.log(hasil)
+  }, [])
+
+  useEffect(() => {
+    const untukTargetLine = []
+    const untukRealisasiLine = []
+    const untukLabelsLine = []
+    task.map(task => {
+      if (task.month === bulan && task.project.fungsi === valueDropLine) {
+        untukTargetLine.push(task.target)
+        untukRealisasiLine.push(task.realisasi)
+        untukLabelsLine.push(task.title)
+      }
+    })
+    setTargetLine(untukTargetLine)
+    setRealisasiLine(untukRealisasiLine)
+    setLabelsLine(untukLabelsLine)
+    console.log(bulan + 'ini pas ganti bulan' + valueDropLine)
+  }, [bulan])
+
+  useEffect(() => {
+    const untukTargetLine = []
+    const untukRealisasiLine = []
+    const untukLabelsLine = []
+    task.map(task => {
+      if (task.month === bulan && task.project.fungsi === valueDropLine) {
+        untukTargetLine.push(task.target)
+        untukRealisasiLine.push(task.realisasi)
+        untukLabelsLine.push(task.title)
+      }
+    })
+    setTargetLine(untukTargetLine)
+    setRealisasiLine(untukRealisasiLine)
+    setLabelsLine(untukLabelsLine)
+    console.log(bulan + 'ini pas ganti valuedropline' + valueDropLine)
+  }, [valueDropLine])
+
+  useEffect(() => {
+    const untukLinearProgress = 0
+    let targetLinear = 0
+    let realisasiLinear = 0
+
+    task.map(task => {
+      targetLinear += task.target
+      realisasiLinear += task.realisasi
+    })
+    untukLinearProgress = 100 * (realisasiLinear / targetLinear)
+    setLinearProgress(untukLinearProgress)
+    setTotalRealisasi(realisasiLinear)
+    setTotalTarget(targetLinear)
+
+    console.log(bulan + 'ini pas ganti valuedropline' + valueDropLine)
+  }, [task])
+
+  // data buat chartnya
+  const dataBar = {
     labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'June', 'July', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
     datasets: [
       {
         label: 'Realisasi',
-        data: target, // Tambahkan data sesuai bulan
-        backgroundColor: ['rgba(255, 99, 132, 1)']
+        data: targetBar,
+        backgroundColor: ['rgba(255, 99, 132,1)']
       },
       {
         label: 'Target',
-        data: realisasi, // Tambahkan data sesuai bulan
-        backgroundColor: ['rgba(255, 159, 64, 1)']
+        data: realisasiBar,
+        backgroundColor: ['rgba(255, 159, 64,1)']
       }
     ]
   }
+
+  const dataLine = {
+    labels: labelsLine,
+    datasets: [
+      {
+        label: 'Target',
+        data: targetLine,
+        backgroundColor: ['rgba(255, 99, 132, 1)']
+      },
+      {
+        label: 'Realisasi',
+        data: realisasiLine,
+        backgroundColor: ['rgba(25, 19, 132, 1)']
+      }
+    ]
+  }
+
+  const dataDoughnut = {
+    datasets: [
+      {
+        data: doughnut,
+        backgroundColor: [
+          'rgba(255, 99, 132,1)',
+          'rgba(49, 10, 49,1)',
+          'rgba(115, 93, 120,1)',
+          'rgba(167, 196, 194,1)',
+          'rgba(151, 239, 233,1)',
+          'rgba(255, 159, 64,1)'
+        ]
+      }
+    ],
+
+    labels: ['Umum', 'Sosial', 'Produksi', 'Distribusi', 'Nerwilis', 'IPDS']
+  }
+
   return (
     <ApexChartWrapper>
       <Grid container spacing={4}>
@@ -125,14 +278,39 @@ const Dashboard = () => {
           <Grid container spacing={4}>
             <Grid item xs={12} md={12}>
               <Card sx={{ padding: 4, height: 250 }}>
-                <Typography variant={'h5'}>Tugas hari ini</Typography>
+                <Typography variant={'h6'}>Tugas bulan ini</Typography>
                 <Divider></Divider>
               </Card>
             </Grid>
             <Grid item xs={6} md={6}>
               <Card sx={{ padding: 4, height: 200 }}>
-                <Typography variant={'h6'}>Pengumuman</Typography>
+                <Typography variant={'h6'}>Capaian Kegiatan</Typography>
                 <Divider></Divider>
+                <Grid container spacing={0}>
+                  <Grid item md={12} height={60} display={'flex'} justifyContent={'start'} alignItems={'end'}>
+                    <Typography variant='h3' color={'primary.dark'}>{`${linearProgress.toFixed(2)}%`}</Typography>
+                  </Grid>
+                  <Grid item md={12} height={60}>
+                    <Grid container spacing={0}>
+                      <Grid item md={7}>
+                        <Typography mt={5} variant='body2'>
+                          Target/Realisasi
+                        </Typography>
+                      </Grid>
+                      <Grid item md={5} display={'flex'} justifyContent={'end'}>
+                        <Typography mt={5} variant='body2' color={'primary.dark'}>
+                          {totalRealisasi}/{totalTarget}
+                        </Typography>
+                      </Grid>
+                    </Grid>
+                    <LinearProgress
+                      sx={{ height: 10 }}
+                      color='success'
+                      value={linearProgress}
+                      variant='determinate'
+                    ></LinearProgress>
+                  </Grid>
+                </Grid>
               </Card>
             </Grid>
             <Grid item xs={6} md={6}>
@@ -144,16 +322,46 @@ const Dashboard = () => {
           </Grid>
         </Grid>
         <Grid item xs={12} md={4}>
-          <Card sx={{ padding: 4, height: 465 }}>
-            <Typography variant={'h6'}>Rapat hari ini</Typography>
-            <Divider></Divider>
-          </Card>
+          <Grid container spacing={4}>
+            <Grid item md={12}>
+              <Card sx={{ padding: 2, height: 40 }}>
+                <Grid container>
+                  <Grid item md={12} display={'flex'} justifyContent={'center'} alignItems={'center'}>
+                    <Typography variant={'body2'}>Nama User </Typography>
+                  </Grid>
+                </Grid>
+              </Card>
+            </Grid>
+            <Grid item md={12}>
+              <Card sx={{ padding: 4, height: 410 }}>
+                <Typography variant={'h6'}>Rapat hari ini</Typography>
+                <Divider></Divider>
+                <Doughnut
+                  data={dataDoughnut}
+                  width={200}
+                  height={100}
+                  options={{
+                    responsive: true,
+                    plugins: {
+                      legend: {
+                        position: 'bottom'
+                      },
+                      title: {
+                        display: true,
+                        text: `Total Sub Kegiatan per KF`
+                      }
+                    }
+                  }}
+                />
+              </Card>
+            </Grid>
+          </Grid>
         </Grid>
       </Grid>
       <Grid mt={1} container spacing={2}>
         <Grid item xs={12} md={12}>
           <Card sx={{ padding: 4, height: 350 }}>
-            <Grid container spacing={2}>
+            <Grid container spacing={1}>
               <Grid item xs={6} md={8}>
                 <Typography variant={'h6'}>Grafik</Typography>
               </Grid>
@@ -194,46 +402,44 @@ const Dashboard = () => {
                     size={'small'}
                     onChange={handleChangeLine}
                   >
-                    <MenuItem value={10}>IPDS</MenuItem>
-                    <MenuItem value={20}>Umum</MenuItem>
-                    <MenuItem value={30}>Nerwilis</MenuItem>
-                    <MenuItem value={40}>Distribusi</MenuItem>
-                    <MenuItem value={50}>Produksi</MenuItem>
-                    <MenuItem value={60}>Sosial</MenuItem>
+                    <MenuItem value={2}>Bagian Umum</MenuItem>
+                    <MenuItem value={3}>Statistik Sosial </MenuItem>
+                    <MenuItem value={4}>Statistik Produksi</MenuItem>
+                    <MenuItem value={5}>Statistik Distribusi</MenuItem>
+                    <MenuItem value={6}>Neraca Wilayah dan Analisis Statistik</MenuItem>
+                    <MenuItem value={7}>Integrasi Pengolahan dan Diseminasi Statistik</MenuItem>
                   </Select>
                 </FormControl>
               </Grid>
             </Grid>
-            <Line
-              datasetIdKey='id'
-              data={{
-                labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'June', 'July', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
-                datasets: [
-                  {
-                    label: 'Target',
-                    data: targetLine,
-                    backgroundColor: ['rgba(255, 99, 132, 1)']
-                  },
-                  {
-                    label: 'Realisasi',
-                    data: realisasiLine,
-                    backgroundColor: ['rgba(25, 19, 132, 1)']
-                  }
-                ]
-              }}
-              width={500}
-              height={160}
-            />
+            <Line datasetIdKey='id' data={dataLine} width={500} height={160} />
             <Divider></Divider>
           </Card>
         </Grid>
         <Grid item xs={12} md={12}>
           <Card sx={{ padding: 4, height: 450 }}>
-            <Grid container spacing={2}>
-              <Grid item xs={6} md={6}>
+            <Grid container spacing={1}>
+              <Grid item xs={1} md={8}>
                 <Typography variant={'h6'}>Grafik</Typography>
               </Grid>
-              <Grid item xs={6} md={6} display={'flex'} justifyContent={'end'} mb={4}>
+              <Grid item xs={6} md={2} justifyContent={'end'} display={'flex'}>
+                <FormControl sx={{ m: 1, minWidth: 120 }}>
+                  <InputLabel id='demo-simple-select-helper-label'>Tahun</InputLabel>
+                  <Select
+                    labelId='demo-simple-select-helper-label'
+                    id='demo-simple-select-helper'
+                    value={tahunBar}
+                    label='Tahun'
+                    size={'small'}
+                    onChange={handleChangeBarTahun}
+                  >
+                    <MenuItem value={2023}>2023</MenuItem>
+                    <MenuItem value={2024}>2024</MenuItem>
+                    <MenuItem value={2025}>2025</MenuItem>
+                  </Select>
+                </FormControl>
+              </Grid>
+              <Grid item xs={6} md={2} display={'flex'} justifyContent={'end'} mb={4}>
                 <FormControl sx={{ m: 1, minWidth: 120 }}>
                   <InputLabel id='demo-simple-select-helper-label'>Fungsi</InputLabel>
                   <Select
@@ -244,18 +450,18 @@ const Dashboard = () => {
                     onChange={handleChangeBar}
                     size={'small'}
                   >
-                    <MenuItem value={10}>IPDS</MenuItem>
-                    <MenuItem value={20}>Umum</MenuItem>
-                    <MenuItem value={30}>Nerwilis</MenuItem>
-                    <MenuItem value={40}>Distribusi</MenuItem>
-                    <MenuItem value={50}>Produksi</MenuItem>
-                    <MenuItem value={60}>Sosial</MenuItem>
+                    <MenuItem value={2}>Bagian Umum</MenuItem>
+                    <MenuItem value={3}>Statistik Sosial </MenuItem>
+                    <MenuItem value={4}>Statistik Produksi</MenuItem>
+                    <MenuItem value={5}>Statistik Distribusi</MenuItem>
+                    <MenuItem value={6}>Neraca Wilayah dan Analisis Statistik</MenuItem>
+                    <MenuItem value={7}>Integrasi Pengolahan dan Diseminasi Statistik</MenuItem>
                   </Select>
                 </FormControl>
               </Grid>
             </Grid>
             <Bar
-              data={data}
+              data={dataBar}
               width={500}
               height={160}
               options={{
@@ -266,7 +472,7 @@ const Dashboard = () => {
                   },
                   title: {
                     display: true,
-                    text: 'Target dan Realisasi per Fungsi Tiap Bulan Tahun 2024'
+                    text: `Target dan Realisasi per Fungsi Tiap Bulan Tahun ${tahunBar}`
                   }
                 }
               }}
@@ -276,78 +482,63 @@ const Dashboard = () => {
         </Grid>
       </Grid>
     </ApexChartWrapper>
-    // <ApexChartWrapper>
-    //   <Grid container spacing={6}>
-    //     <Grid item xs={12} md={4}>
-    //       <Trophy />
-    //     </Grid>
-    //     <Grid item xs={12} md={8}>
-    //       <StatisticsCard />
-    //     </Grid>
-    //     <Grid item xs={12} md={6} lg={4}>
-    //       <WeeklyOverview />
-    //     </Grid>
-    //     <Grid item xs={12} md={6} lg={4}>
-    //       <TotalEarning />
-    //     </Grid>
-    //     <Grid item xs={12} md={6} lg={4}>
-    //       <Grid container spacing={6}>
-    //         <Grid item xs={6}>
-    //           <CardStatisticsVerticalComponent
-    //             stats='$25.6k'
-    //             icon={<Poll />}
-    //             color='success'
-    //             trendNumber='+42%'
-    //             title='Total Profit'
-    //             subtitle='Weekly Profit'
-    //           />
-    //         </Grid>
-    //         <Grid item xs={6}>
-    //           <CardStatisticsVerticalComponent
-    //             stats='$78'
-    //             title='Refunds'
-    //             trend='negative'
-    //             color='secondary'
-    //             trendNumber='-15%'
-    //             subtitle='Past Month'
-    //             icon={<CurrencyUsd />}
-    //           />
-    //         </Grid>
-    //         <Grid item xs={6}>
-    //           <CardStatisticsVerticalComponent
-    //             stats='862'
-    //             trend='negative'
-    //             trendNumber='-18%'
-    //             title='New Project'
-    //             subtitle='Yearly Project'
-    //             icon={<BriefcaseVariantOutline />}
-    //           />
-    //         </Grid>
-    //         <Grid item xs={6}>
-    //           <CardStatisticsVerticalComponent
-    //             stats='15'
-    //             color='warning'
-    //             trend='negative'
-    //             trendNumber='-18%'
-    //             subtitle='Last Week'
-    //             title='Sales Queries'
-    //             icon={<HelpCircleOutline />}
-    //           />
-    //         </Grid>
-    //       </Grid>
-    //     </Grid>
-    //     <Grid item xs={12} md={6} lg={4}>
-    //       <SalesByCountries />
-    //     </Grid>
-    //     <Grid item xs={12} md={12} lg={8}>
-    //       <DepositWithdraw />
-    //     </Grid>
-    //     <Grid item xs={12}>
-    //       <Table />
-    //     </Grid>
-    //   </Grid>
-    // </ApexChartWrapper>
   )
+}
+
+export async function getServerSideProps() {
+  // let projects
+
+  // projects = await prisma.userProject.findMany({
+  //   select: {
+  //     project: {
+  //       select: {
+  //         id: true,
+  //         title: true,
+  //         rentangWaktu: true,
+  //         startdate: true,
+  //         enddate: true,
+  //         description: true,
+  //         isArchived: true,
+  //         projectLeader: true,
+  //         UserProject: true,
+  //         Task: true,
+  //         createdById: true
+  //       }
+  //     }
+  //   }
+  // })
+
+  // projects = await prisma.project.findMany({
+  //   select: {
+  //     id: true,
+  //     title: true,
+  //     rentangWaktu: true,
+  //     startdate: true,
+  //     enddate: true,
+  //     description: true,
+  //     isArchived: true,
+  //     createdById: true,
+  //     projectLeaderId: true
+  //   }
+  // })
+
+  // return {
+  //   props: {
+  //     data: JSON.stringify(projects)
+  //   }
+  // }
+  let tasks
+
+  tasks = await prisma.task.findMany({
+    include: {
+      project: true
+    }
+  })
+  return {
+    props: {
+      dataTask: JSON.stringify(tasks)
+    }
+  }
 }
 
 export default Dashboard

@@ -3,7 +3,7 @@ import prisma from '../../services/db'
 
 import PeopleEditViews from 'src/views/people-views/PeopleEditViews'
 
-const peopleEdit = ({ data }) => {
+const PeopleEdit = ({ data }) => {
   const [pegawai, setPegawai] = useState(JSON.parse(data))
   return (
     <>
@@ -30,4 +30,4 @@ export async function getServerSideProps(context) {
   }
 }
 
-export default peopleEdit
+export default PeopleEdit

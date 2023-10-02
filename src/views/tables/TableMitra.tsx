@@ -144,11 +144,6 @@ const TableMitra = () => {
       <Card sx={{ padding: 4 }}>
         <DataGrid
           rowHeight={65}
-          initialState={{
-            sorting: {
-              sortModel: [{ field: 'deadline', sort: 'asc' }]
-            }
-          }}
           rows={rows}
           columns={columns}
           sx={{
