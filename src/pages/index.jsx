@@ -28,10 +28,18 @@ import LinearProgress from '@mui/material/LinearProgress'
 // ** Styled Component Import
 import ApexChartWrapper from 'src/@core/styles/libs/react-apexcharts'
 
+import TabelTaskDashboard from 'src/views/tables/TableTaskDashboard'
+import TableTaskDashboard from 'src/views/tables/TableTaskDashboard'
+
 const Dashboard = ({ dataTask }) => {
   const [task, setTask] = useState(JSON.parse(dataTask))
   const dataawal = [12, 19, 3, 5, 2, 3, 8, 10, 6, 7, 14, 12]
   const realisasiAwal = Array.from({ length: 12 }, () => Math.floor(Math.random() * 100))
+
+  // SubKegBulan Ini
+  // const [taskBulanIni, setTaskBulanIni] = useState({ test: task.map(task=>{
+
+  // })})
 
   // State Bar
   const [targetBar, setTargetBar] = useState(dataawal)
@@ -183,7 +191,7 @@ const Dashboard = ({ dataTask }) => {
     setTargetLine(untukTargetLine)
     setRealisasiLine(untukRealisasiLine)
     setLabelsLine(untukLabelsLine)
-    console.log(bulan + 'ini pas ganti bulan' + valueDropLine)
+    // console.log(bulan + 'ini pas ganti bulan' + valueDropLine)
   }, [bulan])
 
   useEffect(() => {
@@ -202,6 +210,12 @@ const Dashboard = ({ dataTask }) => {
     setLabelsLine(untukLabelsLine)
     console.log(bulan + 'ini pas ganti valuedropline' + valueDropLine)
   }, [valueDropLine])
+
+  // useEffect(() => {
+  //   task.map(task => {
+  //     task.month == dateSekarang.bulan && task.year == dateSekarang.tahun ? setTaskBulanIni(task) : 0
+  //   })
+  // }, [dateSekarang])
 
   useEffect(() => {
     const untukLinearProgress = 0
@@ -277,9 +291,10 @@ const Dashboard = ({ dataTask }) => {
         <Grid item xs={12} md={8}>
           <Grid container spacing={4}>
             <Grid item xs={12} md={12}>
-              <Card sx={{ padding: 4, height: 250 }}>
+              <Card sx={{ overflowY: 'scroll', padding: 4, height: 250 }}>
                 <Typography variant={'h6'}>Tugas bulan ini</Typography>
                 <Divider></Divider>
+                <TableTaskDashboard data={task}></TableTaskDashboard>
               </Card>
             </Grid>
             <Grid item xs={6} md={6}>
@@ -323,16 +338,16 @@ const Dashboard = ({ dataTask }) => {
         </Grid>
         <Grid item xs={12} md={4}>
           <Grid container spacing={4}>
-            <Grid item md={12}>
+            <Grid item xs={12} md={12}>
               <Card sx={{ padding: 2, height: 40 }}>
                 <Grid container>
-                  <Grid item md={12} display={'flex'} justifyContent={'center'} alignItems={'center'}>
+                  <Grid item xs={12} md={12} display={'flex'} justifyContent={'center'} alignItems={'center'}>
                     <Typography variant={'body2'}>Nama User </Typography>
                   </Grid>
                 </Grid>
               </Card>
             </Grid>
-            <Grid item md={12}>
+            <Grid item xs={12} md={12}>
               <Card sx={{ padding: 4, height: 410 }}>
                 <Typography variant={'h6'}>Grafik</Typography>
                 <Divider></Divider>
@@ -488,45 +503,6 @@ const Dashboard = ({ dataTask }) => {
 export async function getServerSideProps() {
   // let projects
 
-  // projects = await prisma.userProject.findMany({
-  //   select: {
-  //     project: {
-  //       select: {
-  //         id: true,
-  //         title: true,
-  //         rentangWaktu: true,
-  //         startdate: true,
-  //         enddate: true,
-  //         description: true,
-  //         isArchived: true,
-  //         projectLeader: true,
-  //         UserProject: true,
-  //         Task: true,
-  //         createdById: true
-  //       }
-  //     }
-  //   }
-  // })
-
-  // projects = await prisma.project.findMany({
-  //   select: {
-  //     id: true,
-  //     title: true,
-  //     rentangWaktu: true,
-  //     startdate: true,
-  //     enddate: true,
-  //     description: true,
-  //     isArchived: true,
-  //     createdById: true,
-  //     projectLeaderId: true
-  //   }
-  // })
-
-  // return {
-  //   props: {
-  //     data: JSON.stringify(projects)
-  //   }
-  // }
   let tasks
 
   tasks = await prisma.task.findMany({
