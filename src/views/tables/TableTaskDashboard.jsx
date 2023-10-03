@@ -56,7 +56,7 @@ const TableTaskDashboard = props => {
       ),
 
       headerName: 'Task',
-      width: 250
+      width: 200
     },
     {
       field: 'kegiatanName',
@@ -77,13 +77,13 @@ const TableTaskDashboard = props => {
     },
     {
       field: 'target',
-      headerName: 'Target/Realisasi',
+      headerName: 'Realisasi/Target',
       renderCell: params => (
         <Typography textAlign={'center'} sx={{ fontWeight: 500, fontSize: '0.875rem !important' }}>
-          {params.row.target}/{params.row.realisasi}
+          {params.row.realisasi} / {params.row.target}
         </Typography>
       ),
-      width: 100
+      width: 140
     },
 
     {

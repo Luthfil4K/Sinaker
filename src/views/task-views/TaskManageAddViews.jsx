@@ -57,8 +57,8 @@ const TaskManageAddViews = propss => {
     setSelectedDateE(date)
     setValues(values => ({
       ...values, // Pertahankan nilai properti lainnya
-      // subKegMonth: dates.getMonth() + 1,
-      // subKegYear: dates.getFullYear(),
+      subKegMonth: dates.getMonth() + 1,
+      subKegYear: dates.getFullYear(),
       subKegDl: date // Perbarui nilai kegRentang
     }))
   }

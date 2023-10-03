@@ -39,13 +39,15 @@ const ProjectEditViews = props => {
   const [selectedDate, setSelectedDate] = useState(new Date(props.data.project.startdate))
   const [selectedDateE, setSelectedDateE] = useState(new Date(props.data.project.enddate))
   const [values, setValues] = useState({
+    id: props.data.project.id,
     kegNama: props.data.project.title,
     kegRentang: props.data.project.rentangWaktu,
     kegGajiPml: '',
     kegGajiPcl: '',
     kegFungsi: props.data.project.fungsi,
     kegDesk: props.data.project.description,
-    kegKetua: props.data.project.projectLeaderId
+    kegKetua: props.data.project.projectLeaderId,
+    kegArsip: props.data.project.isArchived
   })
 
   const handleDateChange = date => {
@@ -83,6 +85,44 @@ const ProjectEditViews = props => {
     }))
   }
   const router = useRouter()
+
+  // handle edit
+  const handleEdit = e => {
+    e.preventDefault()
+
+    const data = {
+      title: values.kegNama,
+      rentangWaktu: values.kegRentang.toString(),
+      startdate: selectedDate,
+      enddate: selectedDateE,
+      fungsi: values.kegFungsi,
+      description: values.kegDesk,
+      projectLeaderId: values.kegKetua,
+      createdById: 2,
+      isArchived: values.kegArsip
+    }
+
+    axios
+      .put(`/project/${values.id}`, data)
+      .then(res => {
+        Swal.fire({
+          title: 'Success!',
+          text: 'Project has been updated',
+          icon: 'success',
+          confirmButtonText: 'Ok'
+        })
+
+        router.push(`/project-detail/${values.id}`)
+      })
+      .catch(err => {
+        Swal.fire({
+          title: 'Error!',
+          text: 'Something went wrong',
+          icon: 'error',
+          confirmButtonText: 'Ok'
+        })
+      })
+  }
 
   return (
     <Card>
@@ -243,7 +283,7 @@ const ProjectEditViews = props => {
         {/* <TableAddParticipant></TableAddParticipant> */}
         <Divider sx={{ margin: 0 }} />
         <Grid item m={4} display={'flex'} justifyContent={'end'}>
-          <Button size='medium' type='submit' variant='contained'>
+          <Button size='medium' type='submit' variant='contained' onClick={handleEdit}>
             Edit Kegiatan
           </Button>
         </Grid>

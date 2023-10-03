@@ -1,5 +1,12 @@
 import * as React from 'react'
 import { useState } from 'react'
+
+// axios
+import axios from 'src/pages/api/axios'
+
+// swall
+import Swal from 'sweetalert2'
+
 // mui
 import Card from '@mui/material/Card'
 import Grid from '@mui/material/Grid'
@@ -25,12 +32,15 @@ const TaskManageEditViews = props => {
   const ProjectParticipant = ['pegawai1', 'pegawai2', 'pegawai3']
   const [selectedDateE, setSelectedDateE] = useState(new Date(props.data.duedate))
   const [values, setValues] = useState({
+    id: props.data.project.id,
     subKegNama: props.data.title,
     subKegJenis: props.data.jenisKeg,
     subKegTarget: props.data.target,
     subKegUnitTarget: props.data.unitTarget,
     subKegDl: new Date(props.data.duedate),
-    subKegDesk: props.data.description
+    subKegDesk: props.data.description,
+    subKegMonth: props.data.month,
+    subKegYear: props.data.year
   })
 
   const handleChange = props => event => {
@@ -38,9 +48,13 @@ const TaskManageEditViews = props => {
   }
 
   const handleDateChangeE = date => {
+    const dates = new Date(date) // Ganti tanggal dengan tanggal yang sesuai
+    const localizedDateString = date.toLocaleDateString('id')
     setSelectedDateE(date)
     setValues(values => ({
       ...values, // Pertahankan nilai properti lainnya
+      subKegMonth: date.getMonth() + 1,
+      subKegYear: date.getFullYear(),
       subKegDl: date // Perbarui nilai kegRentang
     }))
     console.log(date)
@@ -79,9 +93,45 @@ const TaskManageEditViews = props => {
     }
   ]
 
+  const handleEdit = e => {
+    e.preventDefault()
+
+    const data = {
+      title: values.subKegNama,
+      jenisKeg: values.subKegJenis,
+      target: parseInt(values.subKegTarget),
+      unitTarget: values.subKegUnitTarget,
+      duedate: values.subKegDl,
+      description: values.subKegDesk,
+      month: parseInt(values.subKegMonth),
+      year: parseInt(values.subKegYear)
+    }
+
+    axios
+      .put(`/task/${values.id}`, data)
+      .then(res => {
+        Swal.fire({
+          title: 'Success!',
+          text: 'Project has been updated',
+          icon: 'success',
+          confirmButtonText: 'Ok'
+        })
+
+        router.push(`/task-manage/${values.id}`)
+      })
+      .catch(err => {
+        Swal.fire({
+          title: 'Error!',
+          text: 'Something went wrong',
+          icon: 'error',
+          confirmButtonText: 'Ok'
+        })
+      })
+  }
+
   // a check b check c check
-  console.log(values.subKegJenis)
-  console.log(values)
+  // console.log(values.subKegJenis)
+  // console.log(values)
   return (
     <>
       <Card sx={{ padding: 4 }}>
@@ -177,15 +227,7 @@ const TaskManageEditViews = props => {
           </Grid>
 
           {/* <TableAddParticipant></TableAddParticipant> */}
-          <Button
-            fullWidth
-            onClick={e => {
-              router.push('/task-manage')
-            }}
-            size='medium'
-            variant='contained'
-            sx={{ marginTop: 4 }}
-          >
+          <Button fullWidth onClick={handleEdit} size='medium' variant='contained' sx={{ marginTop: 4 }}>
             Edit Sub Kegiatan
           </Button>
         </form>

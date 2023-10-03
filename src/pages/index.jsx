@@ -36,11 +36,6 @@ const Dashboard = ({ dataTask }) => {
   const dataawal = [12, 19, 3, 5, 2, 3, 8, 10, 6, 7, 14, 12]
   const realisasiAwal = Array.from({ length: 12 }, () => Math.floor(Math.random() * 100))
 
-  // SubKegBulan Ini
-  // const [taskBulanIni, setTaskBulanIni] = useState({ test: task.map(task=>{
-
-  // })})
-
   // State Bar
   const [targetBar, setTargetBar] = useState(dataawal)
   const [realisasiBar, setRealisasiBar] = useState(dataawal)
@@ -211,12 +206,6 @@ const Dashboard = ({ dataTask }) => {
     console.log(bulan + 'ini pas ganti valuedropline' + valueDropLine)
   }, [valueDropLine])
 
-  // useEffect(() => {
-  //   task.map(task => {
-  //     task.month == dateSekarang.bulan && task.year == dateSekarang.tahun ? setTaskBulanIni(task) : 0
-  //   })
-  // }, [dateSekarang])
-
   useEffect(() => {
     const untukLinearProgress = 0
     let targetLinear = 0
@@ -293,7 +282,7 @@ const Dashboard = ({ dataTask }) => {
             <Grid item xs={12} md={12}>
               <Card sx={{ overflowY: 'scroll', padding: 4, height: 250 }}>
                 <Typography variant={'h6'}>Tugas bulan ini</Typography>
-                <Divider></Divider>
+
                 <TableTaskDashboard data={task}></TableTaskDashboard>
               </Card>
             </Grid>
@@ -309,12 +298,12 @@ const Dashboard = ({ dataTask }) => {
                     <Grid container spacing={0}>
                       <Grid item md={7}>
                         <Typography mt={5} variant='body2'>
-                          Target/Realisasi
+                          Realisasi/Target
                         </Typography>
                       </Grid>
                       <Grid item md={5} display={'flex'} justifyContent={'end'}>
                         <Typography mt={5} variant='body2' color={'primary.dark'}>
-                          {totalRealisasi}/{totalTarget}
+                          {totalRealisasi}/ {totalTarget}
                         </Typography>
                       </Grid>
                     </Grid>
@@ -330,7 +319,7 @@ const Dashboard = ({ dataTask }) => {
             </Grid>
             <Grid item xs={6} md={6}>
               <Card sx={{ padding: 4, height: 200 }}>
-                <Typography variant={'h6'}>Jadwal</Typography>
+                <Typography variant={'h6'}>diisi apa</Typography>
                 <Divider></Divider>
               </Card>
             </Grid>

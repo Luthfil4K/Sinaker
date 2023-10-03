@@ -40,14 +40,14 @@ const TaskManageViews = props => {
             <TableManageTaskList data={props.data.Task}></TableManageTaskList>
           </Card>
         </Grid>
-        <Grid item md={12} xs={12}>
+        {/* <Grid item md={12} xs={12}>
           <Card sx={{ paddingTop: 2 }}>
             <Typography fontWeight={500} variant={'h6'} mx={2} my={2}>
               Daftar peserta di kegiatan ini
             </Typography>
             <TableManageTaskPeople></TableManageTaskPeople>
           </Card>
-        </Grid>
+        </Grid> */}
       </Grid>
     </>
   )

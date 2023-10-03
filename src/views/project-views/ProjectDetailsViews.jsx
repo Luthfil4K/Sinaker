@@ -9,6 +9,9 @@ import Button from '@mui/material/Button'
 import { useRouter } from 'next/dist/client/router'
 import { useState } from 'react'
 
+// axios
+import axios from 'src/pages/api/axios'
+
 // swall
 import Swal from 'sweetalert2'
 
@@ -38,19 +41,32 @@ const ProjectDetailsViews = props => {
   }
   const handleDelete = () => {
     Swal.fire({
-      title: 'Apa anda yakin?',
-      text: 'Untuk menghapus project ini?',
+      title: 'Delete Project?',
+      text: 'Press "Delete Project" to send notification to the the participant',
       icon: 'warning',
       showCancelButton: true,
-      confirmButtonColor: '#3085d6',
+      confirmButtonColor: '#68B92E',
       cancelButtonColor: '#d33',
-      confirmButtonText: 'Yes, Hapus'
+      confirmButtonText: 'Yes, Delete Project',
+      cancelButtonText: 'No, Cancel',
+      reverseButtons: true
     }).then(result => {
       if (result.isConfirmed) {
-        Swal.fire('project di hapus')
-        router.push('/project-detail')
-      } else {
-        router.push('/project-detail')
+        axios
+          .delete(`/project/${project.id}`)
+          .then(res => {
+            Swal.fire('Deleted', 'Project has been deleted. Press "OK" to continue.', 'success')
+
+            router.push('/project-list')
+          })
+          .catch(err => {
+            Swal.fire('Error', 'Something went wrong. Please try again.', 'error')
+          })
+      } else if (
+        /* Read more about handling dismissals below */
+        result.dismiss === Swal.DismissReason.cancel
+      ) {
+        Swal.fire('Cancelled!', 'Project is not deleted. Press "OK" to continue.', 'error')
       }
     })
   }
