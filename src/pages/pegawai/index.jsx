@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react'
-import prisma from '../services/db'
+import prisma from '../../services/db'
 import { getToken } from 'next-auth/jwt'
 import PeopleViews from 'src/views/people-views/PeopleViews'
 
