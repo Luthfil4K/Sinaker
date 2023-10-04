@@ -10,10 +10,10 @@ export default axios.create({
   baseURL: fullUrl
 })
 
-// export const axiosAuth = token =>
-//   axios.create({
-//     baseURL: baseURL,
-//     headers: {
-//       Authorization: `Bearer ${token}`
-//     }
-//   })
+export const axiosAuth = token =>
+  axios.create({
+    baseURL: baseURL,
+    headers: {
+      Authorization: `Bearer ${token}`
+    }
+  })

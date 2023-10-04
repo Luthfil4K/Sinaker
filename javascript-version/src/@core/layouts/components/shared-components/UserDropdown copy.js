@@ -1,6 +1,5 @@
 // ** React Imports
-import { useEffect, useState, Fragment } from 'react'
-import AsyncStorage from '@react-native-async-storage/async-storage'
+import { useState, Fragment } from 'react'
 
 // ** Next Import
 import { useRouter } from 'next/router'
@@ -23,10 +22,6 @@ import LogoutVariant from 'mdi-material-ui/LogoutVariant'
 import AccountOutline from 'mdi-material-ui/AccountOutline'
 import MessageOutline from 'mdi-material-ui/MessageOutline'
 import HelpCircleOutline from 'mdi-material-ui/HelpCircleOutline'
-import { signOut, useSession } from 'next-auth/react'
-import axios from 'src/pages/api/axios'
-import { route } from 'next/dist/server/router'
-import Swal from 'sweetalert2'
 
 // ** Styled Components
 const BadgeContentSpan = styled('span')(({ theme }) => ({
@@ -37,23 +32,12 @@ const BadgeContentSpan = styled('span')(({ theme }) => ({
   boxShadow: `0 0 0 2px ${theme.palette.background.paper}`
 }))
 
-const UserDropdown = props => {
+const UserDropdown = () => {
+  // ** States
+  const [anchorEl, setAnchorEl] = useState(null)
+
   // ** Hooks
   const router = useRouter()
-  const [user, setUser] = useState({})
-  const [anchorEl, setAnchorEl] = useState('')
-
-  const session = useSession()
-
-  const getUser = async () => {
-    setUser(prev => {
-      return {
-        ...prev,
-        name: session?.data?.user?.name,
-        role: session?.data?.role
-      }
-    })
-  }
 
   const handleDropdownOpen = event => {
     setAnchorEl(event.currentTarget)
@@ -61,35 +45,10 @@ const UserDropdown = props => {
 
   const handleDropdownClose = url => {
     if (url) {
-      AsyncStorage.clear()
       router.push(url)
     }
     setAnchorEl(null)
   }
-
-  const handleSignout = async e => {
-    handleDropdownClose()
-
-    const confirm = await Swal.fire({
-      title: 'Are you sure?',
-      text: 'You will be logged out',
-      icon: 'warning',
-      confirmButtonColor: '#68B92E',
-      confirmButtonText: 'OK',
-      cancelButtonColor: '#d33',
-      showCancelButton: true
-    })
-
-    if (confirm.isConfirmed) {
-      console.log('SignOut')
-    }
-  }
-
-  useEffect(() => {
-    if (session.status === 'authenticated') {
-      getUser()
-    }
-  }, [session])
 
   const styles = {
     py: 2,
@@ -115,7 +74,7 @@ const UserDropdown = props => {
         anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
       >
         <Avatar
-          alt={user.name}
+          alt='John Doe'
           onClick={handleDropdownOpen}
           sx={{ width: 40, height: 40 }}
           src='/images/avatars/1.png'
@@ -136,24 +95,56 @@ const UserDropdown = props => {
               badgeContent={<BadgeContentSpan />}
               anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
             >
-              <Avatar alt={user.name} src='/images/avatars/1.png' sx={{ width: '2.5rem', height: '2.5rem' }} />
+              <Avatar alt='John Doe' src='/images/avatars/1.png' sx={{ width: '2.5rem', height: '2.5rem' }} />
             </Badge>
             <Box sx={{ display: 'flex', marginLeft: 3, alignItems: 'flex-start', flexDirection: 'column' }}>
-              <Typography sx={{ fontWeight: 600 }}>{user.name}</Typography>
+              <Typography sx={{ fontWeight: 600 }}>John Doe</Typography>
               <Typography variant='body2' sx={{ fontSize: '0.8rem', color: 'text.disabled' }}>
-                {user.role == 'admin' ? 'supervisor' : 'staff'}
+                Admin
               </Typography>
             </Box>
           </Box>
         </Box>
         <Divider sx={{ mt: 0, mb: 1 }} />
-        <MenuItem sx={{ p: 0 }} onClick={() => handleDropdownClose('/account-settings')}>
+        <MenuItem sx={{ p: 0 }} onClick={() => handleDropdownClose()}>
           <Box sx={styles}>
             <AccountOutline sx={{ marginRight: 2 }} />
             Profile
           </Box>
         </MenuItem>
-        <MenuItem sx={{ py: 2 }} onClick={handleSignout}>
+        <MenuItem sx={{ p: 0 }} onClick={() => handleDropdownClose()}>
+          <Box sx={styles}>
+            <EmailOutline sx={{ marginRight: 2 }} />
+            Inbox
+          </Box>
+        </MenuItem>
+        <MenuItem sx={{ p: 0 }} onClick={() => handleDropdownClose()}>
+          <Box sx={styles}>
+            <MessageOutline sx={{ marginRight: 2 }} />
+            Chat
+          </Box>
+        </MenuItem>
+        <Divider />
+        <MenuItem sx={{ p: 0 }} onClick={() => handleDropdownClose()}>
+          <Box sx={styles}>
+            <CogOutline sx={{ marginRight: 2 }} />
+            Settings
+          </Box>
+        </MenuItem>
+        <MenuItem sx={{ p: 0 }} onClick={() => handleDropdownClose()}>
+          <Box sx={styles}>
+            <CurrencyUsd sx={{ marginRight: 2 }} />
+            Pricing
+          </Box>
+        </MenuItem>
+        <MenuItem sx={{ p: 0 }} onClick={() => handleDropdownClose()}>
+          <Box sx={styles}>
+            <HelpCircleOutline sx={{ marginRight: 2 }} />
+            FAQ
+          </Box>
+        </MenuItem>
+        <Divider />
+        <MenuItem sx={{ py: 2 }} onClick={() => handleDropdownClose('/pages/login')}>
           <LogoutVariant sx={{ marginRight: 2, fontSize: '1.375rem', color: 'text.secondary' }} />
           Logout
         </MenuItem>

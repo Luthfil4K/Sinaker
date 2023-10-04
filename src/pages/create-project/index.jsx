@@ -1,8 +1,9 @@
 // view
 import CreateProjectViews from 'src/views/project-views/CreateProjectViews'
 import DatePickerWrapper from 'src/@core/styles/libs/react-datepicker'
+import { useState, useEffect } from 'react'
 import prisma from '../../services/db'
-import { useState, useEffect, useRef } from 'react'
+import { getToken } from 'next-auth/jwt'
 
 const CreateProject = ({ data }) => {
   const [user, setUser] = useState(JSON.parse(data))
@@ -12,7 +13,17 @@ const CreateProject = ({ data }) => {
     </>
   )
 }
-export async function getServerSideProps() {
+export async function getServerSideProps(context) {
+  const token = await getToken({ req: context.req, secret: process.env.JWT_SECRET })
+
+  if (!token) {
+    return {
+      redirect: {
+        destination: '/pages/login',
+        permanent: false
+      }
+    }
+  }
   let user
 
   user = await prisma.user.findMany({

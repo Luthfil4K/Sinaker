@@ -3,10 +3,9 @@
 // ** Third Party Styles Imports
 
 import 'react-datepicker/dist/react-datepicker.css'
-
+import { useState, useEffect } from 'react'
 import prisma from '../../services/db'
-import { useState } from 'react'
-
+import { getToken } from 'next-auth/jwt'
 // view
 import ProjectEditViews from 'src/views/project-views/ProjectEditViews'
 
@@ -16,6 +15,16 @@ const ProjectEdit = ({ data }) => {
 }
 
 export async function getServerSideProps(context) {
+  const token = await getToken({ req: context.req, secret: process.env.JWT_SECRET })
+
+  if (!token) {
+    return {
+      redirect: {
+        destination: '/pages/login',
+        permanent: false
+      }
+    }
+  }
   const project = await prisma.project.findUnique({
     where: {
       id: Number(context.params.id)

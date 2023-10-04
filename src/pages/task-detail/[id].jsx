@@ -1,5 +1,6 @@
+import { useState, useEffect } from 'react'
 import prisma from '../../services/db'
-import { useState } from 'react'
+import { getToken } from 'next-auth/jwt'
 
 import TaskDetailViews from 'src/views/task-views/TaskDetailViews'
 
@@ -14,6 +15,16 @@ const TaskDetail = ({ data }) => {
 }
 
 export async function getServerSideProps(context) {
+  const token = await getToken({ req: context.req, secret: process.env.JWT_SECRET })
+
+  if (!token) {
+    return {
+      redirect: {
+        destination: '/pages/login',
+        permanent: false
+      }
+    }
+  }
   const task = await prisma.task.findUnique({
     where: {
       id: parseInt(context.params.id)

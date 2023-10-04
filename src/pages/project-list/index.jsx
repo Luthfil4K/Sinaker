@@ -1,8 +1,9 @@
 // view
+import { useState, useEffect } from 'react'
+import prisma from '../../services/db'
+import { getToken } from 'next-auth/jwt'
 
 import ProjectListViews from 'src/views/project-views/ProjectListViews'
-import prisma from '../../services/db'
-import { useState, useEffect, useRef } from 'react'
 
 const ProjectList = ({ data }) => {
   const [projects, setProjects] = useState(JSON.parse(data))
@@ -20,8 +21,17 @@ const ProjectList = ({ data }) => {
     </>
   )
 }
+export async function getServerSideProps(context) {
+  const token = await getToken({ req: context.req, secret: process.env.JWT_SECRET })
 
-export async function getServerSideProps() {
+  if (!token) {
+    return {
+      redirect: {
+        destination: '/pages/login',
+        permanent: false
+      }
+    }
+  }
   let projects
 
   projects = await prisma.userProject.findMany({

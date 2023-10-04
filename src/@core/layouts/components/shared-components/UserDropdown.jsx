@@ -81,7 +81,7 @@ const UserDropdown = props => {
     })
 
     if (confirm.isConfirmed) {
-      console.log('SignOut')
+      signOut().then(router.push('/  '))
     }
   }
 

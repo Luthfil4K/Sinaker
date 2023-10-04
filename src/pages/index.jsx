@@ -1,9 +1,11 @@
 import * as React from 'react'
 import { useState, useEffect } from 'react'
 import prisma from '../services/db'
+import { getToken } from 'next-auth/jwt'
 
 // ** MUI Imports
 import InputLabel from '@mui/material/InputLabel'
+import Button from '@mui/material/Button'
 import MenuItem from '@mui/material/MenuItem'
 import FormHelperText from '@mui/material/FormHelperText'
 import FormControl from '@mui/material/FormControl'
@@ -21,6 +23,7 @@ import Divider from '@mui/material/Divider'
 import { Line, Bar, Doughnut } from 'react-chartjs-2'
 import { CategoryScale } from 'chart.js'
 import Chart from 'chart.js/auto'
+import { signOut, useSession } from 'next-auth/react'
 Chart.register(CategoryScale)
 
 import LinearProgress from '@mui/material/LinearProgress'
@@ -32,6 +35,7 @@ import TabelTaskDashboard from 'src/views/tables/TableTaskDashboard'
 import TableTaskDashboard from 'src/views/tables/TableTaskDashboard'
 
 const Dashboard = ({ dataTask }) => {
+  const session = useSession()
   const [task, setTask] = useState(JSON.parse(dataTask))
   const dataawal = [12, 19, 3, 5, 2, 3, 8, 10, 6, 7, 14, 12]
   const realisasiAwal = Array.from({ length: 12 }, () => Math.floor(Math.random() * 100))
@@ -85,8 +89,8 @@ const Dashboard = ({ dataTask }) => {
           targetAccumulator += monthlyTarget
           realisasiAccumulator += monthlyRealisasi
 
-          // console.log('Akumulasi Target:', targetAccumulator)
-          // console.log('Akumulasi Realisasi:', realisasiAccumulator)
+          // // console.log('Akumulasi Target:', targetAccumulator)
+          // // console.log('Akumulasi Realisasi:', realisasiAccumulator)
 
           untukTarget.push(targetAccumulator)
           untukRealisasi.push(realisasiAccumulator)
@@ -103,7 +107,7 @@ const Dashboard = ({ dataTask }) => {
       }
     }
 
-    console.log(event.target.value)
+    // console.log(event.target.value)
     setvalueDropBar(event.target.value)
   }
 
@@ -112,7 +116,7 @@ const Dashboard = ({ dataTask }) => {
   }
 
   const handleChangeLine = event => {
-    console.log(event.target.value)
+    // console.log(event.target.value)
     setvalueDropLine(event.target.value)
   }
 
@@ -138,8 +142,8 @@ const Dashboard = ({ dataTask }) => {
       targetAccumulator += monthlyTarget
       realisasiAccumulator += monthlyRealisasi
 
-      // console.log('Akumulasi Target:', targetAccumulator)
-      // console.log('Akumulasi Realisasi:', realisasiAccumulator)
+      // // console.log('Akumulasi Target:', targetAccumulator)
+      // // console.log('Akumulasi Realisasi:', realisasiAccumulator)
 
       untukTarget.push(targetAccumulator)
       untukRealisasi.push(realisasiAccumulator)
@@ -169,7 +173,7 @@ const Dashboard = ({ dataTask }) => {
       [0, 0, 0, 0, 0, 0, 0]
     )
     setDoughnut(hasil)
-    console.log(hasil)
+    // console.log(hasil)
   }, [])
 
   useEffect(() => {
@@ -186,7 +190,7 @@ const Dashboard = ({ dataTask }) => {
     setTargetLine(untukTargetLine)
     setRealisasiLine(untukRealisasiLine)
     setLabelsLine(untukLabelsLine)
-    // console.log(bulan + 'ini pas ganti bulan' + valueDropLine)
+    // // console.log(bulan + 'ini pas ganti bulan' + valueDropLine)
   }, [bulan])
 
   useEffect(() => {
@@ -203,7 +207,7 @@ const Dashboard = ({ dataTask }) => {
     setTargetLine(untukTargetLine)
     setRealisasiLine(untukRealisasiLine)
     setLabelsLine(untukLabelsLine)
-    console.log(bulan + 'ini pas ganti valuedropline' + valueDropLine)
+    // console.log(bulan + 'ini pas ganti valuedropline' + valueDropLine)
   }, [valueDropLine])
 
   useEffect(() => {
@@ -220,7 +224,7 @@ const Dashboard = ({ dataTask }) => {
     setTotalRealisasi(realisasiLinear)
     setTotalTarget(targetLinear)
 
-    console.log(bulan + 'ini pas ganti valuedropline' + valueDropLine)
+    // console.log(bulan + 'ini pas ganti valuedropline' + valueDropLine)
   }, [task])
 
   // data buat chartnya
@@ -276,6 +280,7 @@ const Dashboard = ({ dataTask }) => {
 
   return (
     <ApexChartWrapper>
+      {/* <Button onClick={signOut()}>LogOut</Button> */}
       <Grid container spacing={4}>
         <Grid item xs={12} md={8}>
           <Grid container spacing={4}>
@@ -489,8 +494,17 @@ const Dashboard = ({ dataTask }) => {
   )
 }
 
-export async function getServerSideProps() {
-  // let projects
+export async function getServerSideProps(context) {
+  const token = await getToken({ req: context.req, secret: process.env.JWT_SECRET })
+
+  if (!token) {
+    return {
+      redirect: {
+        destination: '/pages/login',
+        permanent: false
+      }
+    }
+  }
 
   let tasks
 

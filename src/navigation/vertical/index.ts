@@ -52,6 +52,11 @@ const navigation = (): VerticalNavItemsType => {
       icon: HomeOutline,
       path: '/'
     },
+    {
+      title: 'Login',
+      icon: HomeOutline,
+      path: '/pages/login'
+    },
 
     // {
     //   title: 'Pengumuman',
