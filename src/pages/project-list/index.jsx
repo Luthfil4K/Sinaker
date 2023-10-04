@@ -36,6 +36,8 @@ export async function getServerSideProps() {
           description: true,
           isArchived: true,
           projectLeader: true,
+          projectLeaderId: true,
+          fungsi: true,
           UserProject: true,
           Task: true,
           createdById: true

@@ -47,8 +47,7 @@ const CardProjectDetails = props => {
       ? 100 * (task.reduce((acc, cur) => acc + cur.realisasi, 0) / task.reduce((acc, cur) => acc + cur.target, 0))
       : 0
   const router = useRouter()
-  console.log(totalRealisasi)
-  console.log(totalTarget)
+
   const {
     id,
     namaKegiatan,
@@ -57,6 +56,7 @@ const CardProjectDetails = props => {
     tanggalBerakhir,
     jumlahParicipant,
     totalSubKegiatan,
+    penganggungJawab,
     totalGaji
   } = props
   return (
@@ -99,7 +99,7 @@ const CardProjectDetails = props => {
               <Box sx={{ display: 'flex', alignItems: 'center' }}>
                 <AccountOutline sx={{ color: 'primary.main', marginRight: 2.25 }} fontSize='small' />
                 <Typography variant='body2' sx={{ fontSize: '12px' }}>
-                  Jumlah Participant: <strong>{jumlahParicipant.length}</strong>
+                  Penanggung Jawab: <strong>{jumlahParicipant}</strong>
                 </Typography>
               </Box>
             </StyledBox>
