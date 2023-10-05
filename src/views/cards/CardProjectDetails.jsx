@@ -29,7 +29,8 @@ const rentang = {
   61: { waktu: 'Semesteran', color: 'warning' },
   62: { waktu: 'Tahunan', color: 'warning' },
   70: { waktu: 'SubRound', color: 'warning' },
-  80: { waktu: 'Ad-Hok', color: 'warning' }
+  80: { waktu: 'Ad-Hok', color: 'warning' },
+  321: { waktu: 'Belum Ditentukan', color: 'warning' }
 }
 
 const StyledBox = styled(Box)(({ theme }) => ({
@@ -61,24 +62,27 @@ const CardProjectDetails = props => {
   } = props
   return (
     <Card>
-      <CardContent key={id} sx={{ padding: theme => `${theme.spacing(3.25, 5.75, 6.25)} !important` }}>
+      <CardContent key={id} sx={{ padding: theme => `${theme.spacing(3, 5, 6)} !important` }}>
         <Grid container spacing={1}>
-          <Grid item xs={6}>
-            <Typography variant='h5' sx={{ marginBottom: 3.5, fontWeight: 600 }}>
+          <Grid item xs={8}>
+            <Typography variant='h6' sx={{ marginBottom: 3.5, fontWeight: 600 }}>
               {namaKegiatan}
             </Typography>
             <Typography variant='body2'>{rentang[intervalWaktu].waktu}</Typography>
           </Grid>
-          <Grid item xs={6} display={'flex'} justifyContent={'center'} alignItems={'center'}>
+          <Grid item xs={4} display={'flex'} justifyContent={'center'} alignItems={'center'}>
             <Box sx={{ mb: 3.5, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
               <Typography variant='h6' sx={{ lineHeight: 1, fontWeight: 600, fontSize: '3rem !important' }}>
                 {Math.round(
                   totalSubKegiatan.length > 0 &&
                     totalSubKegiatan.every(item => item.realisasi !== undefined && item.realisasi !== null) &&
                     totalSubKegiatan.every(item => item.target !== undefined && item.target !== null)
-                    ? 100 *
-                        (totalSubKegiatan.reduce((acc, cur) => acc + cur.realisasi, 0) /
-                          totalSubKegiatan.reduce((acc, cur) => acc + cur.target, 0))
+                    ? (100 * totalSubKegiatan.reduce((acc, cur) => acc + cur.realisasi, 0)) /
+                        totalSubKegiatan.reduce((acc, cur) => acc + cur.target, 0) <
+                      100
+                      ? (100 * totalSubKegiatan.reduce((acc, cur) => acc + cur.realisasi, 0)) /
+                        totalSubKegiatan.reduce((acc, cur) => acc + cur.target, 0)
+                      : 0
                     : 0
                 )}
                 %

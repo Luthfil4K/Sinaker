@@ -33,7 +33,7 @@ const CardTaskSubmit = props => {
     const data = {
       realisasi: parseInt(values.realisasi),
       notes: values.notesSubKeg,
-      target: values.target
+      target: parseInt(values.target)
     }
     values.realisasi <= values.target
       ? axios
@@ -84,7 +84,10 @@ const CardTaskSubmit = props => {
                 Pekerjaan Anda
               </Typography>
             </Grid>
-            <Grid item xs={9} md={9} mt={3}>
+            <Grid item xs={12} md={12} mt={2} display={'flex'} alignItems={'start'}>
+              <Typography variant={'body2'}>Unit Target: {props.data.unitTarget}</Typography>
+            </Grid>
+            <Grid item xs={12} md={12} mt={3}>
               <TextField
                 value={values.realisasi}
                 size='small'
@@ -95,27 +98,20 @@ const CardTaskSubmit = props => {
                 placeholder='Realisasi'
               />
             </Grid>
-            <Grid item xs={3} md={3} mt={3}>
-              <Typography textAlign={'center'} variant={'body2'}>
-                {props.data.unitTarget}
-              </Typography>
-            </Grid>
-            <Grid item xs={9} md={9} mt={2}>
+
+            <Grid item xs={12} md={12} mt={2}>
               <TextField
                 value={values.target}
                 size='small'
                 fullWidth
                 multiline
                 label='Target'
+                type={'number'}
                 onChange={handleChange('target')}
                 placeholder='Target'
               />
             </Grid>
-            <Grid item xs={3} md={3} mt={2}>
-              <Typography textAlign={'center'} variant={'body2'}>
-                {props.data.unitTarget}
-              </Typography>
-            </Grid>
+
             {/* <Grid mt={3} display={'flex'} justifyContent={'center'} item xs={12} md={12}>
             <Box
               width={'100%'}

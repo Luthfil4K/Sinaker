@@ -45,7 +45,7 @@ const CardTaskDetail = props => {
           </Grid>
           <Grid justifyContent={'end'} mt={2} xs={6} item md={6}>
             <Typography textAlign={'end'} variant={'body2'}>
-              {new Date(props.data.duedate).toLocaleDateString('id')}
+              Due Date: {new Date(props.data.duedate).toLocaleDateString('id')}
             </Typography>
           </Grid>
 

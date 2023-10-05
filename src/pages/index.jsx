@@ -219,7 +219,8 @@ const Dashboard = ({ dataTask }) => {
       targetLinear += task.target
       realisasiLinear += task.realisasi
     })
-    untukLinearProgress = 100 * (realisasiLinear / targetLinear)
+    untukLinearProgress = targetLinear == 0 ? 0 : 100 * (realisasiLinear / targetLinear)
+
     setLinearProgress(untukLinearProgress)
     setTotalRealisasi(realisasiLinear)
     setTotalTarget(targetLinear)
@@ -324,7 +325,7 @@ const Dashboard = ({ dataTask }) => {
             </Grid>
             <Grid item xs={6} md={6}>
               <Card sx={{ padding: 4, height: 200 }}>
-                <Typography variant={'h6'}>diisi apa</Typography>
+                <Typography variant={'h6'}>_</Typography>
                 <Divider></Divider>
               </Card>
             </Grid>
@@ -336,7 +337,7 @@ const Dashboard = ({ dataTask }) => {
               <Card sx={{ padding: 2, height: 40 }}>
                 <Grid container>
                   <Grid item xs={12} md={12} display={'flex'} justifyContent={'center'} alignItems={'center'}>
-                    <Typography variant={'body2'}>Nama User </Typography>
+                    <Typography variant={'body2'}>Admin </Typography>
                   </Grid>
                 </Grid>
               </Card>
@@ -421,7 +422,31 @@ const Dashboard = ({ dataTask }) => {
                 </FormControl>
               </Grid>
             </Grid>
-            <Line datasetIdKey='id' data={dataLine} width={500} height={160} />
+            <Line
+              datasetIdKey='id'
+              data={dataLine}
+              width={500}
+              height={140}
+              options={{
+                responsive: true,
+                scales: {
+                  x: {
+                    ticks: {
+                      display: false
+                    }
+                  }
+                },
+                plugins: {
+                  legend: {
+                    position: 'top'
+                  },
+                  title: {
+                    display: true,
+                    text: `Target dan Realisasi per Fungsi Tiap Bulan Tahun ${tahunBar}`
+                  }
+                }
+              }}
+            />
             <Divider></Divider>
           </Card>
         </Grid>

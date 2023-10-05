@@ -61,7 +61,9 @@ const CardProjectDetailProgress = props => {
                     task.length > 0 &&
                       task.every(item => item.realisasi !== undefined && item.realisasi !== null) &&
                       task.every(item => item.target !== undefined && item.target !== null)
-                      ? 100 *
+                      ? task.reduce((acc, cur) => acc + cur.realisasi, 0) == 0
+                        ? 0
+                        : 100 *
                           (task.reduce((acc, cur) => acc + cur.realisasi, 0) /
                             task.reduce((acc, cur) => acc + cur.target, 0))
                       : 0
@@ -74,7 +76,9 @@ const CardProjectDetailProgress = props => {
                     task.length > 0 &&
                       task.every(item => item.realisasi !== undefined && item.realisasi !== null) &&
                       task.every(item => item.target !== undefined && item.target !== null)
-                      ? 100 *
+                      ? task.reduce((acc, cur) => acc + cur.realisasi, 0) == 0
+                        ? 0
+                        : 100 *
                           (task.reduce((acc, cur) => acc + cur.realisasi, 0) /
                             task.reduce((acc, cur) => acc + cur.target, 0))
                       : 0

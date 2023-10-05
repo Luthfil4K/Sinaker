@@ -29,7 +29,6 @@ import DatePickerWrapper from 'src/@core/styles/libs/react-datepicker'
 
 const TaskManageEditViews = props => {
   const router = useRouter()
-  const ProjectParticipant = ['pegawai1', 'pegawai2', 'pegawai3']
   const [selectedDateE, setSelectedDateE] = useState(new Date(props.data.duedate))
   const [values, setValues] = useState({
     id: props.data.project.id,
@@ -40,7 +39,8 @@ const TaskManageEditViews = props => {
     subKegDl: new Date(props.data.duedate),
     subKegDesk: props.data.description,
     subKegMonth: props.data.month,
-    subKegYear: props.data.year
+    subKegYear: props.data.year,
+    subKegId: props.data.id
   })
 
   const handleChange = props => event => {
@@ -107,12 +107,13 @@ const TaskManageEditViews = props => {
       year: parseInt(values.subKegYear)
     }
 
+    // console.log(data)
     axios
-      .put(`/task/${values.id}`, data)
+      .put(`/task/${values.subKegId}`, data)
       .then(res => {
         Swal.fire({
           title: 'Success!',
-          text: 'Project has been updated',
+          text: 'Sub Kegiatan berhasil diedit',
           icon: 'success',
           confirmButtonText: 'Ok'
         })

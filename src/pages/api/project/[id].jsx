@@ -20,6 +20,7 @@ export default async function handler(req, res) {
     const { title, startdate, enddate, description, projectLeaderId, createdById, fungsi, rentangWaktu, isArchived } =
       req.body
 
+    console.log('asdasdasd')
     if (isArchived) {
       try {
         const project = await prisma.project.update({
@@ -34,6 +35,7 @@ export default async function handler(req, res) {
         return res.status(200).json({ success: true, data: project })
       } catch (error) {
         if (error instanceof PrismaClientKnownRequestError) {
+          console.log(error.message)
           return res.status(400).json({ success: false, message: error.message })
         }
 
@@ -64,6 +66,7 @@ export default async function handler(req, res) {
 
       return res.status(200).json({ success: true, data: project })
     } catch (error) {
+      console.log(error.message)
       return res.status(400).json({ success: false })
     }
   } else if (method === 'DELETE') {

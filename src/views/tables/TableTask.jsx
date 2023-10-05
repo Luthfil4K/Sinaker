@@ -90,17 +90,19 @@ const TableTask = props => {
     {
       field: 'status',
       renderCell: params => (
-        <Chip
-          label={statusObj[params.row.target / params.row.realisasi === 1 ? 1 : 0].status}
-          color={statusObj[params.row.target / params.row.realisasi === 1 ? 1 : 0].color}
-          sx={{
-            height: 24,
-            fontSize: '0.75rem',
-            width: 100,
-            textTransform: 'capitalize',
-            '& .MuiChip-label': { fontWeight: 500 }
-          }}
-        />
+        <>
+          <Chip
+            label={statusObj[params.row.status === 'Done' ? 1 : 0].status}
+            color={statusObj[params.row.status === 'Done' ? 1 : 0].color}
+            sx={{
+              height: 24,
+              fontSize: '0.75rem',
+              width: 100,
+              textTransform: 'capitalize',
+              '& .MuiChip-label': { fontWeight: 500 }
+            }}
+          />
+        </>
       ),
       headerName: 'Status',
       type: 'string',
@@ -141,7 +143,7 @@ const TableTask = props => {
     jenisKegiatan: task.jenisKeg,
     target: task.target,
     realisasi: task.realisasi,
-    status: 'see',
+    status: task.target / task.realisasi === 1 ? 'Done' : 'On Progress',
     deadline: new Date(task.duedate).toLocaleDateString('id'),
     userId: task.userId
   }))

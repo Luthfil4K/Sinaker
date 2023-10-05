@@ -35,7 +35,7 @@ import CardProjectEdit from 'src/views/cards/CardProjectEdit'
 
 const ProjectEditViews = props => {
   const [dataUser, setDataUser] = useState(props.data.user)
-  console.log(dataUser)
+  // console.log(dataUser)
   const [selectedDate, setSelectedDate] = useState(new Date(props.data.project.startdate))
   const [selectedDateE, setSelectedDateE] = useState(new Date(props.data.project.enddate))
   const [values, setValues] = useState({
@@ -88,8 +88,10 @@ const ProjectEditViews = props => {
 
   // handle edit
   const handleEdit = e => {
+    // console.log(values)
+    // console.log(selectedDate)
+    // console.log(selectedDateE)
     e.preventDefault()
-
     const data = {
       title: values.kegNama,
       rentangWaktu: values.kegRentang.toString(),
@@ -98,10 +100,9 @@ const ProjectEditViews = props => {
       fungsi: values.kegFungsi,
       description: values.kegDesk,
       projectLeaderId: values.kegKetua,
-      createdById: 2,
+      createdById: 99,
       isArchived: values.kegArsip
     }
-
     axios
       .put(`/project/${values.id}`, data)
       .then(res => {
@@ -111,7 +112,6 @@ const ProjectEditViews = props => {
           icon: 'success',
           confirmButtonText: 'Ok'
         })
-
         router.push(`/project-detail/${values.id}`)
       })
       .catch(err => {
