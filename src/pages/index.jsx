@@ -276,7 +276,7 @@ const Dashboard = ({ dataTask }) => {
       }
     ],
 
-    labels: ['Umum', 'Sosial', 'Produksi', 'Distribusi', 'Nerwilis', 'IPDS']
+    labels: ['Sosial', 'Produksi', 'IPDS', 'Distribusi', 'Nerwilis']
   }
 
   return (
@@ -287,7 +287,7 @@ const Dashboard = ({ dataTask }) => {
           <Grid container spacing={4}>
             <Grid item xs={12} md={12}>
               <Card sx={{ overflowY: 'scroll', padding: 4, height: 250 }}>
-                <Typography variant={'h6'}>Tugas bulan ini</Typography>
+                <Typography variant={'h6'}>Sub Kegiatan bulan ini</Typography>
 
                 <TableTaskDashboard data={task}></TableTaskDashboard>
               </Card>
@@ -442,7 +442,7 @@ const Dashboard = ({ dataTask }) => {
                   },
                   title: {
                     display: true,
-                    text: `Target dan Realisasi per Fungsi Tiap Bulan Tahun ${tahunBar}`
+                    text: `Target dan Realisasi per Kegiatan ${tahunBar}`
                   }
                 }
               }}

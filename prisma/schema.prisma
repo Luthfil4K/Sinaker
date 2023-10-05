@@ -66,6 +66,28 @@ model Task {
   projectId   Int
   user        User          @relation("taskToDo", fields: [userId], references: [id], onDelete: Cascade, onUpdate: Cascade)
   userId      Int
+  // perusahaanTask     PerusahaanTask[]
 }
 
+model Perusahaan {
+  id                Int           @id @default(autoincrement())
+  kip               Int           @db.Int
+  nama              String        @db.VarChar(128)
+  desa              String        @db.VarChar(128)
+  kecamatan         String        @db.VarChar(128)
+  alamat            String        @db.VarChar(128)
+  kegiatan          String        @db.VarChar(128)
+  kodePencacah      Int           @db.Int
+  kodePengawas      Int           @db.Int
+  // perusahaanTask    PerusahaanTask[]
+ 
+}
+
+// model PerusahaanTask {
+//   id              Int     @id @default(autoincrement())
+//   perusahaan      Perusahaan    @relation(fields: [perusahaanId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+//   perusahaanId    Int
+//   task            Task @relation(fields: [taskId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+//   taskId          Int
+// }
 

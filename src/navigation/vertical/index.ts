@@ -52,11 +52,6 @@ const navigation = (): VerticalNavItemsType => {
       icon: HomeOutline,
       path: '/'
     },
-    {
-      title: 'Login',
-      icon: HomeOutline,
-      path: '/pages/login'
-    },
 
     // {
     //   title: 'Pengumuman',
@@ -98,10 +93,15 @@ const navigation = (): VerticalNavItemsType => {
       path: '/pegawai'
     },
     {
-      title: 'Daftar Mitra',
-      icon: FormatLetterCase,
-      path: '/mitra'
+      title: 'Daftar Perusahaan',
+      icon: Table,
+      path: '/perusahaan'
     },
+    // {
+    //   title: 'Daftar Mitra',
+    //   icon: FormatLetterCase,
+    //   path: '/mitra'
+    // },
 
     {
       sectionTitle: 'Pustaka'
