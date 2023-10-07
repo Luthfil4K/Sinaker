@@ -29,6 +29,8 @@ import Select, { SelectChangeEvent } from '@mui/material/Select'
 import InputLabel from '@mui/material/InputLabel'
 import MenuItem from '@mui/material/MenuItem'
 
+import { DataGrid } from '@mui/x-data-grid'
+
 import TableAddParticipant from 'src/views/tables/TableAddParticipant'
 
 const CreateProjectViews = props => {
@@ -108,7 +110,7 @@ const CreateProjectViews = props => {
           fungsi: values.kegFungsi,
           description: values.kegDesk,
           projectLeaderId: values.kegKetua,
-          createdById: 2
+          createdById: 99
         })
 
         if (res.status === 201) {

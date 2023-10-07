@@ -66,7 +66,8 @@ model Task {
   projectId   Int
   user        User          @relation("taskToDo", fields: [userId], references: [id], onDelete: Cascade, onUpdate: Cascade)
   userId      Int
-  // perusahaanTask     PerusahaanTask[]
+  TaskPerusahaan    TaskPerusahaan[]
+  
 }
 
 model Perusahaan {
@@ -79,15 +80,33 @@ model Perusahaan {
   kegiatan          String        @db.VarChar(128)
   kodePencacah      Int           @db.Int
   kodePengawas      Int           @db.Int
-  // perusahaanTask    PerusahaanTask[]
- 
+  TaskPerusahaan    TaskPerusahaan[]
+  Perusahaangroup   PerusahaanGroup[]
+
 }
 
-// model PerusahaanTask {
-//   id              Int     @id @default(autoincrement())
-//   perusahaan      Perusahaan    @relation(fields: [perusahaanId], references: [id], onDelete: Cascade, onUpdate: Cascade)
-//   perusahaanId    Int
-//   task            Task @relation(fields: [taskId], references: [id], onDelete: Cascade, onUpdate: Cascade)
-//   taskId          Int
-// }
+
+model GroupPerusahaan {
+  id                  Int                  @id @default(autoincrement())
+  nama                String               @db.VarChar(128)
+  fungsi              Int                  @db.Int
+  Perusahaangroup     PerusahaanGroup[]
+}
+model PerusahaanGroup {
+  id                   Int                @id @default(autoincrement())
+  perusahaan           Perusahaan         @relation(fields: [perusahaanId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  perusahaanId         Int
+  groupPerusahaan      GroupPerusahaan    @relation(fields: [groupPerusahaanId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  groupPerusahaanId    Int
+}
+
+model TaskPerusahaan {
+ id                Int           @id @default(autoincrement())
+ task              Task          @relation(fields: [taskId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+ taskId            Int
+ perusahaan        Perusahaan    @relation(fields: [perusahaanId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+ perusahaanId      Int
+}
+
+
 

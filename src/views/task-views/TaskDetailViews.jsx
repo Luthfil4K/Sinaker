@@ -20,20 +20,24 @@ import IconButton from '@mui/material/IconButton'
 import TextField from '@mui/material/TextField'
 import SendIcon from 'mdi-material-ui/Send'
 import AccountIcon from 'mdi-material-ui/Account'
+import { useSession } from 'next-auth/react'
 
 import { useState } from 'react'
 
+import TablePerusahaanTaskDetails from 'src/views/tables/TablePerusahaanTaskDetails'
 import CardTaskDetail from 'src/views/cards/CardTaskDetail'
 import CardTaskComment from 'src/views/cards/CardTaskComment'
 
 const TaskDetailViews = props => {
+  const session = useSession()
   console.log(props.data)
   const [values, setValues] = useState({
     id: props.data.id,
     target: props.data.target,
     realisasi: props.data.realisasi,
     notes: props.data.notes,
-    notesSubKeg: props.data.notes
+    notesSubKeg: props.data.notes,
+    jenisKeg: props.data.jenisKeg
   })
 
   const handleChange = props => event => {
@@ -87,90 +91,102 @@ const TaskDetailViews = props => {
   return (
     <>
       <Grid container spacing={4}>
-        <Grid item md={8}>
-          <CardTaskDetail data={props.data}></CardTaskDetail>
-        </Grid>
-        <Grid item md={4}>
-          <form onSubmit={e => e.preventDefault()}>
-            <Card>
-              <Grid container p={4}>
-                <Grid item xs={12} md={12}>
-                  <Typography color={'primary.dark'} variant={'h5'}>
-                    Pekerjaan Anda
-                  </Typography>
-                </Grid>
-                <Grid item xs={12} md={12} mt={2} display={'flex'} alignItems={'start'}>
-                  <Typography variant={'body2'}>Unit Target: {props.data.unitTarget}</Typography>
-                </Grid>
-                <Grid item xs={12} md={12} mt={3}>
-                  <TextField
-                    value={values.realisasi}
-                    size='small'
-                    fullWidth
-                    type={'number'}
-                    label='Realisasi'
-                    onChange={handleChange('realisasi')}
-                    placeholder='Realisasi'
-                  />
-                </Grid>
-
-                <Grid item xs={12} md={12} mt={2}>
-                  <TextField
-                    value={values.target}
-                    size='small'
-                    fullWidth
-                    multiline
-                    label='Target'
-                    type={'number'}
-                    onChange={handleChange('target')}
-                    placeholder='Target'
-                  />
-                </Grid>
-              </Grid>
-            </Card>
-            <Card sx={{ marginTop: 4 }}>
-              <Grid container p={4} spacing={2}>
-                <Grid item md={1} display={'inline'}>
-                  <AccountIcon></AccountIcon>
-                </Grid>
-                <Grid item md={11} display={'inline'}>
-                  <Typography color={'primary.dark'} variant={'body1'}>
-                    Note
-                  </Typography>
-                </Grid>
-                <Grid mt={1} display={'flex'} justifyContent={'center'} item md={12}>
-                  <FormControl fullWidth sx={{ overflowY: 'auto' }}>
-                    <OutlinedInput
-                      name='notesSubKeg'
-                      value={values.notesSubKeg}
-                      onChange={handleChange('notesSubKeg')}
-                      minRows={3}
-                      multiline
-                      endAdornment={
-                        <InputAdornment position='end'>
-                          <IconButton
-                            type='submit'
-                            onClick={handleSimpan}
-                            edge='end'
-                            aria-label='toggle password visibility'
-                          >
-                            <SendIcon></SendIcon>
-                          </IconButton>
-                        </InputAdornment>
-                      }
-                    />
-                  </FormControl>
-                </Grid>
-              </Grid>
-            </Card>
-            <Grid container spacing={3}>
-              <Grid justifyContent={'center'} mt={2} item xs={12} md={12}>
-                <Button type='submit' variant={'contained'} onClick={handleSimpan} fullWidth>
-                  Simpan
-                </Button>
-              </Grid>
+        <Grid item md={12}>
+          <Grid container spacing={4}>
+            <Grid item md={8}>
+              <CardTaskDetail data={props.data}></CardTaskDetail>
             </Grid>
-          </form>
+            <Grid item md={4}>
+              <form onSubmit={e => e.preventDefault()}>
+                <Card>
+                  <Grid container p={4}>
+                    <Grid item xs={12} md={12}>
+                      <Typography color={'primary.dark'} variant={'h5'}>
+                        Pekerjaan Anda
+                      </Typography>
+                    </Grid>
+                    <Grid item xs={12} md={12} mt={2} display={'flex'} alignItems={'start'}>
+                      <Typography variant={'body2'}>Unit Target: {props.data.unitTarget}</Typography>
+                    </Grid>
+                    <Grid item xs={12} md={12} mt={3}>
+                      <TextField
+                        value={values.realisasi}
+                        size='small'
+                        fullWidth
+                        type={'number'}
+                        label='Realisasi'
+                        onChange={handleChange('realisasi')}
+                        placeholder='Realisasi'
+                      />
+                    </Grid>
+
+                    <Grid item xs={12} md={12} mt={2}>
+                      <TextField
+                        value={values.target}
+                        size='small'
+                        fullWidth
+                        multiline
+                        label='Target'
+                        type={'number'}
+                        onChange={handleChange('target')}
+                        placeholder='Target'
+                      />
+                    </Grid>
+                  </Grid>
+                </Card>
+                <Card sx={{ marginTop: 4 }}>
+                  <Grid container p={4} spacing={2}>
+                    <Grid item md={1} display={'inline'}>
+                      <AccountIcon></AccountIcon>
+                    </Grid>
+                    <Grid item md={11} display={'inline'}>
+                      <Typography color={'primary.dark'} variant={'body1'}>
+                        Note
+                      </Typography>
+                    </Grid>
+                    <Grid mt={1} display={'flex'} justifyContent={'center'} item md={12}>
+                      <FormControl fullWidth sx={{ overflowY: 'auto' }}>
+                        <OutlinedInput
+                          name='notesSubKeg'
+                          value={values.notesSubKeg}
+                          onChange={handleChange('notesSubKeg')}
+                          minRows={3}
+                          multiline
+                          endAdornment={
+                            <InputAdornment position='end'>
+                              <IconButton
+                                type='submit'
+                                onClick={handleSimpan}
+                                edge='end'
+                                aria-label='toggle password visibility'
+                              >
+                                <SendIcon></SendIcon>
+                              </IconButton>
+                            </InputAdornment>
+                          }
+                        />
+                      </FormControl>
+                    </Grid>
+                  </Grid>
+                </Card>
+                <Grid container spacing={3}>
+                  <Grid justifyContent={'center'} mt={2} item xs={12} md={12}>
+                    <Button type='submit' variant={'contained'} onClick={handleSimpan} fullWidth>
+                      Simpan
+                    </Button>
+                  </Grid>
+                </Grid>
+              </form>
+            </Grid>
+          </Grid>
+        </Grid>
+        {}
+        <Grid item md={12}>
+          <Card>
+            {session.status === 'authenticated' && (session.data.uid === 99 || values.jenisKeg === 65) && (
+              <TablePerusahaanTaskDetails></TablePerusahaanTaskDetails>
+            )}
+          </Card>
         </Grid>
       </Grid>
     </>

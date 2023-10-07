@@ -325,7 +325,7 @@ const Dashboard = ({ dataTask }) => {
             </Grid>
             <Grid item xs={6} md={6}>
               <Card sx={{ padding: 4, height: 200 }}>
-                <Typography variant={'h6'}>_</Typography>
+                <Typography variant={'h6'}>Capaian Tarel </Typography>
                 <Divider></Divider>
               </Card>
             </Grid>
@@ -344,7 +344,9 @@ const Dashboard = ({ dataTask }) => {
             </Grid>
             <Grid item xs={12} md={12}>
               <Card sx={{ padding: 4, height: 410 }}>
-                <Typography variant={'h6'}>Grafik</Typography>
+                <Typography textAlign={'center'} variant={'h6'}>
+                  Total Sub Kegiatan per KF
+                </Typography>
                 <Divider></Divider>
                 <Doughnut
                   data={dataDoughnut}
@@ -358,7 +360,7 @@ const Dashboard = ({ dataTask }) => {
                       },
                       title: {
                         display: true,
-                        text: `Total Sub Kegiatan per KF`
+                        text: ` `
                       }
                     }
                   }}
@@ -373,7 +375,7 @@ const Dashboard = ({ dataTask }) => {
           <Card sx={{ padding: 4, height: 350 }}>
             <Grid container spacing={1}>
               <Grid item xs={6} md={8}>
-                <Typography variant={'h6'}>Grafik</Typography>
+                <Typography variant={'h6'}>Target dan Realisasi per Sub Kegiatan {tahunBar}</Typography>
               </Grid>
               <Grid item xs={3} md={2} display={'flex'} justifyContent={'end'} mb={4}>
                 <FormControl sx={{ m: 1, minWidth: 120 }}>
@@ -442,7 +444,7 @@ const Dashboard = ({ dataTask }) => {
                   },
                   title: {
                     display: true,
-                    text: `Target dan Realisasi per Kegiatan ${tahunBar}`
+                    text: ` `
                   }
                 }
               }}
@@ -454,7 +456,7 @@ const Dashboard = ({ dataTask }) => {
           <Card sx={{ padding: 4, height: 450 }}>
             <Grid container spacing={1}>
               <Grid item xs={1} md={8}>
-                <Typography variant={'h6'}>Grafik</Typography>
+                <Typography variant={'h6'}>Target dan Realisasi per Fungsi Tiap Bulan Tahun {tahunBar} </Typography>
               </Grid>
               <Grid item xs={6} md={2} justifyContent={'end'} display={'flex'}>
                 <FormControl sx={{ m: 1, minWidth: 120 }}>
@@ -506,7 +508,7 @@ const Dashboard = ({ dataTask }) => {
                   },
                   title: {
                     display: true,
-                    text: `Target dan Realisasi per Fungsi Tiap Bulan Tahun ${tahunBar}`
+                    text: ` `
                   }
                 }
               }}

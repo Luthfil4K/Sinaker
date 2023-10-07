@@ -43,13 +43,14 @@ const TablePerusahaan = props => {
     kodePengawas: row.kodePengawas,
     jumlahKegiatan: 2
   }))
-  console.log(rows)
+  // console.log(rows)
   const columns = [
     { field: 'id', headerName: 'No', type: 'string', minWidth: 40 },
     {
       field: 'kip',
       headerName: 'KIP',
       width: 240,
+      height: 50,
       minWidth: 130
     },
     {
@@ -172,7 +173,7 @@ const TablePerusahaan = props => {
     <>
       <Card sx={{ padding: 4 }}>
         <DataGrid
-          rowHeight={65}
+          rowHeight={35}
           initialState={{
             sorting: {
               sortModel: [{ field: 'deadline', sort: 'asc' }]
@@ -181,9 +182,9 @@ const TablePerusahaan = props => {
           rows={rows}
           columns={columns}
           sx={{
+            height: rows.length > 3 ? '70vh' : '45vh',
             overflowY: 'auto',
-            width: '100%',
-            alignItems: 'start'
+            width: '100%'
           }}
         />
       </Card>

@@ -48,7 +48,7 @@ const navigation = (): VerticalNavItemsType => {
     // },
 
     {
-      title: 'Dashboard2',
+      title: 'Dashboard',
       icon: HomeOutline,
       path: '/'
     },
@@ -87,6 +87,29 @@ const navigation = (): VerticalNavItemsType => {
       icon: CubeOutline,
       path: '/task'
     },
+
+    // {
+    //   title: 'Daftar Mitra',
+    //   icon: FormatLetterCase,
+    //   path: '/mitra'
+    // },
+
+    {
+      sectionTitle: 'Perusahaan'
+    },
+    {
+      title: 'List Group Perusahaan',
+      icon: Table,
+      path: '/perusahaan'
+    },
+    {
+      title: 'Buat Group Perusahaan',
+      icon: Login,
+      path: '/create-kegiatan-perusahaan'
+    },
+    {
+      sectionTitle: 'Pustaka'
+    },
     {
       title: 'Daftar Pegawai',
       icon: Login,
@@ -96,26 +119,20 @@ const navigation = (): VerticalNavItemsType => {
       title: 'Daftar Perusahaan',
       icon: Table,
       path: '/perusahaan'
-    },
+    }
     // {
-    //   title: 'Daftar Mitra',
-    //   icon: FormatLetterCase,
-    //   path: '/mitra'
+    //   sectionTitle: 'Pustaka'
     // },
-
-    {
-      sectionTitle: 'Pustaka'
-    },
-    {
-      title: 'Induk Kegiatan',
-      icon: CubeOutline,
-      path: '/master-induk-kegiatan'
-    },
-    {
-      title: 'Kode',
-      icon: Login,
-      path: '/master-kode'
-    },
+    // {
+    //   title: 'Induk Kegiatan',
+    //   icon: CubeOutline,
+    //   path: '/master-induk-kegiatan'
+    // },
+    // {
+    //   title: 'Kode',
+    //   icon: Login,
+    //   path: '/master-kode'
+    // },
 
     // {
     //   title: 'Daftar Rapat',
@@ -145,11 +162,11 @@ const navigation = (): VerticalNavItemsType => {
     //   icon: Table,
     //   path: '/tables'
     // }
-    {
-      icon: CubeOutline,
-      title: 'Form Layouts',
-      path: '/form-layouts'
-    }
+    // {
+    //   icon: CubeOutline,
+    //   title: 'Form Layouts',
+    //   path: '/form-layouts'
+    // }
     // {
     //   icon: CubeOutline,
     //   title: 'iccon',
