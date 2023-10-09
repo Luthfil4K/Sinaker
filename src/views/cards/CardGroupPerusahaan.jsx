@@ -48,7 +48,7 @@ const CardProjectDetails = props => {
               <Typography variant='body2'>{jenisFungsi[fungsi].bagFungsi}</Typography>
               <Divider sx={{ marginTop: 1.5 }} />
               <Grid justifyContent='start' display='flex'>
-                <Link onClick={e => router.push(`/project-detail/${id}`)}>
+                <Link onClick={e => router.push(`/perusahaan-group-details/${id}`)}>
                   <Button sx={{ mt: 1 }} variant='contained' size={'small'}>
                     Selengkapnya
                   </Button>

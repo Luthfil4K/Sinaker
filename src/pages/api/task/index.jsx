@@ -23,17 +23,17 @@ export default async function handler(req, res) {
       duedate,
       description,
       realisasi,
+      jenisSample,
       month,
       year,
       projectId,
       userId,
-      notes
+      notes,
+      participants
     } = req.body
-    console.log(month)
-    console.log(year)
 
     try {
-      const user = await prisma.task.create({
+      const task = await prisma.task.create({
         data: {
           title,
           jenisKeg,
@@ -42,6 +42,7 @@ export default async function handler(req, res) {
           duedate,
           description,
           realisasi,
+          jenisSample,
           month,
           year,
           notes,
@@ -50,7 +51,24 @@ export default async function handler(req, res) {
         }
       })
 
-      return res.status(201).json({ success: true, data: user })
+      if (jenisKeg == 65) {
+        participants.map(async participant => {
+          if (participant.checked) {
+            const tpp = await prisma.TaskPerusahaanProduksi.create({
+              data: {
+                taskId: task.id,
+                perusahaanId: participant.id,
+                target: 0,
+                realisasi: 0,
+                hasilPencacahan: '',
+                duedate: participant.tanggal
+              }
+            })
+          }
+        })
+      }
+
+      return res.status(201).json({ success: true, data: task })
     } catch (error) {
       console.log(error)
 

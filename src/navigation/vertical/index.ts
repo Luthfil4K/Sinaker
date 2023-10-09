@@ -100,7 +100,7 @@ const navigation = (): VerticalNavItemsType => {
     {
       title: 'List Group Perusahaan',
       icon: Table,
-      path: '/list-group-perusahaan'
+      path: '/perusahaan-group-list'
     },
     {
       title: 'Buat Group Perusahaan',

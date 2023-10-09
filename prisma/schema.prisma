@@ -58,6 +58,7 @@ model Task {
   description String?       @db.LongText
   notes       String?       @db.LongText
   month       Int           @db.Int
+  jenisSample Int           @db.Int
   year        Int           @db.Int
   target      Int           @db.Int
   realisasi   Int           @db.Int
@@ -66,7 +67,7 @@ model Task {
   projectId   Int
   user        User          @relation("taskToDo", fields: [userId], references: [id], onDelete: Cascade, onUpdate: Cascade)
   userId      Int
-  TaskPerusahaan    TaskPerusahaan[]
+  TaskPerusahaanProduksi    TaskPerusahaanProduksi[]
   
 }
 
@@ -80,7 +81,7 @@ model Perusahaan {
   kegiatan          String        @db.VarChar(128)
   kodePencacah      Int           @db.Int
   kodePengawas      Int           @db.Int
-  TaskPerusahaan    TaskPerusahaan[]
+  TaskPerusahaanProduksi    TaskPerusahaanProduksi[]
   Perusahaangroup   PerusahaanGroup[]
 
 }
@@ -100,12 +101,17 @@ model PerusahaanGroup {
   groupPerusahaanId    Int
 }
 
-model TaskPerusahaan {
+model TaskPerusahaanProduksi {
  id                Int           @id @default(autoincrement())
  task              Task          @relation(fields: [taskId], references: [id], onDelete: Cascade, onUpdate: Cascade)
  taskId            Int
  perusahaan        Perusahaan    @relation(fields: [perusahaanId], references: [id], onDelete: Cascade, onUpdate: Cascade)
  perusahaanId      Int
+ target            Int           @db.Int
+ //  nambah lagi buat pml pcl gaji
+ realisasi         Int           @db.Int
+ hasilPencacahan   String        @db.VarChar(128)
+ duedate           DateTime      @db.Date
 }
 
 
