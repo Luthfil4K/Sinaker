@@ -33,7 +33,7 @@ import InputAdornment from '@mui/material/InputAdornment'
 
 import { useRouter } from 'next/router'
 
-const PeopleAddViews = () => {
+const PeopleAddViews = props => {
   const router = useRouter()
   const [showPassword, setShowPassword] = useState(false)
   const handleClickShowPassword = () => setShowPassword(show => !show)
@@ -42,13 +42,14 @@ const PeopleAddViews = () => {
   }
 
   const [values, setValues] = useState({
-    perusahaanKip: '',
-    perusahaanNama: '',
-    perusahaanNamaD: '',
-    perusahaanNamaK: '',
-    perusahaanDesa: '',
-    perusahaanKecamatan: '',
-    perusahaanAlamat: ''
+    id: props.data.id,
+    perusahaanKip: props.data.kip,
+    perusahaanNama: props.data.nama,
+    perusahaanNamaD: props.data.namaDesa,
+    perusahaanNamaK: props.data.namaKec,
+    perusahaanDesa: props.data.desa,
+    perusahaanKecamatan: props.data.kecamatan,
+    perusahaanAlamat: props.data.alamat
   })
 
   const handleChange = props => event => {
@@ -71,42 +72,37 @@ const PeopleAddViews = () => {
     e.preventDefault()
 
     try {
-      while (true) {
-        const res = await axios.post('/perusahaan/add', {
-          kip: values.perusahaanKip,
-          nama: values.perusahaanNama.toUpperCase(),
-          namaDesa: values.perusahaanNamaD.toUpperCase(),
-          namaKec: values.perusahaanNamaK.toUpperCase(),
-          desa: values.perusahaanDesa,
-          kecamatan: values.perusahaanKecamatan,
-          alamat: values.perusahaanAlamat
-        })
-
-        if (res.status === 201) {
-          Swal.fire({
-            title: 'Tambah Pegawai Success',
-            text: 'Tekan OK untuk lanjut',
-            icon: 'success',
-            confirmButtonColor: '#68B92E',
-            confirmButtonText: 'OK'
-          })
-
-          setValues({
-            perusahaanKip: '',
-            perusahaanNama: '',
-            perusahaanNamaD: '',
-            perusahaanNamaK: '',
-            perusahaanDesa: '',
-            perusahaanKecamatan: '',
-            perusahaanAlamat: ''
-          })
-        }
-
-        break
+      const data = {
+        kip: values.perusahaanKip,
+        nama: values.perusahaanNama.toUpperCase(),
+        namaDesa: values.perusahaanNamaD.toUpperCase(),
+        namaKec: values.perusahaanNamaK.toUpperCase(),
+        desa: values.perusahaanDesa,
+        kecamatan: values.perusahaanKecamatan,
+        alamat: values.perusahaanAlamat
       }
+      axios
+        .put(`/edel-perusahaan/${values.id}`, data)
+        .then(res => {
+          Swal.fire({
+            title: 'Success!',
+            text: 'Project has been updated',
+            icon: 'success',
+            confirmButtonText: 'Ok'
+          })
+          router.push(`/perusahaan`)
+        })
+        .catch(err => {
+          Swal.fire({
+            title: 'Error!',
+            text: 'Something went wrong',
+            icon: 'error',
+            confirmButtonText: 'Ok'
+          })
+        })
     } catch (error) {
       Swal.fire({
-        title: 'Tambah Pegawai Gagal',
+        title: 'Edit Perusahaan Gagal',
         text: error,
         icon: 'error',
         confirmButtonColor: '#d33',
@@ -120,7 +116,7 @@ const PeopleAddViews = () => {
       <Card sx={{ padding: 4 }}>
         <Box sx={{ mb: 6 }}>
           <Typography variant='h5' sx={{ fontWeight: 600, marginBottom: 1.5 }}>
-            Tambah Perusahaan
+            Edit Perusahaan
           </Typography>
           <Typography variant='body2'>Fill this blank field below</Typography>
         </Box>
@@ -218,7 +214,7 @@ const PeopleAddViews = () => {
             variant='contained'
             sx={{ marginTop: 4 }}
           >
-            Tambah
+            Edit
           </Button>
         </form>
       </Card>

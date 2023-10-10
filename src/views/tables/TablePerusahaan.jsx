@@ -1,5 +1,8 @@
 import * as React from 'react'
 
+// axios
+import axios from 'src/pages/api/axios'
+
 // ** MUI Imports
 import Typography from '@mui/material/Typography'
 import Card from '@mui/material/Card'
@@ -44,6 +47,27 @@ const TablePerusahaan = props => {
 
     jumlahKegiatan: 2
   }))
+
+  const handleDelete = async id => {
+    axios
+      .delete(`edel-perusahaan/${id}`)
+      .then(async res => {
+        await Swal.fire({
+          icon: 'success',
+          title: 'Success',
+          text: 'Perusahaan Deleted'
+        })
+        router.reload()
+      })
+      .catch(err => {
+        console.log(err)
+        Swal.fire({
+          icon: 'error',
+          title: 'Error',
+          text: 'Something went wrong'
+        })
+      })
+  }
   // console.log(rows)
   const columns = [
     { field: 'id', headerName: 'No', type: 'string', minWidth: 40 },
@@ -107,7 +131,7 @@ const TablePerusahaan = props => {
           <Button
             onClick={e => {
               console.log('edit')
-              // router.push(`/people-edit/${params.row.id}`)
+              router.push(`/perusahaan-edit/${params.row.id}`)
             }}
             type='submit'
             sx={{ mr: 1 }}
@@ -117,33 +141,33 @@ const TablePerusahaan = props => {
             <PencilOutline />
           </Button>
 
-          <Button onClick={handleDelete} type='submit' sx={{ mr: 1 }} color='error' variant='text'>
+          <Button
+            onClick={() => {
+              Swal.fire({
+                title: 'Hapus Perusahaan?',
+
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Ya, Hapus Perusahaan'
+              }).then(result => {
+                if (result.isConfirmed) {
+                  handleDelete(params.row.id)
+                }
+              })
+            }}
+            type='submit'
+            sx={{ mr: 1 }}
+            color='error'
+            variant='text'
+          >
             <DeleteOutline />
           </Button>
         </>
       )
     }
   ]
-
-  const handleDelete = () => {
-    console.log('delete')
-
-    // Swal.fire({
-    //   title: 'Apa Anda Yakin?',
-    //   text: 'Untuk menghapus akun ini!',
-    //   icon: 'warning',
-    //   showCancelButton: true,
-    //   confirmButtonColor: '#3085d6',
-    //   cancelButtonColor: '#d33',
-    //   confirmButtonText: 'Yes, Hapus akun !'
-    // }).then(result => {
-    //   if (result.isConfirmed) {
-    //     router.push('/people')
-    //   } else {
-    //     router.push('/people')
-    //   }
-    // })
-  }
 
   return (
     <>

@@ -18,8 +18,7 @@ export default async function handler(req, res) {
     return res.status(200).json({ success: true, data: task })
   } else if (method === 'PUT') {
     const { title, jenisKeg, target, unitTarget, duedate, description, month, year } = req.body
-    console.log('idnya adalah ' + id)
-    console.log(title, jenisKeg, target, unitTarget, duedate, description, month, year)
+
     try {
       const task = await prisma.task.update({
         where: {
