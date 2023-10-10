@@ -6,10 +6,10 @@ import TaskDetailViews from 'src/views/task-views/TaskDetailViews'
 
 const TaskDetail = ({ data }) => {
   const [task, setTask] = useState(JSON.parse(data))
-  console.log(task)
+  // console.log(task.perusahaanTask)
   return (
     <>
-      <TaskDetailViews data={task}></TaskDetailViews>
+      <TaskDetailViews data={task.task} dataPerusahaan={task.perusahaanTask}></TaskDetailViews>
     </>
   )
 }
@@ -43,9 +43,22 @@ export async function getServerSideProps(context) {
     }
   })
 
+  const perusahaanTask = await prisma.taskPerusahaanProduksi.findMany({
+    where: {
+      taskId: parseInt(context.params.id)
+    },
+    include: {
+      perusahaan: true
+    }
+  })
+  const data = {
+    task,
+    perusahaanTask
+  }
+
   return {
     props: {
-      data: JSON.stringify(task)
+      data: JSON.stringify(data)
     }
   }
 }

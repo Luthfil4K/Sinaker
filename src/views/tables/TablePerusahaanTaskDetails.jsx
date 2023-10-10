@@ -1,4 +1,11 @@
+// axios
+import axios from 'src/pages/api/axios'
+
+// swall
+import Swal from 'sweetalert2'
+
 import * as React from 'react'
+import { useState, useEffect } from 'react'
 import Box from '@mui/material/Box'
 import Button from '@mui/material/Button'
 import AddIcon from '@mui/icons-material/Add'
@@ -20,52 +27,15 @@ const randomRole = () => {
   return randomArrayItem(roles)
 }
 
-const initialRows = [
-  {
-    id: randomId(),
-    name: randomTraderName(),
-    age: 25,
-    joinDate: randomCreatedDate(),
-    role: randomRole()
-  },
-  {
-    id: randomId(),
-    name: randomTraderName(),
-    age: 36,
-    joinDate: randomCreatedDate(),
-    role: randomRole()
-  },
-  {
-    id: randomId(),
-    name: randomTraderName(),
-    age: 19,
-    joinDate: randomCreatedDate(),
-    role: randomRole()
-  },
-  {
-    id: randomId(),
-    name: randomTraderName(),
-    age: 28,
-    joinDate: randomCreatedDate(),
-    role: randomRole()
-  },
-  {
-    id: randomId(),
-    name: randomTraderName(),
-    age: 23,
-    joinDate: randomCreatedDate(),
-    role: randomRole()
-  }
-]
-
 function EditToolbar(props) {
   const { setRows, setRowModesModel } = props
 
   const handleClick = () => {
     const id = randomId()
-    setRows(oldRows => [...oldRows, { id, name: '', age: '', isNew: true }])
+    setRows(oldRows => [...oldRows, { id, kip: '', nama: 'www', desa: '', alamat: '', kecamatan: '', isNew: true }])
     setRowModesModel(oldModel => ({
       ...oldModel,
+
       [id]: { mode: GridRowModes.Edit, fieldToFocus: 'name' }
     }))
   }
@@ -79,7 +49,32 @@ function EditToolbar(props) {
   )
 }
 
-const TablePerusahaanTaskDetails = () => {
+const TableGroupPerusahaan = props => {
+  const [participants, setParticipants] = useState(props.data)
+  const apapa = props.dataProjectFungsi
+  const initialRows = participants.map(row => ({
+    id: row.id,
+    kip: row.perusahaan.kip,
+    nama: row.perusahaan.nama,
+    desa: row.perusahaan.desa,
+    kecamatan: row.perusahaan.kecamatan,
+    alamat: row.perusahaan.alamat,
+    target: row.target,
+    realisasi: row.realisasi,
+    hasilPencacahan: row.hasilPencacahan,
+    tanggalDob: new Date(row.duedate)
+  }))
+  // console.log(initialRows
+  const initialRow2s = [
+    {
+      id: randomId(),
+      name: randomTraderName(),
+      age: 25,
+      joinDate: randomCreatedDate(),
+      role: randomRole()
+    }
+  ]
+
   const [rows, setRows] = React.useState(initialRows)
   const [rowModesModel, setRowModesModel] = React.useState({})
 
@@ -95,12 +90,40 @@ const TablePerusahaanTaskDetails = () => {
   }
 
   const handleSaveClick = id => () => {
+    // console.log(id)
+    // console.log(id - 1)
+    // console.log(rows[id - 1].id)
+    // console.log(rows)
     setRowModesModel({ ...rowModesModel, [id]: { mode: GridRowModes.View } })
-    console.log(rows)
   }
 
   const handleDeleteClick = id => () => {
-    setRows(rows.filter(row => row.id !== id))
+    Swal.fire({
+      title: 'Delete Perusahaan?',
+      text: 'Press "Delete Perusahaan"',
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#68B92E',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Yes, Delete Project',
+      cancelButtonText: 'No, Cancel',
+      reverseButtons: true
+    }).then(result => {
+      if (result.isConfirmed) {
+        axios
+          .delete(`/perusahaan/${id}`)
+          .then(setRows(rows.filter(row => row.id !== id)))
+
+          .catch(err => {
+            Swal.fire('Error', 'Something went wrong. Please try again.', 'error')
+          })
+      } else if (
+        /* Read more about handling dismissals below */
+        result.dismiss === Swal.DismissReason.cancel
+      ) {
+        Swal.fire('Cancelled!', 'Perusahaan is not deleted. Press "OK" to continue.', 'error')
+      }
+    })
   }
 
   const handleCancelClick = id => () => {
@@ -115,43 +138,93 @@ const TablePerusahaanTaskDetails = () => {
     }
   }
 
+  // const processRowUpdate = newRow => {
+  //   const updatedRow = { ...newRow, isNew: false }
+  //   setRows(rows.map(row => (row.id === newRow.id ? updatedRow : row)))
+  //   return updatedRow
+  // }
+  // console.log(rows)
+
   const processRowUpdate = newRow => {
     const updatedRow = { ...newRow, isNew: false }
-    setRows(rows.map(row => (row.id === newRow.id ? updatedRow : row)))
+
+    // Lakukan pengecekan dan pengiriman permintaan AJAX di sini
+    const data = {
+      target: updatedRow.target,
+      realisasi: updatedRow.realisasi,
+      hasilPencacahan: updatedRow.hasilPencacahan,
+      duedate: updatedRow.tanggalDob
+    }
+
+    if (data.realisasi <= data.target) {
+      axios
+        .put(`/perusahaan/${updatedRow.id}`, data)
+        .then(res => {
+          Swal.fire({
+            title: 'Success!',
+            text: 'Berhasil disimpan',
+            icon: 'success',
+            confirmButtonText: 'Ok'
+          })
+        })
+        .catch(err => {
+          Swal.fire({
+            title: 'Error!',
+            text: 'Something went wrong',
+            icon: 'error',
+            confirmButtonText: 'Ok'
+          })
+        })
+    } else {
+      Swal.fire({
+        title: 'Error!',
+        text: 'Realisasi lebih besar dari target',
+        icon: 'error',
+        confirmButtonText: 'Ok'
+      })
+    }
+
+    // Update state rows
+    setRows(rows.map(row => (row.id === updatedRow.id ? updatedRow : row)))
+
     return updatedRow
   }
-  console.log(rows)
 
   const handleRowModesModelChange = newRowModesModel => {
     setRowModesModel(newRowModesModel)
   }
 
   const columns = [
-    { field: 'name', headerName: 'Name', width: 180, editable: false },
     {
-      field: 'age',
-      headerName: 'Age',
-      type: 'number',
-      width: 80,
+      field: 'kip',
+      headerName: 'KIP',
+      width: 100,
       align: 'left',
       headerAlign: 'left',
       editable: true
     },
+    { field: 'nama', headerName: 'Name', width: 200, editable: false },
+    { field: 'desa', headerName: 'Desa', width: 80, editable: false },
+    { field: 'kecamatan', headerName: 'Kecamatan', width: 80, editable: false },
+    { field: 'alamat', headerName: 'Alamat', width: 200, editable: true },
+    { field: 'realisasi', headerName: 'Realisasi', width: 100, editable: true },
+    { field: 'target', headerName: 'Target', width: 100, editable: true },
+    { field: 'hasilPencacahan', headerName: 'Hasil Pencacahan', width: 180, editable: true },
     {
-      field: 'joinDate',
-      headerName: 'Join date',
+      field: 'tanggalDob',
+      headerName: 'Tanggal Terima Dok Dikab',
       type: 'date',
       width: 180,
       editable: true
     },
-    {
-      field: 'role',
-      headerName: 'Department',
-      width: 220,
-      editable: true,
-      type: 'singleSelect',
-      valueOptions: ['Market', 'Finance', 'Development']
-    },
+    // {
+    //   field: 'role',
+    //   headerName: 'Department',
+    //   width: 220,
+    //   editable: true,
+    //   type: 'singleSelect',
+    //   valueOptions: ['Market', 'Finance', 'Development']
+    // },
     {
       field: 'actions',
       type: 'actions',
@@ -196,40 +269,43 @@ const TablePerusahaanTaskDetails = () => {
   ]
 
   return (
-    <Box
-      sx={{
-        height: 500,
-        width: '100%',
-        '& .actions': {
-          color: 'text.secondary'
-        },
-        '& .textPrimary': {
-          color: 'text.primary'
-        }
-      }}
-    >
-      <DataGrid
-        initialState={{
-          pagination: { paginationModel: { pageSize: 5 } }
+    <>
+      <Box
+        sx={{
+          overflowX: 'auto',
+          height: 500,
+          width: '100%',
+          '& .actions': {
+            color: 'text.secondary'
+          },
+          '& .textPrimary': {
+            color: 'text.primary'
+          }
         }}
-        pageSizeOptions={[5, 10, 15]}
-        rowHeight={35}
-        rows={rows}
-        columns={columns}
-        editMode='row'
-        rowModesModel={rowModesModel}
-        onRowModesModelChange={handleRowModesModelChange}
-        onRowEditStop={handleRowEditStop}
-        processRowUpdate={processRowUpdate}
-        slots={{
-          toolbar: EditToolbar
-        }}
-        slotProps={{
-          toolbar: { setRows, setRowModesModel }
-        }}
-      />
-    </Box>
+      >
+        <DataGrid
+          initialState={{
+            pagination: { paginationModel: { pageSize: 10 } }
+          }}
+          pageSizeOptions={[10, 15, 25]}
+          rowHeight={35}
+          rows={rows}
+          columns={columns}
+          editMode='row'
+          rowModesModel={rowModesModel}
+          onRowModesModelChange={handleRowModesModelChange}
+          onRowEditStop={handleRowEditStop}
+          processRowUpdate={processRowUpdate}
+          // slots={{
+          //   toolbar: EditToolbar
+          // }}
+          slotProps={{
+            toolbar: { setRows, setRowModesModel }
+          }}
+        />
+      </Box>
+    </>
   )
 }
 
-export default TablePerusahaanTaskDetails
+export default TableGroupPerusahaan

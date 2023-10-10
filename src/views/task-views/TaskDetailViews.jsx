@@ -29,8 +29,8 @@ import CardTaskDetail from 'src/views/cards/CardTaskDetail'
 import CardTaskComment from 'src/views/cards/CardTaskComment'
 
 const TaskDetailViews = props => {
+  const [participants, setParticipants] = useState(props.dataPerusahaan)
   const session = useSession()
-  console.log(props.data)
   const [values, setValues] = useState({
     id: props.data.id,
     target: props.data.target,
@@ -82,6 +82,45 @@ const TaskDetailViews = props => {
         )
   }
 
+  const handleSimpanPerusahaan = e => {
+    // const data = {
+    //   target: rows.id.target,
+    //   realisasi:rows.id.realisasi,
+    //   hasilPencacahan: rows.id.hasilPencacahan,
+    //   duedate: rows.id.tanggalDob
+    // }
+    values.realisasi <= values.target
+      ? axios
+          .put(`/taskdetail/${values.id}`, data)
+          .then(res => {
+            Swal.fire({
+              title: 'Success!',
+              text: 'Berhasil disimpan',
+              icon: 'success',
+              confirmButtonText: 'Ok'
+            })
+          })
+          .catch(err => {
+            Swal.fire({
+              title: 'Error!',
+              text: 'Something went wrong',
+              icon: 'error',
+              confirmButtonText: 'Ok'
+            })
+          })
+      : Swal.fire({
+          title: 'Error!',
+          text: 'Realisasi lebih besar dari target',
+          icon: 'error',
+          confirmButtonText: 'Ok'
+        }).then(
+          setValues(values => ({
+            ...values, // Pertahankan nilai properti lainnya
+            realisasi: values.target // Perbarui nilai kegRentang
+          }))
+        )
+  }
+
   const s = () => {
     console.log(values.realisasi)
     console.log(values.target)
@@ -93,7 +132,7 @@ const TaskDetailViews = props => {
       <Grid container spacing={4}>
         <Grid item md={12}>
           <Grid container spacing={4}>
-            <Grid item md={8}>
+            <Grid item xs={12} md={8}>
               <CardTaskDetail data={props.data}></CardTaskDetail>
             </Grid>
             <Grid item md={4}>
@@ -184,7 +223,13 @@ const TaskDetailViews = props => {
         <Grid item md={12}>
           <Card>
             {session.status === 'authenticated' && (session.data.uid === 99 || values.jenisKeg === 65) && (
-              <TablePerusahaanTaskDetails></TablePerusahaanTaskDetails>
+              <TablePerusahaanTaskDetails
+                data={participants}
+                dataProjectFungsi={props.data.project.fungsi}
+              ></TablePerusahaanTaskDetails>
+              // <Button type='submit' variant={'contained'} onClick={handleSimpan} fullWidth>
+              //   Simpan
+              // </Button>
             )}
           </Card>
         </Grid>

@@ -17,12 +17,12 @@ const CardTaskDetail = props => {
       <Card>
         {/* <CardHeader title='Nama Project' sx={{ color: 'primary.dark' }}></CardHeader> */}
         <Grid container p={4}>
-          <Grid item md={10}>
+          <Grid item xs={8} md={10}>
             <Typography color={'primary.dark'} variant={'h4'}>
               {props.data.title}
             </Typography>
           </Grid>
-          <Grid item md={2}>
+          <Grid item xs={4} md={2} display={'flex'} justifyContent={'end'}>
             <Chip
               label={statusObj[props.data.target / props.data.realisasi === 1 ? 1 : 0].status}
               color={statusObj[props.data.target / props.data.realisasi === 1 ? 1 : 0].color}
@@ -49,7 +49,7 @@ const CardTaskDetail = props => {
             </Typography>
           </Grid>
 
-          <Grid mt={2} item md={12}>
+          <Grid mt={2} item xs={12} md={12}>
             <Divider sx={{ marginTop: 3.5 }} />
             <Typography variant={'body1'}>Deskripsi Kegiatan</Typography>
             <Typography variant={'body2'}>{props.data.description}</Typography>
