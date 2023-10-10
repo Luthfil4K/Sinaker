@@ -160,7 +160,7 @@ const CreateProjectViews = props => {
 
           <Grid item xs={12} md={6}>
             <FormControl fullWidth>
-              <InputLabel id='demo-simple-select-helper-label'>Rentang Waktu</InputLabel>
+              <InputLabel id='demo-simple-select-helper-label'>Periode Waktu</InputLabel>
               <Select
                 fullWidth
                 labelId='demo-simple-select-helper-label'

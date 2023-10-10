@@ -1,3 +1,6 @@
+// axios
+import axios from 'src/pages/api/axios'
+
 import Card from '@mui/material/Card'
 import Grid from '@mui/material/Grid'
 import Link from '@mui/material/Link'
@@ -28,8 +31,6 @@ const statusObj = {
   1: { color: 'success', status: 'Done' }
 }
 
-console.log(statusObj[1].color)
-
 const TableManageTaskList = props => {
   const [subkeg, setSubKeg] = useState(props.data)
   const rows = subkeg.map(row => ({
@@ -43,23 +44,24 @@ const TableManageTaskList = props => {
   }))
 
   const router = useRouter()
-  const handleDelete = props => {
-    console.log(props)
-    Swal.fire({
-      title: 'Apa Anda Yakin?',
-      text: 'Untuk menghapus task ini!',
-      icon: 'warning',
-      showCancelButton: true,
-      confirmButtonColor: '#3085d6',
-      cancelButtonColor: '#d33',
-      confirmButtonText: 'Yes, Hapus tim !'
-    }).then(result => {
-      if (result.isConfirmed) {
-        router.push(`/task-manage/2}`)
-      } else {
-        router.push(`/task-manage/2`)
-      }
-    })
+  const handleDelete = async id => {
+    axios
+      .delete(`task/${id}`)
+      .then(async res => {
+        await Swal.fire({
+          icon: 'success',
+          title: 'Success',
+          text: 'Task Deleted'
+        })
+        router.reload()
+      })
+      .catch(err => {
+        Swal.fire({
+          icon: 'error',
+          title: 'Error',
+          text: 'Something went wrong'
+        })
+      })
   }
 
   const columns = [
@@ -145,7 +147,27 @@ const TableManageTaskList = props => {
             </Button>
           </Link>
 
-          <Button onClick={handleDelete} type='submit' sx={{ mr: 1 }} color='error' variant='text'>
+          <Button
+            onClick={() => {
+              Swal.fire({
+                title: 'Hapus Tugas?',
+                text: 'Tekan tombol "Hapus Tugas" untuk menghapus tugas',
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Ya, Hapus Tugas'
+              }).then(result => {
+                if (result.isConfirmed) {
+                  handleDelete(params.row.id)
+                }
+              })
+            }}
+            type='submit'
+            sx={{ mr: 1 }}
+            color='error'
+            variant='text'
+          >
             <DeleteOutline />
           </Button>
         </>

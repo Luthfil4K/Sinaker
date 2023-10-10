@@ -76,11 +76,12 @@ model Perusahaan {
   kip               Int           @db.Int
   nama              String        @db.VarChar(128)
   desa              String        @db.VarChar(128)
+  namaDesa          String        @db.VarChar(128)
   kecamatan         String        @db.VarChar(128)
+  namaKec           String        @db.VarChar(128)
   alamat            String        @db.VarChar(128)
   kegiatan          String        @db.VarChar(128)
-  kodePencacah      Int           @db.Int
-  kodePengawas      Int           @db.Int
+ 
   TaskPerusahaanProduksi    TaskPerusahaanProduksi[]
   Perusahaangroup   PerusahaanGroup[]
 

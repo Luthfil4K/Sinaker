@@ -137,7 +137,7 @@ const TaskManageAddViews = propss => {
             icon: 'success',
             confirmButtonColor: '#68B92E',
             confirmButtonText: 'OK'
-          })
+          }).then(router.push(`/project-detail/${values.subKegProjectId}`))
 
           setValues({
             subKegNama: '',

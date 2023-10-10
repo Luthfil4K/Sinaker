@@ -49,7 +49,7 @@ const CardTaskDetail = props => {
             </Typography>
           </Grid>
 
-          <Grid mt={2} item xs={12} md={12}>
+          <Grid mt={2} item xs={12} md={12} height={200} overflow={'auto'}>
             <Divider sx={{ marginTop: 3.5 }} />
             <Typography variant={'body1'}>Deskripsi Kegiatan</Typography>
             <Typography variant={'body2'}>{props.data.description}</Typography>

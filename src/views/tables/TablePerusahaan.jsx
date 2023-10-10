@@ -39,8 +39,9 @@ const TablePerusahaan = props => {
     kecamatan: row.kecamatan,
     desa: row.desa,
     alamat: row.alamat,
-    kodePencacah: row.kodePencacah,
-    kodePengawas: row.kodePengawas,
+    namaDesa: row.namaDesa,
+    namaKec: row.namaKec,
+
     jumlahKegiatan: 2
   }))
   // console.log(rows)
@@ -78,18 +79,17 @@ const TablePerusahaan = props => {
       minWidth: 130
     },
     {
-      field: 'kodePencacah',
-      headerName: 'Kode Pencacah',
+      field: 'namaDesa',
+      headerName: 'Nama Desa',
       width: 240,
       minWidth: 130
     },
     {
-      field: 'kodePengawas',
-      headerName: 'Kode Pengawas',
+      field: 'namaKec',
+      headerName: 'Nama Kecamatan',
       width: 240,
       minWidth: 130
     },
-
     {
       field: 'jumlahKegiatan',
       headerName: 'Jumlah Kegiatan',
@@ -97,30 +97,6 @@ const TablePerusahaan = props => {
       minWidth: 150
     },
 
-    {
-      field: 'role',
-      renderHeader: () => (
-        <Typography sx={{ fontSize: '0.875rem !important', textAlign: 'center' }}>Status Dokumen</Typography>
-      ),
-      minWidth: 160,
-      flex: 1,
-      renderCell: () => (
-        <form>
-          <FormControl fullWidth>
-            <InputLabel id='form-layouts-separator-select-label'>Status </InputLabel>
-            <Select
-              sx={{ height: 50 }}
-              label='Status Dokumen'
-              id='form-layouts-separator-role'
-              labelId='form-layouts-separator-role-label'
-            >
-              <MenuItem value='1'>Masuk</MenuItem>
-              <MenuItem value='2'>Pending</MenuItem>
-            </Select>
-          </FormControl>
-        </form>
-      )
-    },
     {
       field: 'action',
       renderHeader: () => <Typography sx={{ fontSize: '0.875rem !important', textAlign: 'center' }}>Action</Typography>,

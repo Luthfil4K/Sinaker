@@ -61,6 +61,8 @@ const TableGroupPerusahaan = props => {
     alamat: row.perusahaan.alamat,
     target: row.target,
     realisasi: row.realisasi,
+    persentase:
+      row.target > 0 || row.target > 0 ? `${Math.round(100 * (Number(row.realisasi) / Number(row.target)))}%` : 0,
     hasilPencacahan: row.hasilPencacahan,
     tanggalDob: new Date(row.duedate)
   }))
@@ -95,7 +97,26 @@ const TableGroupPerusahaan = props => {
     // console.log(rows[id - 1].id)
     // console.log(rows)
     setRowModesModel({ ...rowModesModel, [id]: { mode: GridRowModes.View } })
+    const jenisSub = {
+      64: { namaJenisSub: 'Persiapan', color: 'warning' },
+      66: { namaJenisSub: 'Pelaksanaan', color: 'warning' },
+      65: { namaJenisSub: 'Pengawasan', color: 'warning' },
+      67: { namaJenisSub: 'Pengolahan', color: 'warning' },
+      68: { namaJenisSub: 'Evaluasi', color: 'warning' },
+      69: { namaJenisSub: 'Diseminasi', color: 'warning' }
+    }
+
+    console.log(jenisSub)
+    // const roles = ['Market', 'Finance', 'Development']
+    // const randomRole = () => {
+    //   return randomArrayItem(roles)
+    // }
+    // console.log(randomRole())
+    // console.log(roles)
   }
+  useEffect(() => {
+    console.log('update persentase')
+  }, [rows])
 
   const handleDeleteClick = id => () => {
     Swal.fire({
@@ -209,7 +230,15 @@ const TableGroupPerusahaan = props => {
     { field: 'alamat', headerName: 'Alamat', width: 200, editable: true },
     { field: 'realisasi', headerName: 'Realisasi', width: 100, editable: true },
     { field: 'target', headerName: 'Target', width: 100, editable: true },
-    { field: 'hasilPencacahan', headerName: 'Hasil Pencacahan', width: 180, editable: true },
+    { field: 'persentase', headerName: 'Persentase', width: 100, editable: false },
+    {
+      field: 'hasilPencacahan',
+      headerName: 'Hasil Pencacahan',
+      type: 'singleSelect',
+      valueOptions: ['Masuk', 'Menunggu Masuk', 'Tutup', 'Tidak Aktif', 'Tidak Ditemukan', 'Non Respon'],
+      width: 180,
+      editable: true
+    },
     {
       field: 'tanggalDob',
       headerName: 'Tanggal Terima Dok Dikab',

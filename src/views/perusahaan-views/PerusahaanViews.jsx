@@ -25,9 +25,9 @@ const PerusahaanViews = props => {
           <Typography variant={'h5'}>Daftar Perusahaan</Typography>
         </Grid>
         <Grid item md={6} xs={6} display={'flex'} justifyContent={'end'}>
-          {/* <Link onClick={e => router.push(`/add-people`)}>
-            <Button variant={'contained'}> Tambah Pegawai</Button>
-          </Link> */}
+          <Link onClick={e => router.push(`/add-perusahaan`)}>
+            <Button variant={'contained'}>Tambah Perusahaan</Button>
+          </Link>
         </Grid>
         <Grid item md={12} xs={12}>
           <Box sx={{ width: '100%' }}>

@@ -4,7 +4,7 @@ export default async function handler(req, res) {
   const { method } = req
 
   if (method === 'GET') {
-    const users = await prisma.user.findMany()
+    const users = await prisma.perusahaan.findMany()
     if (!users) {
       return res.status(400).json({ success: false })
     }
@@ -13,22 +13,24 @@ export default async function handler(req, res) {
   }
 
   if (method === 'POST') {
-    const { email, name, nip, password, role, fungsi } = req.body
+    const { kip, nama, desa, kecamatan, namaDesa, namaKec, alamat } = req.body
 
     console.log('dah sampe post')
     try {
-      const user = await prisma.user.create({
+      const companies = await prisma.perusahaan.create({
         data: {
-          email,
-          name,
-          nip,
-          password,
-          role,
-          fungsi
+          kip: Number(kip),
+          nama,
+          desa,
+          kecamatan,
+          namaDesa,
+          namaKec,
+          alamat,
+          kegiatan: ''
         }
       })
 
-      return res.status(201).json({ success: true, data: user })
+      return res.status(201).json({ success: true, data: companies })
     } catch (error) {
       console.log(error)
 

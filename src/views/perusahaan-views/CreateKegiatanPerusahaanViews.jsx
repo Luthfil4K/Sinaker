@@ -77,7 +77,7 @@ const CreateKegiatanPerusahaanViews = props => {
             icon: 'success',
             confirmButtonColor: '#68B92E',
             confirmButtonText: 'OK'
-          })
+          }).then(router.push(`perusahaan-group-list`))
 
           setValues({
             kegNama: ''
@@ -109,7 +109,7 @@ const CreateKegiatanPerusahaanViews = props => {
   const columns = [
     {
       field: 'checked',
-      sortable: false,
+      sortable: true,
       renderHeader: () => (
         <FormControlLabel
           control={

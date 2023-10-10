@@ -174,16 +174,16 @@ const TaskDetailViews = props => {
                   </Grid>
                 </Card>
                 <Card sx={{ marginTop: 4 }}>
-                  <Grid container p={4} spacing={2}>
-                    <Grid item md={1} display={'inline'}>
+                  <Grid container p={4} height={200} spacing={2} overflow={'auto'}>
+                    <Grid item xs={1} md={1} display={'inline'}>
                       <AccountIcon></AccountIcon>
                     </Grid>
-                    <Grid item md={11} display={'inline'}>
+                    <Grid item xs={11} md={11} display={'inline'}>
                       <Typography color={'primary.dark'} variant={'body1'}>
                         Note
                       </Typography>
                     </Grid>
-                    <Grid mt={1} display={'flex'} justifyContent={'center'} item md={12}>
+                    <Grid mt={1} display={'flex'} justifyContent={'center'} xs={12} item md={12}>
                       <FormControl fullWidth sx={{ overflowY: 'auto' }}>
                         <OutlinedInput
                           name='notesSubKeg'
