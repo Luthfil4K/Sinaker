@@ -226,6 +226,7 @@ const TaskDetailViews = props => {
               <TablePerusahaanTaskDetails
                 data={participants}
                 dataProjectFungsi={props.data.project.fungsi}
+                dataId={values.id}
               ></TablePerusahaanTaskDetails>
               // <Button type='submit' variant={'contained'} onClick={handleSimpan} fullWidth>
               //   Simpan

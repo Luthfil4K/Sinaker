@@ -114,8 +114,8 @@ const TableGroupPerusahaan = props => {
     {
       field: 'kip',
       headerName: 'KIP',
-      type: 'number',
-      width: 80,
+
+      width: 180,
       align: 'left',
       headerAlign: 'left',
       editable: true
@@ -142,7 +142,7 @@ const TableGroupPerusahaan = props => {
     {
       field: 'actions',
       type: 'actions',
-      headerName: 'Actions',
+      headerName: ' ',
       width: 100,
       cellClassName: 'actions',
       getActions: ({ id }) => {
@@ -169,14 +169,14 @@ const TableGroupPerusahaan = props => {
         }
 
         return [
-          <GridActionsCellItem
-            icon={<EditIcon />}
-            label='Edit'
-            className='textPrimary'
-            onClick={handleEditClick(id)}
-            color='inherit'
-          />,
-          <GridActionsCellItem icon={<DeleteIcon />} label='Delete' onClick={handleDeleteClick(id)} color='inherit' />
+          // <GridActionsCellItem
+          //   icon={<EditIcon />}
+          //   label='Edit'
+          //   className='textPrimary'
+          //   onClick={handleEditClick(id)}
+          //   color='inherit'
+          // />,
+          // <GridActionsCellItem icon={<DeleteIcon />} label='Delete' onClick={handleDeleteClick(id)} color='inherit' />
         ]
       }
     }

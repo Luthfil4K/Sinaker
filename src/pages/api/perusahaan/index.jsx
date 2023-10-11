@@ -1,5 +1,5 @@
 import prisma from '../../../services/db'
-
+// groupperusahaan
 export default async function handler(req, res) {
   const { method } = req
 

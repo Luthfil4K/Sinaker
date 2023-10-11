@@ -132,7 +132,7 @@ const TaskManageAddViews = propss => {
 
         if (res.status === 201) {
           Swal.fire({
-            title: 'Tambah Pegawai Success',
+            title: 'Tambah Sub Kegiatan Success',
             text: 'Tekan OK untuk lanjut',
             icon: 'success',
             confirmButtonColor: '#68B92E',

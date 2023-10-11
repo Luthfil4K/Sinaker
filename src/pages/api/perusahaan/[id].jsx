@@ -1,5 +1,5 @@
 import prisma from '../../../services/db'
-
+// update tarel di taskdetail
 export default async function handler(req, res) {
   const id = req.query.id
 
@@ -18,10 +18,9 @@ export default async function handler(req, res) {
     return res.status(200).json({ success: true, data: taskPerusahaanProduksi })
   } else if (method === 'PUT') {
     const { target, realisasi, duedate, hasilPencacahan } = req.body
-
+    console.log('bukan wo yg pasti')
     try {
       console.log(target, realisasi, duedate, hasilPencacahan)
-      console.log('awawawkakwkawkaw')
       const taskPerusahaanProduksi = await prisma.taskPerusahaanProduksi.update({
         where: {
           id: Number(id)

@@ -31,8 +31,8 @@ function EditToolbar(props) {
   const { setRows, setRowModesModel } = props
 
   const handleClick = () => {
-    const id = randomId()
-    setRows(oldRows => [...oldRows, { id, kip: '', nama: 'www', desa: '', alamat: '', kecamatan: '', isNew: true }])
+    const id = 100000 + randomId()
+    setRows(oldRows => [...oldRows, { id, kip: '', nama: '', desa: '', alamat: '', kecamatan: '', isNew: true }])
     setRowModesModel(oldModel => ({
       ...oldModel,
 
@@ -50,6 +50,9 @@ function EditToolbar(props) {
 }
 
 const TableGroupPerusahaan = props => {
+  const [values, setValues] = useState(props.dataId)
+  console.log(props.dataId)
+  console.log(values)
   const [participants, setParticipants] = useState(props.data)
   const apapa = props.dataProjectFungsi
   const initialRows = participants.map(row => ({
@@ -126,7 +129,7 @@ const TableGroupPerusahaan = props => {
       showCancelButton: true,
       confirmButtonColor: '#68B92E',
       cancelButtonColor: '#d33',
-      confirmButtonText: 'Yes, Delete Project',
+      confirmButtonText: 'Ya, Delete Perusahaan',
       cancelButtonText: 'No, Cancel',
       reverseButtons: true
     }).then(result => {
@@ -171,15 +174,50 @@ const TableGroupPerusahaan = props => {
 
     // Lakukan pengecekan dan pengiriman permintaan AJAX di sini
     const data = {
-      target: updatedRow.target,
-      realisasi: updatedRow.realisasi,
-      hasilPencacahan: updatedRow.hasilPencacahan,
-      duedate: updatedRow.tanggalDob
+      target: updatedRow.target ? updatedRow.target : 0,
+      realisasi: updatedRow.realisasi ? updatedRow.realisasi : 0,
+      hasilPencacahan: updatedRow.hasilPencacahan ? updatedRow.hasilPencacahan : '',
+      duedate: updatedRow.tanggalDob ? updatedRow.tanggalDob : new Date(),
+      taskId: props.dataId,
+      perusahaanId: props.dataId,
+      kip: updatedRow.kip ? updatedRow.kip : '',
+      nama: updatedRow.nama ? updatedRow.nama : '',
+      desa: updatedRow.desa ? updatedRow.desa : '',
+      kecamatan: updatedRow.kecamatan ? updatedRow.kecamatan : '',
+      alamat: updatedRow.alamat ? updatedRow.alamat : ''
     }
 
-    if (data.realisasi <= data.target) {
+    if (updatedRow.id < 100000) {
+      if (data.realisasi <= data.target) {
+        axios
+          .put(`/perusahaan/${updatedRow.id}`, data)
+          .then(res => {
+            Swal.fire({
+              title: 'Success!',
+              text: 'Berhasil disimpan',
+              icon: 'success',
+              confirmButtonText: 'Ok'
+            })
+          })
+          .catch(err => {
+            Swal.fire({
+              title: 'Error!',
+              text: 'Something went wrong',
+              icon: 'error',
+              confirmButtonText: 'Ok'
+            })
+          })
+      } else {
+        Swal.fire({
+          title: 'Error!',
+          text: 'Realisasi lebih besar dari target',
+          icon: 'error',
+          confirmButtonText: 'Ok'
+        })
+      }
+    } else {
       axios
-        .put(`/perusahaan/${updatedRow.id}`, data)
+        .post(`/perusahaan/addWoDB`, data)
         .then(res => {
           Swal.fire({
             title: 'Success!',
@@ -196,13 +234,6 @@ const TableGroupPerusahaan = props => {
             confirmButtonText: 'Ok'
           })
         })
-    } else {
-      Swal.fire({
-        title: 'Error!',
-        text: 'Realisasi lebih besar dari target',
-        icon: 'error',
-        confirmButtonText: 'Ok'
-      })
     }
 
     // Update state rows
@@ -224,9 +255,9 @@ const TableGroupPerusahaan = props => {
       headerAlign: 'left',
       editable: true
     },
-    { field: 'nama', headerName: 'Name', width: 200, editable: false },
-    { field: 'desa', headerName: 'Desa', width: 80, editable: false },
-    { field: 'kecamatan', headerName: 'Kecamatan', width: 80, editable: false },
+    { field: 'nama', headerName: 'Name', width: 200, editable: true },
+    { field: 'desa', headerName: 'Desa', width: 80, editable: true },
+    { field: 'kecamatan', headerName: 'Kecamatan', width: 80, editable: true },
     { field: 'alamat', headerName: 'Alamat', width: 200, editable: true },
     { field: 'realisasi', headerName: 'Realisasi', width: 100, editable: true },
     { field: 'target', headerName: 'Target', width: 100, editable: true },
@@ -325,9 +356,9 @@ const TableGroupPerusahaan = props => {
           onRowModesModelChange={handleRowModesModelChange}
           onRowEditStop={handleRowEditStop}
           processRowUpdate={processRowUpdate}
-          // slots={{
-          //   toolbar: EditToolbar
-          // }}
+          slots={{
+            toolbar: EditToolbar
+          }}
           slotProps={{
             toolbar: { setRows, setRowModesModel }
           }}

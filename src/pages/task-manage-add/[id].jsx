@@ -75,9 +75,7 @@ export async function getServerSideProps(context) {
       desa: true,
       kecamatan: true,
       kegiatan: true,
-      alamat: true,
-      kodePencacah: true,
-      kodePengawas: true
+      alamat: true
     }
   })
 

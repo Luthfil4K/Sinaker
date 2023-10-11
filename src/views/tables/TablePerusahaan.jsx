@@ -44,7 +44,6 @@ const TablePerusahaan = props => {
     alamat: row.alamat,
     namaDesa: row.namaDesa,
     namaKec: row.namaKec,
-
     jumlahKegiatan: 2
   }))
 

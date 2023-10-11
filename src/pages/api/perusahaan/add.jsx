@@ -1,5 +1,6 @@
 import prisma from '../../../services/db'
 
+// addperusahaan di daftar perusahaan
 export default async function handler(req, res) {
   const { method } = req
 
@@ -15,7 +16,6 @@ export default async function handler(req, res) {
   if (method === 'POST') {
     const { kip, nama, desa, kecamatan, namaDesa, namaKec, alamat } = req.body
 
-    console.log('dah sampe post')
     try {
       const companies = await prisma.perusahaan.create({
         data: {
