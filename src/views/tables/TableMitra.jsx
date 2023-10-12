@@ -1,8 +1,9 @@
-import * as React from 'react'
+import { useState, useEffect, useRef } from 'react'
 
 // ** MUI Imports
 import Typography from '@mui/material/Typography'
 import Card from '@mui/material/Card'
+import Box from '@mui/material/Box'
 import Button from '@mui/material/Button'
 import Grid from '@mui/material/Grid'
 
@@ -15,7 +16,7 @@ import Swal from 'sweetalert2'
 import PencilOutline from 'mdi-material-ui/PencilOutline'
 import DeleteOutline from 'mdi-material-ui/DeleteOutline'
 
-const rows = [
+const rows2 = [
   {
     id: 1,
     nama: 'Mitra A',
@@ -35,30 +36,23 @@ const rows = [
     gajiTahunan: 100000,
     jumlahKegiatan: '5',
     jumlahSubkegiatan: '5'
-  },
-  {
-    id: 3,
-    nama: 'Mitra3',
-    gajiBulanan: 26000,
-    gajiTriwulanan: 38000,
-    gajiSemesteran: 19000,
-    gajiTahunan: 69000,
-    jumlahKegiatan: '2',
-    jumlahSubkegiatan: '7'
-  },
-  {
-    id: 4,
-    nama: 'Mitra4',
-    gajiBulanan: 28000,
-    gajiTriwulanan: 39000,
-    gajiSemesteran: 40000,
-    gajiTahunan: 60000,
-    jumlahKegiatan: '5',
-    jumlahSubkegiatan: '4'
   }
 ]
 
-const TableMitra = () => {
+const TableMitra = props => {
+  // const { dataMitra } = props.data
+  const [mitra, setMitra] = useState(props.data)
+  const rows = mitra.map(row => ({
+    id: row.id,
+    nik: row.nik,
+    name: row.name,
+    jenisKelamin: row.jenisKelamin,
+    tanggalLahir: row.tanggalLahir,
+    umur: row.umur,
+    pendidikan: row.pendidikan,
+    email: row.email,
+    status: row.status
+  }))
   const handleDelete = () => {
     Swal.fire({
       title: 'Apa Anda Yakin?',
@@ -79,13 +73,14 @@ const TableMitra = () => {
   const router = useRouter()
   const columns = [
     { field: 'id', headerName: 'No', type: 'string', width: 40 },
-    { field: 'nama', headerName: 'Nama', width: 200 },
-    { field: 'gajiBulanan', headerName: 'Gaji Bulanan', width: 150 },
-    { field: 'gajiTriwulanan', headerName: 'Gaji Triwulanan', type: 'string', width: 150 },
-    { field: 'gajiSemesteran', headerName: 'Gaji Semesteran', type: 'string', width: 150 },
-    { field: 'gajiTahunan', headerName: 'Gaji Tahunan', type: 'string', width: 150 },
-    { field: 'jumlahKegiatan', headerName: 'Jumlah Kegiatan ', width: 160 },
-    { field: 'jumlahSubkegiatan', headerName: 'Jumlah Subkegiatan ', type: 'string', width: 140 },
+    { field: 'nik', headerName: 'NIK', width: 200 },
+    { field: 'name', headerName: 'Nama', width: 200 },
+    { field: 'jenisKelamin', headerName: 'Jenis Kelamin', width: 150 },
+    { field: 'tanggalLahir', headerName: 'Tanggal Lahir', type: 'string', width: 150 },
+    { field: 'umur', headerName: 'Umur', type: 'string', width: 150 },
+    { field: 'pendidikan', headerName: 'Pendidikan', type: 'string', width: 150 },
+    { field: 'email', headerName: 'Email', width: 160 },
+    { field: 'status', headerName: 'Mitra Internal/External ', type: 'string', width: 140 },
     // {
     //   field: 'role',
     //   renderHeader: () => (
@@ -142,16 +137,18 @@ const TableMitra = () => {
   return (
     <>
       <Card sx={{ padding: 4 }}>
-        <DataGrid
-          rowHeight={65}
-          rows={rows}
-          columns={columns}
-          sx={{
-            overflowY: 'auto',
-            width: '100%',
-            alignItems: 'start'
-          }}
-        />
+        <Box sx={{ width: '100%' }}>
+          <DataGrid
+            rowHeight={45}
+            rows={rows}
+            columns={columns}
+            sx={{
+              height: rows.length > 3 ? '70vh' : '45vh',
+              overflowY: 'auto',
+              width: '100%'
+            }}
+          />
+        </Box>
       </Card>
     </>
   )

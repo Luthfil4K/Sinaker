@@ -134,14 +134,14 @@ const ProjectEditViews = props => {
 
           <Grid item xs={12} md={6}>
             <FormControl fullWidth>
-              <InputLabel id='demo-simple-select-helper-label'>Rentang Waktu</InputLabel>
+              <InputLabel id='demo-simple-select-helper-label'>Periode Waktu</InputLabel>
               <Select
                 fullWidth
                 labelId='demo-simple-select-helper-label'
                 id='demo-simple-select-helper'
                 value={values.kegRentang}
                 onChange={handleRentangChange}
-                label='Rentang Waktu'
+                label='Periode Waktu'
                 name='rentangWaktu'
               >
                 <MenuItem value={59}>Bulanan</MenuItem>

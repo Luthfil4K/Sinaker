@@ -61,16 +61,16 @@ const CardProjectDetails = props => {
     totalGaji
   } = props
   return (
-    <Card>
+    <Card height={100} sx={{ height: 320 }}>
       <CardContent key={id} sx={{ padding: theme => `${theme.spacing(3, 5, 6)} !important` }}>
         <Grid container spacing={1}>
-          <Grid item xs={8}>
-            <Typography variant='h6' sx={{ marginBottom: 3.5, fontWeight: 600 }}>
+          <Grid item xs={9} height={80}>
+            <Typography variant='h6' sx={{ marginBottom: 2, lineHeight: '24px', fontWeight: 600 }}>
               {namaKegiatan}
             </Typography>
-            <Typography variant='body2'>{rentang[intervalWaktu].waktu}</Typography>
+            <Typography variant='body2'>{rentang[Number(intervalWaktu)].waktu}</Typography>
           </Grid>
-          <Grid item xs={4} display={'flex'} justifyContent={'center'} alignItems={'center'}>
+          <Grid item xs={3} display={'flex'} justifyContent={'center'} alignItems={'center'}>
             <Box sx={{ mb: 3.5, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
               <Typography variant='h6' sx={{ lineHeight: 1, fontWeight: 600, fontSize: '3rem !important' }}>
                 {Math.round(
@@ -94,7 +94,7 @@ const CardProjectDetails = props => {
         <Grid container spacing={4}>
           <Grid item xs={12} sm={6}>
             <StyledBox>
-              <Box sx={{ mb: 10, mt: 3, display: 'flex', alignItems: 'center' }}>
+              <Box sx={{ mb: 5, mt: 3, display: 'flex', alignItems: 'center' }}>
                 <LockOpenOutline sx={{ color: 'primary.main', marginRight: 2.25 }} fontSize='small' />
                 <Typography variant='body2' sx={{ fontSize: '12px' }}>
                   Tanggal Dimulai: <strong>{new Date(tanggalDimulai).toLocaleDateString('id')}</strong>
@@ -109,7 +109,7 @@ const CardProjectDetails = props => {
             </StyledBox>
           </Grid>
           <Grid item xs={12} sm={6}>
-            <Box sx={{ mb: 10, mt: 3, display: 'flex', alignItems: 'center' }}>
+            <Box sx={{ mb: 5, mt: 3, display: 'flex', alignItems: 'center' }}>
               <LockOutline sx={{ color: 'primary.main', marginRight: 2.25 }} fontSize='small' />
               <Typography variant='body2' sx={{ fontSize: '12px' }}>
                 Tanggal Berakhir: <strong>{new Date(tanggalBerakhir).toLocaleDateString('id')}</strong>
@@ -126,7 +126,7 @@ const CardProjectDetails = props => {
         <Divider sx={{ marginTop: 4.5, marginBottom: 1.75 }} />
         <Grid justifyContent='end' display='flex'>
           <Link onClick={e => router.push(`/project-detail/${id}`)}>
-            <Button sx={{ mt: 5 }} variant='contained'>
+            <Button sx={{ mt: 3 }} variant='contained'>
               Selengkapnya
             </Button>
           </Link>

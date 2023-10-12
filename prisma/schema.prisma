@@ -114,6 +114,18 @@ model TaskPerusahaanProduksi {
  hasilPencacahan   String        @db.VarChar(128)
  duedate           DateTime      @db.Date
 }
+model Mitra {
+  id             Int            @id @default(autoincrement())
+  nik            String         @db.VarChar(128)
+  name           String         @db.VarChar(64)
+  jenisKelamin   String         @db.VarChar(64)
+  tanggalLahir   DateTime       @db.Date
+  umur           Int            @db.Int
+  pendidikan     String         @db.VarChar(128)
+  email          String         @db.VarChar(128)
+  status         String         @default("internal") @db.VarChar(64)
+ 
+}
 
 
 

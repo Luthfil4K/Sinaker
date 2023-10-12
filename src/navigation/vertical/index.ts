@@ -88,11 +88,11 @@ const navigation = (): VerticalNavItemsType => {
       path: '/task'
     },
 
-    // {
-    //   title: 'Daftar Mitra',
-    //   icon: FormatLetterCase,
-    //   path: '/mitra'
-    // },
+    {
+      title: 'Daftar Mitra',
+      icon: FormatLetterCase,
+      path: '/mitra'
+    },
 
     {
       sectionTitle: 'Perusahaan'

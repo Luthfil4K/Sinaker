@@ -1,3 +1,4 @@
+import { useState, useEffect, useRef } from 'react'
 import Grid from '@mui/material/Grid'
 import Typography from '@mui/material/Typography'
 import Button from '@mui/material/Button'
@@ -9,9 +10,12 @@ import { useRouter } from 'next/dist/client/router'
 
 import TableMitra from 'src/views/tables/TableMitra'
 
-const MitraListViews = () => {
+const MitraListViews = props => {
   const router = useRouter()
-  // const gaji = 90000
+
+  const [mitra, setMitra] = useState(props.data)
+  console.log(mitra)
+
   return (
     <>
       <Grid container spacing={5}>
@@ -26,7 +30,7 @@ const MitraListViews = () => {
         {/* <Typography>{gaji.toLocaleString('id-ID', { currency: 'IDR' })}</Typography> */}
         <Grid item md={12} xs={12}>
           <Box sx={{ width: '100%' }}>
-            <TableMitra></TableMitra>
+            <TableMitra data={mitra}></TableMitra>
           </Box>
         </Grid>
       </Grid>
