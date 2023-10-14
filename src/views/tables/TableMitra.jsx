@@ -1,5 +1,8 @@
 import { useState, useEffect, useRef } from 'react'
 
+// axios
+import axios from 'src/pages/api/axios'
+
 // ** MUI Imports
 import Typography from '@mui/material/Typography'
 import Card from '@mui/material/Card'
@@ -44,7 +47,7 @@ const TableMitra = props => {
   const [mitra, setMitra] = useState(props.data)
   const rows = mitra.map(row => ({
     id: row.id,
-    nik: row.nik,
+    nik: row.nik.toString(),
     name: row.name,
     jenisKelamin: row.jenisKelamin,
     tanggalLahir: row.tanggalLahir,
@@ -53,22 +56,24 @@ const TableMitra = props => {
     email: row.email,
     status: row.status
   }))
-  const handleDelete = () => {
-    Swal.fire({
-      title: 'Apa Anda Yakin?',
-      text: 'Untuk menghapus mitra ini!',
-      icon: 'warning',
-      showCancelButton: true,
-      confirmButtonColor: '#3085d6',
-      cancelButtonColor: '#d33',
-      confirmButtonText: 'Ya, Hapus mitra !'
-    }).then(result => {
-      if (result.isConfirmed) {
-        router.push('/mitra')
-      } else {
-        router.push('/mitra')
-      }
-    })
+  const handleDelete = async id => {
+    axios
+      .delete(`mitra/${id}`)
+      .then(async res => {
+        await Swal.fire({
+          icon: 'success',
+          title: 'Success',
+          text: 'Mitra Deleted'
+        })
+        router.reload()
+      })
+      .catch(err => {
+        Swal.fire({
+          icon: 'error',
+          title: 'Error',
+          text: 'Something went wrong'
+        })
+      })
   }
   const router = useRouter()
   const columns = [
@@ -112,12 +117,12 @@ const TableMitra = props => {
       ),
       minWidth: 215,
       flex: 1,
-      renderCell: () => (
+      renderCell: params => (
         <>
           <Button
             onClick={e => {
               e.preventDefault()
-              router.push('/mitra-edit')
+              router.push(`/mitra-edit/${params.row.id}`)
             }}
             type='submit'
             sx={{ mr: 1 }}
@@ -127,7 +132,27 @@ const TableMitra = props => {
             <PencilOutline />
           </Button>
 
-          <Button onClick={handleDelete} type='submit' sx={{ mr: 1 }} color='error' variant='text'>
+          <Button
+            onClick={() => {
+              Swal.fire({
+                title: 'Hapus Mitra?',
+                text: '',
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Ya, Hapus Mitra'
+              }).then(result => {
+                if (result.isConfirmed) {
+                  handleDelete(params.row.id)
+                }
+              })
+            }}
+            type='submit'
+            sx={{ mr: 1 }}
+            color='error'
+            variant='text'
+          >
             <DeleteOutline />
           </Button>
         </>

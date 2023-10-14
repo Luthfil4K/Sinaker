@@ -34,70 +34,94 @@ import { useRouter } from 'next/dist/client/router'
 import EyeOffOutline from 'mdi-material-ui/EyeOffOutline'
 import InputAdornment from '@mui/material/InputAdornment'
 
-const FormMitra = () => {
+const FormMitra = props => {
+  console.log(props.data)
   const router = useRouter()
   const CustomInputStart = forwardRef((props, ref) => {
     return <TextField fullWidth {...props} inputRef={ref} label='Tanggal Lahir' autoComplete='on' />
   })
 
-  const [selectedDate, setSelectedDate] = useState(null)
+  const [selectedDate, setSelectedDate] = useState(new Date(props.data.tanggalLahir))
 
   const [values, setValues] = useState({
-    mitraNama: '',
-    mitraNIK: '',
-    mitraJenisKelamin: '',
-    mitraTanggalLahir: '',
-    mitraUmur: '',
-    mitraPendidikan: '',
-    mitraEmail: '',
-    mitraStatus: ''
+    id: props.data.id,
+    mitraNama: props.data.name,
+    mitraNIK: props.data.nik,
+    mitraJenisKelamin: props.data.jenisKelamin,
+    mitraUmur: props.data.umur,
+    mitraPendidikan: props.data.pendidikan,
+    mitraEmail: props.data.email,
+    mitraStatus: props.data.status
   })
 
   const handleDateChange = date => {
     setSelectedDate(date)
-    setValues({ ...values, mitraTanggalLahir: new Date(date) })
     console.log(date)
   }
 
-  const handleAdd = async e => {
-    // console.log(values)
+  // const handleAdd = async e => {
+  //   // console.log(values)
+  //   e.preventDefault()
+
+  //   try {
+  //     while (true) {
+  //       const res = await axios.post(`/mitra/${props.data.id}`, data)
+
+  //       if (res.status === 201) {
+  //         Swal.fire({
+  //           title: 'Edit Mitra Success',
+  //           text: 'Tekan OK untuk lanjut',
+  //           icon: 'success',
+  //           confirmButtonColor: '#68B92E',
+  //           confirmButtonText: 'OK'
+  //         })
+  //         router.push('/mitra-add')
+  //       }
+
+  //       break
+  //     }
+  //   } catch (error) {
+  //     Swal.fire({
+  //       title: 'Edit Mitra Gagal',
+  //       text: error,
+  //       icon: 'error',
+  //       confirmButtonColor: '#d33',
+  //       confirmButtonText: 'OK'
+  //     })
+  //   }
+  // }
+
+  const handleEdit = e => {
     e.preventDefault()
-
-    try {
-      while (true) {
-        const res = await axios.post('/mitra', {
-          nik: values.mitraNIK,
-          name: values.mitraNama,
-          jenisKelamin: values.mitraJenisKelamin,
-          tanggalLahir: selectedDate,
-          umur: values.mitraUmur,
-          pendidikan: values.mitraPendidikan,
-          email: values.mitraEmail,
-          status: values.mitraStatus
-        })
-
-        if (res.status === 201) {
-          Swal.fire({
-            title: 'Tambah Mitra Success',
-            text: 'Tekan OK untuk lanjut',
-            icon: 'success',
-            confirmButtonColor: '#68B92E',
-            confirmButtonText: 'OK'
-          })
-          router.push('/mitra-add')
-        }
-
-        break
-      }
-    } catch (error) {
-      Swal.fire({
-        title: 'Tambah Mitra Gagal',
-        text: error,
-        icon: 'error',
-        confirmButtonColor: '#d33',
-        confirmButtonText: 'OK'
-      })
+    const data = {
+      nik: values.mitraNIK,
+      name: values.mitraNama,
+      jenisKelamin: values.mitraJenisKelamin,
+      tanggalLahir: new Date(selectedDate),
+      umur: values.mitraUmur,
+      pendidikan: values.mitraPendidikan,
+      email: values.mitraEmail,
+      status: values.mitraStatus
     }
+    axios
+      .put(`/mitra/${values.id}`, data)
+      .then(res => {
+        Swal.fire({
+          title: 'Success!',
+          text: 'Edit Mitra Berhasil',
+          icon: 'success',
+          confirmButtonText: 'Ok'
+        })
+        router.push(`/mitra`)
+      })
+      .catch(err => {
+        Swal.fire({
+          title: 'Error!',
+          text: 'Something went wrong',
+          icon: 'error',
+          confirmButtonText: 'Ok'
+        })
+      })
   }
 
   useEffect(() => {
@@ -114,7 +138,7 @@ const FormMitra = () => {
       <Card sx={{ padding: 4 }}>
         <Box sx={{ mb: 6 }}>
           <Typography variant='h5' sx={{ fontWeight: 600, marginBottom: 1.5 }}>
-            Tambah Mitra
+            Edit Mitra
           </Typography>
           <Typography variant='body2'>Fill this blank field below</Typography>
         </Box>
@@ -232,8 +256,8 @@ const FormMitra = () => {
           </Grid>
 
           <Link>
-            <Button onClick={handleAdd} fullWidth size='medium' variant='contained' sx={{ marginTop: 4 }}>
-              Tambah
+            <Button onClick={handleEdit} fullWidth size='medium' variant='contained' sx={{ marginTop: 4 }}>
+              Edit
             </Button>
           </Link>
         </form>

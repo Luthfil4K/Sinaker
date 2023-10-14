@@ -14,7 +14,6 @@ const MitraListViews = props => {
   const router = useRouter()
 
   const [mitra, setMitra] = useState(props.data)
-  console.log(mitra)
 
   return (
     <>

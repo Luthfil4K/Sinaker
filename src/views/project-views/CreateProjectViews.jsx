@@ -1,5 +1,5 @@
 // react import
-import { useState } from 'react'
+import { useState, forwardRef } from 'react'
 import * as React from 'react'
 
 // axios
@@ -32,6 +32,14 @@ import MenuItem from '@mui/material/MenuItem'
 import { DataGrid } from '@mui/x-data-grid'
 
 import TableAddParticipant from 'src/views/tables/TableAddParticipant'
+
+const CustomInputStart = forwardRef((props, ref) => {
+  return <TextField fullWidth {...props} inputRef={ref} label='Start Date' autoComplete='on' />
+})
+
+const CustomInputEnd = forwardRef((props, ref) => {
+  return <TextField fullWidth {...props} inputRef={ref} label='End Date' autoComplete='off' />
+})
 
 const CreateProjectViews = props => {
   const [dataUser, setDataUser] = useState(props.data)
@@ -237,7 +245,7 @@ const CreateProjectViews = props => {
               fullWidth
               multiline
               minRows={3}
-              label='Project Description'
+              label='Deskripsi Kegiatan'
               placeholder='Description'
               value={values.kegDesk}
               onChange={handleChange('kegDesk')}
@@ -245,7 +253,7 @@ const CreateProjectViews = props => {
             />
           </Grid>
 
-          <Grid item xs={12} sm={12} lg={6} display={'flex'} justifyContent={'end'}>
+          <Grid item xs={12} sm={12} lg={6}>
             <DatePickerWrapper>
               <DatePicker
                 sx={{ width: 1000 }}
@@ -257,7 +265,7 @@ const CreateProjectViews = props => {
                 onChange={handleDateChange}
                 dateFormat='dd/MM/yyyy'
                 className='custom-datepicker'
-                renderInput={params => <TextField {...params} fullWidth sx={{ width: 1000 }} />}
+                customInput={<CustomInputStart />}
                 name='tanggalMulai'
               />
             </DatePickerWrapper>
@@ -276,6 +284,7 @@ const CreateProjectViews = props => {
                 onChange={handleDateChangeE}
                 dateFormat='dd/MM/yyyy'
                 className='custom-datepicker'
+                customInput={<CustomInputEnd />}
                 name='tanggalBerakhir'
               />
             </DatePickerWrapper>

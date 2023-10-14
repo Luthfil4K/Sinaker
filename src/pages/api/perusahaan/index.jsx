@@ -24,13 +24,6 @@ export default async function handler(req, res) {
         }
       })
 
-      // const pk = await prisma.perusahaanGroup.create({
-      //   data: {
-      //     perusahaanId: 14,
-      //     groupPerusahaanId: 1
-      //   }
-      // })
-
       participants.map(async participant => {
         if (participant.checked) {
           const pk = await prisma.perusahaanGroup.create({

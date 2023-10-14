@@ -33,7 +33,7 @@ import InputAdornment from '@mui/material/InputAdornment'
 
 import { useRouter } from 'next/router'
 
-const PeopleAddViews = () => {
+const PerusahaanAddViews = () => {
   const router = useRouter()
   const [showPassword, setShowPassword] = useState(false)
   const handleClickShowPassword = () => setShowPassword(show => !show)
@@ -226,4 +226,4 @@ const PeopleAddViews = () => {
   )
 }
 
-export default PeopleAddViews
+export default PerusahaanAddViews

@@ -13,6 +13,7 @@ const TaskManageAdd = ({ data }) => {
         data={project.project}
         dataPerusahaan={project.companies}
         dataAllPerusahaan={project.perusahaans}
+        dataMitra={project.mitras}
       ></TaskManageAddViews>
     </>
   )
@@ -79,10 +80,21 @@ export async function getServerSideProps(context) {
     }
   })
 
+  let mitras
+
+  mitras = await prisma.mitra.findMany({
+    where: {
+      id: {
+        not: 0
+      }
+    }
+  })
+
   const data = {
     project,
     companies,
-    perusahaans
+    perusahaans,
+    mitras
   }
 
   return {

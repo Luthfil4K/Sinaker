@@ -1,5 +1,5 @@
 import * as React from 'react'
-import { useState, useEffect } from 'react'
+import { useState, useEffect, forwardRef } from 'react'
 
 // axios
 import axios from 'src/pages/api/axios'
@@ -36,6 +36,9 @@ import { DataGrid } from '@mui/x-data-grid'
 import TableAddParticipant from 'src/views/tables/TableAddParticipant'
 
 const TaskManageAddViews = propss => {
+  const CustomInputStart = forwardRef((props, ref) => {
+    return <TextField fullWidth {...props} inputRef={ref} label='Tanggal Berakhir' autoComplete='on' />
+  })
   const session = useSession()
   const [project, setProject] = useState(propss.data)
   const [show, setShow] = useState(0)
@@ -69,7 +72,7 @@ const TaskManageAddViews = propss => {
     })
     setParticipants(dataGroup)
   }, [values])
-  console.log(participants)
+  // console.log(participants)
 
   const handleChange = props => event => {
     setValues({ ...values, [props]: event.target.value })
@@ -213,6 +216,15 @@ const TaskManageAddViews = propss => {
     })
   )
 
+  const [dataMitra, setDataMitra] = useState(
+    propss.dataMitra.map(meetra => {
+      return {
+        ...meetra,
+        checked: false
+      }
+    })
+  )
+
   // const rows = company.map(perusahaan => ({
   //   id: perusahaan.id,
   //   nama: perusahaan.nama,
@@ -234,6 +246,20 @@ const TaskManageAddViews = propss => {
       target: 0,
       hasilPencacahan: '',
       tanggal: new Date()
+    }))
+  )
+
+  const [rowsM, setRowsM] = useState(
+    dataMitra.map(row => ({
+      id: row.id,
+      nik: row.nik.toString(),
+      name: row.name,
+      jenisKelamin: row.jenisKelamin,
+      tanggalLahir: row.tanggalLahir,
+      umur: row.umur,
+      pendidikan: row.pendidikan,
+      email: row.email,
+      status: row.status
     }))
   )
 
@@ -344,6 +370,66 @@ const TaskManageAddViews = propss => {
     }
   ]
 
+  const columnsM = [
+    {
+      field: 'checked',
+      sortable: true,
+      renderHeader: () => (
+        <FormControlLabel
+          control={
+            <Checkbox
+              checked={rowsM.filter(participant => participant.checked === true).length === rowsM.length}
+              onChange={e => {
+                let checked = e.target.checked
+                setRowsM(
+                  rowsM.map(participant => {
+                    return {
+                      ...participant,
+                      checked: checked
+                    }
+                  })
+                )
+              }}
+            />
+          }
+          label='All'
+        />
+      ),
+      minWidth: 30,
+      renderCell: params => (
+        <FormControlLabel
+          control={
+            <Checkbox
+              checked={params.value}
+              onChange={e => {
+                let checked = e.target.checked
+                setRowsM(
+                  rowsM.map(participant => {
+                    if (participant.id === params.id) {
+                      participant.checked = checked
+                    }
+
+                    return participant
+                  })
+                )
+              }}
+            />
+          }
+          label=''
+        />
+      ),
+      align: 'left'
+    },
+    { field: 'nik', headerName: 'NIK', width: 200 },
+    { field: 'name', headerName: 'Nama', width: 200 },
+    { field: 'jenisKelamin', headerName: 'Jenis Kelamin', width: 150 },
+    { field: 'tanggalLahir', headerName: 'Tanggal Lahir', type: 'string', width: 150 },
+    { field: 'umur', headerName: 'Umur', type: 'string', width: 150 },
+    { field: 'pendidikan', headerName: 'Pendidikan', type: 'string', width: 150 },
+    { field: 'email', headerName: 'Email', width: 160 },
+    { field: 'status', headerName: 'Mitra Internal/External ', type: 'string', width: 140 }
+  ]
+
   return (
     <>
       <Card sx={{ padding: 4 }}>
@@ -383,7 +469,7 @@ const TaskManageAddViews = propss => {
                 </Select>
               </FormControl>
             </Grid>
-            {session.status === 'authenticated' && (session.data.uid === 99 || values.subKegJenis === 65) && (
+            {session.status === 'authenticated' && (session.data.uid === 9988 || values.subKegJenis === 65) && (
               <>
                 <Grid item md={6} xs={12}>
                   <FormControl fullWidth>
@@ -441,6 +527,7 @@ const TaskManageAddViews = propss => {
                   placeholderText='Tanggal Berakhir'
                   value={selectedDateE}
                   onChange={handleDateChangeE}
+                  customInput={<CustomInputStart />}
                   dateFormat='dd/MM/yyyy'
                   className='custom-datepicker'
                 />
@@ -461,7 +548,7 @@ const TaskManageAddViews = propss => {
               <Divider mt={2}></Divider>
             </Grid>
 
-            {session.status === 'authenticated' && (session.data.uid === 99 || values.subKegJenisSample === 1) && (
+            {session.status === 'authenticated' && (session.data.uid === 999 || values.subKegJenisSample === 1) && (
               <>
                 <Grid item md={6} xs={12}>
                   <Typography variant={'h6'} mb={4}>
@@ -508,6 +595,42 @@ const TaskManageAddViews = propss => {
                           experimentalFeatures={{ newEditingApi: true }}
                           sx={{
                             height: rows.length > 3 ? '70vh' : '45vh',
+                            overflowY: 'auto',
+                            width: '100%'
+                          }}
+                        />
+                      </Box>
+                    </Grid>
+                  </Grid>
+                </Grid>
+                <Grid item md={6} xs={12}>
+                  <Typography variant={'h6'} mb={4}>
+                    Peserta Kegiatan
+                  </Typography>
+                </Grid>
+                <Grid item md={12} xs={12}>
+                  <Grid container spacing={4}>
+                    <Grid item xs={12}>
+                      <Box sx={{ width: '100%' }}>
+                        <DataGrid
+                          initialState={{
+                            // filter: {
+                            //   filterModel: {
+                            //     items: [{ field: 'nama', value: 'antam' }]
+                            //   }
+                            // }
+                            sorting: {
+                              sortModel: [{ field: 'checked', sort: 'desc' }]
+                            }
+                          }}
+                          rows={rowsM}
+                          columns={columnsM}
+                          pprioritySize={5}
+                          rowsPerPpriorityOptions={[5]}
+                          disableSelectionOnClick
+                          experimentalFeatures={{ newEditingApi: true }}
+                          sx={{
+                            height: rowsM.length > 3 ? '70vh' : '45vh',
                             overflowY: 'auto',
                             width: '100%'
                           }}

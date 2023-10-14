@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, forwardRef } from 'react'
 import * as React from 'react'
 
 // axios
@@ -34,6 +34,13 @@ import TableProjectEditParticipant from 'src/views/tables/TableProjectEditPartic
 import CardProjectEdit from 'src/views/cards/CardProjectEdit'
 
 const ProjectEditViews = props => {
+  const CustomInputStart = forwardRef((props, ref) => {
+    return <TextField fullWidth {...props} inputRef={ref} label='Start Date' autoComplete='on' />
+  })
+
+  const CustomInputEnd = forwardRef((props, ref) => {
+    return <TextField fullWidth {...props} inputRef={ref} label='End Date' autoComplete='off' />
+  })
   const [dataUser, setDataUser] = useState(props.data.user)
   // console.log(dataUser)
   const [selectedDate, setSelectedDate] = useState(new Date(props.data.project.startdate))
@@ -219,7 +226,7 @@ const ProjectEditViews = props => {
             />
           </Grid>
 
-          <Grid item xs={12} sm={12} lg={6} display={'flex'} justifyContent={'end'}>
+          <Grid item xs={12} sm={12} lg={6}>
             <DatePickerWrapper>
               <DatePicker
                 sx={{ width: 1000 }}
@@ -229,9 +236,9 @@ const ProjectEditViews = props => {
                 placeholderText='Tanggal Mulai'
                 value={selectedDate}
                 onChange={handleDateChange}
+                customInput={<CustomInputStart />}
                 dateFormat='dd/MM/yyyy'
                 className='custom-datepicker'
-                renderInput={params => <TextField {...params} fullWidth sx={{ width: 1000 }} />}
                 name='tanggalMulai'
               />
             </DatePickerWrapper>
@@ -247,6 +254,7 @@ const ProjectEditViews = props => {
                 showMonthDropdown
                 placeholderText='Tanggal Berakhir'
                 value={selectedDateE}
+                customInput={<CustomInputEnd />}
                 onChange={handleDateChangeE}
                 dateFormat='dd/MM/yyyy'
                 className='custom-datepicker'

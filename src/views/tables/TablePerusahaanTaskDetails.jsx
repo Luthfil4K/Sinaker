@@ -50,9 +50,9 @@ function EditToolbar(props) {
 }
 
 const TableGroupPerusahaan = props => {
-  const [values, setValues] = useState(props.dataId)
-  console.log(props.dataId)
-  console.log(values)
+  const [idAja, setidAja] = useState(props.dataId)
+
+  console.log(idAja)
   const [participants, setParticipants] = useState(props.data)
   const apapa = props.dataProjectFungsi
   const initialRows = participants.map(row => ({
@@ -264,9 +264,27 @@ const TableGroupPerusahaan = props => {
     { field: 'persentase', headerName: 'Persentase', width: 100, editable: false },
     {
       field: 'hasilPencacahan',
-      headerName: 'Hasil Pencacahan',
+      headerName: 'Proses',
       type: 'singleSelect',
       valueOptions: ['Masuk', 'Menunggu Masuk', 'Tutup', 'Tidak Aktif', 'Tidak Ditemukan', 'Non Respon'],
+      width: 180,
+      editable: true
+    },
+    {
+      field: 'pml',
+      headerName: 'PML',
+      type: 'singleSelect',
+      valueOptions: ['PML1', 'PML2', 'PML2', 'PML3', 'PML4', 'PML5'],
+      values: [1, 2, 3, 4, 5, 6],
+      width: 180,
+      editable: true
+    },
+    {
+      field: 'pcl',
+      headerName: 'PCL',
+      type: 'singleSelect',
+      valueOptions: ['PCL1', 'PCL2', 'PCL3', 'PCL4', 'PCL5', 'PCL6'],
+      values: [1, 2, 3, 4, 5, 6],
       width: 180,
       editable: true
     },

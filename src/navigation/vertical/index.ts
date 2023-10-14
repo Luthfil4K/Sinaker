@@ -73,7 +73,7 @@ const navigation = (): VerticalNavItemsType => {
     },
     {
       title: 'Buat Kegiatan',
-      icon: FormatLetterCase,
+      icon: CreditCardOutline,
       path: '/create-project'
     },
 
@@ -86,12 +86,6 @@ const navigation = (): VerticalNavItemsType => {
       title: 'Sub Kegiatan',
       icon: CubeOutline,
       path: '/task'
-    },
-
-    {
-      title: 'Daftar Mitra',
-      icon: FormatLetterCase,
-      path: '/mitra'
     },
 
     {
@@ -117,9 +111,15 @@ const navigation = (): VerticalNavItemsType => {
     },
     {
       title: 'Daftar Perusahaan',
-      icon: Table,
+      icon: GoogleCirclesExtended,
       path: '/perusahaan'
+    },
+    {
+      title: 'Daftar Mitra',
+      icon: FormatLetterCase,
+      path: '/mitra'
     }
+
     // {
     //   sectionTitle: 'Pustaka'
     // },

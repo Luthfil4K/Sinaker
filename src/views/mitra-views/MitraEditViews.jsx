@@ -1,8 +1,11 @@
-import FormMitra from 'src/views/form-layouts/FormMitra'
-const MitraEditViews = () => {
+import { useState, useEffect } from 'react'
+
+import FormMitraEdit from 'src/views/form-layouts/FormMitraEdit'
+const MitraEditViews = props => {
+  const [mitra, setMira] = useState(props.data)
   return (
     <>
-      <FormMitra></FormMitra>
+      <FormMitraEdit data={mitra}></FormMitraEdit>
     </>
   )
 }
