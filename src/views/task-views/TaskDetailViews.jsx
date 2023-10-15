@@ -30,6 +30,8 @@ import CardTaskComment from 'src/views/cards/CardTaskComment'
 
 const TaskDetailViews = props => {
   const [participants, setParticipants] = useState(props.dataPerusahaan)
+  const [mitra, setMitra] = useState(props.dataMitra)
+  const [pegawai, setPegawai] = useState(props.dataPML)
   const session = useSession()
   const [values, setValues] = useState({
     id: props.data.id,
@@ -227,6 +229,8 @@ const TaskDetailViews = props => {
                 data={participants}
                 dataProjectFungsi={props.data.project.fungsi}
                 dataId={values.id}
+                dataMitra={mitra}
+                dataPML={pegawai}
               ></TablePerusahaanTaskDetails>
               // <Button type='submit' variant={'contained'} onClick={handleSimpan} fullWidth>
               //   Simpan

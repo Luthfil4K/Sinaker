@@ -17,8 +17,8 @@ export default async function handler(req, res) {
 
     return res.status(200).json({ success: true, data: taskPerusahaanProduksi })
   } else if (method === 'PUT') {
-    const { target, realisasi, duedate, hasilPencacahan } = req.body
-    console.log('bukan wo yg pasti')
+    const { target, realisasi, duedate, hasilPencacahan, pmlId, gajiPml, pclId, gajiPcl } = req.body
+    // console.log('bukan wo yg pasti' + pclId)
     try {
       console.log(target, realisasi, duedate, hasilPencacahan)
       const taskPerusahaanProduksi = await prisma.taskPerusahaanProduksi.update({
@@ -29,6 +29,10 @@ export default async function handler(req, res) {
           target: Number(target),
           realisasi: Number(realisasi),
           hasilPencacahan,
+          pmlId,
+          gajiPml,
+          pclId,
+          gajiPcl,
           duedate
         }
       })

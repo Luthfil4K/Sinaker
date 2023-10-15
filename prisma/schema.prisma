@@ -68,6 +68,7 @@ model Task {
   user        User          @relation("taskToDo", fields: [userId], references: [id], onDelete: Cascade, onUpdate: Cascade)
   userId      Int
   TaskPerusahaanProduksi    TaskPerusahaanProduksi[]
+  TaskPeserta       TaskPeserta[]
   
 }
 
@@ -84,6 +85,7 @@ model Perusahaan {
  
   TaskPerusahaanProduksi    TaskPerusahaanProduksi[]
   Perusahaangroup   PerusahaanGroup[]
+  
 
 }
 
@@ -109,11 +111,16 @@ model TaskPerusahaanProduksi {
  perusahaan        Perusahaan    @relation(fields: [perusahaanId], references: [id], onDelete: Cascade, onUpdate: Cascade)
  perusahaanId      Int
  target            Int           @db.Int
- //  nambah lagi buat pml pcl gaji
+ pmlId             Int           @db.Int
+ pclId             Int           @db.Int
+ gajiPml           Int           @db.Int
+ gajiPcl           Int           @db.Int
  realisasi         Int           @db.Int
  hasilPencacahan   String        @db.VarChar(128)
  duedate           DateTime      @db.Date
+ PesertaGaji       PesertaGaji[]
 }
+
 model Mitra {
   id             Int            @id @default(autoincrement())
   nik            String         @db.VarChar(128)
@@ -124,8 +131,27 @@ model Mitra {
   pendidikan     String         @db.VarChar(128)
   email          String         @db.VarChar(128)
   status         String         @default("internal") @db.VarChar(64)
+  TaskPeserta    TaskPeserta[]
+  PesertaGaji    PesertaGaji[]
  
 }
 
+model TaskPeserta {
+ id                Int           @id @default(autoincrement())
+ task              Task          @relation(fields: [taskId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+ taskId            Int
+ mitra             Mitra         @relation(fields: [mitraId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+ mitraId           Int
+}
+
+model PesertaGaji {
+ id                          Int                             @id @default(autoincrement())
+ taskPerusahaanProduksi      TaskPerusahaanProduksi          @relation(fields: [TaskPerusahaanProduksiId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+ TaskPerusahaanProduksiId    Int
+ mitra                       Mitra                           @relation(fields: [mitraId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+ mitraId                     Int
+ gaji                        Int                             @db.Int
+ dateGaji                    Int                             @db.Int
+} 
 
 

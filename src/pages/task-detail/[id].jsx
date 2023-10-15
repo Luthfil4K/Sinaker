@@ -6,10 +6,15 @@ import TaskDetailViews from 'src/views/task-views/TaskDetailViews'
 
 const TaskDetail = ({ data }) => {
   const [task, setTask] = useState(JSON.parse(data))
-  // console.log(task.perusahaanTask)
+  // console.log(task.mitraTask)
   return (
     <>
-      <TaskDetailViews data={task.task} dataPerusahaan={task.perusahaanTask}></TaskDetailViews>
+      <TaskDetailViews
+        data={task.task}
+        dataPerusahaan={task.perusahaanTask}
+        dataMitra={task.mitraTask}
+        dataPML={task.pegawai}
+      ></TaskDetailViews>
     </>
   )
 }
@@ -51,9 +56,29 @@ export async function getServerSideProps(context) {
       perusahaan: true
     }
   })
+
+  const mitraTask = await prisma.taskPeserta.findMany({
+    where: {
+      taskId: parseInt(context.params.id)
+    },
+    include: {
+      mitra: true
+    }
+  })
+
+  const pegawai = await prisma.user.findMany({
+    where: {
+      id: {
+        not: 99
+      }
+    }
+  })
+
   const data = {
     task,
-    perusahaanTask
+    perusahaanTask,
+    mitraTask,
+    pegawai
   }
 
   return {

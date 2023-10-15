@@ -41,27 +41,6 @@ export default async function handler(req, res) {
     } catch (error) {
       return res.status(400).json({ success: false })
     }
-
-    // if (isArchived) {
-    //   try {
-    //     const task = await prisma.task.update({
-    //       where: {
-    //         id: Number(id)
-    //       },
-    //       data: {
-    //         isArchived: isArchived
-    //       }
-    //     })
-
-    //     return res.status(200).json({ success: true, data: project })
-    //   } catch (error) {
-    //     if (error instanceof PrismaClientKnownRequestError) {
-    //       return res.status(400).json({ success: false, message: error.message })
-    //     }
-
-    //     return res.status(500).json({ success: false, message: error.message })
-    //   }
-    // }
   } else if (method === 'DELETE') {
     try {
       const task = await prisma.task.delete({

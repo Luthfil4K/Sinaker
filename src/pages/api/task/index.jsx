@@ -29,7 +29,8 @@ export default async function handler(req, res) {
       projectId,
       userId,
       notes,
-      participants
+      participants,
+      peserta
     } = req.body
 
     try {
@@ -61,10 +62,26 @@ export default async function handler(req, res) {
                 target: 0,
                 realisasi: 0,
                 hasilPencacahan: '',
-                duedate: participant.tanggal
+                duedate: participant.tanggal,
+                pmlId: 0,
+                pclId: 0,
+                gajiPml: 0,
+                gajiPcl: 0
               }
             })
           }
+        })
+
+        // buat add peserta disini
+
+        peserta.map(async peserta => {
+          console.log(peserta.id)
+          const tp = await prisma.TaskPeserta.create({
+            data: {
+              taskId: task.id,
+              mitraId: peserta.id
+            }
+          })
         })
       }
 

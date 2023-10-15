@@ -30,7 +30,7 @@ export async function getServerSideProps(context) {
   user = await prisma.user.findMany({
     where: {
       id: {
-        not: 0
+        not: 99
       }
     },
     include: {

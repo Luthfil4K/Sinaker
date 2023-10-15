@@ -12,6 +12,7 @@ import AddIcon from '@mui/icons-material/Add'
 import EditIcon from '@mui/icons-material/Edit'
 import DeleteIcon from '@mui/icons-material/DeleteOutlined'
 import SaveIcon from '@mui/icons-material/Save'
+import Typography from '@mui/material/Typography'
 import CancelIcon from '@mui/icons-material/Close'
 import {
   GridRowModes,
@@ -51,8 +52,18 @@ function EditToolbar(props) {
 
 const TableGroupPerusahaan = props => {
   const [idAja, setidAja] = useState(props.dataId)
+  const [mitra, setMitra] = useState(props.dataMitra)
+  const [pml, setPML] = useState(props.dataPML)
+  console.log(pml)
+  const optionPML = pml.map(pml => ({
+    value: pml.id,
+    label: pml.name
+  }))
+  const optionPCL = mitra.map(mi => ({
+    value: mi.mitra.id,
+    label: mi.mitra.name
+  }))
 
-  console.log(idAja)
   const [participants, setParticipants] = useState(props.data)
   const apapa = props.dataProjectFungsi
   const initialRows = participants.map(row => ({
@@ -63,22 +74,17 @@ const TableGroupPerusahaan = props => {
     kecamatan: row.perusahaan.kecamatan,
     alamat: row.perusahaan.alamat,
     target: row.target,
+    pmlId: row.pmlId,
+    gajiPml: row.gajiPml,
+    pclId: row.pclId,
+    gajiPcl: row.gajiPcl,
     realisasi: row.realisasi,
     persentase:
       row.target > 0 || row.target > 0 ? `${Math.round(100 * (Number(row.realisasi) / Number(row.target)))}%` : 0,
     hasilPencacahan: row.hasilPencacahan,
     tanggalDob: new Date(row.duedate)
   }))
-  // console.log(initialRows
-  const initialRow2s = [
-    {
-      id: randomId(),
-      name: randomTraderName(),
-      age: 25,
-      joinDate: randomCreatedDate(),
-      role: randomRole()
-    }
-  ]
+  console.log(initialRows)
 
   const [rows, setRows] = React.useState(initialRows)
   const [rowModesModel, setRowModesModel] = React.useState({})
@@ -95,10 +101,6 @@ const TableGroupPerusahaan = props => {
   }
 
   const handleSaveClick = id => () => {
-    // console.log(id)
-    // console.log(id - 1)
-    // console.log(rows[id - 1].id)
-    // console.log(rows)
     setRowModesModel({ ...rowModesModel, [id]: { mode: GridRowModes.View } })
     const jenisSub = {
       64: { namaJenisSub: 'Persiapan', color: 'warning' },
@@ -184,7 +186,11 @@ const TableGroupPerusahaan = props => {
       nama: updatedRow.nama ? updatedRow.nama : '',
       desa: updatedRow.desa ? updatedRow.desa : '',
       kecamatan: updatedRow.kecamatan ? updatedRow.kecamatan : '',
-      alamat: updatedRow.alamat ? updatedRow.alamat : ''
+      alamat: updatedRow.alamat ? updatedRow.alamat : '',
+      pmlId: updatedRow.pmlId ? updatedRow.pmlId : 0,
+      gajiPml: updatedRow.gajiPml ? updatedRow.gajiPml : 0,
+      pclId: updatedRow.pclId ? updatedRow.pclId : 0,
+      gajiPcl: updatedRow.gajiPcl ? updatedRow.gajiPml : 0
     }
 
     if (updatedRow.id < 100000) {
@@ -271,23 +277,32 @@ const TableGroupPerusahaan = props => {
       editable: true
     },
     {
-      field: 'pml',
+      field: 'pmlId',
       headerName: 'PML',
       type: 'singleSelect',
-      valueOptions: ['PML1', 'PML2', 'PML2', 'PML3', 'PML4', 'PML5'],
-      values: [1, 2, 3, 4, 5, 6],
+      valueOptions: optionPML,
+
       width: 180,
       editable: true
     },
     {
-      field: 'pcl',
+      field: 'gajiPml',
+      headerName: 'Gaji PML',
+      type: 'number',
+
+      width: 120,
+      editable: true
+    },
+    {
+      field: 'pclId',
       headerName: 'PCL',
       type: 'singleSelect',
-      valueOptions: ['PCL1', 'PCL2', 'PCL3', 'PCL4', 'PCL5', 'PCL6'],
-      values: [1, 2, 3, 4, 5, 6],
+      valueOptions: optionPCL,
+
       width: 180,
       editable: true
     },
+    { field: 'gajiPcl', headerName: 'Gaji PCL', type: 'number', width: 120, editable: true },
     {
       field: 'tanggalDob',
       headerName: 'Tanggal Terima Dok Dikab',
@@ -295,14 +310,7 @@ const TableGroupPerusahaan = props => {
       width: 180,
       editable: true
     },
-    // {
-    //   field: 'role',
-    //   headerName: 'Department',
-    //   width: 220,
-    //   editable: true,
-    //   type: 'singleSelect',
-    //   valueOptions: ['Market', 'Finance', 'Development']
-    // },
+
     {
       field: 'actions',
       type: 'actions',

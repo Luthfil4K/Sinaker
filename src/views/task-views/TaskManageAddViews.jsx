@@ -113,6 +113,12 @@ const TaskManageAddViews = propss => {
 
   const handleAddTask = async e => {
     e.preventDefault()
+    let dataPCL = []
+    rowsM.map(a => {
+      if (a.checked) {
+        dataPCL.push(a)
+      }
+    })
 
     try {
       while (true) {
@@ -124,6 +130,7 @@ const TaskManageAddViews = propss => {
           duedate: values.subKegDl,
           jenisSample: values.subKegJenis == 65 ? values.subKegJenisSample : 0,
           participants: rows,
+          peserta: dataPCL,
           description: values.subKegDesk,
           realisasi: 0,
           month: parseInt(values.subKegMonth),
@@ -160,7 +167,7 @@ const TaskManageAddViews = propss => {
       }
     } catch (error) {
       Swal.fire({
-        title: 'Tambah Pegawai Gagal',
+        title: 'Tambah Sub Kegiatan Gagal',
         text: error,
         icon: 'error',
         confirmButtonColor: '#d33',
