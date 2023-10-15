@@ -54,10 +54,7 @@ const TableGroupPerusahaan = props => {
   const [idAja, setidAja] = useState(props.dataId)
   const [mitra, setMitra] = useState(props.dataMitra)
   const [pml, setPML] = useState(props.dataPML)
-  const fungsi = props.dataProjectFungsi
-  const jenisSample = props.dataTaskSample
-  console.log('ini fungsi: ' + fungsi)
-  console.log('ini jenisSample: ' + jenisSample)
+  console.log(pml)
   const optionPML = pml.map(pml => ({
     value: pml.id,
     label: pml.name
@@ -72,39 +69,10 @@ const TableGroupPerusahaan = props => {
   const initialRows = participants.map(row => ({
     id: row.id,
     kip: row.perusahaan.kip,
-    nama: row.nama,
-    // fungsi === 4 || fungsi === 5 //produksi distribusi
-    //   ? row.nama
-    //   : (fungsi === 6 && jenisSample === 1) || (fungsi === 7 && jenisSample === 1) //nerwilis ipds responden
-    //   ? row.nama
-    //   : fungsi === 6 && jenisSample === 0 // Nerwilis Dok
-    //   ? row.nbs
-    //   : fungsi === 3 //Sosial
-    //   ? row.nks
-    //   : fungsi === 7 && jenisSample === 0 //IPDS Dok
-    //   ? row.idSls
-    //   : '',
-    desa: row.desa,
-    namadesa: row.namadesa,
-    kecamatan: row.kecamatan,
-    namaKec: row.namaKec,
-    alamat: row.alamat,
-    // fungsi === 4 || fungsi === 5
-    //   ? row.alamat
-    //   : fungsi === 3 || (fungsi === 7 && jenisSample === 0) //Sosial or IPDS dokumen
-    //   ? row.nbs
-    //   : fungsi === 6 && jenisSample === 0 // Nerwilis Dok
-    //   ? row.idSls
-    //   : fungsi === 7 && jenisSample === 1 // IPDS Responden
-    //   ? row.idSbr
-    //   : fungsi === 6 && jenisSample === 1 //Nerwilis responden
-    //   ? row.nus
-    //   : '',
-    nbs: row.nbs,
-    idSls: row.idSls,
-    idSbr: row.idSbr,
-    nks: row.nks,
-    nus: row.nus,
+    nama: row.perusahaan.nama,
+    desa: row.perusahaan.desa,
+    kecamatan: row.perusahaan.kecamatan,
+    alamat: row.perusahaan.alamat,
     target: row.target,
     pmlId: row.pmlId,
     gajiPml: row.gajiPml,
@@ -217,19 +185,12 @@ const TableGroupPerusahaan = props => {
       kip: updatedRow.kip ? updatedRow.kip : '',
       nama: updatedRow.nama ? updatedRow.nama : '',
       desa: updatedRow.desa ? updatedRow.desa : '',
-      namadesa: updatedRow.namadesa ? updatedRow.namadesa : '',
       kecamatan: updatedRow.kecamatan ? updatedRow.kecamatan : '',
-      namaKec: updatedRow.namaKec ? updatedRow.namaKec : '',
       alamat: updatedRow.alamat ? updatedRow.alamat : '',
       pmlId: updatedRow.pmlId ? updatedRow.pmlId : 0,
       gajiPml: updatedRow.gajiPml ? updatedRow.gajiPml : 0,
       pclId: updatedRow.pclId ? updatedRow.pclId : 0,
-      gajiPcl: updatedRow.gajiPcl ? updatedRow.gajiPml : 0,
-      nbs: updatedRow.nbs ? updatedRow.nbs : '',
-      idSls: updatedRow.idSls ? updatedRow.idSls : '',
-      idSbr: updatedRow.idSbr ? updatedRow.idSbr : '',
-      nks: updatedRow.nks ? updatedRow.nks : '',
-      nus: updatedRow.nus ? updatedRow.nus : ''
+      gajiPcl: updatedRow.gajiPcl ? updatedRow.gajiPml : 0
     }
 
     if (updatedRow.id < 100000) {
@@ -261,45 +222,24 @@ const TableGroupPerusahaan = props => {
         })
       }
     } else {
-      if (fungsi === 3 || fungsi === 4) {
-        axios
-          .post(`/task-perusahaan/addWoDB`, data)
-          .then(res => {
-            Swal.fire({
-              title: 'Success!',
-              text: 'Berhasil disimpan',
-              icon: 'success',
-              confirmButtonText: 'Ok'
-            })
+      axios
+        .post(`/perusahaan/addWoDB`, data)
+        .then(res => {
+          Swal.fire({
+            title: 'Success!',
+            text: 'Berhasil disimpan',
+            icon: 'success',
+            confirmButtonText: 'Ok'
           })
-          .catch(err => {
-            Swal.fire({
-              title: 'Error!',
-              text: 'Something went wrong',
-              icon: 'error',
-              confirmButtonText: 'Ok'
-            })
+        })
+        .catch(err => {
+          Swal.fire({
+            title: 'Error!',
+            text: 'Something went wrong',
+            icon: 'error',
+            confirmButtonText: 'Ok'
           })
-      } else if (fungsi === 5 || fungsi === 6 || fungsi === 7) {
-        axios
-          .post(`/task-perusahaan`, data)
-          .then(res => {
-            Swal.fire({
-              title: 'Success!',
-              text: 'Berhasil disimpan',
-              icon: 'success',
-              confirmButtonText: 'Ok'
-            })
-          })
-          .catch(err => {
-            Swal.fire({
-              title: 'Error!',
-              text: 'Something went wrong',
-              icon: 'error',
-              confirmButtonText: 'Ok'
-            })
-          })
-      }
+        })
     }
 
     // Update state rows
@@ -313,66 +253,18 @@ const TableGroupPerusahaan = props => {
   }
 
   const columns = [
-    { field: 'kecamatan', headerName: 'Kode Kecamatan', width: 80, editable: true },
-    { field: 'namaKec', headerName: 'Nama Kecamatan', width: 80, editable: true },
-    { field: 'desa', headerName: 'Kode Desa', width: 80, editable: true },
-    { field: 'namadesa', headerName: 'Nama Desa ', width: 80, editable: true },
     {
-      field:
-        fungsi === 4 || fungsi === 5 //Produksi or Distribusi
-          ? 'alamat'
-          : fungsi === 3 || (fungsi === 7 && jenisSample === 0) //Sosial or IPDS dokumen
-          ? 'nbs'
-          : fungsi === 6 && jenisSample === 0 // Nerwilis Dok
-          ? 'idSls'
-          : fungsi === 7 && jenisSample === 1 // IPDS Responden
-          ? 'idSbr'
-          : fungsi === 6 && jenisSample === 1 //Nerwilis responden
-          ? 'nus'
-          : '',
-      headerName:
-        fungsi === 4 || fungsi === 5 //Produksi or Distribusi
-          ? 'Alamat'
-          : fungsi === 3 || (fungsi === 7 && jenisSample === 0) //Sosial or IPDS dokumen
-          ? 'NBS'
-          : fungsi === 6 && jenisSample === 0 // Nerwilis Dok
-          ? 'ID SLS'
-          : fungsi === 7 && jenisSample === 1 // IPDS Responden
-          ? 'ID SBR'
-          : fungsi === 6 && jenisSample === 1 //Nerwilis responden
-          ? 'NUS'
-          : '',
-      width: 200,
+      field: 'kip',
+      headerName: 'KIP',
+      width: 100,
+      align: 'left',
+      headerAlign: 'left',
       editable: true
     },
-    {
-      field:
-        fungsi === 4 || fungsi === 5 //Produksi or Distribusi
-          ? 'nama'
-          : (fungsi === 6 && jenisSample === 1) || (fungsi === 7 && jenisSample === 1) //NerwilisResponden or IPDS Responden
-          ? 'nama'
-          : fungsi === 6 && jenisSample === 0 // Nerwilis Dok
-          ? 'nbs'
-          : fungsi === 3 //Sosial
-          ? 'nks'
-          : fungsi === 7 && jenisSample === 0 //IPDS Dok
-          ? 'idSls'
-          : '',
-      headerName:
-        fungsi === 4 || fungsi === 5 //Produksi or Distribusi
-          ? 'Nama Perusahaan'
-          : (fungsi === 6 && jenisSample === 1) || (fungsi === 7 && jenisSample === 1) //NerwilisResponden or IPDS Responden
-          ? 'Nama Perusahaan'
-          : fungsi === 6 && jenisSample === 0 // Nerwilis Dok
-          ? 'NBS'
-          : fungsi === 3 //Sosial
-          ? 'NKS'
-          : fungsi === 7 && jenisSample === 0 //IPDS Dok
-          ? 'ID SLS'
-          : '',
-      width: 200,
-      editable: true
-    },
+    { field: 'nama', headerName: 'Name', width: 200, editable: true },
+    { field: 'desa', headerName: 'Desa', width: 80, editable: true },
+    { field: 'kecamatan', headerName: 'Kecamatan', width: 80, editable: true },
+    { field: 'alamat', headerName: 'Alamat', width: 200, editable: true },
     { field: 'realisasi', headerName: 'Realisasi', width: 100, editable: true },
     { field: 'target', headerName: 'Target', width: 100, editable: true },
     { field: 'persentase', headerName: 'Persentase', width: 100, editable: false },

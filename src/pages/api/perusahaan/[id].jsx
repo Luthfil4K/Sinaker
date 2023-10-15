@@ -17,7 +17,27 @@ export default async function handler(req, res) {
 
     return res.status(200).json({ success: true, data: taskPerusahaanProduksi })
   } else if (method === 'PUT') {
-    const { target, realisasi, duedate, hasilPencacahan, pmlId, gajiPml, pclId, gajiPcl } = req.body
+    const {
+      target,
+      realisasi,
+      duedate,
+      hasilPencacahan,
+      pmlId,
+      gajiPml,
+      pclId,
+      gajiPcl,
+      idSls,
+      nbs,
+      nks,
+      idSbr,
+      nus,
+      nama,
+      desa,
+      namadesa,
+      kecamatan,
+      namaKec,
+      alamat
+    } = req.body
     // console.log('bukan wo yg pasti' + pclId)
     try {
       console.log(target, realisasi, duedate, hasilPencacahan)
@@ -33,7 +53,18 @@ export default async function handler(req, res) {
           gajiPml,
           pclId,
           gajiPcl,
-          duedate
+          duedate,
+          idSls,
+          nbs,
+          nks,
+          idSbr,
+          nus,
+          nama,
+          desa,
+          namadesa,
+          kecamatan,
+          namaKec,
+          alamat
         }
       })
 

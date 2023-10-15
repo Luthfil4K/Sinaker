@@ -52,7 +52,7 @@ const TaskManageAddViews = propss => {
     subKegTarget: '',
     subKegUnitTarget: '',
     subKegJenisSample: '',
-    subKegSamplePerusahaan: 1,
+    subKegSamplePerusahaan: 0,
     subKegDl: '',
     subKegDesk: '',
     subKegProjectId: project.id,
@@ -194,12 +194,9 @@ const TaskManageAddViews = propss => {
     },
     {
       id: 65,
-      nama: 'Pelaksanaan'
+      nama: 'Lapangan'
     },
-    {
-      id: 66,
-      nama: 'Pengawasan '
-    },
+
     {
       id: 67,
       nama: 'Pengolahan '
@@ -246,7 +243,9 @@ const TaskManageAddViews = propss => {
       id: perusahaan.id,
       nama: perusahaan.nama,
       desa: perusahaan.desa,
+      namaDesa: perusahaan.namaDesa,
       kecamatan: perusahaan.kecamatan,
+      namaKec: perusahaan.namaKec,
       alamat: perusahaan.alamat,
       checked: perusahaan.checked,
       realisasi: 0,
@@ -610,6 +609,10 @@ const TaskManageAddViews = propss => {
                     </Grid>
                   </Grid>
                 </Grid>
+              </>
+            )}
+            {session.status === 'authenticated' && (session.data.uid === 9988 || values.subKegJenis === 65) && (
+              <>
                 <Grid item md={6} xs={12}>
                   <Typography variant={'h6'} mb={4}>
                     Peserta Kegiatan
@@ -621,11 +624,6 @@ const TaskManageAddViews = propss => {
                       <Box sx={{ width: '100%' }}>
                         <DataGrid
                           initialState={{
-                            // filter: {
-                            //   filterModel: {
-                            //     items: [{ field: 'nama', value: 'antam' }]
-                            //   }
-                            // }
                             sorting: {
                               sortModel: [{ field: 'checked', sort: 'desc' }]
                             }

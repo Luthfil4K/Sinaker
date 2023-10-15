@@ -18,7 +18,7 @@ const statusObj = {
 const jenisSub = {
   64: { namaJenisSub: 'Persiapan', color: 'warning' },
   66: { namaJenisSub: 'Pelaksanaan', color: 'warning' },
-  65: { namaJenisSub: 'Pengawasan', color: 'warning' },
+  65: { namaJenisSub: 'Lapangan', color: 'warning' },
   67: { namaJenisSub: 'Pengolahan', color: 'warning' },
   68: { namaJenisSub: 'Evaluasi', color: 'warning' },
   69: { namaJenisSub: 'Diseminasi', color: 'warning' }

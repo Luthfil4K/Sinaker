@@ -74,6 +74,8 @@ export async function getServerSideProps(context) {
       kip: true,
       nama: true,
       desa: true,
+      namaDesa: true,
+      namaKec: true,
       kecamatan: true,
       kegiatan: true,
       alamat: true

@@ -39,8 +39,10 @@ const TaskDetailViews = props => {
     realisasi: props.data.realisasi,
     notes: props.data.notes,
     notesSubKeg: props.data.notes,
-    jenisKeg: props.data.jenisKeg
+    jenisKeg: props.data.jenisKeg,
+    jenisSample: props.data.jenisSample
   })
+  console.log(values)
 
   const handleChange = props => event => {
     setValues({ ...values, [props]: event.target.value })
@@ -231,6 +233,7 @@ const TaskDetailViews = props => {
                 dataId={values.id}
                 dataMitra={mitra}
                 dataPML={pegawai}
+                dataTaskSample={values.jenisSample}
               ></TablePerusahaanTaskDetails>
               // <Button type='submit' variant={'contained'} onClick={handleSimpan} fullWidth>
               //   Simpan

@@ -59,6 +59,12 @@ export default async function handler(req, res) {
               data: {
                 taskId: task.id,
                 perusahaanId: participant.id,
+                nama: participant.nama,
+                desa: participant.desa,
+                namadesa: participant.namaDesa,
+                kecamatan: participant.kecamatan,
+                namaKec: participant.namaKec,
+                alamat: participant.alamat,
                 target: 0,
                 realisasi: 0,
                 hasilPencacahan: '',
@@ -66,7 +72,17 @@ export default async function handler(req, res) {
                 pmlId: 0,
                 pclId: 0,
                 gajiPml: 0,
-                gajiPcl: 0
+                gajiPcl: 0,
+                idSls: '',
+                nbs: '',
+                nks: '',
+                idSbr: '',
+                nus: ''
+                // idSls             String        @db.VarChar(128)
+                // nbs               String        @db.VarChar(128)
+                // nks               String        @db.VarChar(128)
+                // idSbr             String        @db.VarChar(128)
+                // nus               String        @db.VarChar(128)
               }
             })
           }

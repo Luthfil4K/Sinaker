@@ -82,7 +82,6 @@ model Perusahaan {
   namaKec           String        @db.VarChar(128)
   alamat            String        @db.VarChar(128)
   kegiatan          String        @db.VarChar(128)
- 
   TaskPerusahaanProduksi    TaskPerusahaanProduksi[]
   Perusahaangroup   PerusahaanGroup[]
   
@@ -116,7 +115,18 @@ model TaskPerusahaanProduksi {
  gajiPml           Int           @db.Int
  gajiPcl           Int           @db.Int
  realisasi         Int           @db.Int
+ desa              String        @db.VarChar(128)
+ namadesa          String        @db.VarChar(128)
+ kecamatan         String        @db.VarChar(128)
+ namaKec           String        @db.VarChar(128)
+ nama              String        @db.VarChar(128)
+ alamat            String        @db.VarChar(128)
  hasilPencacahan   String        @db.VarChar(128)
+ idSls             String        @db.VarChar(128)
+ nbs               String        @db.VarChar(128)
+ nks               String        @db.VarChar(128)
+ idSbr             String        @db.VarChar(128)
+ nus               String        @db.VarChar(128)
  duedate           DateTime      @db.Date
  PesertaGaji       PesertaGaji[]
 }
