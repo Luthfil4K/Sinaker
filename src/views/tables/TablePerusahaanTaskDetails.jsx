@@ -8,6 +8,7 @@ import * as React from 'react'
 import { useState, useEffect } from 'react'
 import Box from '@mui/material/Box'
 import Button from '@mui/material/Button'
+import Card from '@mui/material/Card'
 import AddIcon from '@mui/icons-material/Add'
 import EditIcon from '@mui/icons-material/Edit'
 import DeleteIcon from '@mui/icons-material/DeleteOutlined'
@@ -224,7 +225,7 @@ const TableGroupPerusahaan = props => {
       pmlId: updatedRow.pmlId ? updatedRow.pmlId : 0,
       gajiPml: updatedRow.gajiPml ? updatedRow.gajiPml : 0,
       pclId: updatedRow.pclId ? updatedRow.pclId : 0,
-      gajiPcl: updatedRow.gajiPcl ? updatedRow.gajiPml : 0,
+      gajiPcl: updatedRow.gajiPcl ? updatedRow.gajiPcl : 0,
       nbs: updatedRow.nbs ? updatedRow.nbs : '',
       idSls: updatedRow.idSls ? updatedRow.idSls : '',
       idSbr: updatedRow.idSbr ? updatedRow.idSbr : '',
@@ -313,10 +314,10 @@ const TableGroupPerusahaan = props => {
   }
 
   const columns = [
-    { field: 'kecamatan', headerName: 'Kode Kecamatan', width: 80, editable: true },
-    { field: 'namaKec', headerName: 'Nama Kecamatan', width: 80, editable: true },
-    { field: 'desa', headerName: 'Kode Desa', width: 80, editable: true },
-    { field: 'namadesa', headerName: 'Nama Desa ', width: 80, editable: true },
+    { field: 'kecamatan', headerName: 'Kode Kecamatan', width: 130, editable: true },
+    { field: 'namaKec', headerName: 'Nama Kecamatan', width: 130, editable: true },
+    { field: 'desa', headerName: 'Kode Desa', width: 130, editable: true },
+    { field: 'namadesa', headerName: 'Nama Desa ', width: 130, editable: true },
     {
       field:
         fungsi === 4 || fungsi === 5 //Produksi or Distribusi
@@ -464,40 +465,42 @@ const TableGroupPerusahaan = props => {
 
   return (
     <>
-      <Box
-        sx={{
-          overflowX: 'auto',
-          height: 500,
-          width: '100%',
-          '& .actions': {
-            color: 'text.secondary'
-          },
-          '& .textPrimary': {
-            color: 'text.primary'
-          }
-        }}
-      >
-        <DataGrid
-          initialState={{
-            pagination: { paginationModel: { pageSize: 10 } }
+      <Card>
+        <Box
+          sx={{
+            overflowX: 'auto',
+            height: 500,
+            width: '100%',
+            '& .actions': {
+              color: 'text.secondary'
+            },
+            '& .textPrimary': {
+              color: 'text.primary'
+            }
           }}
-          pageSizeOptions={[10, 15, 25]}
-          rowHeight={35}
-          rows={rows}
-          columns={columns}
-          editMode='row'
-          rowModesModel={rowModesModel}
-          onRowModesModelChange={handleRowModesModelChange}
-          onRowEditStop={handleRowEditStop}
-          processRowUpdate={processRowUpdate}
-          slots={{
-            toolbar: EditToolbar
-          }}
-          slotProps={{
-            toolbar: { setRows, setRowModesModel }
-          }}
-        />
-      </Box>
+        >
+          <DataGrid
+            initialState={{
+              pagination: { paginationModel: { pageSize: 10 } }
+            }}
+            pageSizeOptions={[10, 15, 25]}
+            rowHeight={35}
+            rows={rows}
+            columns={columns}
+            editMode='row'
+            rowModesModel={rowModesModel}
+            onRowModesModelChange={handleRowModesModelChange}
+            onRowEditStop={handleRowEditStop}
+            processRowUpdate={processRowUpdate}
+            slots={{
+              toolbar: EditToolbar
+            }}
+            slotProps={{
+              toolbar: { setRows, setRowModesModel }
+            }}
+          />
+        </Box>
+      </Card>
     </>
   )
 }

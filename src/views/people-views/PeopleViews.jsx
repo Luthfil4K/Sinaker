@@ -10,14 +10,10 @@ import { useState, useEffect, useRef } from 'react'
 
 const PeopleViews = props => {
   const router = useRouter()
-  const [cardP, setCardP] = useState(
-    props.data.map(data => {
-      return {
-        ...data
-      }
-    })
-  )
-  // console.log(cardP)
+  const [cardP, setCardP] = useState(props.data)
+  const [dataTpp, setdataTpp] = useState(props.dataTpp)
+  // console.log(dataTpp)
+
   return (
     <>
       <Grid container spacing={5}>
@@ -31,7 +27,7 @@ const PeopleViews = props => {
         </Grid>
         <Grid item md={12} xs={12}>
           <Box sx={{ width: '100%' }}>
-            <TablePeople dataUser={cardP}></TablePeople>
+            <TablePeople dataUser={cardP} dataTpp={dataTpp}></TablePeople>
           </Box>
         </Grid>
       </Grid>

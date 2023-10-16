@@ -249,7 +249,7 @@ const FormMitra = props => {
                   name='Mitra Internal/Eksternal'
                 >
                   <MenuItem value={'Internal'}>Internal</MenuItem>
-                  <MenuItem value={'EKsternal'}>Eksternal</MenuItem>
+                  <MenuItem value={'Eksternal'}>Eksternal</MenuItem>
                 </Select>
               </FormControl>
             </Grid>

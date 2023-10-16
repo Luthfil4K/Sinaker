@@ -9,7 +9,7 @@ const People = ({ data }) => {
   // console.log('asd')
   return (
     <>
-      <PeopleViews data={user}></PeopleViews>
+      <PeopleViews data={user.user} dataTpp={user.perusahaanTask}></PeopleViews>
     </>
   )
 }
@@ -38,9 +38,21 @@ export async function getServerSideProps(context) {
       taskToDo: true
     }
   })
+
+  const perusahaanTask = await prisma.taskPerusahaanProduksi.findMany({
+    include: {
+      perusahaan: true,
+      task: true
+    }
+  })
+
+  const data = {
+    perusahaanTask,
+    user
+  }
   return {
     props: {
-      data: JSON.stringify(user)
+      data: JSON.stringify(data)
     }
   }
 }

@@ -39,8 +39,10 @@ export default async function handler(req, res) {
       alamat
     } = req.body
     // console.log('bukan wo yg pasti' + pclId)
+
+    // console.log('ini Bulan : ' + bulan)
     try {
-      console.log(target, realisasi, duedate, hasilPencacahan)
+      console.log(target, realisasi, duedate, hasilPencacahan, gajiPcl, pclId)
       const taskPerusahaanProduksi = await prisma.taskPerusahaanProduksi.update({
         where: {
           id: Number(id)
@@ -67,6 +69,18 @@ export default async function handler(req, res) {
           alamat
         }
       })
+
+      // const pesertaGaji = await prisma.pesertaGaji.update({
+      //   where: {
+      //     id: Number(id)
+      //   },
+      //   data: {
+      //     mitraId: pclId,
+      //     gaji: gajiPcl,
+      //     dateGaji: bulan,
+      //     taskPerusahaanProduksi: id
+      //   }
+      // })
 
       return res.status(200).json({ success: true, data: taskPerusahaanProduksi })
     } catch (error) {

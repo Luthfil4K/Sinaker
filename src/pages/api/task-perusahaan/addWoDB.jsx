@@ -14,7 +14,29 @@ export default async function handler(req, res) {
 
   if (method === 'POST') {
     console.log('dah sampe post')
-    const { taskId, target, duedate, hasilPencacahan, realisasi, nama, desa, kecamatan, alamat, kip } = req.body
+    const {
+      taskId,
+      realisasi,
+      target,
+      duedate,
+      hasilPencacahan,
+      nama,
+      desa,
+      namadesa,
+      kecamatan,
+      namaKec,
+      alamat,
+      kip,
+      pmlId,
+      pclId,
+      gajiPml,
+      gajiPcl,
+      nbs,
+      idSls,
+      idSbr,
+      nks,
+      nus
+    } = req.body
     console.log('masuk ke wodb')
     try {
       const companies = await prisma.perusahaan.create({
@@ -23,8 +45,8 @@ export default async function handler(req, res) {
           nama,
           desa,
           kecamatan,
-          namaDesa: '',
-          namaKec: '',
+          namaDesa: namadesa,
+          namaKec,
           alamat,
           kegiatan: ''
         }
@@ -34,10 +56,25 @@ export default async function handler(req, res) {
         data: {
           taskId: taskId,
           perusahaanId: companies.id,
+          nama,
+          desa,
+          namadesa,
+          kecamatan,
+          namaKec,
+          alamat,
+          pmlId,
+          pclId,
+          gajiPml,
+          gajiPcl,
           target: Number(target),
           realisasi: Number(realisasi),
           hasilPencacahan: hasilPencacahan,
-          duedate: duedate
+          duedate: duedate,
+          nbs,
+          idSls,
+          idSbr,
+          nks,
+          nus
         }
       })
 

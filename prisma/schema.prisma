@@ -161,7 +161,7 @@ model PesertaGaji {
  mitra                       Mitra                           @relation(fields: [mitraId], references: [id], onDelete: Cascade, onUpdate: Cascade)
  mitraId                     Int
  gaji                        Int                             @db.Int
- dateGaji                    Int                             @db.Int
+ dateGaji                    DateTime                        @db.Date
 } 
 
 

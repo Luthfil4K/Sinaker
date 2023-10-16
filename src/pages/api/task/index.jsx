@@ -52,7 +52,7 @@ export default async function handler(req, res) {
         }
       })
 
-      if (jenisKeg == 65) {
+      if (jenisKeg == 65 || jenisKeg == 67) {
         participants.map(async participant => {
           if (participant.checked) {
             const tpp = await prisma.TaskPerusahaanProduksi.create({
@@ -78,11 +78,6 @@ export default async function handler(req, res) {
                 nks: '',
                 idSbr: '',
                 nus: ''
-                // idSls             String        @db.VarChar(128)
-                // nbs               String        @db.VarChar(128)
-                // nks               String        @db.VarChar(128)
-                // idSbr             String        @db.VarChar(128)
-                // nus               String        @db.VarChar(128)
               }
             })
           }

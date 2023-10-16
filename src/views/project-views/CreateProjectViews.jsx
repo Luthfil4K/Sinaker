@@ -34,11 +34,11 @@ import { DataGrid } from '@mui/x-data-grid'
 import TableAddParticipant from 'src/views/tables/TableAddParticipant'
 
 const CustomInputStart = forwardRef((props, ref) => {
-  return <TextField fullWidth {...props} inputRef={ref} label='Start Date' autoComplete='on' />
+  return <TextField fullWidth {...props} inputRef={ref} label='Tanggal Mulai' autoComplete='on' />
 })
 
 const CustomInputEnd = forwardRef((props, ref) => {
-  return <TextField fullWidth {...props} inputRef={ref} label='End Date' autoComplete='off' />
+  return <TextField fullWidth {...props} inputRef={ref} label='Tanggal Berakhir' autoComplete='off' />
 })
 
 const CreateProjectViews = props => {

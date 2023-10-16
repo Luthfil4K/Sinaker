@@ -1,8 +1,9 @@
-import * as React from 'react'
+import { useState, useEffect, useRef } from 'react'
 
 // ** MUI Imports
 import Typography from '@mui/material/Typography'
 import Card from '@mui/material/Card'
+import Chip from '@mui/material/Chip'
 import Button from '@mui/material/Button'
 import Grid from '@mui/material/Grid'
 import FormControl from '@mui/material/FormControl'
@@ -58,20 +59,72 @@ const data = [
 ]
 
 const TablePeople = props => {
+  const statusObj = {
+    0: { color: 'error', status: 'Overload' },
+    1: { color: 'success', status: 'Available' }
+  }
+  const [tpp, setTpp] = useState(props.dataTpp)
   const { dataUser } = props
-  const rows = dataUser.map(row => ({
-    id: row.id,
-    nama: row.name,
-    fungsi: row.fungsi,
-    totalGaji: 10000,
-    gajiBulanan: 10000,
-    gajiTriwulanan: 10000,
-    gajiSemesteran: 10000,
-    gajiTahunan: 10000,
-    jumlahKegiatan: row.UserProject.length
-    // jumlahSubkegiatan: row.jumlahSubkegiatan,
-  }))
-  console.log(rows)
+  console.log(tpp)
+  const rows = dataUser.map(row => {
+    const gajiBulanIni = tpp
+      .filter(tppRow => tppRow.pmlId === row.id)
+      .filter(tppRow => {
+        const tppDueDate = new Date(tppRow.task.duedate)
+        const currentDate = new Date()
+        return (
+          tppDueDate.getFullYear() === currentDate.getFullYear() && tppDueDate.getMonth() === currentDate.getMonth()
+        )
+      })
+      .reduce((totalGaji, tppRow) => totalGaji + tppRow.gajiPml, 0)
+
+    const gajiBulanSblm = tpp
+      .filter(tppRow => tppRow.pmlId === row.id)
+      .filter(tppRow => {
+        const tppDueDate = new Date(tppRow.task.duedate)
+        const currentDate = new Date()
+        return currentDate.getMonth != 0
+          ? tppDueDate.getFullYear() === currentDate.getFullYear() &&
+              tppDueDate.getMonth() === currentDate.getMonth() - 1
+          : tppDueDate.getFullYear() === currentDate.getFullYear() - 1 && tppDueDate.getMonth() === 12
+      })
+      .reduce((totalGaji, tppRow) => totalGaji + tppRow.gajiPml, 0)
+
+    const gajiBulanDepan = tpp
+      .filter(tppRow => tppRow.pmlId === row.id)
+      .filter(tppRow => {
+        const tppDueDate = new Date(tppRow.task.duedate)
+        const currentDate = new Date()
+        return currentDate.getMonth != 11
+          ? tppDueDate.getFullYear() === currentDate.getFullYear() &&
+              tppDueDate.getMonth() === currentDate.getMonth() + 1
+          : tppDueDate.getFullYear() === currentDate.getFullYear() + 1 && tppDueDate.getMonth() === 0
+      })
+      .reduce((totalGaji, tppRow) => totalGaji + tppRow.gajiPml, 0)
+
+    return {
+      id: row.id,
+      nama: row.name,
+      fungsi: row.fungsi,
+      jumlahKegiatan: row.UserProject.length,
+      gajiBulanIni,
+      gajiBulanSblm,
+      gajiBulanDepan,
+      over: gajiBulanIni
+    }
+  })
+  //   id: row.id,
+  //   nama: row.name,
+  //   fungsi: row.fungsi,
+  //   totalGaji: 10000,
+  //   gajiBulanan: 10000,
+  //   gajiTriwulanan: 10000,
+  //   gajiSemesteran: 10000,
+  //   gajiTahunan: 10000,
+  //   jumlahKegiatan: row.UserProject.length
+  //   // jumlahSubkegiatan: row.jumlahSubkegiatan,
+  // }))
+
   const columns = [
     { field: 'id', headerName: 'No', type: 'string', minWidth: 40 },
     {
@@ -79,6 +132,95 @@ const TablePeople = props => {
       headerName: 'Nama',
       width: 240,
       minWidth: 130
+    },
+    {
+      field: 'over',
+      renderCell: params => (
+        <>
+          <Chip
+            label={statusObj[params.row.gajiBulanIni < 100000 ? 1 : 0].status}
+            color={statusObj[params.row.gajiBulanIni < 100000 ? 1 : 0].color}
+            sx={{
+              height: 24,
+              fontSize: '0.75rem',
+              width: 100,
+              textTransform: 'capitalize',
+              '& .MuiChip-label': { fontWeight: 500 }
+            }}
+          />
+        </>
+      ),
+      renderHeader: () => (
+        <Typography sx={{ fontWeight: 900, fontSize: '0.875rem !important', textAlign: 'center' }}>
+          Status Bulan Ini
+        </Typography>
+      ),
+      type: 'string',
+      width: 140
+    },
+
+    {
+      field: 'gajiBulanIni',
+      renderHeader: () => (
+        <Typography sx={{ fontWeight: 900, fontSize: '0.875rem !important', textAlign: 'center' }}>
+          Gaji Bulan Ini
+        </Typography>
+      ),
+      headerName: 'Gaji Bulan Ini ',
+      type: 'string',
+      width: 140,
+      renderCell: params => (
+        <>
+          <Typography
+            color={params.row.gajiBulanIni < 100000 ? 'secondary.main' : 'error.main'}
+            sx={{ fontWeight: 500, fontSize: '0.875rem !important', textAlign: 'center' }}
+          >
+            {`Rp ${params.row.gajiBulanIni.toLocaleString('id-ID')}`}
+          </Typography>
+        </>
+      )
+    },
+    {
+      field: 'gajiBulanSblm',
+      renderHeader: () => (
+        <Typography sx={{ fontWeight: 900, fontSize: '0.875rem !important', textAlign: 'center' }}>
+          Gaji Bulan Sebelumnya
+        </Typography>
+      ),
+      headerName: 'Gaji Bulan Sebelumnya ',
+      type: 'string',
+      width: 140,
+      renderCell: params => (
+        <>
+          <Typography
+            color={params.row.gajiBulanSblm < 100000 ? 'secondary.main' : 'error.main'}
+            sx={{ fontWeight: 500, fontSize: '0.875rem !important', textAlign: 'center' }}
+          >
+            {`Rp ${params.row.gajiBulanSblm.toLocaleString('id-ID')}`}
+          </Typography>
+        </>
+      )
+    },
+    {
+      field: 'gajiBulanDepan',
+      renderHeader: () => (
+        <Typography sx={{ fontWeight: 900, fontSize: '0.875rem !important', textAlign: 'center' }}>
+          Gaji Bulan Depan
+        </Typography>
+      ),
+      headerName: 'Gaji Bulan Depan ',
+      type: 'string',
+      width: 140,
+      renderCell: params => (
+        <>
+          <Typography
+            color={params.row.gajiBulanDepan < 100000 ? 'secondary.main' : 'error.main'}
+            sx={{ fontWeight: 500, fontSize: '0.875rem !important', textAlign: 'center' }}
+          >
+            {`Rp ${params.row.gajiBulanDepan.toLocaleString('id-ID')}`}
+          </Typography>
+        </>
+      )
     },
     {
       field: 'fungsi',

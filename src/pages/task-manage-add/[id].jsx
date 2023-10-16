@@ -6,7 +6,7 @@ import TaskManageAddViews from 'src/views/task-views/TaskManageAddViews'
 
 const TaskManageAdd = ({ data }) => {
   const [project, setProject] = useState(JSON.parse(data))
-  console.log(project)
+  // console.log(project)
   return (
     <>
       <TaskManageAddViews
@@ -14,6 +14,7 @@ const TaskManageAdd = ({ data }) => {
         dataPerusahaan={project.companies}
         dataAllPerusahaan={project.perusahaans}
         dataMitra={project.mitras}
+        dataTaskPerusahaan={project.perusahaanTask}
       ></TaskManageAddViews>
     </>
   )
@@ -75,10 +76,15 @@ export async function getServerSideProps(context) {
       nama: true,
       desa: true,
       namaDesa: true,
-      namaKec: true,
       kecamatan: true,
-      kegiatan: true,
+      namaKec: true,
       alamat: true
+    }
+  })
+
+  const perusahaanTask = await prisma.taskPerusahaanProduksi.findMany({
+    include: {
+      task: true
     }
   })
 
@@ -96,7 +102,8 @@ export async function getServerSideProps(context) {
     project,
     companies,
     perusahaans,
-    mitras
+    mitras,
+    perusahaanTask
   }
 
   return {

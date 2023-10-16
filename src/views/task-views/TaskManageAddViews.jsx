@@ -8,6 +8,7 @@ import axios from 'src/pages/api/axios'
 import Swal from 'sweetalert2'
 
 // mui
+import Chip from '@mui/material/Chip'
 import Card from '@mui/material/Card'
 import Grid from '@mui/material/Grid'
 import Box from '@mui/material/Box'
@@ -39,11 +40,19 @@ const TaskManageAddViews = propss => {
   const CustomInputStart = forwardRef((props, ref) => {
     return <TextField fullWidth {...props} inputRef={ref} label='Tanggal Berakhir' autoComplete='on' />
   })
+
+  const statusObj = {
+    0: { color: 'error', status: 'Overload' },
+    1: { color: 'success', status: 'Available' }
+  }
+
   const session = useSession()
   const [project, setProject] = useState(propss.data)
   const [show, setShow] = useState(0)
   const [group, setGroup] = useState(propss.dataPerusahaan)
   const [participants, setParticipants] = useState([])
+  const [tpp, setTpp] = useState(propss.dataTaskPerusahaan)
+  // console.log(tpp)
 
   const [selectedDateE, setSelectedDateE] = useState(null)
   const [values, setValues] = useState({
@@ -52,7 +61,7 @@ const TaskManageAddViews = propss => {
     subKegTarget: '',
     subKegUnitTarget: '',
     subKegJenisSample: '',
-    subKegSamplePerusahaan: 0,
+    subKegSamplePerusahaan: '',
     subKegDl: '',
     subKegDesk: '',
     subKegProjectId: project.id,
@@ -60,10 +69,6 @@ const TaskManageAddViews = propss => {
     subKegMonth: '',
     subKegYear: ''
   })
-
-  useEffect(() => {
-    // console.log(values.subKegJenis)
-  }, [values.subKegJenis])
 
   useEffect(() => {
     let dataGroup = []
@@ -128,7 +133,8 @@ const TaskManageAddViews = propss => {
           target: parseInt(values.subKegTarget),
           unitTarget: values.subKegUnitTarget,
           duedate: values.subKegDl,
-          jenisSample: values.subKegJenis == 65 ? values.subKegJenisSample : 0,
+          bulan: values.subKegDl.getMonth(),
+          jenisSample: values.subKegJenis == 65 || values.subKegJenis == 67 ? values.subKegJenisSample : 0,
           participants: rows,
           peserta: dataPCL,
           description: values.subKegDesk,
@@ -188,10 +194,10 @@ const TaskManageAddViews = propss => {
     }
   ]
   const jenisSubKegiatan = [
-    {
-      id: 64,
-      nama: 'Persiapan'
-    },
+    // {
+    //   id: 64,
+    //   nama: 'Persiapan'
+    // },
     {
       id: 65,
       nama: 'Lapangan'
@@ -201,10 +207,10 @@ const TaskManageAddViews = propss => {
       id: 67,
       nama: 'Pengolahan '
     },
-    {
-      id: 68,
-      nama: 'Evaluasi '
-    },
+    // {
+    //   id: 68,
+    //   nama: 'Evaluasi '
+    // },
     {
       id: 69,
       nama: 'Diseminasi '
@@ -256,17 +262,52 @@ const TaskManageAddViews = propss => {
   )
 
   const [rowsM, setRowsM] = useState(
-    dataMitra.map(row => ({
-      id: row.id,
-      nik: row.nik.toString(),
-      name: row.name,
-      jenisKelamin: row.jenisKelamin,
-      tanggalLahir: row.tanggalLahir,
-      umur: row.umur,
-      pendidikan: row.pendidikan,
-      email: row.email,
-      status: row.status
-    }))
+    dataMitra.map(row => {
+      const gajiBulanIni = tpp
+        .filter(tppRow => tppRow.pclId === row.id)
+        .filter(tppRow => {
+          const tppDueDate = new Date(tppRow.task.duedate)
+          const currentDate = new Date()
+          return (
+            tppDueDate.getFullYear() === currentDate.getFullYear() && tppDueDate.getMonth() === currentDate.getMonth()
+          )
+        })
+        .reduce((totalGaji, tppRow) => totalGaji + tppRow.gajiPcl, 0)
+
+      const gajiBulanSblm = tpp
+        .filter(tppRow => tppRow.pclId === row.id)
+        .filter(tppRow => {
+          const tppDueDate = new Date(tppRow.task.duedate)
+          const currentDate = new Date()
+          return currentDate.getMonth != 0
+            ? tppDueDate.getFullYear() === currentDate.getFullYear() &&
+                tppDueDate.getMonth() === currentDate.getMonth() - 1
+            : tppDueDate.getFullYear() === currentDate.getFullYear() - 1 && tppDueDate.getMonth() === 12
+        })
+        .reduce((totalGaji, tppRow) => totalGaji + tppRow.gajiPcl, 0)
+
+      const gajiBulanDepan = tpp
+        .filter(tppRow => tppRow.pclId === row.id)
+        .filter(tppRow => {
+          const tppDueDate = new Date(tppRow.task.duedate)
+          const currentDate = new Date()
+          return currentDate.getMonth != 11
+            ? tppDueDate.getFullYear() === currentDate.getFullYear() &&
+                tppDueDate.getMonth() === currentDate.getMonth() + 1
+            : tppDueDate.getFullYear() === currentDate.getFullYear() + 1 && tppDueDate.getMonth() === 0
+        })
+        .reduce((totalGaji, tppRow) => totalGaji + tppRow.gajiPcl, 0)
+
+      return {
+        id: row.id,
+        nik: row.nik.toString(),
+        name: row.name,
+        gajiBulanIni,
+        gajiBulanSblm,
+        gajiBulanDepan,
+        over: gajiBulanIni
+      }
+    })
   )
 
   useEffect(() => {
@@ -426,14 +467,111 @@ const TaskManageAddViews = propss => {
       ),
       align: 'left'
     },
-    { field: 'nik', headerName: 'NIK', width: 200 },
-    { field: 'name', headerName: 'Nama', width: 200 },
-    { field: 'jenisKelamin', headerName: 'Jenis Kelamin', width: 150 },
-    { field: 'tanggalLahir', headerName: 'Tanggal Lahir', type: 'string', width: 150 },
-    { field: 'umur', headerName: 'Umur', type: 'string', width: 150 },
-    { field: 'pendidikan', headerName: 'Pendidikan', type: 'string', width: 150 },
-    { field: 'email', headerName: 'Email', width: 160 },
-    { field: 'status', headerName: 'Mitra Internal/External ', type: 'string', width: 140 }
+    {
+      field: 'nik',
+      renderHeader: () => (
+        <Typography sx={{ fontWeight: 900, fontSize: '0.875rem !important', textAlign: 'center' }}>NIK</Typography>
+      ),
+      headerName: 'NIK',
+      width: 200
+    },
+    {
+      field: 'name',
+      renderHeader: () => (
+        <Typography sx={{ fontWeight: 900, fontSize: '0.875rem !important', textAlign: 'center' }}>Nama</Typography>
+      ),
+      headerName: 'Nama',
+      width: 200
+    },
+    {
+      field: 'over',
+      renderCell: params => (
+        <>
+          <Chip
+            label={statusObj[params.row.gajiBulanIni < 100000 ? 1 : 0].status}
+            color={statusObj[params.row.gajiBulanIni < 100000 ? 1 : 0].color}
+            sx={{
+              height: 24,
+              fontSize: '0.75rem',
+              width: 100,
+              textTransform: 'capitalize',
+              '& .MuiChip-label': { fontWeight: 500 }
+            }}
+          />
+        </>
+      ),
+      renderHeader: () => (
+        <Typography sx={{ fontWeight: 900, fontSize: '0.875rem !important', textAlign: 'center' }}>
+          Status Bulan Ini
+        </Typography>
+      ),
+      type: 'string',
+      width: 140
+    },
+
+    {
+      field: 'gajiBulanIni',
+      renderHeader: () => (
+        <Typography sx={{ fontWeight: 900, fontSize: '0.875rem !important', textAlign: 'center' }}>
+          Gaji Bulan Ini
+        </Typography>
+      ),
+      headerName: 'Gaji Bulan Ini ',
+      type: 'string',
+      width: 140,
+      renderCell: params => (
+        <>
+          <Typography
+            color={params.row.gajiBulanIni < 100000 ? 'secondary.main' : 'error.main'}
+            sx={{ fontWeight: 500, fontSize: '0.875rem !important', textAlign: 'center' }}
+          >
+            {`Rp ${params.row.gajiBulanIni.toLocaleString('id-ID')}`}
+          </Typography>
+        </>
+      )
+    },
+    {
+      field: 'gajiBulanSblm',
+      renderHeader: () => (
+        <Typography sx={{ fontWeight: 900, fontSize: '0.875rem !important', textAlign: 'center' }}>
+          Gaji Bulan Sebelumnya
+        </Typography>
+      ),
+      headerName: 'Gaji Bulan Sebelumnya ',
+      type: 'string',
+      width: 140,
+      renderCell: params => (
+        <>
+          <Typography
+            color={params.row.gajiBulanSblm < 100000 ? 'secondary.main' : 'error.main'}
+            sx={{ fontWeight: 500, fontSize: '0.875rem !important', textAlign: 'center' }}
+          >
+            {`Rp ${params.row.gajiBulanSblm.toLocaleString('id-ID')}`}
+          </Typography>
+        </>
+      )
+    },
+    {
+      field: 'gajiBulanDepan',
+      renderHeader: () => (
+        <Typography sx={{ fontWeight: 900, fontSize: '0.875rem !important', textAlign: 'center' }}>
+          Gaji Bulan Depan
+        </Typography>
+      ),
+      headerName: 'Gaji Bulan Depan ',
+      type: 'string',
+      width: 140,
+      renderCell: params => (
+        <>
+          <Typography
+            color={params.row.gajiBulanDepan < 100000 ? 'secondary.main' : 'error.main'}
+            sx={{ fontWeight: 500, fontSize: '0.875rem !important', textAlign: 'center' }}
+          >
+            {`Rp ${params.row.gajiBulanDepan.toLocaleString('id-ID')}`}
+          </Typography>
+        </>
+      )
+    }
   ]
 
   return (
@@ -467,6 +605,9 @@ const TaskManageAddViews = propss => {
                   onChange={handleJenisSubKeg}
                   value={values.subKegJenis}
                 >
+                  <MenuItem key={''} value={''}>
+                    {''}
+                  </MenuItem>
                   {jenisSubKegiatan.map(item => (
                     <MenuItem key={item.id} value={item.id}>
                       {item.nama}
@@ -475,29 +616,33 @@ const TaskManageAddViews = propss => {
                 </Select>
               </FormControl>
             </Grid>
-            {session.status === 'authenticated' && (session.data.uid === 9988 || values.subKegJenis === 65) && (
-              <>
-                <Grid item md={6} xs={12}>
-                  <FormControl fullWidth>
-                    <InputLabel id='demo-simple-select-helper-label'>Jenis Sample</InputLabel>
-                    <Select
-                      fullWidth
-                      labelId='demo-simple-select-helper-label'
-                      id='demo-simple-select-helper'
-                      label='Rentang Waktu'
-                      onChange={handleJenisSample}
-                      value={values.subKegJenisSample}
-                    >
-                      {jenisSample.map(item => (
-                        <MenuItem key={item.id} value={item.id}>
-                          {item.nama}
+            {session.status === 'authenticated' &&
+              (session.data.uid === 9988 || values.subKegJenis === 65 || values.subKegJenis === 67) && (
+                <>
+                  <Grid item md={6} xs={12}>
+                    <FormControl fullWidth>
+                      <InputLabel id='demo-simple-select-helper-label'>Jenis Sample</InputLabel>
+                      <Select
+                        fullWidth
+                        labelId='demo-simple-select-helper-label'
+                        id='demo-simple-select-helper'
+                        label='Rentang Waktu'
+                        onChange={handleJenisSample}
+                        value={values.subKegJenisSample}
+                      >
+                        <MenuItem key={''} value={''}>
+                          {''}
                         </MenuItem>
-                      ))}
-                    </Select>
-                  </FormControl>
-                </Grid>
-              </>
-            )}
+                        {jenisSample.map(item => (
+                          <MenuItem key={item.id} value={item.id}>
+                            {item.nama}
+                          </MenuItem>
+                        ))}
+                      </Select>
+                    </FormControl>
+                  </Grid>
+                </>
+              )}
 
             <Grid item md={6} xs={12}>
               <TextField
@@ -541,7 +686,7 @@ const TaskManageAddViews = propss => {
             </Grid>
             <Grid item md={12} xs={12}>
               {' '}
-              <TextField
+              {/* <TextField
                 name='deskripsiSubKeg'
                 value={values.subKegDesk}
                 onChange={handleChange('subKegDesk')}
@@ -550,7 +695,7 @@ const TaskManageAddViews = propss => {
                 minRows={3}
                 label='Deskripsi Sub Kegiatan'
                 placeholder='Deskripsi Sub Kegiatan'
-              />
+              /> */}
               <Divider mt={2}></Divider>
             </Grid>
 
@@ -570,6 +715,9 @@ const TaskManageAddViews = propss => {
                       onChange={handleSamplePerusahaan}
                       value={values.subKegSamplePerusahaan}
                     >
+                      <MenuItem key={''} value={''}>
+                        {''}
+                      </MenuItem>
                       {group.map(item => (
                         <MenuItem key={item.id} value={item.id}>
                           {item.nama}
@@ -611,41 +759,42 @@ const TaskManageAddViews = propss => {
                 </Grid>
               </>
             )}
-            {session.status === 'authenticated' && (session.data.uid === 9988 || values.subKegJenis === 65) && (
-              <>
-                <Grid item md={6} xs={12}>
-                  <Typography variant={'h6'} mb={4}>
-                    Peserta Kegiatan
-                  </Typography>
-                </Grid>
-                <Grid item md={12} xs={12}>
-                  <Grid container spacing={4}>
-                    <Grid item xs={12}>
-                      <Box sx={{ width: '100%' }}>
-                        <DataGrid
-                          initialState={{
-                            sorting: {
-                              sortModel: [{ field: 'checked', sort: 'desc' }]
-                            }
-                          }}
-                          rows={rowsM}
-                          columns={columnsM}
-                          pprioritySize={5}
-                          rowsPerPpriorityOptions={[5]}
-                          disableSelectionOnClick
-                          experimentalFeatures={{ newEditingApi: true }}
-                          sx={{
-                            height: rowsM.length > 3 ? '70vh' : '45vh',
-                            overflowY: 'auto',
-                            width: '100%'
-                          }}
-                        />
-                      </Box>
+            {session.status === 'authenticated' &&
+              (session.data.uid === 9988 || values.subKegJenis === 65 || values.subKegJenis === 67) && (
+                <>
+                  <Grid item md={6} xs={12}>
+                    <Typography variant={'h6'} mb={4}>
+                      Peserta Kegiatan
+                    </Typography>
+                  </Grid>
+                  <Grid item md={12} xs={12}>
+                    <Grid container spacing={4}>
+                      <Grid item xs={12}>
+                        <Box sx={{ width: '100%' }}>
+                          <DataGrid
+                            initialState={{
+                              sorting: {
+                                sortModel: [{ field: 'checked', sort: 'desc' }]
+                              }
+                            }}
+                            rows={rowsM}
+                            columns={columnsM}
+                            pprioritySize={5}
+                            rowsPerPpriorityOptions={[5]}
+                            disableSelectionOnClick
+                            experimentalFeatures={{ newEditingApi: true }}
+                            sx={{
+                              height: rowsM.length > 3 ? '70vh' : '45vh',
+                              overflowY: 'auto',
+                              width: '100%'
+                            }}
+                          />
+                        </Box>
+                      </Grid>
                     </Grid>
                   </Grid>
-                </Grid>
-              </>
-            )}
+                </>
+              )}
           </Grid>
 
           {/* <TableAddParticipant></TableAddParticipant> */}

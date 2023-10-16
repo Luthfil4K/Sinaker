@@ -7,7 +7,7 @@ const Mitra = ({ data }) => {
   const [mitra, setMitra] = useState(JSON.parse(data))
   return (
     <>
-      <MitraListViews data={mitra}></MitraListViews>
+      <MitraListViews data={mitra.mitra} dataTpp={mitra.perusahaanTask}></MitraListViews>
     </>
   )
 }
@@ -32,9 +32,22 @@ export async function getServerSideProps(context) {
       }
     }
   })
+
+  const perusahaanTask = await prisma.taskPerusahaanProduksi.findMany({
+    include: {
+      perusahaan: true,
+      task: true
+    }
+  })
+
+  const data = {
+    perusahaanTask,
+    mitra
+  }
+
   return {
     props: {
-      data: JSON.stringify(mitra)
+      data: JSON.stringify(data)
     }
   }
 }
