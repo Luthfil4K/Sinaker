@@ -27,6 +27,36 @@ const MitraDetailGajiViews = props => {
     0: { color: 'error', status: 'Overload' },
     1: { color: 'success', status: 'Available' }
   }
+
+  const namaBulan = {
+    0: { n: 'Januari', status: 'Overload' },
+    1: { n: 'Februari', status: 'Available' },
+    2: { n: 'Maret', status: 'Overload' },
+    3: { n: 'April', status: 'Available' },
+    4: { n: 'Mei', status: 'Overload' },
+    5: { n: 'Juni', status: 'Available' },
+    6: { n: 'Juli', status: 'Overload' },
+    7: { n: 'Agustus', status: 'Available' },
+    8: { n: 'September', status: 'Overload' },
+    9: { n: 'Oktober', status: 'Available' },
+    10: { n: 'November', status: 'Overload' },
+    11: { n: 'Desember', status: 'Available' }
+  }
+
+  const namaBulanArr = [
+    'Januari',
+    'Februari',
+    'Maret',
+    'April',
+    'Mei',
+    'Juni',
+    'Juli',
+    'Agustus',
+    'September',
+    'Oktober',
+    'November',
+    'Desember'
+  ]
   const router = useRouter()
   const [tpp, setTpp] = useState(props.dataTpp)
   const [values, setValues] = useState({
@@ -141,65 +171,96 @@ const MitraDetailGajiViews = props => {
   })
 
   function BulanCard({ namaBulan, totalGaji, subKegData }) {
-    const [collapse, setCollapse] = useState(false)
+    const [collapseStates, setCollapseStates] = useState(subKegData.map(() => false))
 
-    const handleClick = () => {
-      setCollapse(!collapse)
+    const handleClick = index => {
+      const newCollapseStates = [...collapseStates]
+      newCollapseStates[index] = !newCollapseStates[index]
+      setCollapseStates(newCollapseStates)
     }
 
     return (
       <Grid item md={4} xs={6}>
         <Card>
-          <CardMedia sx={{ height: '0.5rem' }} image='/images/cards/paper-boat.png' />
+          <CardMedia sx={{ height: '0.5rem' }} image='/images/cards/rec.png' />
           <CardContent>
-            <Typography variant='h5' sx={{ marginBottom: 2 }}>
+            <Typography variant='h6' sx={{ marginBottom: 2 }}>
               {namaBulan}
             </Typography>
+            <Typography textAlign={'end'} variant={'body2'}>
+              Total Gaji: Rp{totalGaji.toLocaleString('id-ID')}
+            </Typography>
             <Divider sx={{ margin: 0 }} />
-            <p>Total Gaji: Rp{totalGaji.toLocaleString('id-ID')}</p>
-
-            {subKegData.map(subKeg => (
-              <div key={subKeg.taskId}>
-                <Typography>
-                  {subKeg.nama}: Rp{subKeg.taskTotalGaji.toLocaleString('id-ID')}
-                </Typography>
-                <ul>
-                  {subKeg.listPerusahaan.map((nama, index) => (
-                    <li key={nama}>
-                      <p>Nama Perusahaan: {nama}</p>
-                      <p>Gaji Perusahaan: {subKeg.gajiPerusahaan[index]}</p>
-                    </li>
-                  ))}
-                </ul>
-              </div>
-            ))}
           </CardContent>
-          <CardActions className='card-action-dense'>
-            <Box
-              sx={{
-                width: '100%',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'space-between'
-              }}
-            >
-              <Button onClick={handleClick}>Details</Button>
-              <IconButton size='small' onClick={handleClick}>
-                {collapse ? <ChevronUp sx={{ fontSize: '1.875rem' }} /> : <ChevronDown sx={{ fontSize: '1.875rem' }} />}
-              </IconButton>
-            </Box>
-          </CardActions>
-          <Collapse in={collapse}>
-            <Divider sx={{ margin: 0 }} />
-            <CardContent>
-              <Typography variant='body2'></Typography>
-            </CardContent>
-          </Collapse>
+          <Grid container sx={{ height: 150, overflowY: 'auto' }}>
+            <Grid item md={12}>
+              {subKegData.length > 0 ? (
+                subKegData.map((subKeg, index) => (
+                  <div key={index}>
+                    <CardActions className='card-action-dense'>
+                      <Box
+                        // bgcolor={'primary.main'}
+                        sx={{
+                          width: '100%',
+                          display: 'flex',
+                          alignItems: 'center',
+                          justifyContent: 'space-between'
+                        }}
+                      >
+                        <Typography variant={'body2'}>
+                          {/* <span style={{ fontWeight: 500, color: '#804BDF' }}>{subKeg.nama}</span>: Rp
+                        {subKeg.taskTotalGaji.toLocaleString('id-ID')} */}
+                          {subKeg.nama}:{' '}
+                          <span style={{ fontWeight: 500, color: '#804BDF' }}>
+                            {' '}
+                            Rp
+                            {subKeg.taskTotalGaji.toLocaleString('id-ID')}
+                          </span>
+                        </Typography>
+
+                        <IconButton size='small' onClick={() => handleClick(index)}>
+                          {collapseStates[index] ? (
+                            <ChevronUp sx={{ fontSize: '1.875rem' }} />
+                          ) : (
+                            <ChevronDown sx={{ fontSize: '1.875rem' }} />
+                          )}
+                        </IconButton>
+                      </Box>
+                    </CardActions>
+                    <Collapse in={collapseStates[index]}>
+                      <CardContent>
+                        {subKeg.listPerusahaan.map((nama, index) => (
+                          <>
+                            <Typography key={nama} variant={'caption'}>
+                              Perusahaan: {nama}
+                            </Typography>
+                            <br></br>
+                            <Typography key={nama} variant={'caption'}>
+                              Gaji : {subKeg.gajiPerusahaan[index]}
+                            </Typography>
+                            <br></br>
+                            <br></br>
+                          </>
+                        ))}
+                      </CardContent>
+                      <Divider sx={{ margin: 0 }} />
+                    </Collapse>
+                  </div>
+                ))
+              ) : (
+                <Box height={120} display={'flex'} justifyContent={'center'} alignItems={'center'}>
+                  <Typography variant={'caption'} color={'secondary'}>
+                    {' '}
+                    Available!
+                  </Typography>
+                </Box>
+              )}
+            </Grid>
+          </Grid>
         </Card>
       </Grid>
     )
   }
-
   const totalGaji = tpp
     .filter(tppRow => tppRow.pclId === values.id)
     .reduce((totalGaji, tppRow) => totalGaji + tppRow.gajiPcl, 0)
@@ -300,7 +361,7 @@ const MitraDetailGajiViews = props => {
         {bulanData.map((data, index) => (
           <BulanCard
             key={index}
-            namaBulan={`Bulan ${index + 1}`}
+            namaBulan={namaBulan[index].n}
             totalGaji={data.totalGajiBulan}
             subKegData={data.subKeg}
           />
