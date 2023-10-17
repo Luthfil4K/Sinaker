@@ -389,7 +389,7 @@ const TableGroupPerusahaan = props => {
       field: 'pmlId',
       headerName: 'PML',
       type: 'singleSelect',
-      valueOptions: optionPML,
+      valueOptions: optionPML.sort((a, b) => a.label.localeCompare(b.label)),
 
       width: 180,
       editable: true
@@ -406,7 +406,7 @@ const TableGroupPerusahaan = props => {
       field: 'pclId',
       headerName: 'PCL',
       type: 'singleSelect',
-      valueOptions: optionPCL,
+      valueOptions: optionPCL.sort((a, b) => a.label.localeCompare(b.label)),
 
       width: 180,
       editable: true

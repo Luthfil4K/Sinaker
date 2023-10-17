@@ -118,7 +118,7 @@ const navigation = (): VerticalNavItemsType => {
       title: 'Daftar Mitra',
       icon: FormatLetterCase,
       path: '/mitra'
-    }
+    },
 
     // {
     //   sectionTitle: 'Pustaka'
@@ -152,11 +152,11 @@ const navigation = (): VerticalNavItemsType => {
     //   path: '/icons',
     //   icon: GoogleCirclesExtended
     // },
-    // {
-    //   title: 'Cards',
-    //   icon: CreditCardOutline,
-    //   path: '/cards'
-    // },
+    {
+      title: 'Cards',
+      icon: CreditCardOutline,
+      path: '/cards'
+    }
     // {
     //   title: 'Tables',
     //   icon: Table,

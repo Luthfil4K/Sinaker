@@ -119,9 +119,9 @@ const ProjectDetailsViews = props => {
           <Button onClick={handleDelete} size='medium' variant={'contained'} sx={{ margin: 2 }}>
             Delete
           </Button>
-          <Button onClick={handleArchieve} size='medium' variant={'contained'} sx={{ margin: 2 }}>
+          {/* <Button onClick={handleArchieve} size='medium' variant={'contained'} sx={{ margin: 2 }}>
             Archieve
-          </Button>
+          </Button> */}
         </Grid>
       </Grid>
     </>

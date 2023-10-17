@@ -14,6 +14,7 @@ import Chip from '@mui/material/Chip'
 import { DataGrid } from '@mui/x-data-grid'
 import { useRouter } from 'next/dist/client/router'
 import Swal from 'sweetalert2'
+import Link from '@mui/material/Link'
 
 // icon
 import PencilOutline from 'mdi-material-ui/PencilOutline'
@@ -162,7 +163,19 @@ const TableMitra = props => {
         <Typography sx={{ fontWeight: 900, fontSize: '0.875rem !important', textAlign: 'center' }}>Nama</Typography>
       ),
       headerName: 'Nama',
-      width: 200
+      width: 200,
+      renderCell: params => (
+        <Link
+          onClick={async e => {
+            router.push(`/mitra-detail-gaji/${params.row.id}`)
+          }}
+          sx={{ cursor: 'pointer' }}
+        >
+          <Typography sx={{ fontWeight: 500, textDecoration: 'underline', fontSize: '0.875rem !important' }}>
+            {params.row.name}
+          </Typography>
+        </Link>
+      )
     },
     {
       field: 'over',
@@ -301,7 +314,7 @@ const TableMitra = props => {
         <Typography sx={{ fontWeight: 900, fontSize: '0.875rem !important', textAlign: 'center' }}>Email</Typography>
       ),
       headerName: 'Email',
-      width: 160
+      width: 250
     },
     {
       field: 'status',

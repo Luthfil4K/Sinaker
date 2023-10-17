@@ -351,9 +351,9 @@ const TablePeople = props => {
           rows={rows}
           columns={columns}
           sx={{
+            height: rows.length > 3 ? '70vh' : '45vh',
             overflowY: 'auto',
-            width: '100%',
-            alignItems: 'start'
+            width: '100%'
           }}
         />
       </Card>
