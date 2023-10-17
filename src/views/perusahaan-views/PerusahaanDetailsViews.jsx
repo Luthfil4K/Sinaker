@@ -122,12 +122,14 @@ const CreateKegiatanPerusahaanViews = props => {
               multiline
               label='Nama Group Kegiatan Perusahaan'
               name='namaKegiatan'
+              disabled
             />
           </Grid>
           <Grid item xs={12} md={6}>
             <FormControl fullWidth>
               <InputLabel id='demo-simple-select-helper-label'>Fungsi</InputLabel>
               <Select
+                disabled
                 fullWidth
                 labelId='demo-simple-select-helper-label'
                 onChange={handleFungsiChange}
@@ -152,11 +154,11 @@ const CreateKegiatanPerusahaanViews = props => {
         </Grid>
         {/* <TableAddParticipant></TableAddParticipant> */}
         <Divider sx={{ margin: 0 }} />
-        <Grid item m={4} display={'flex'} justifyContent={'end'}>
+        {/* <Grid item m={4} display={'flex'} justifyContent={'end'}>
           <Button size='medium' type='submit' variant='contained' onClick={handleKegiatanPerusahaan}>
             Buat Group Perusahaan
           </Button>
-        </Grid>
+        </Grid> */}
       </form>
     </Card>
   )

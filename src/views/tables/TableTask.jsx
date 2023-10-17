@@ -64,7 +64,7 @@ const TableTask = props => {
           </Typography>
         </Link>
       ),
-      width: 140
+      width: 200
     },
     {
       field: 'target',
@@ -151,7 +151,7 @@ const TableTask = props => {
     <>
       <Typography variant={'h5'} mb={5}>
         {' '}
-        Sub Kegiatan Anda
+        Sub Kegiatan
       </Typography>
       <Grid item md={12}>
         <Card>

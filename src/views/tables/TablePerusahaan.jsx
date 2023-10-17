@@ -24,6 +24,8 @@ import PencilOutline from 'mdi-material-ui/PencilOutline'
 import DeleteOutline from 'mdi-material-ui/DeleteOutline'
 import router from 'next/router'
 
+import Link from '@mui/material/Link'
+
 const jenisFungsi = {
   2: { bagFungsi: 'Bagian', color: 'warning' },
   3: { bagFungsi: 'Statistik Sosial', color: 'warning' },
@@ -79,6 +81,18 @@ const TablePerusahaan = props => {
     },
     {
       field: 'nama',
+      renderCell: params => (
+        <Link
+          onClick={async e => {
+            router.push(`/perusahaan-detail/${params.row.id}`)
+          }}
+          sx={{ cursor: 'pointer' }}
+        >
+          <Typography sx={{ fontWeight: 500, textDecoration: 'underline', fontSize: '0.875rem !important' }}>
+            {params.row.nama}
+          </Typography>
+        </Link>
+      ),
       headerName: 'Nama',
       width: 240,
       minWidth: 130
@@ -112,12 +126,6 @@ const TablePerusahaan = props => {
       headerName: 'Nama Kecamatan',
       width: 240,
       minWidth: 130
-    },
-    {
-      field: 'jumlahKegiatan',
-      headerName: 'Jumlah Kegiatan',
-
-      minWidth: 150
     },
 
     {

@@ -1,15 +1,15 @@
 import { useState, useEffect } from 'react'
 import prisma from '../../services/db'
 import { getToken } from 'next-auth/jwt'
-import PeopleDetailGajiViews from 'src/views/people-views/PeopleDetailGajiViews'
+import PerusahaanDetailViews from 'src/views/perusahaan-views/PerusahaanDetailViews'
 
-const People = ({ data }) => {
-  const [user, setUser] = useState(JSON.parse(data))
+const PerusahaanDetail = ({ data }) => {
+  const [perusahaan, setPerusahaan] = useState(JSON.parse(data))
   // console.log(user)
   // console.log('asd')
   return (
     <>
-      <PeopleDetailGajiViews data={user.user} dataTpp={user.perusahaanTask}></PeopleDetailGajiViews>
+      <PerusahaanDetailViews data={perusahaan.perusahaan} dataTpp={perusahaan.perusahaanTask}></PerusahaanDetailViews>
     </>
   )
 }
@@ -25,15 +25,11 @@ export async function getServerSideProps(context) {
       }
     }
   }
-  let user
+  let perusahaan
 
-  user = await prisma.user.findMany({
+  perusahaan = await prisma.perusahaan.findMany({
     where: {
       id: parseInt(context.params.id)
-    },
-    include: {
-      UserProject: true,
-      taskToDo: true
     }
   })
 
@@ -46,7 +42,7 @@ export async function getServerSideProps(context) {
 
   const data = {
     perusahaanTask,
-    user
+    perusahaan
   }
   return {
     props: {
@@ -55,4 +51,4 @@ export async function getServerSideProps(context) {
   }
 }
 
-export default People
+export default PerusahaanDetail

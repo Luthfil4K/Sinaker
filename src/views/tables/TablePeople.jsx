@@ -11,6 +11,8 @@ import InputLabel from '@mui/material/InputLabel'
 import Select from '@mui/material/Select'
 import MenuItem from '@mui/material/MenuItem'
 
+import Link from '@mui/material/Link'
+
 // other, swall
 import { DataGrid } from '@mui/x-data-grid'
 import Swal from 'sweetalert2'
@@ -129,9 +131,23 @@ const TablePeople = props => {
     { field: 'id', headerName: 'No', type: 'string', minWidth: 40 },
     {
       field: 'nama',
-      headerName: 'Nama',
-      width: 240,
-      minWidth: 130
+      renderHeader: () => (
+        <Typography sx={{ fontWeight: 900, fontSize: '0.875rem !important', textAlign: 'center' }}>Nama</Typography>
+      ),
+      headerName: 'Namaste',
+      width: 200,
+      renderCell: params => (
+        <Link
+          onClick={async e => {
+            router.push(`/pegawai-detail-gaji/${params.row.id}`)
+          }}
+          sx={{ cursor: 'pointer' }}
+        >
+          <Typography sx={{ fontWeight: 500, textDecoration: 'underline', fontSize: '0.875rem !important' }}>
+            {params.row.nama}
+          </Typography>
+        </Link>
+      )
     },
     {
       field: 'over',

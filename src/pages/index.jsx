@@ -372,7 +372,7 @@ const Dashboard = ({ dataTask }) => {
       </Grid>
       <Grid mt={1} container spacing={2}>
         <Grid item xs={12} md={12}>
-          <Card sx={{ padding: 4, height: 350 }}>
+          <Card sx={{ padding: 4, height: 400 }}>
             <Grid container spacing={1}>
               <Grid item xs={6} md={8}>
                 <Typography variant={'h6'}>Target dan Realisasi per Sub Kegiatan {tahunBar}</Typography>
@@ -424,31 +424,34 @@ const Dashboard = ({ dataTask }) => {
                 </FormControl>
               </Grid>
             </Grid>
-            <Line
-              datasetIdKey='id'
-              data={dataLine}
-              width={500}
-              height={140}
-              options={{
-                responsive: true,
-                scales: {
-                  x: {
-                    ticks: {
-                      display: false
+            <Grid item md={12} xs={12}>
+              <Line
+                datasetIdKey='id'
+                data={dataLine}
+                width={500}
+                height={140}
+                options={{
+                  responsive: true,
+                  scales: {
+                    x: {
+                      ticks: {
+                        display: false
+                      }
+                    }
+                  },
+                  plugins: {
+                    legend: {
+                      position: 'top'
+                    },
+                    title: {
+                      display: true,
+                      text: ` `
                     }
                   }
-                },
-                plugins: {
-                  legend: {
-                    position: 'top'
-                  },
-                  title: {
-                    display: true,
-                    text: ` `
-                  }
-                }
-              }}
-            />
+                }}
+              />
+            </Grid>
+
             <Divider></Divider>
           </Card>
         </Grid>

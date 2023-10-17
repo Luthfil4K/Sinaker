@@ -180,15 +180,19 @@ const MitraDetailGajiViews = props => {
     }
 
     return (
-      <Grid item md={4} xs={6}>
+      <Grid item md={4} xs={12}>
         <Card>
           <CardMedia sx={{ height: '0.5rem' }} image='/images/cards/rec.png' />
           <CardContent>
             <Typography variant='h6' sx={{ marginBottom: 2 }}>
               {namaBulan}
             </Typography>
-            <Typography textAlign={'end'} variant={'body2'}>
-              Total Gaji: Rp{totalGaji.toLocaleString('id-ID')}
+            <Typography textAlign={'end'} variant={'body1'}>
+              Gaji Bulanan :{' '}
+              <span style={{ fontWeight: 500, color: `${totalGaji < 100000 ? '#804BDF' : '#FF6166'}` }}>
+                {' '}
+                Rp{totalGaji.toLocaleString('id-ID')}
+              </span>
             </Typography>
             <Divider sx={{ margin: 0 }} />
           </CardContent>
@@ -236,7 +240,7 @@ const MitraDetailGajiViews = props => {
                             </Typography>
                             <br></br>
                             <Typography key={nama} variant={'caption'}>
-                              Gaji : {subKeg.gajiPerusahaan[index]}
+                              Gaji : Rp{subKeg.gajiPerusahaan[index].toLocaleString('id-ID')}
                             </Typography>
                             <br></br>
                             <br></br>
@@ -334,7 +338,7 @@ const MitraDetailGajiViews = props => {
               <Grid item md={12} xs={12}>
                 <Divider sx={{ marginTop: 1.5, marginBottom: 1.75 }} />
               </Grid>
-              <Grid item md={6} xs={6} display={'flex'} justifyContent={'start'} alignItems={'center'}>
+              <Grid item md={6} xs={6} display={'flex'} justifyContent={'start'}>
                 <Typography variant='h6'>Total Gaji : Rp</Typography>
                 <Typography
                   sx={{ marginRight: 30, fontWeight: 500, fontSize: '1.2rem !important', textAlign: 'center' }}
@@ -349,6 +353,7 @@ const MitraDetailGajiViews = props => {
                     router.push(`/mitra-edit/${props.data[0].id}`)
                   }}
                   variant='contained'
+                  size='medium'
                 >
                   Edit Mitra
                 </Button>
