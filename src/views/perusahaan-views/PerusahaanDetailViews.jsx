@@ -148,6 +148,7 @@ const PerusahaanDetailViews = props => {
                   sx={{ marginRight: 30, fontWeight: 500, fontSize: '1.2rem !important', textAlign: 'center' }}
                 ></Typography>
               </Grid>
+
               <Grid item md={6} xs={6} display={'flex'} justifyContent={'end'}>
                 <Button
                   onClick={e => {
@@ -160,6 +161,7 @@ const PerusahaanDetailViews = props => {
                   Edit perusahaan
                 </Button>
               </Grid>
+
               <Grid item md={12}>
                 <div>
                   <p>Perusahaan Masuk Kedalam Kegiatan: {totalKegiatan.totalKegiatanUnik}</p>
@@ -171,7 +173,11 @@ const PerusahaanDetailViews = props => {
                         }}
                         sx={{ cursor: 'pointer' }}
                       >
-                        <li key={taskId}>{namaKegiatan}</li>
+                        <Typography
+                          sx={{ fontWeight: 500, textDecoration: 'underline', fontSize: '0.875rem !important' }}
+                        >
+                          <li key={taskId}>{namaKegiatan}</li>
+                        </Typography>
                       </Link>
                     ))}
                   </ul>
