@@ -371,7 +371,7 @@ const TableGroupPerusahaan = props => {
           : fungsi === 7 && jenisSample === 0 //IPDS Dok
           ? 'ID SLS'
           : '',
-      width: 200,
+      width: 280,
       editable: true
     },
     { field: 'realisasi', headerName: 'Realisasi', width: 100, editable: true },

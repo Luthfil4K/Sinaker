@@ -46,7 +46,7 @@ const TableTask = props => {
         </Link>
       ),
 
-      headerName: 'Task',
+      headerName: 'Sub Kegiatan',
       width: 250
     },
     {
