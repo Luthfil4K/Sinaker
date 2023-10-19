@@ -30,7 +30,8 @@ export default async function handler(req, res) {
       userId,
       notes,
       participants,
-      peserta
+      peserta,
+      persertaOrganik
     } = req.body
 
     try {
@@ -87,11 +88,20 @@ export default async function handler(req, res) {
           // buat add peserta disini
 
           peserta.map(async peserta => {
-            console.log(peserta.id)
             const tp = await prisma.TaskPeserta.create({
               data: {
                 taskId: task.id,
                 mitraId: peserta.id
+              }
+            })
+          })
+
+          persertaOrganik.map(async peserta => {
+            console.log(peserta.id)
+            const to = await prisma.TaskOrganik.create({
+              data: {
+                taskId: task.id,
+                organikId: peserta.id
               }
             })
           })
@@ -103,6 +113,16 @@ export default async function handler(req, res) {
             data: {
               taskId: task.id,
               mitraId: peserta.id
+            }
+          })
+        })
+
+        persertaOrganik.map(async peserta => {
+          console.log(peserta.id)
+          const to = await prisma.TaskOrganik.create({
+            data: {
+              taskId: task.id,
+              organikId: peserta.id
             }
           })
         })

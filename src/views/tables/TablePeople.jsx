@@ -25,7 +25,7 @@ import DeleteOutline from 'mdi-material-ui/DeleteOutline'
 import router from 'next/router'
 
 const jenisFungsi = {
-  2: { bagFungsi: 'Bagian', color: 'warning' },
+  2: { bagFungsi: 'Bagian Umum', color: 'warning' },
   3: { bagFungsi: 'Statistik Sosial', color: 'warning' },
   4: { bagFungsi: 'Statistik Produksi', color: 'warning' },
   5: { bagFungsi: 'Statistik Distribusi', color: 'warning' },
@@ -339,9 +339,9 @@ const TablePeople = props => {
             <PencilOutline />
           </Button>
 
-          <Button onClick={handleDelete} type='submit' sx={{ mr: 1 }} color='error' variant='text'>
+          {/* <Button onClick={handleDelete} type='submit' sx={{ mr: 1 }} color='error' variant='text'>
             <DeleteOutline />
-          </Button>
+          </Button> */}
         </>
       )
     }

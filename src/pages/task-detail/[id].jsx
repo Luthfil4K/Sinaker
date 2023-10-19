@@ -66,11 +66,12 @@ export async function getServerSideProps(context) {
     }
   })
 
-  const pegawai = await prisma.user.findMany({
+  const pegawai = await prisma.TaskOrganik.findMany({
     where: {
-      id: {
-        not: 99
-      }
+      taskId: parseInt(context.params.id)
+    },
+    include: {
+      organik: true
     }
   })
 

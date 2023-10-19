@@ -58,17 +58,22 @@ const TableGroupPerusahaan = props => {
   const [pml, setPML] = useState(props.dataPML)
   const fungsi = props.dataProjectFungsi
   const jenisSample = props.dataTaskSample
-  console.log('ini fungsi: ' + fungsi)
-  console.log('ini jenisSample: ' + jenisSample)
-  const optionPML = pml.map(pml => ({
-    value: pml.id,
-    label: pml.name
-  }))
+
+  const [organikMitra, setOrganikMitra] = useState({
+    value: '',
+    label: ''
+  })
+
   const optionPCL = mitra.map(mi => ({
     value: mi.mitra.id,
     label: mi.mitra.name
   }))
+  const optionPML = pml.map(pml => ({
+    value: pml.id,
+    label: pml.organik.name + ' - Organik'
+  }))
 
+  const combinedOptions = [...optionPCL, ...optionPML]
   const [participants, setParticipants] = useState(props.data)
   const apapa = props.dataProjectFungsi
   const initialRows = participants.map(row => ({
@@ -423,7 +428,17 @@ const TableGroupPerusahaan = props => {
       width: 200,
       renderHeader: () => (
         <Typography sx={{ fontWeight: 900, fontSize: '0.875rem !important', textAlign: 'center' }}>
-          Realisasi
+          {fungsi === 4 || fungsi === 5 //Produksi or Distribusi
+            ? 'Alamat'
+            : fungsi === 3 || (fungsi === 7 && jenisSample === 0) //Sosial or IPDS dokumen
+            ? 'NBS'
+            : fungsi === 6 && jenisSample === 0 // Nerwilis Dok
+            ? 'ID SLS'
+            : fungsi === 7 && jenisSample === 1 // IPDS Responden
+            ? 'ID SBR'
+            : fungsi === 6 && jenisSample === 1 //Nerwilis responden
+            ? 'NUS'
+            : ''}
         </Typography>
       ),
       editable: true
@@ -521,7 +536,20 @@ const TableGroupPerusahaan = props => {
       field: 'pmlId',
       headerName: 'PML',
       type: 'singleSelect',
-      valueOptions: optionPML.sort((a, b) => a.label.localeCompare(b.label)),
+      valueOptions: combinedOptions.sort((a, b) => {
+        // Periksa apakah label mengandung "organik"
+        const isAOrganik = a.label.toLowerCase().includes('organik')
+        const isBOrganik = b.label.toLowerCase().includes('organik')
+
+        if (isAOrganik && !isBOrganik) {
+          return -1 // Pindahkan label a ke atas
+        } else if (!isAOrganik && isBOrganik) {
+          return 1 // Pindahkan label b ke atas
+        } else {
+          // Urutkan berdasarkan label
+          return a.label.localeCompare(b.label)
+        }
+      }),
       renderHeader: () => (
         <Typography sx={{ fontWeight: 900, fontSize: '0.875rem !important', textAlign: 'center' }}>PML</Typography>
       ),
@@ -651,7 +679,7 @@ const TableGroupPerusahaan = props => {
 
               <Grid item md={2} xs={6}>
                 <Typography variant='body1'>Total Gaji Pml</Typography>
-                <Typography variant='caption'>{summary.totalGajiPml.toLocaleString('id-ID')} </Typography>
+                <Typography variant='caption'>Rp{summary.totalGajiPml.toLocaleString('id-ID')} </Typography>
               </Grid>
               <Grid item md={2} xs={6}>
                 <Typography variant='body1'>Total PCL</Typography>

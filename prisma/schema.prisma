@@ -22,6 +22,7 @@ model User {
   projectToLead  Project[]      @relation("projectToLead")
   taskToDo       Task[]         @relation("taskToDo")
   ProjectCreated Project[]
+  TaskOrganik    TaskOrganik[]
 
 }
 
@@ -69,6 +70,7 @@ model Task {
   userId      Int
   TaskPerusahaanProduksi    TaskPerusahaanProduksi[]
   TaskPeserta       TaskPeserta[]
+  TaskOrganik       TaskOrganik[]
   
 }
 
@@ -152,6 +154,14 @@ model TaskPeserta {
  taskId            Int
  mitra             Mitra         @relation(fields: [mitraId], references: [id], onDelete: Cascade, onUpdate: Cascade)
  mitraId           Int
+}
+
+model TaskOrganik {
+ id                Int           @id @default(autoincrement())
+ task              Task          @relation(fields: [taskId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+ taskId            Int
+ organik           User         @relation(fields: [organikId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+ organikId         Int
 }
 
 model PesertaGaji {

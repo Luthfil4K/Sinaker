@@ -136,6 +136,14 @@ const TaskManageAddViews = propss => {
       }
     })
 
+    let pegawaiOrganik = []
+    rowsO.map(a => {
+      if (a.checked) {
+        console.log('ini dikliiiiiiiiiiiiiiiiiiiiiiiiiiik')
+        pegawaiOrganik.push(a)
+      }
+    })
+
     try {
       while (true) {
         const res = await axios.post('/task', {
@@ -148,6 +156,7 @@ const TaskManageAddViews = propss => {
           jenisSample: values.subKegJenis == 65 || values.subKegJenis == 67 ? values.subKegJenisSample : 0,
           participants: rows,
           peserta: dataPCL,
+          persertaOrganik: pegawaiOrganik,
           description: values.subKegDesk,
           realisasi: 0,
           month: parseInt(values.subKegMonth),
@@ -164,7 +173,8 @@ const TaskManageAddViews = propss => {
             icon: 'success',
             confirmButtonColor: '#68B92E',
             confirmButtonText: 'OK'
-          }).then(router.push(`/project-detail/${values.subKegProjectId}`))
+          })
+          // .then(router.push(`/project-detail/${values.subKegProjectId}`))
 
           setValues({
             subKegNama: '',
@@ -246,6 +256,15 @@ const TaskManageAddViews = propss => {
     })
   )
 
+  const [dataOrganik, setDataOrganik] = useState(
+    propss.dataOrganik.map(meetra => {
+      return {
+        ...meetra,
+        checked: false
+      }
+    })
+  )
+
   // const rows = company.map(perusahaan => ({
   //   id: perusahaan.id,
   //   nama: perusahaan.nama,
@@ -312,6 +331,55 @@ const TaskManageAddViews = propss => {
       return {
         id: row.id,
         nik: row.nik.toString(),
+        name: row.name,
+        gajiBulanIni,
+        gajiBulanSblm,
+        gajiBulanDepan,
+        over: gajiBulanIni
+      }
+    })
+  )
+
+  const [rowsO, setRowsO] = useState(
+    dataOrganik.map(row => {
+      const gajiBulanIni = tpp
+        .filter(tppRow => tppRow.pmlId === row.id)
+        .filter(tppRow => {
+          const tppDueDate = new Date(tppRow.task.duedate)
+          const currentDate = new Date()
+          return (
+            tppDueDate.getFullYear() === currentDate.getFullYear() && tppDueDate.getMonth() === currentDate.getMonth()
+          )
+        })
+        .reduce((totalGaji, tppRow) => totalGaji + tppRow.gajiPml, 0)
+
+      const gajiBulanSblm = tpp
+        .filter(tppRow => tppRow.pmlId === row.id)
+        .filter(tppRow => {
+          const tppDueDate = new Date(tppRow.task.duedate)
+          const currentDate = new Date()
+          return currentDate.getMonth != 0
+            ? tppDueDate.getFullYear() === currentDate.getFullYear() &&
+                tppDueDate.getMonth() === currentDate.getMonth() - 1
+            : tppDueDate.getFullYear() === currentDate.getFullYear() - 1 && tppDueDate.getMonth() === 12
+        })
+        .reduce((totalGaji, tppRow) => totalGaji + tppRow.gajiPml, 0)
+
+      const gajiBulanDepan = tpp
+        .filter(tppRow => tppRow.pmlId === row.id)
+        .filter(tppRow => {
+          const tppDueDate = new Date(tppRow.task.duedate)
+          const currentDate = new Date()
+          return currentDate.getMonth != 11
+            ? tppDueDate.getFullYear() === currentDate.getFullYear() &&
+                tppDueDate.getMonth() === currentDate.getMonth() + 1
+            : tppDueDate.getFullYear() === currentDate.getFullYear() + 1 && tppDueDate.getMonth() === 0
+        })
+        .reduce((totalGaji, tppRow) => totalGaji + tppRow.gajiPml, 0)
+
+      return {
+        id: row.id,
+        nip: row.nip.toString(),
         name: row.name,
         gajiBulanIni,
         gajiBulanSblm,
@@ -484,6 +552,164 @@ const TaskManageAddViews = propss => {
         <Typography sx={{ fontWeight: 900, fontSize: '0.875rem !important', textAlign: 'center' }}>NIK</Typography>
       ),
       headerName: 'NIK',
+      width: 200
+    },
+    {
+      field: 'name',
+      renderHeader: () => (
+        <Typography sx={{ fontWeight: 900, fontSize: '0.875rem !important', textAlign: 'center' }}>Nama</Typography>
+      ),
+      headerName: 'Nama',
+      width: 200
+    },
+    {
+      field: 'over',
+      renderCell: params => (
+        <>
+          <Chip
+            label={statusObj[params.row.gajiBulanIni < 3000000 ? 1 : 0].status}
+            color={statusObj[params.row.gajiBulanIni < 3000000 ? 1 : 0].color}
+            sx={{
+              height: 24,
+              fontSize: '0.75rem',
+              width: 100,
+              textTransform: 'capitalize',
+              '& .MuiChip-label': { fontWeight: 500 }
+            }}
+          />
+        </>
+      ),
+      renderHeader: () => (
+        <Typography sx={{ fontWeight: 900, fontSize: '0.875rem !important', textAlign: 'center' }}>
+          Status Bulan Ini
+        </Typography>
+      ),
+      type: 'string',
+      width: 140
+    },
+
+    {
+      field: 'gajiBulanIni',
+      renderHeader: () => (
+        <Typography sx={{ fontWeight: 900, fontSize: '0.875rem !important', textAlign: 'center' }}>
+          Gaji Bulan Ini
+        </Typography>
+      ),
+      headerName: 'Gaji Bulan Ini ',
+      type: 'string',
+      width: 140,
+      renderCell: params => (
+        <>
+          <Typography
+            color={params.row.gajiBulanIni < 3000000 ? 'secondary.main' : 'error.main'}
+            sx={{ fontWeight: 500, fontSize: '0.875rem !important', textAlign: 'center' }}
+          >
+            {`Rp ${params.row.gajiBulanIni.toLocaleString('id-ID')}`}
+          </Typography>
+        </>
+      )
+    },
+    {
+      field: 'gajiBulanSblm',
+      renderHeader: () => (
+        <Typography sx={{ fontWeight: 900, fontSize: '0.875rem !important', textAlign: 'center' }}>
+          Gaji Bulan Sebelumnya
+        </Typography>
+      ),
+      headerName: 'Gaji Bulan Sebelumnya ',
+      type: 'string',
+      width: 140,
+      renderCell: params => (
+        <>
+          <Typography
+            color={params.row.gajiBulanSblm < 3000000 ? 'secondary.main' : 'error.main'}
+            sx={{ fontWeight: 500, fontSize: '0.875rem !important', textAlign: 'center' }}
+          >
+            {`Rp ${params.row.gajiBulanSblm.toLocaleString('id-ID')}`}
+          </Typography>
+        </>
+      )
+    },
+    {
+      field: 'gajiBulanDepan',
+      renderHeader: () => (
+        <Typography sx={{ fontWeight: 900, fontSize: '0.875rem !important', textAlign: 'center' }}>
+          Gaji Bulan Depan
+        </Typography>
+      ),
+      headerName: 'Gaji Bulan Depan ',
+      type: 'string',
+      width: 140,
+      renderCell: params => (
+        <>
+          <Typography
+            color={params.row.gajiBulanDepan < 3000000 ? 'secondary.main' : 'error.main'}
+            sx={{ fontWeight: 500, fontSize: '0.875rem !important', textAlign: 'center' }}
+          >
+            {`Rp ${params.row.gajiBulanDepan.toLocaleString('id-ID')}`}
+          </Typography>
+        </>
+      )
+    }
+  ]
+
+  const columnsO = [
+    {
+      field: 'checked',
+      sortable: true,
+      headerName: 'List',
+      // renderHeader: () => (
+      //   <FormControlLabel
+      //     control={
+      //       <Checkbox
+      //         checked={rowsO.filter(participant => participant.checked === true).length === rowsO.length}
+      //         onChange={e => {
+      //           let checked = e.target.checked
+      //           setRowsO(
+      //             rowsO.map(participant => {
+      //               return {
+      //                 ...participant,
+      //                 checked: checked
+      //               }
+      //             })
+      //           )
+      //         }}
+      //       />
+      //     }
+      //     label='All'
+      //   />
+      // ),
+      minWidth: 30,
+      renderCell: params => (
+        <FormControlLabel
+          control={
+            <Checkbox
+              checked={params.value}
+              onChange={e => {
+                let checked = e.target.checked
+                setRowsO(
+                  rowsO.map(participant => {
+                    if (participant.id === params.id) {
+                      participant.checked = checked
+                    }
+
+                    return participant
+                  })
+                )
+              }}
+            />
+          }
+          label=''
+        />
+      ),
+      align: 'left'
+    },
+    {
+      field: 'nip',
+      renderHeader: () => (
+        <Typography sx={{ fontWeight: 900, fontSize: '0.875rem !important', textAlign: 'center' }}>NIP</Typography>
+      ),
+      headerName: 'NIP',
       width: 200
     },
     {
@@ -761,7 +987,7 @@ const TaskManageAddViews = propss => {
                           experimentalFeatures={{ newEditingApi: true }}
                           sx={{
                             height: rows.length > 3 ? '70vh' : '45vh',
-                            overflowY: 'auto',
+                            // overflowY: 'auto',
                             width: '100%'
                           }}
                         />
@@ -776,7 +1002,7 @@ const TaskManageAddViews = propss => {
                 <>
                   <Grid item md={6} xs={12}>
                     <Typography variant={'h6'} mb={4}>
-                      Peserta Kegiatan
+                      Mitra
                     </Typography>
                   </Grid>
                   <Grid item md={12} xs={12}>
@@ -797,7 +1023,37 @@ const TaskManageAddViews = propss => {
                             experimentalFeatures={{ newEditingApi: true }}
                             sx={{
                               height: rowsM.length > 3 ? '70vh' : '45vh',
-                              overflowY: 'auto',
+                              width: '100%'
+                            }}
+                          />
+                        </Box>
+                      </Grid>
+                    </Grid>
+                  </Grid>
+
+                  <Grid item md={6} xs={12}>
+                    <Typography variant={'h6'} mb={4}>
+                      Organik
+                    </Typography>
+                  </Grid>
+                  <Grid item md={12} xs={12}>
+                    <Grid container spacing={4}>
+                      <Grid item xs={12}>
+                        <Box sx={{ width: '100%' }}>
+                          <DataGrid
+                            initialState={{
+                              sorting: {
+                                sortModel: [{ field: 'checked', sort: 'desc' }]
+                              }
+                            }}
+                            rows={rowsO}
+                            columns={columnsO}
+                            pprioritySize={5}
+                            rowsPerPpriorityOptions={[5]}
+                            disableSelectionOnClick
+                            experimentalFeatures={{ newEditingApi: true }}
+                            sx={{
+                              height: rowsO.length > 3 ? '70vh' : '45vh',
                               width: '100%'
                             }}
                           />
