@@ -302,14 +302,14 @@ const PeopleDetailGajiViews = props => {
       return tppDueDate.getMonth() === sekarang.getMonth() && tppDueDate.getFullYear() === selectedYear
     })
     .reduce((totalGaji, tppRow) => totalGaji + tppRow.gajiPml, 0)
-
+  const angkaRandom = Math.floor(Math.random() * 7) + 1
   return (
     <>
       <Card sx={{ position: 'relative' }}>
         <CardMedia sx={{ height: '6.625rem' }} image='/images/cards/background-user.png' />
         <Avatar
           alt='Robert Meyer'
-          src='/images/avatars/jisoo.png'
+          src='/images/avatars/5.png'
           sx={{
             width: 75,
             height: 75,

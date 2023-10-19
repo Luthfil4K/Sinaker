@@ -120,7 +120,7 @@ const UserDropdown = props => {
           alt={user.name}
           onClick={handleDropdownOpen}
           sx={{ width: 40, height: 40 }}
-          src='/images/avatars/jisoo.png'
+          src='/images/avatars/3.png'
         />
       </Badge>
       <Menu
@@ -138,7 +138,7 @@ const UserDropdown = props => {
               badgeContent={<BadgeContentSpan />}
               anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
             >
-              <Avatar alt={user.name} src='/images/avatars/jisoo.png' sx={{ width: '2.5rem', height: '2.5rem' }} />
+              <Avatar alt={user.name} src='/images/avatars/3.png' sx={{ width: '2.5rem', height: '2.5rem' }} />
             </Badge>
             <Box sx={{ display: 'flex', marginLeft: 3, alignItems: 'flex-start', flexDirection: 'column' }}>
               <Typography sx={{ fontWeight: 600 }}>{user.name}</Typography>

@@ -500,7 +500,7 @@ const Dashboard = ({ dataTask }) => {
                   scales: {
                     x: {
                       ticks: {
-                        display: false
+                        display: true
                       }
                     }
                   },

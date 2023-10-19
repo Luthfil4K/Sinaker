@@ -20,7 +20,7 @@ import DeleteOutline from 'mdi-material-ui/DeleteOutline'
 
 const jenisSub = {
   64: { namaJenisSub: 'Persiapan', color: 'warning' },
-  65: { namaJenisSub: 'Pelaksanaan', color: 'warning' },
+  65: { namaJenisSub: 'Lapangan', color: 'warning' },
   66: { namaJenisSub: 'Pengawasan', color: 'warning' },
   67: { namaJenisSub: 'Pengolahan', color: 'warning' },
   68: { namaJenisSub: 'Evaluasi', color: 'warning' },
@@ -65,7 +65,7 @@ const TableManageTaskList = props => {
   }
 
   const columns = [
-    { field: 'id', headerName: 'No', type: 'string', width: 70 },
+    // { field: 'id', headerName: 'No', type: 'string', width: 70 },
     {
       field: 'subKegiatan',
       headerName: 'Sub Kegiatan',

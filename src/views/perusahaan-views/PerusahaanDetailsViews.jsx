@@ -73,13 +73,13 @@ const CreateKegiatanPerusahaanViews = props => {
     e.preventDefault()
 
     Swal.fire({
-      title: 'Delete Project?',
+      title: 'Delete Group?',
       text: '',
       icon: 'warning',
       showCancelButton: true,
       confirmButtonColor: '#68B92E',
       cancelButtonColor: '#d33',
-      confirmButtonText: 'Yes, Delete Project',
+      confirmButtonText: 'Yes, Delete Group',
       cancelButtonText: 'No, Cancel',
       reverseButtons: true
     }).then(result => {

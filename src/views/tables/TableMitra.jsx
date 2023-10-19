@@ -428,7 +428,7 @@ const TableMitra = props => {
             columns={columns}
             sx={{
               height: rows.length > 3 ? '70vh' : '45vh',
-              overflowY: 'auto',
+              // overflowY: 'auto',
               width: '100%'
             }}
           />

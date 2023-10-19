@@ -30,7 +30,7 @@ const TableTask = props => {
 
   console.log(task)
   const columns = [
-    { field: 'id', headerName: 'No', type: 'string', width: 70 },
+    // { field: 'id', headerName: 'No', type: 'string', width: 70 },
     {
       field: 'taskName',
       renderCell: params => (

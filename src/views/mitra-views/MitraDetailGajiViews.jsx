@@ -445,7 +445,7 @@ const MitraDetailGajiViews = props => {
         <CardMedia sx={{ height: '6.625rem' }} image='/images/cards/background-user.png' />
         <Avatar
           alt='Robert Meyer'
-          src='/images/avatars/jisoo.png'
+          src='/images/avatars/4.png'
           sx={{
             width: 75,
             height: 75,
