@@ -271,22 +271,21 @@ const TaskDetailViews = props => {
           </Grid>
         </Grid>
         {}
-        <Grid item md={12}>
-          {session.status === 'authenticated' &&
-            (session.data.uid === 99 || values.jenisKeg === 65 || values.jenisKeg === 67) && (
-              <TablePerusahaanTaskDetails
-                data={participants}
-                dataProjectFungsi={props.data.project.fungsi}
-                dataId={values.id}
-                dataMitra={mitra}
-                dataPML={pegawai}
-                dataTaskSample={values.jenisSample}
-              ></TablePerusahaanTaskDetails>
-              // <Button type='submit' variant={'contained'} onClick={handleSimpan} fullWidth>
-              //   Simpan
-              // </Button>
-            )}
-        </Grid>
+
+        {session.status === 'authenticated' &&
+          (session.data.uid === 99 || values.jenisKeg === 65 || values.jenisKeg === 67) && (
+            <TablePerusahaanTaskDetails
+              data={participants}
+              dataProjectFungsi={props.data.project.fungsi}
+              dataId={values.id}
+              dataMitra={mitra}
+              dataPML={pegawai}
+              dataTaskSample={values.jenisSample}
+            ></TablePerusahaanTaskDetails>
+            // <Button type='submit' variant={'contained'} onClick={handleSimpan} fullWidth>
+            //   Simpan
+            // </Button>
+          )}
       </Grid>
     </>
   )

@@ -13,6 +13,7 @@ import Select, { SelectChangeEvent } from '@mui/material/Select'
 import Grid from '@mui/material/Grid'
 import Card from '@mui/material/Card'
 import Typography from '@mui/material/Typography'
+
 import Divider from '@mui/material/Divider'
 
 // ** MUI chart
@@ -36,7 +37,24 @@ import TableTaskDashboard from 'src/views/tables/TableTaskDashboard'
 
 const Dashboard = ({ dataTask }) => {
   const session = useSession()
+  const [user, setUser] = useState({})
+  const getUser = async () => {
+    setUser(prev => {
+      return {
+        ...prev,
+        name: session?.data?.user?.name,
+        role: session?.data?.role
+      }
+    })
+  }
+
+  useEffect(() => {
+    if (session.status === 'authenticated') {
+      getUser()
+    }
+  }, [session])
   const [task, setTask] = useState(JSON.parse(dataTask))
+  console.log(task)
   const dataawal = [12, 19, 3, 5, 2, 3, 8, 10, 6, 7, 14, 12]
   const realisasiAwal = Array.from({ length: 12 }, () => Math.floor(Math.random() * 100))
 
@@ -60,6 +78,9 @@ const Dashboard = ({ dataTask }) => {
   const [linearProgress, setLinearProgress] = useState(0)
   const [totalTarget, setTotalTarget] = useState(0)
   const [totalRealisasi, setTotalRealisasi] = useState(0)
+  const [linearProgressP, setLinearProgressP] = useState(0)
+  const [totalTargetP, setTotalTargetP] = useState(0)
+  const [totalRealisasiP, setTotalRealisasiP] = useState(0)
 
   // handle dropdown
   const handleChangeBulan = event => {
@@ -214,16 +235,35 @@ const Dashboard = ({ dataTask }) => {
     const untukLinearProgress = 0
     let targetLinear = 0
     let realisasiLinear = 0
+    const untukLinearProgressP = 0
+    let targetLinearP = 0
+    let realisasiLinearP = 0
 
     task.map(task => {
-      targetLinear += task.target
-      realisasiLinear += task.realisasi
+      if (task.jenisSample === 1) {
+        targetLinear += task.target
+        realisasiLinear += task.realisasi
+        console.log(
+          task.id + 'masuk ke jenis sample 1 dengan realisasi :' + task.realisasi + 'dan target : ' + task.target
+        )
+      } else if (task.jenisSample == 0) {
+        console.log(
+          task.id + 'masuk ke jenis sample 0 dengan realisasi :' + task.realisasi + 'dan target : ' + task.target
+        )
+        targetLinearP += task.target
+        realisasiLinearP += task.realisasi
+      }
     })
     untukLinearProgress = targetLinear == 0 ? 0 : 100 * (realisasiLinear / targetLinear)
+    untukLinearProgressP = targetLinearP == 0 ? 0 : 100 * (realisasiLinearP / targetLinearP)
 
     setLinearProgress(untukLinearProgress)
     setTotalRealisasi(realisasiLinear)
     setTotalTarget(targetLinear)
+
+    setLinearProgressP(untukLinearProgressP)
+    setTotalRealisasiP(realisasiLinearP)
+    setTotalTargetP(targetLinearP)
 
     // console.log(bulan + 'ini pas ganti valuedropline' + valueDropLine)
   }, [task])
@@ -325,8 +365,33 @@ const Dashboard = ({ dataTask }) => {
             </Grid>
             <Grid item xs={6} md={6}>
               <Card sx={{ padding: 4, height: 200 }}>
-                <Typography variant={'h6'}>Capaian Tarel </Typography>
+                <Typography variant={'h6'}>Capaian Kegiatan</Typography>
                 <Divider></Divider>
+                <Grid container spacing={0}>
+                  <Grid item md={12} height={60} display={'flex'} justifyContent={'start'} alignItems={'end'}>
+                    <Typography variant='h3' color={'primary.dark'}>{`${linearProgressP.toFixed(2)}%`}</Typography>
+                  </Grid>
+                  <Grid item md={12} height={60}>
+                    <Grid container spacing={0}>
+                      <Grid item md={7}>
+                        <Typography mt={5} variant='body2'>
+                          Realisasi/Target
+                        </Typography>
+                      </Grid>
+                      <Grid item md={5} display={'flex'} justifyContent={'end'}>
+                        <Typography mt={5} variant='body2' color={'primary.dark'}>
+                          {totalRealisasiP}/ {totalTargetP}
+                        </Typography>
+                      </Grid>
+                    </Grid>
+                    <LinearProgress
+                      sx={{ height: 10 }}
+                      color='success'
+                      value={linearProgressP}
+                      variant='determinate'
+                    ></LinearProgress>
+                  </Grid>
+                </Grid>
               </Card>
             </Grid>
           </Grid>
@@ -337,7 +402,7 @@ const Dashboard = ({ dataTask }) => {
               <Card sx={{ padding: 2, height: 40 }}>
                 <Grid container>
                   <Grid item xs={12} md={12} display={'flex'} justifyContent={'center'} alignItems={'center'}>
-                    <Typography variant={'body2'}>Admin </Typography>
+                    <Typography variant={'body2'}>{user.name} </Typography>
                   </Grid>
                 </Grid>
               </Card>

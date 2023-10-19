@@ -18,6 +18,8 @@ import Collapse from '@mui/material/Collapse'
 import IconButton from '@mui/material/IconButton'
 import CardActions from '@mui/material/CardActions'
 
+import router from 'next/router'
+import Link from '@mui/material/Link'
 // ** Icons Imports
 import ChevronUp from 'mdi-material-ui/ChevronUp'
 import ChevronDown from 'mdi-material-ui/ChevronDown'
@@ -189,7 +191,7 @@ const MitraDetailGajiViews = props => {
             </Typography>
             <Typography textAlign={'end'} variant={'body1'}>
               Gaji Bulanan :{' '}
-              <span style={{ fontWeight: 500, color: `${totalGaji < 100000 ? '#804BDF' : '#FF6166'}` }}>
+              <span style={{ fontWeight: 500, color: `${totalGaji < 3000000 ? '#804BDF' : '#FF6166'}` }}>
                 {' '}
                 Rp{totalGaji.toLocaleString('id-ID')}
               </span>
@@ -207,20 +209,23 @@ const MitraDetailGajiViews = props => {
                         sx={{
                           width: '100%',
                           display: 'flex',
-                          alignItems: 'center',
+                          alignItems: 'start',
                           justifyContent: 'space-between'
                         }}
                       >
-                        <Typography variant={'body2'}>
-                          {/* <span style={{ fontWeight: 500, color: '#804BDF' }}>{subKeg.nama}</span>: Rp
-                        {subKeg.taskTotalGaji.toLocaleString('id-ID')} */}
-                          {subKeg.nama}:{' '}
-                          <span style={{ fontWeight: 500, color: '#804BDF' }}>
-                            {' '}
-                            Rp
-                            {subKeg.taskTotalGaji.toLocaleString('id-ID')}
-                          </span>
+                        <Typography display={'inline'} variant={'body2'}>
+                          <Link
+                            onClick={async e => {
+                              router.push(`/task-detail/${subKeg.taskId}`)
+                            }}
+                            sx={{ color: '#777B82', textDecoration: 'underline', cursor: 'pointer' }}
+                          >
+                            {subKeg.nama}
+                          </Link>
+                          : Rp
+                          {subKeg.taskTotalGaji.toLocaleString('id-ID')}
                         </Typography>
+                        <Typography display={'inline'} variant={'body2'}></Typography>
 
                         <IconButton size='small' onClick={() => handleClick(index)}>
                           {collapseStates[index] ? (
@@ -252,12 +257,18 @@ const MitraDetailGajiViews = props => {
                   </div>
                 ))
               ) : (
-                <Box height={120} display={'flex'} justifyContent={'center'} alignItems={'center'}>
-                  <Typography variant={'caption'} color={'secondary'}>
-                    {' '}
-                    Available!
-                  </Typography>
-                </Box>
+                <>
+                  <Grid container spacing={1}>
+                    <Grid item md={12}>
+                      <Box height={120} display={'flex'} justifyContent={'center'} alignItems={'center'}>
+                        <Typography variant={'caption'} color={'secondary'}>
+                          {' '}
+                          Available!
+                        </Typography>
+                      </Box>
+                    </Grid>
+                  </Grid>
+                </>
               )}
             </Grid>
           </Grid>
@@ -320,12 +331,11 @@ const MitraDetailGajiViews = props => {
                   {new Date(values.mitraTanggalLahir).toLocaleDateString('id-ID')}
                 </Typography>
               </Grid>
-
               <Grid item md={2} xs={6}>
                 <Typography variant='body1'>Status Bulan Ini</Typography>
                 <Chip
-                  label={statusObj[totalGaji < 100000 ? 1 : 0].status}
-                  color={statusObj[totalGaji < 100000 ? 1 : 0].color}
+                  label={statusObj[totalGaji < 3000000 ? 1 : 0].status}
+                  color={statusObj[totalGaji < 3000000 ? 1 : 0].color}
                   sx={{
                     height: 24,
                     fontSize: '0.75rem',
@@ -338,25 +348,34 @@ const MitraDetailGajiViews = props => {
               <Grid item md={12} xs={12}>
                 <Divider sx={{ marginTop: 1.5, marginBottom: 1.75 }} />
               </Grid>
-              <Grid item md={6} xs={6} display={'flex'} justifyContent={'start'}>
-                <Typography variant='h6'>Total Gaji : Rp</Typography>
-                <Typography
-                  sx={{ marginRight: 30, fontWeight: 500, fontSize: '1.2rem !important', textAlign: 'center' }}
-                >
-                  {`${totalGaji.toLocaleString('id-ID')}`}
-                </Typography>
-              </Grid>
-              <Grid item md={6} xs={6} display={'flex'} justifyContent={'end'}>
-                <Button
-                  onClick={e => {
-                    e.preventDefault()
-                    router.push(`/mitra-edit/${props.data[0].id}`)
-                  }}
-                  variant='contained'
-                  size='medium'
-                >
-                  Edit Mitra
-                </Button>
+              <Grid item md={12} xs={12}>
+                <Grid container>
+                  <Grid item md={6} xs={6} display={'flex'} justifyContent={'start'}>
+                    <Typography display='inline' variant='h6'>
+                      Total Gaji : Rp
+                    </Typography>
+                    <Typography
+                      display='inline'
+                      sx={{ marginRight: 30, fontWeight: 500, fontSize: '1.2rem !important', textAlign: 'center' }}
+                    >
+                      {`${totalGaji.toLocaleString('id-ID')}`}
+                    </Typography>
+                  </Grid>
+                  <Grid item md={6} xs={6}>
+                    <Box display='flex' justifyContent='flex-end'>
+                      <Button
+                        onClick={e => {
+                          e.preventDefault()
+                          router.push(`/mitra-edit/${props.data[0].id}`)
+                        }}
+                        variant='contained'
+                        size='medium'
+                      >
+                        Edit Mitra
+                      </Button>
+                    </Box>
+                  </Grid>
+                </Grid>
               </Grid>
             </Grid>
           </Box>

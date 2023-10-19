@@ -7,6 +7,7 @@ import Swal from 'sweetalert2'
 import * as React from 'react'
 import { useState, useEffect } from 'react'
 import Box from '@mui/material/Box'
+import Grid from '@mui/material/Grid'
 import Button from '@mui/material/Button'
 import Card from '@mui/material/Card'
 import AddIcon from '@mui/icons-material/Add'
@@ -145,12 +146,6 @@ const TableGroupPerusahaan = props => {
     }
 
     console.log(jenisSub)
-    // const roles = ['Market', 'Finance', 'Development']
-    // const randomRole = () => {
-    //   return randomArrayItem(roles)
-    // }
-    // console.log(randomRole())
-    // console.log(roles)
   }
   useEffect(() => {
     console.log('update persentase')
@@ -309,15 +304,82 @@ const TableGroupPerusahaan = props => {
     return updatedRow
   }
 
+  const [summary, setSummary] = useState({
+    totalTarget: 0,
+    totalRealisasi: 0,
+    totalSample: 0,
+    totalPcl: 0,
+    totalPml: 0,
+    totalMasuk: 0,
+    totalTidakDitemukan: 0,
+    totalGajiPcl: 0,
+    totalGajiPml: 0
+  })
+
+  useEffect(() => {
+    setSummary(prevSummary => ({
+      ...prevSummary,
+      totalGajiPml: rows.reduce((totalGaji, tppRow) => totalGaji + tppRow.gajiPml, 0),
+      totalGajiPcl: rows.reduce((totalGaji, tppRow) => totalGaji + tppRow.gajiPcl, 0),
+      totalPml: optionPML.length,
+      totalPcl: optionPCL.length,
+      totalTarget: rows.reduce((totalTarget, tppRow) => totalTarget + tppRow.target, 0),
+      totalRealisasi: rows.reduce((totalRealisasi, tppRow) => totalRealisasi + tppRow.realisasi, 0),
+      totalSample: rows.length,
+      totalSample: rows.length
+    }))
+  }, [rows])
+
+  console.log(summary)
   const handleRowModesModelChange = newRowModesModel => {
     setRowModesModel(newRowModesModel)
   }
 
   const columns = [
-    { field: 'kecamatan', headerName: 'Kode Kecamatan', width: 130, editable: true },
-    { field: 'namaKec', headerName: 'Nama Kecamatan', width: 130, editable: true },
-    { field: 'desa', headerName: 'Kode Desa', width: 130, editable: true },
-    { field: 'namadesa', headerName: 'Nama Desa ', width: 130, editable: true },
+    {
+      field: 'kecamatan',
+      headerName: 'Kode Kecamatan',
+      renderHeader: () => (
+        <Typography sx={{ fontWeight: 900, fontSize: '0.875rem !important', textAlign: 'center' }}>
+          Kode Kecamatan
+        </Typography>
+      ),
+      width: 130,
+      editable: true
+    },
+    {
+      field: 'namaKec',
+      headerName: 'Nama Kecamatan',
+      renderHeader: () => (
+        <Typography sx={{ fontWeight: 900, fontSize: '0.875rem !important', textAlign: 'center' }}>
+          Nama Kecamatan
+        </Typography>
+      ),
+      width: 130,
+      editable: true
+    },
+    {
+      field: 'desa',
+      headerName: 'Kode Desa',
+      renderHeader: () => (
+        <Typography sx={{ fontWeight: 900, fontSize: '0.875rem !important', textAlign: 'center' }}>
+          Kode Desa
+        </Typography>
+      ),
+      width: 130,
+      editable: true
+    },
+    {
+      field: 'namadesa',
+      headerName: 'Nama Desa ',
+      renderHeader: () => (
+        <Typography sx={{ fontWeight: 900, fontSize: '0.875rem !important', textAlign: 'center' }}>
+          Nama Desa
+        </Typography>
+      ),
+      width: 130,
+      editable: true
+    },
     {
       field:
         fungsi === 4 || fungsi === 5 //Produksi or Distribusi
@@ -343,7 +405,27 @@ const TableGroupPerusahaan = props => {
           : fungsi === 6 && jenisSample === 1 //Nerwilis responden
           ? 'NUS'
           : '',
+      renderHeader: () => (
+        <Typography sx={{ fontWeight: 900, fontSize: '0.875rem !important', textAlign: 'center' }}>
+          {fungsi === 4 || fungsi === 5 //Produksi or Distribusi
+            ? 'Alamat'
+            : fungsi === 3 || (fungsi === 7 && jenisSample === 0) //Sosial or IPDS dokumen
+            ? 'NBS'
+            : fungsi === 6 && jenisSample === 0 // Nerwilis Dok
+            ? 'ID SLS'
+            : fungsi === 7 && jenisSample === 1 // IPDS Responden
+            ? 'ID SBR'
+            : fungsi === 6 && jenisSample === 1 //Nerwilis responden
+            ? 'NUS'
+            : ''}
+        </Typography>
+      ),
       width: 200,
+      renderHeader: () => (
+        <Typography sx={{ fontWeight: 900, fontSize: '0.875rem !important', textAlign: 'center' }}>
+          Realisasi
+        </Typography>
+      ),
       editable: true
     },
     {
@@ -371,15 +453,65 @@ const TableGroupPerusahaan = props => {
           : fungsi === 7 && jenisSample === 0 //IPDS Dok
           ? 'ID SLS'
           : '',
+      renderHeader: () => (
+        <Typography sx={{ fontWeight: 900, fontSize: '0.875rem !important', textAlign: 'center' }}>
+          {fungsi === 4 || fungsi === 5 //Produksi or Distribusi
+            ? 'Nama Perusahaan'
+            : (fungsi === 6 && jenisSample === 1) || (fungsi === 7 && jenisSample === 1) //NerwilisResponden or IPDS Responden
+            ? 'Nama Perusahaan'
+            : fungsi === 6 && jenisSample === 0 // Nerwilis Dok
+            ? 'NBS'
+            : fungsi === 3 //Sosial
+            ? 'NKS'
+            : fungsi === 7 && jenisSample === 0 //IPDS Dok
+            ? 'ID SLS'
+            : ''}
+        </Typography>
+      ),
       width: 280,
       editable: true
     },
-    { field: 'realisasi', headerName: 'Realisasi', width: 100, editable: true },
-    { field: 'target', headerName: 'Target', width: 100, editable: true },
-    { field: 'persentase', headerName: 'Persentase', width: 100, editable: false },
+    {
+      field: 'realisasi',
+      headerName: 'Realisasi',
+      renderHeader: () => (
+        <Typography sx={{ fontWeight: 900, fontSize: '0.875rem !important', textAlign: 'center' }}>
+          Realisasi
+        </Typography>
+      ),
+      type: 'number',
+      width: 100,
+      editable: true
+    },
+    {
+      field: 'target',
+      type: 'number',
+      headerName: 'Target',
+      renderHeader: () => (
+        <Typography sx={{ fontWeight: 900, fontSize: '0.875rem !important', textAlign: 'center' }}>Target</Typography>
+      ),
+      width: 100,
+      editable: true
+    },
+    {
+      field: 'persentase',
+      headerName: 'Persentase',
+      renderHeader: () => (
+        <Typography sx={{ fontWeight: 900, fontSize: '0.875rem !important', textAlign: 'center' }}>
+          Persentase
+        </Typography>
+      ),
+      width: 100,
+      editable: false
+    },
     {
       field: 'hasilPencacahan',
       headerName: 'Proses',
+      renderHeader: () => (
+        <Typography sx={{ fontWeight: 900, fontSize: '0.875rem !important', textAlign: 'center' }}>
+          Keterangan
+        </Typography>
+      ),
       type: 'singleSelect',
       valueOptions: ['Masuk', 'Menunggu Masuk', 'Tutup', 'Tidak Aktif', 'Tidak Ditemukan', 'Non Respon'],
       width: 180,
@@ -390,7 +522,9 @@ const TableGroupPerusahaan = props => {
       headerName: 'PML',
       type: 'singleSelect',
       valueOptions: optionPML.sort((a, b) => a.label.localeCompare(b.label)),
-
+      renderHeader: () => (
+        <Typography sx={{ fontWeight: 900, fontSize: '0.875rem !important', textAlign: 'center' }}>PML</Typography>
+      ),
       width: 180,
       editable: true
     },
@@ -398,23 +532,42 @@ const TableGroupPerusahaan = props => {
       field: 'gajiPml',
       headerName: 'Gaji PML',
       type: 'number',
-
+      renderHeader: () => (
+        <Typography sx={{ fontWeight: 900, fontSize: '0.875rem !important', textAlign: 'center' }}>Gaji PML</Typography>
+      ),
       width: 120,
       editable: true
     },
     {
       field: 'pclId',
       headerName: 'PCL',
+      renderHeader: () => (
+        <Typography sx={{ fontWeight: 900, fontSize: '0.875rem !important', textAlign: 'center' }}>PCL</Typography>
+      ),
       type: 'singleSelect',
       valueOptions: optionPCL.sort((a, b) => a.label.localeCompare(b.label)),
 
       width: 180,
       editable: true
     },
-    { field: 'gajiPcl', headerName: 'Gaji PCL', type: 'number', width: 120, editable: true },
+    {
+      field: 'gajiPcl',
+      headerName: 'Gaji PCL',
+      renderHeader: () => (
+        <Typography sx={{ fontWeight: 900, fontSize: '0.875rem !important', textAlign: 'center' }}>Gaji PCL</Typography>
+      ),
+      type: 'number',
+      width: 120,
+      editable: true
+    },
     {
       field: 'tanggalDob',
       headerName: 'Tanggal Terima Dok Dikab',
+      renderHeader: () => (
+        <Typography sx={{ fontWeight: 900, fontSize: '0.875rem !important', textAlign: 'center' }}>
+          Tanggal Terima Dok Di Kab
+        </Typography>
+      ),
       type: 'date',
       width: 180,
       editable: true
@@ -424,6 +577,9 @@ const TableGroupPerusahaan = props => {
       field: 'actions',
       type: 'actions',
       headerName: 'Actions',
+      renderHeader: () => (
+        <Typography sx={{ fontWeight: 900, fontSize: '0.875rem !important', textAlign: 'center' }}>Actions</Typography>
+      ),
       width: 100,
       cellClassName: 'actions',
       getActions: ({ id }) => {
@@ -465,42 +621,88 @@ const TableGroupPerusahaan = props => {
 
   return (
     <>
-      <Card>
-        <Box
-          sx={{
-            overflowX: 'auto',
-            height: 500,
-            width: '100%',
-            '& .actions': {
-              color: 'text.secondary'
-            },
-            '& .textPrimary': {
-              color: 'text.primary'
-            }
-          }}
-        >
-          <DataGrid
-            initialState={{
-              pagination: { paginationModel: { pageSize: 10 } }
+      {' '}
+      <Grid item md={12} xs={12}>
+        <Card>
+          {' '}
+          <Box
+            sx={{
+              overflowX: 'auto',
+              height: 100,
+              width: '100%',
+              padding: 6
             }}
-            pageSizeOptions={[10, 15, 25]}
-            rowHeight={35}
-            rows={rows}
-            columns={columns}
-            editMode='row'
-            rowModesModel={rowModesModel}
-            onRowModesModelChange={handleRowModesModelChange}
-            onRowEditStop={handleRowEditStop}
-            processRowUpdate={processRowUpdate}
-            slots={{
-              toolbar: EditToolbar
+          >
+            <Grid container spacing={4}>
+              <Grid item md={2} xs={6}>
+                <Typography variant='body1'>Total Sample</Typography>
+                <Typography variant='caption'>{summary.totalSample}</Typography>
+              </Grid>
+              <Grid item md={2} xs={6}>
+                <Typography variant='body1'>Realisasi/Target</Typography>
+                <Typography variant='caption'>
+                  {summary.totalRealisasi}/{summary.totalTarget}
+                </Typography>
+              </Grid>
+              <Grid item md={2} xs={6}>
+                <Typography variant='body1'>Total PML</Typography>
+                <Typography variant='caption'>{summary.totalPml} orang</Typography>
+              </Grid>
+
+              <Grid item md={2} xs={6}>
+                <Typography variant='body1'>Total Gaji Pml</Typography>
+                <Typography variant='caption'>{summary.totalGajiPml.toLocaleString('id-ID')} </Typography>
+              </Grid>
+              <Grid item md={2} xs={6}>
+                <Typography variant='body1'>Total PCL</Typography>
+                <Typography variant='caption'>{summary.totalPcl} orang</Typography>
+              </Grid>
+              <Grid item md={2} xs={6}>
+                <Typography variant='body1'>Total Gaji PCL</Typography>
+                <Typography variant='caption'>Rp{summary.totalGajiPcl.toLocaleString('id-ID')}</Typography>
+              </Grid>
+            </Grid>
+          </Box>
+        </Card>
+      </Grid>
+      <Grid item md={12} xs={12}>
+        <Card>
+          <Box
+            sx={{
+              overflowX: 'auto',
+              height: 500,
+              width: '100%',
+              '& .actions': {
+                color: 'text.secondary'
+              },
+              '& .textPrimary': {
+                color: 'text.primary'
+              }
             }}
-            slotProps={{
-              toolbar: { setRows, setRowModesModel }
-            }}
-          />
-        </Box>
-      </Card>
+          >
+            <DataGrid
+              initialState={{
+                pagination: { paginationModel: { pageSize: 10 } }
+              }}
+              pageSizeOptions={[10, 15, 25]}
+              rowHeight={35}
+              rows={rows}
+              columns={columns}
+              editMode='row'
+              rowModesModel={rowModesModel}
+              onRowModesModelChange={handleRowModesModelChange}
+              onRowEditStop={handleRowEditStop}
+              processRowUpdate={processRowUpdate}
+              slots={{
+                toolbar: EditToolbar
+              }}
+              slotProps={{
+                toolbar: { setRows, setRowModesModel }
+              }}
+            />
+          </Box>
+        </Card>
+      </Grid>{' '}
     </>
   )
 }

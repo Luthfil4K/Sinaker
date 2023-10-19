@@ -39,7 +39,8 @@ export async function getServerSideProps(context) {
     include: {
       Task: {
         include: {
-          user: true
+          user: true,
+          project: true
         }
       },
       projectLeader: true,

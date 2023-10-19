@@ -45,13 +45,23 @@ const TableTask = props => {
           </Typography>
         </Link>
       ),
-
+      renderHeader: () => (
+        <Typography sx={{ fontWeight: 900, fontSize: '0.875rem !important', textAlign: 'center' }}>
+          Sub Kegiatan
+        </Typography>
+      ),
       headerName: 'Sub Kegiatan',
       width: 250
     },
     {
       field: 'kegiatanName',
       headerName: 'Kegiatan',
+      renderHeader: () => (
+        <Typography sx={{ fontWeight: 900, fontSize: '0.875rem !important', textAlign: 'center' }}>
+          {' '}
+          Kegiatan
+        </Typography>
+      ),
       renderCell: params => (
         <Link
           onClick={async e => {
@@ -67,18 +77,13 @@ const TableTask = props => {
       width: 200
     },
     {
-      field: 'target',
-      headerName: 'Target',
-      renderCell: params => (
-        <Typography textAlign={'center'} sx={{ fontWeight: 500, fontSize: '0.875rem !important' }}>
-          {params.row.target}
-        </Typography>
-      ),
-      width: 100
-    },
-    {
       field: 'realisasi',
       headerName: 'Realisasi',
+      renderHeader: () => (
+        <Typography sx={{ fontWeight: 900, fontSize: '0.875rem !important', textAlign: 'center' }}>
+          Realisasi
+        </Typography>
+      ),
       renderCell: params => (
         <Typography textAlign={'center'} sx={{ fontWeight: 500, fontSize: '0.875rem !important' }}>
           {params.row.realisasi}
@@ -86,9 +91,25 @@ const TableTask = props => {
       ),
       width: 100
     },
+    {
+      field: 'target',
+      headerName: 'Target',
+      renderHeader: () => (
+        <Typography sx={{ fontWeight: 900, fontSize: '0.875rem !important', textAlign: 'center' }}>Target</Typography>
+      ),
+      renderCell: params => (
+        <Typography textAlign={'center'} sx={{ fontWeight: 500, fontSize: '0.875rem !important' }}>
+          {params.row.target}
+        </Typography>
+      ),
+      width: 100
+    },
 
     {
       field: 'status',
+      renderHeader: () => (
+        <Typography sx={{ fontWeight: 900, fontSize: '0.875rem !important', textAlign: 'center' }}>Status</Typography>
+      ),
       renderCell: params => (
         <>
           <Chip
@@ -110,6 +131,11 @@ const TableTask = props => {
     },
     {
       field: 'jenisKegiatan',
+      renderHeader: () => (
+        <Typography sx={{ fontWeight: 900, fontSize: '0.875rem !important', textAlign: 'center' }}>
+          Jenis Kegiatan
+        </Typography>
+      ),
       headerName: 'Jenis Kegiatan',
       renderCell: params => (
         <Typography sx={{ fontWeight: 500, fontSize: '0.875rem !important' }}>
@@ -122,6 +148,11 @@ const TableTask = props => {
     },
     {
       field: 'deadline',
+      renderHeader: () => (
+        <Typography sx={{ fontWeight: 900, fontSize: '0.875rem !important', textAlign: 'center' }}>
+          Tanggal Berakhir
+        </Typography>
+      ),
       headerName: 'Deadline',
       renderCell: params => (
         <Typography sx={{ fontWeight: 500, fontSize: '0.875rem !important' }}> {params.row.deadline}</Typography>

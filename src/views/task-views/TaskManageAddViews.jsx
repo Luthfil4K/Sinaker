@@ -116,6 +116,17 @@ const TaskManageAddViews = propss => {
     }))
   }
 
+  // useEffect(() => {
+  //   values.subKegJenisSample === 0
+  //     ? rows.map(row => {
+  //         setRows(values => ({
+  //           ...values,
+  //           checked: false
+  //         }))
+  //       })
+  //     : console.log('a')
+  // }, [values])
+
   const handleAddTask = async e => {
     e.preventDefault()
     let dataPCL = []
@@ -133,7 +144,7 @@ const TaskManageAddViews = propss => {
           target: parseInt(values.subKegTarget),
           unitTarget: values.subKegUnitTarget,
           duedate: values.subKegDl,
-          bulan: values.subKegDl.getMonth(),
+          bulan: new Date(values.subKegDl).getMonth(),
           jenisSample: values.subKegJenis == 65 || values.subKegJenis == 67 ? values.subKegJenisSample : 0,
           participants: rows,
           peserta: dataPCL,
@@ -488,8 +499,8 @@ const TaskManageAddViews = propss => {
       renderCell: params => (
         <>
           <Chip
-            label={statusObj[params.row.gajiBulanIni < 100000 ? 1 : 0].status}
-            color={statusObj[params.row.gajiBulanIni < 100000 ? 1 : 0].color}
+            label={statusObj[params.row.gajiBulanIni < 3000000 ? 1 : 0].status}
+            color={statusObj[params.row.gajiBulanIni < 3000000 ? 1 : 0].color}
             sx={{
               height: 24,
               fontSize: '0.75rem',
@@ -522,7 +533,7 @@ const TaskManageAddViews = propss => {
       renderCell: params => (
         <>
           <Typography
-            color={params.row.gajiBulanIni < 100000 ? 'secondary.main' : 'error.main'}
+            color={params.row.gajiBulanIni < 3000000 ? 'secondary.main' : 'error.main'}
             sx={{ fontWeight: 500, fontSize: '0.875rem !important', textAlign: 'center' }}
           >
             {`Rp ${params.row.gajiBulanIni.toLocaleString('id-ID')}`}
@@ -543,7 +554,7 @@ const TaskManageAddViews = propss => {
       renderCell: params => (
         <>
           <Typography
-            color={params.row.gajiBulanSblm < 100000 ? 'secondary.main' : 'error.main'}
+            color={params.row.gajiBulanSblm < 3000000 ? 'secondary.main' : 'error.main'}
             sx={{ fontWeight: 500, fontSize: '0.875rem !important', textAlign: 'center' }}
           >
             {`Rp ${params.row.gajiBulanSblm.toLocaleString('id-ID')}`}
@@ -564,7 +575,7 @@ const TaskManageAddViews = propss => {
       renderCell: params => (
         <>
           <Typography
-            color={params.row.gajiBulanDepan < 100000 ? 'secondary.main' : 'error.main'}
+            color={params.row.gajiBulanDepan < 3000000 ? 'secondary.main' : 'error.main'}
             sx={{ fontWeight: 500, fontSize: '0.875rem !important', textAlign: 'center' }}
           >
             {`Rp ${params.row.gajiBulanDepan.toLocaleString('id-ID')}`}
@@ -584,6 +595,7 @@ const TaskManageAddViews = propss => {
         </Box>
         <form noValidate autoComplete='off' onSubmit={e => e.preventDefault()}>
           <TextField
+            required
             name='namaSubKeg'
             value={values.subKegNama}
             onChange={handleChange('subKegNama')}

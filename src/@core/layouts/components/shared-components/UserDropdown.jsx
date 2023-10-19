@@ -44,11 +44,13 @@ const UserDropdown = props => {
   const [anchorEl, setAnchorEl] = useState('')
 
   const session = useSession()
+  console.log(session)
 
   const getUser = async () => {
     setUser(prev => {
       return {
         ...prev,
+        id: session?.data?.uid,
         name: session?.data?.user?.name,
         role: session?.data?.role
       }
@@ -118,7 +120,7 @@ const UserDropdown = props => {
           alt={user.name}
           onClick={handleDropdownOpen}
           sx={{ width: 40, height: 40 }}
-          src='/images/avatars/1.png'
+          src='/images/avatars/jisoo.png'
         />
       </Badge>
       <Menu
@@ -136,18 +138,18 @@ const UserDropdown = props => {
               badgeContent={<BadgeContentSpan />}
               anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
             >
-              <Avatar alt={user.name} src='/images/avatars/1.png' sx={{ width: '2.5rem', height: '2.5rem' }} />
+              <Avatar alt={user.name} src='/images/avatars/jisoo.png' sx={{ width: '2.5rem', height: '2.5rem' }} />
             </Badge>
             <Box sx={{ display: 'flex', marginLeft: 3, alignItems: 'flex-start', flexDirection: 'column' }}>
               <Typography sx={{ fontWeight: 600 }}>{user.name}</Typography>
               <Typography variant='body2' sx={{ fontSize: '0.8rem', color: 'text.disabled' }}>
-                {user.role == 'admin' ? 'supervisor' : 'staff'}
+                {user.id == 99 ? 'admin' : 'staff'}
               </Typography>
             </Box>
           </Box>
         </Box>
         <Divider sx={{ mt: 0, mb: 1 }} />
-        <MenuItem sx={{ p: 0 }} onClick={() => handleDropdownClose('/account-settings')}>
+        <MenuItem sx={{ p: 0 }} onClick={() => handleDropdownClose(`/pegawai-detail-gaji/${user.id}`)}>
           <Box sx={styles}>
             <AccountOutline sx={{ marginRight: 2 }} />
             Profile

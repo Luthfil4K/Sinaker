@@ -38,7 +38,7 @@ const data = [
     id: 1,
     nama: 'Pegawai1',
     fungsi: 'Nerwilis',
-    totalGaji: 100000,
+    totalGaji: 3000000,
     gajiBulanan: 10000,
     gajiTriwulanan: 110000,
     gajiSemesteran: 150000,
@@ -128,7 +128,7 @@ const TablePeople = props => {
   // }))
 
   const columns = [
-    { field: 'id', headerName: 'No', type: 'string', minWidth: 40 },
+    // { field: 'id', headerName: 'No', type: 'string', minWidth: 40 },
     {
       field: 'nama',
       renderHeader: () => (
@@ -154,8 +154,8 @@ const TablePeople = props => {
       renderCell: params => (
         <>
           <Chip
-            label={statusObj[params.row.gajiBulanIni < 100000 ? 1 : 0].status}
-            color={statusObj[params.row.gajiBulanIni < 100000 ? 1 : 0].color}
+            label={statusObj[params.row.gajiBulanIni < 3000000 ? 1 : 0].status}
+            color={statusObj[params.row.gajiBulanIni < 3000000 ? 1 : 0].color}
             sx={{
               height: 24,
               fontSize: '0.75rem',
@@ -188,7 +188,7 @@ const TablePeople = props => {
       renderCell: params => (
         <>
           <Typography
-            color={params.row.gajiBulanIni < 100000 ? 'secondary.main' : 'error.main'}
+            color={params.row.gajiBulanIni < 3000000 ? 'secondary.main' : 'error.main'}
             sx={{ fontWeight: 500, fontSize: '0.875rem !important', textAlign: 'center' }}
           >
             {`Rp ${params.row.gajiBulanIni.toLocaleString('id-ID')}`}
@@ -209,7 +209,7 @@ const TablePeople = props => {
       renderCell: params => (
         <>
           <Typography
-            color={params.row.gajiBulanSblm < 100000 ? 'secondary.main' : 'error.main'}
+            color={params.row.gajiBulanSblm < 3000000 ? 'secondary.main' : 'error.main'}
             sx={{ fontWeight: 500, fontSize: '0.875rem !important', textAlign: 'center' }}
           >
             {`Rp ${params.row.gajiBulanSblm.toLocaleString('id-ID')}`}
@@ -230,7 +230,7 @@ const TablePeople = props => {
       renderCell: params => (
         <>
           <Typography
-            color={params.row.gajiBulanDepan < 100000 ? 'secondary.main' : 'error.main'}
+            color={params.row.gajiBulanDepan < 3000000 ? 'secondary.main' : 'error.main'}
             sx={{ fontWeight: 500, fontSize: '0.875rem !important', textAlign: 'center' }}
           >
             {`Rp ${params.row.gajiBulanDepan.toLocaleString('id-ID')}`}
@@ -241,6 +241,9 @@ const TablePeople = props => {
     {
       field: 'fungsi',
       headerName: 'Fungsi',
+      renderHeader: () => (
+        <Typography sx={{ fontWeight: 900, fontSize: '0.875rem !important', textAlign: 'center' }}>Fungsi</Typography>
+      ),
 
       minWidth: 170,
       renderCell: params => (
@@ -283,35 +286,43 @@ const TablePeople = props => {
     {
       field: 'jumlahKegiatan',
       headerName: 'Jumlah Kegiatan',
+      renderHeader: () => (
+        <Typography sx={{ fontWeight: 900, fontSize: '0.875rem !important', textAlign: 'center' }}>
+          Jumlah Kegiatan
+        </Typography>
+      ),
 
       minWidth: 150
     },
 
-    {
-      field: 'role',
-      renderHeader: () => <Typography sx={{ fontSize: '0.875rem !important', textAlign: 'center' }}>Role</Typography>,
-      minWidth: 160,
-      flex: 1,
-      renderCell: () => (
-        <form>
-          <FormControl fullWidth>
-            <InputLabel id='form-layouts-separator-select-label'>role</InputLabel>
-            <Select
-              sx={{ height: 50 }}
-              label='role'
-              id='form-layouts-separator-role'
-              labelId='form-layouts-separator-role-label'
-            >
-              <MenuItem value='1'>Ketua Tim</MenuItem>
-              <MenuItem value='2'>Staff</MenuItem>
-            </Select>
-          </FormControl>
-        </form>
-      )
-    },
+    // {
+    //   field: 'role',
+    //   renderHeader: () => <Typography sx={{ fontSize: '0.875rem !important', textAlign: 'center' }}>Role</Typography>,
+    //   minWidth: 160,
+    //   flex: 1,
+    //   renderCell: () => (
+    //     <form>
+    //       <FormControl fullWidth>
+    //         <InputLabel id='form-layouts-separator-select-label'>role</InputLabel>
+    //         <Select
+    //           sx={{ height: 50 }}
+    //           label='role'
+    //           id='form-layouts-separator-role'
+    //           labelId='form-layouts-separator-role-label'
+    //         >
+    //           <MenuItem value='1'>Ketua Tim</MenuItem>
+    //           <MenuItem value='2'>Staff</MenuItem>
+    //         </Select>
+    //       </FormControl>
+    //     </form>
+    //   )
+    // },
     {
       field: 'action',
-      renderHeader: () => <Typography sx={{ fontSize: '0.875rem !important', textAlign: 'center' }}>Action</Typography>,
+      renderHeader: () => (
+        <Typography sx={{ fontWeight: 900, fontSize: '0.875rem !important', textAlign: 'center' }}>Action</Typography>
+      ),
+
       minWidth: 250,
       flex: 1,
       renderCell: params => (

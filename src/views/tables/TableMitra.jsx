@@ -117,7 +117,7 @@ const TableMitra = props => {
       name: row.name,
       jenisKelamin: row.jenisKelamin,
       tanggalLahir: new Date(row.tanggalLahir).toLocaleDateString('id'),
-      umur: row.umur,
+      umur: new Date().getFullYear() - new Date(row.tanggalLahir).getFullYear(),
       pendidikan: row.pendidikan,
       email: row.email,
       status: row.status,
@@ -182,8 +182,8 @@ const TableMitra = props => {
       renderCell: params => (
         <>
           <Chip
-            label={statusObj[params.row.gajiBulanIni < 100000 ? 1 : 0].status}
-            color={statusObj[params.row.gajiBulanIni < 100000 ? 1 : 0].color}
+            label={statusObj[params.row.gajiBulanIni < 3000000 ? 1 : 0].status}
+            color={statusObj[params.row.gajiBulanIni < 3000000 ? 1 : 0].color}
             sx={{
               height: 24,
               fontSize: '0.75rem',
@@ -216,10 +216,10 @@ const TableMitra = props => {
       renderCell: params => (
         <>
           <Typography
-            color={params.row.gajiBulanIni < 100000 ? 'secondary.main' : 'error.main'}
+            color={params.row.gajiBulanIni < 3000000 ? 'secondary.main' : 'error.main'}
             sx={{ fontWeight: 500, fontSize: '0.875rem !important', textAlign: 'center' }}
           >
-            {`Rp ${params.row.gajiBulanIni.toLocaleString('id-ID')}`}
+            {`Rp${params.row.gajiBulanIni.toLocaleString('id-ID')}`}
           </Typography>
         </>
       )
@@ -237,10 +237,10 @@ const TableMitra = props => {
       renderCell: params => (
         <>
           <Typography
-            color={params.row.gajiBulanSblm < 100000 ? 'secondary.main' : 'error.main'}
+            color={params.row.gajiBulanSblm < 3000000 ? 'secondary.main' : 'error.main'}
             sx={{ fontWeight: 500, fontSize: '0.875rem !important', textAlign: 'center' }}
           >
-            {`Rp ${params.row.gajiBulanSblm.toLocaleString('id-ID')}`}
+            {`Rp${params.row.gajiBulanSblm.toLocaleString('id-ID')}`}
           </Typography>
         </>
       )
@@ -258,10 +258,10 @@ const TableMitra = props => {
       renderCell: params => (
         <>
           <Typography
-            color={params.row.gajiBulanDepan < 100000 ? 'secondary.main' : 'error.main'}
+            color={params.row.gajiBulanDepan < 3000000 ? 'secondary.main' : 'error.main'}
             sx={{ fontWeight: 500, fontSize: '0.875rem !important', textAlign: 'center' }}
           >
-            {`Rp ${params.row.gajiBulanDepan.toLocaleString('id-ID')}`}
+            {`Rp${params.row.gajiBulanDepan.toLocaleString('id-ID')}`}
           </Typography>
         </>
       )

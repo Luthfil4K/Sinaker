@@ -153,7 +153,7 @@ const TimelineViews = props => {
                 router.push(`/project-detail/${task.project.id}`)
               }}
             >
-              <Typography variant='body2' sx={{ textDecoration: 'underline' }} color={'white'}>
+              <Typography variant='body2' sx={{ textDecoration: 'underline', cursor: 'pointer' }} color={'white'}>
                 {task.title}
               </Typography>
               <Typography variant='body2' color={'white'}>

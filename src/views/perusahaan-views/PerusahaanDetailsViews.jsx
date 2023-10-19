@@ -46,13 +46,15 @@ const CreateKegiatanPerusahaanViews = props => {
   //   }, [])
 
   const [values, setValues] = useState({
+    idGroup: 0,
     kegFungsi: 0,
     kegNama: ''
   })
   useEffect(() => {
     props.data.map(perusahaan => {
       console.log(perusahaan.fungsi)
-      setValues({ kegFungsi: perusahaan.fungsi, kegNama: perusahaan.nama })
+      console.log('ini idnya : ' + perusahaan.id)
+      setValues({ kegFungsi: perusahaan.fungsi, kegNama: perusahaan.nama, idGroup: perusahaan.id })
     })
   }, [])
 
@@ -67,9 +69,38 @@ const CreateKegiatanPerusahaanViews = props => {
     }))
   }
 
-  const handleKegiatanPerusahaan = async e => {
+  const handleDelete = async e => {
     e.preventDefault()
 
+    Swal.fire({
+      title: 'Delete Project?',
+      text: '',
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#68B92E',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Yes, Delete Project',
+      cancelButtonText: 'No, Cancel',
+      reverseButtons: true
+    }).then(result => {
+      if (result.isConfirmed) {
+        axios
+          .delete(`/group-perusahaan/${values.idGroup}`)
+          .then(res => {
+            Swal.fire('Deleted', 'Group has been deleted. ', 'success')
+
+            router.push('/perusahaan-group-list')
+          })
+          .catch(err => {
+            Swal.fire('Error', 'Something went wrong. Please try again.', 'error')
+          })
+      } else if (
+        /* Read more about handling dismissals below */
+        result.dismiss === Swal.DismissReason.cancel
+      ) {
+        Swal.fire('Cancelled!', ' Press "OK" to continue.', 'error')
+      }
+    })
     // try {
     //   while (true) {
     //     const res = await axios.post('/perusahaan', {
@@ -154,11 +185,11 @@ const CreateKegiatanPerusahaanViews = props => {
         </Grid>
         {/* <TableAddParticipant></TableAddParticipant> */}
         <Divider sx={{ margin: 0 }} />
-        {/* <Grid item m={4} display={'flex'} justifyContent={'end'}>
-          <Button size='medium' type='submit' variant='contained' onClick={handleKegiatanPerusahaan}>
-            Buat Group Perusahaan
+        <Grid item m={4} display={'flex'} justifyContent={'end'}>
+          <Button color={'error'} size='medium' type='submit' variant='contained' onClick={handleDelete}>
+            Hapus Group Perusahaan
           </Button>
-        </Grid> */}
+        </Grid>
       </form>
     </Card>
   )

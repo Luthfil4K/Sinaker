@@ -118,24 +118,24 @@ const TableGroupPerusahaan = props => {
       width: 180,
       align: 'left',
       headerAlign: 'left',
-      editable: true
+      editable: false
     },
-    { field: 'nama', headerName: 'Name', width: 180, editable: true },
-    { field: 'alamat', headerName: 'Alamat', width: 180, editable: true },
-    { field: 'desa', headerName: 'Desa', width: 180, editable: true },
-    { field: 'kecamatan', headerName: 'Kecamatan', width: 180, editable: true },
+    { field: 'nama', headerName: 'Name', width: 250, editable: false },
+    { field: 'alamat', headerName: 'Alamat', width: 250, editable: false },
+    { field: 'desa', headerName: 'Desa', width: 80, editable: false },
+    { field: 'kecamatan', headerName: 'Kecamatan', width: 880, editable: false },
     // {
     //   field: '',
     //   headerName: 'Join date',
     //   type: 'date',
     //   width: 180,
-    //   editable: true
+    //   editable: false
     // },
     // {
     //   field: 'role',
     //   headerName: 'Department',
     //   width: 220,
-    //   editable: true,
+    //   editable: false,
     //   type: 'singleSelect',
     //   valueOptions: ['Market', 'Finance', 'Development']
     // },

@@ -71,7 +71,7 @@ const TablePerusahaan = props => {
   }
   // console.log(rows)
   const columns = [
-    { field: 'id', headerName: 'No', type: 'string', minWidth: 40 },
+    // { field: 'id', headerName: 'No', type: 'string', minWidth: 40 },
     {
       field: 'kip',
       headerName: 'KIP',

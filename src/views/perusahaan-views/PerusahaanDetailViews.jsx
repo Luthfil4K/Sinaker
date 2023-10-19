@@ -94,7 +94,7 @@ const PerusahaanDetailViews = props => {
       <Card sx={{ position: 'relative' }}>
         <CardMedia sx={{ height: '12.625rem' }} image='/images/cards/yeet-01.png' />
         <Avatar
-          alt='Robert Meyer'
+          alt='Yeet'
           src='/images/avatars/Asset-1-100.jpg'
           sx={{
             width: 95,
@@ -128,11 +128,15 @@ const PerusahaanDetailViews = props => {
               </Grid>
               <Grid item md={2} xs={6}>
                 <Typography variant='body1'>Desa</Typography>
-                <Typography variant='caption'>{values.perusahaanDesa}</Typography>
+                <Typography variant='caption'>
+                  {values.perusahaanDesa}: {values.perusahaanNamaDesa}
+                </Typography>
               </Grid>
               <Grid item md={2} xs={6}>
                 <Typography variant='body1'>Kecamatan</Typography>
-                <Typography variant='caption'>{values.perusahaanKecamatan}</Typography>
+                <Typography variant='caption'>
+                  {values.perusahaanKecamatan}:{values.perusahaanNamaKec}
+                </Typography>
               </Grid>
 
               <Grid item md={4} xs={6}>
@@ -174,7 +178,12 @@ const PerusahaanDetailViews = props => {
                         sx={{ cursor: 'pointer' }}
                       >
                         <Typography
-                          sx={{ fontWeight: 500, textDecoration: 'underline', fontSize: '0.875rem !important' }}
+                          sx={{
+                            fontWeight: 500,
+                            textDecoration: 'underline',
+                            cursor: 'pointer',
+                            fontSize: '0.875rem !important'
+                          }}
                         >
                           <li key={taskId}>{namaKegiatan}</li>
                         </Typography>
