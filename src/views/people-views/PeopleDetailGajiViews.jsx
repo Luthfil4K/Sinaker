@@ -17,6 +17,10 @@ import Divider from '@mui/material/Divider'
 import Collapse from '@mui/material/Collapse'
 import IconButton from '@mui/material/IconButton'
 import CardActions from '@mui/material/CardActions'
+import MenuItem from '@mui/material/MenuItem'
+import FormControl from '@mui/material/FormControl'
+import Select, { SelectChangeEvent } from '@mui/material/Select'
+import InputLabel from '@mui/material/InputLabel'
 
 import Link from '@mui/material/Link'
 
@@ -25,6 +29,11 @@ import ChevronUp from 'mdi-material-ui/ChevronUp'
 import ChevronDown from 'mdi-material-ui/ChevronDown'
 
 const PeopleDetailGajiViews = props => {
+  const [selectedYear, setSelectedYear] = useState(2023)
+
+  const handleYearChange = event => {
+    setSelectedYear(parseInt(event.target.value))
+  }
   const statusObj = {
     0: { color: 'error', status: 'Overload' },
     1: { color: 'success', status: 'Available' }
@@ -330,6 +339,25 @@ const PeopleDetailGajiViews = props => {
           </Box>
         </CardContent>
       </Card>
+      <Grid mt={3} item xs={12} md={12} justifyContent={'end'} display={'flex'}>
+        <Card sx={{ padding: 3 }}>
+          <FormControl sx={{ m: 1, minWidth: 120 }}>
+            <InputLabel id='demo-simple-select-helper-label'>Tahun</InputLabel>
+            <Select
+              labelId='demo-simple-select-helper-label'
+              id='demo-simple-select-helper'
+              value={selectedYear}
+              label='Tahun'
+              size={'small'}
+              onChange={handleYearChange}
+            >
+              <MenuItem value={2023}>2023</MenuItem>
+              <MenuItem value={2024}>2024</MenuItem>
+              <MenuItem value={2025}>2025</MenuItem>
+            </Select>
+          </FormControl>
+        </Card>
+      </Grid>
       <Grid container spacing={4} mt={5}>
         {bulanData.map((data, index) => (
           <BulanCard

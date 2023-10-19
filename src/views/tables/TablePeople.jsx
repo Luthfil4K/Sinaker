@@ -134,7 +134,7 @@ const TablePeople = props => {
       renderHeader: () => (
         <Typography sx={{ fontWeight: 900, fontSize: '0.875rem !important', textAlign: 'center' }}>Nama</Typography>
       ),
-      headerName: 'Namaste',
+      headerName: 'Nama',
       width: 200,
       renderCell: params => (
         <Link

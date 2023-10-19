@@ -151,7 +151,7 @@ const TaskManageAddViews = propss => {
           jenisKeg: values.subKegJenis,
           target: parseInt(values.subKegTarget),
           unitTarget: values.subKegUnitTarget,
-          duedate: values.subKegDl,
+          duedate: values.subKegDl ? values.subKegDl : new Date(),
           bulan: new Date(values.subKegDl).getMonth(),
           jenisSample: values.subKegJenis == 65 || values.subKegJenis == 67 ? values.subKegJenisSample : 0,
           participants: rows,
@@ -173,8 +173,7 @@ const TaskManageAddViews = propss => {
             icon: 'success',
             confirmButtonColor: '#68B92E',
             confirmButtonText: 'OK'
-          })
-          // .then(router.push(`/project-detail/${values.subKegProjectId}`))
+          }).then(router.push(`/project-detail/${values.subKegProjectId}`))
 
           setValues({
             subKegNama: '',
@@ -293,7 +292,7 @@ const TaskManageAddViews = propss => {
 
   const [rowsM, setRowsM] = useState(
     dataMitra.map(row => {
-      const gajiBulanIni = tpp
+      const gajiBulanIniPCL = tpp
         .filter(tppRow => tppRow.pclId === row.id)
         .filter(tppRow => {
           const tppDueDate = new Date(tppRow.task.duedate)
@@ -304,7 +303,21 @@ const TaskManageAddViews = propss => {
         })
         .reduce((totalGaji, tppRow) => totalGaji + tppRow.gajiPcl, 0)
 
-      const gajiBulanSblm = tpp
+      const gajiBulanIniPML = tpp
+        .filter(tppRow => tppRow.pmlId === row.id)
+        .filter(tppRow => {
+          const tppDueDate = new Date(tppRow.task.duedate)
+          const currentDate = new Date()
+          return (
+            tppDueDate.getFullYear() === currentDate.getFullYear() && tppDueDate.getMonth() === currentDate.getMonth()
+          )
+        })
+        .reduce((totalGaji, tppRow) => totalGaji + tppRow.gajiPml, 0)
+
+      // Gabungkan total gaji dari kedua kasus
+      const gajiBulanIni = gajiBulanIniPCL + gajiBulanIniPML
+
+      const gajiBulanSblmPCL = tpp
         .filter(tppRow => tppRow.pclId === row.id)
         .filter(tppRow => {
           const tppDueDate = new Date(tppRow.task.duedate)
@@ -316,7 +329,20 @@ const TaskManageAddViews = propss => {
         })
         .reduce((totalGaji, tppRow) => totalGaji + tppRow.gajiPcl, 0)
 
-      const gajiBulanDepan = tpp
+      const gajiBulanSblmPML = tpp
+        .filter(tppRow => tppRow.pmlId === row.id)
+        .filter(tppRow => {
+          const tppDueDate = new Date(tppRow.task.duedate)
+          const currentDate = new Date()
+          return currentDate.getMonth != 0
+            ? tppDueDate.getFullYear() === currentDate.getFullYear() &&
+                tppDueDate.getMonth() === currentDate.getMonth() - 1
+            : tppDueDate.getFullYear() === currentDate.getFullYear() - 1 && tppDueDate.getMonth() === 12
+        })
+        .reduce((totalGaji, tppRow) => totalGaji + tppRow.gajiPcl, 0)
+      const gajiBulanSblm = gajiBulanSblmPML + gajiBulanSblmPCL
+
+      const gajiBulanDepanPCL = tpp
         .filter(tppRow => tppRow.pclId === row.id)
         .filter(tppRow => {
           const tppDueDate = new Date(tppRow.task.duedate)
@@ -327,6 +353,20 @@ const TaskManageAddViews = propss => {
             : tppDueDate.getFullYear() === currentDate.getFullYear() + 1 && tppDueDate.getMonth() === 0
         })
         .reduce((totalGaji, tppRow) => totalGaji + tppRow.gajiPcl, 0)
+
+      const gajiBulanDepanPML = tpp
+        .filter(tppRow => tppRow.pclId === row.id)
+        .filter(tppRow => {
+          const tppDueDate = new Date(tppRow.task.duedate)
+          const currentDate = new Date()
+          return currentDate.getMonth != 11
+            ? tppDueDate.getFullYear() === currentDate.getFullYear() &&
+                tppDueDate.getMonth() === currentDate.getMonth() + 1
+            : tppDueDate.getFullYear() === currentDate.getFullYear() + 1 && tppDueDate.getMonth() === 0
+        })
+        .reduce((totalGaji, tppRow) => totalGaji + tppRow.gajiPcl, 0)
+
+      const gajiBulanDepan = gajiBulanDepanPCL + gajiBulanDepanPML
 
       return {
         id: row.id,

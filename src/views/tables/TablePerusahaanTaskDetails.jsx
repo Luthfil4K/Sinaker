@@ -69,11 +69,12 @@ const TableGroupPerusahaan = props => {
     label: mi.mitra.name
   }))
   const optionPML = pml.map(pml => ({
-    value: pml.id,
+    value: pml.organik.id,
     label: pml.organik.name + ' - Organik'
   }))
 
   const combinedOptions = [...optionPCL, ...optionPML]
+  console.log(combinedOptions)
   const [participants, setParticipants] = useState(props.data)
   const apapa = props.dataProjectFungsi
   const initialRows = participants.map(row => ({
@@ -123,7 +124,7 @@ const TableGroupPerusahaan = props => {
     hasilPencacahan: row.hasilPencacahan,
     tanggalDob: new Date(row.duedate)
   }))
-  console.log(initialRows)
+  // console.log(initialRows)
 
   const [rows, setRows] = React.useState(initialRows)
   const [rowModesModel, setRowModesModel] = React.useState({})
@@ -150,10 +151,10 @@ const TableGroupPerusahaan = props => {
       69: { namaJenisSub: 'Diseminasi', color: 'warning' }
     }
 
-    console.log(jenisSub)
+    // console.log(jenisSub)
   }
   useEffect(() => {
-    console.log('update persentase')
+    // console.log('update persentase')
   }, [rows])
 
   const handleDeleteClick = id => () => {
@@ -262,7 +263,7 @@ const TableGroupPerusahaan = props => {
         })
       }
     } else {
-      if (fungsi === 3 || fungsi === 4) {
+      if (fungsi === 4 || fungsi === 5 || (fungsi === 7 && jenisSample === 1)) {
         axios
           .post(`/task-perusahaan/addWoDB`, data)
           .then(res => {
@@ -281,7 +282,7 @@ const TableGroupPerusahaan = props => {
               confirmButtonText: 'Ok'
             })
           })
-      } else if (fungsi === 5 || fungsi === 6 || fungsi === 7) {
+      } else if (fungsi === 3 || fungsi === 6 || (fungsi === 7 && jenisSample === 0)) {
         axios
           .post(`/task-perusahaan`, data)
           .then(res => {
@@ -335,7 +336,7 @@ const TableGroupPerusahaan = props => {
     }))
   }, [rows])
 
-  console.log(summary)
+  // console.log(summary)
   const handleRowModesModelChange = newRowModesModel => {
     setRowModesModel(newRowModesModel)
   }
@@ -360,6 +361,11 @@ const TableGroupPerusahaan = props => {
           Nama Kecamatan
         </Typography>
       ),
+      renderCell: params => (
+        <Typography color={'secondary.main'} sx={{ textTransform: 'uppercase', textAlign: 'center' }}>
+          {params.row.namaKec}
+        </Typography>
+      ),
       width: 130,
       editable: true
     },
@@ -380,6 +386,11 @@ const TableGroupPerusahaan = props => {
       renderHeader: () => (
         <Typography sx={{ fontWeight: 900, fontSize: '0.875rem !important', textAlign: 'center' }}>
           Nama Desa
+        </Typography>
+      ),
+      renderCell: params => (
+        <Typography color={'secondary.main'} sx={{ textTransform: 'uppercase', textAlign: 'center' }}>
+          {params.row.namadesa}
         </Typography>
       ),
       width: 130,
@@ -519,19 +530,7 @@ const TableGroupPerusahaan = props => {
       width: 100,
       editable: false
     },
-    {
-      field: 'hasilPencacahan',
-      headerName: 'Proses',
-      renderHeader: () => (
-        <Typography sx={{ fontWeight: 900, fontSize: '0.875rem !important', textAlign: 'center' }}>
-          Keterangan
-        </Typography>
-      ),
-      type: 'singleSelect',
-      valueOptions: ['Masuk', 'Menunggu Masuk', 'Tutup', 'Tidak Aktif', 'Tidak Ditemukan', 'Non Respon'],
-      width: 180,
-      editable: true
-    },
+
     {
       field: 'pmlId',
       headerName: 'PML',
@@ -586,6 +585,21 @@ const TableGroupPerusahaan = props => {
       ),
       type: 'number',
       width: 120,
+      editable: true
+    },
+    {
+      field: 'hasilPencacahan',
+      headerName: 'Proses',
+      renderHeader: () => (
+        <Typography sx={{ fontWeight: 900, fontSize: '0.875rem !important', textAlign: 'center' }}>
+          {fungsi === 4 || fungsi === 5 || fungsi === 3 //Produksi or Distribusi
+            ? 'Hasil Pencacahan'
+            : 'Proses'}
+        </Typography>
+      ),
+      type: 'singleSelect',
+      valueOptions: ['Masuk', 'Menunggu Masuk', 'Tutup', 'Tidak Aktif', 'Tidak Ditemukan', 'Non Respon'],
+      width: 180,
       editable: true
     },
     {
@@ -676,14 +690,13 @@ const TableGroupPerusahaan = props => {
                 <Typography variant='body1'>Total PML</Typography>
                 <Typography variant='caption'>{summary.totalPml} orang</Typography>
               </Grid>
-
+              <Grid item md={2} xs={6}>
+                <Typography variant='body1'>Total Mitra</Typography>
+                <Typography variant='caption'>{summary.totalPcl} orang</Typography>
+              </Grid>
               <Grid item md={2} xs={6}>
                 <Typography variant='body1'>Total Gaji Pml</Typography>
                 <Typography variant='caption'>Rp{summary.totalGajiPml.toLocaleString('id-ID')} </Typography>
-              </Grid>
-              <Grid item md={2} xs={6}>
-                <Typography variant='body1'>Total PCL</Typography>
-                <Typography variant='caption'>{summary.totalPcl} orang</Typography>
               </Grid>
               <Grid item md={2} xs={6}>
                 <Typography variant='body1'>Total Gaji PCL</Typography>

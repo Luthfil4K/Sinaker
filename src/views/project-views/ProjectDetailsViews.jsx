@@ -116,7 +116,7 @@ const ProjectDetailsViews = props => {
               Edit
             </Button>
           </Link> */}
-          <Button onClick={handleDelete} size='medium' variant={'contained'} sx={{ margin: 2 }}>
+          <Button color={'error'} onClick={handleDelete} size='medium' variant={'contained'} sx={{ margin: 2 }}>
             Delete
           </Button>
           {/* <Button onClick={handleArchieve} size='medium' variant={'contained'} sx={{ margin: 2 }}>

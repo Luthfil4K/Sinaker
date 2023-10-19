@@ -1,5 +1,5 @@
 // ** React Imports
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 // next
 import { useRouter } from 'next/dist/client/router'
 // ** MUI Imports
@@ -17,6 +17,10 @@ import Divider from '@mui/material/Divider'
 import Collapse from '@mui/material/Collapse'
 import IconButton from '@mui/material/IconButton'
 import CardActions from '@mui/material/CardActions'
+import MenuItem from '@mui/material/MenuItem'
+import FormControl from '@mui/material/FormControl'
+import Select, { SelectChangeEvent } from '@mui/material/Select'
+import InputLabel from '@mui/material/InputLabel'
 
 import router from 'next/router'
 import Link from '@mui/material/Link'
@@ -25,6 +29,11 @@ import ChevronUp from 'mdi-material-ui/ChevronUp'
 import ChevronDown from 'mdi-material-ui/ChevronDown'
 
 const MitraDetailGajiViews = props => {
+  const [selectedYear, setSelectedYear] = useState(2023)
+
+  const handleYearChange = event => {
+    setSelectedYear(parseInt(event.target.value))
+  }
   const statusObj = {
     0: { color: 'error', status: 'Overload' },
     1: { color: 'success', status: 'Available' }
@@ -109,6 +118,7 @@ const MitraDetailGajiViews = props => {
   //           nama: data.task.title,
   //           taskId: data.taskId,
   //           taskTotalGaji: data.gajiPcl,
+  //
   //           listPerusahaan: [data.nama],
   //           gajiPerusahaan: [data.gajiPcl]
   //         })
@@ -126,51 +136,170 @@ const MitraDetailGajiViews = props => {
   //     .reduce((totalGaji, tppRow) => totalGaji + tppRow.gajiPcl, 0)
 
   //   return { totalGajiOktober, perusahaan, subKeg, totalGajiSubkeg }
-  // })
+  // })\
+  console.log(tpp)
 
-  const [bulanData, setBulanData] = useState(() => {
-    const bulanData = []
+  // const [bulanData, setBulanData] = useState(() => {
+  //   const bulanData = []
+
+  //   for (let bulan = 0; bulan < 12; bulan++) {
+  //     const selectedYear = 2023 // Ganti dengan tahun yang dipilih
+
+  //     const totalGajiBulanPCL = tpp
+  //       .filter(tppRow => tppRow.pclId === values.id)
+  //       .filter(tppRow => {
+  //         const tppDueDate = new Date(tppRow.task.duedate)
+  //         return tppDueDate.getMonth() === bulan && tppDueDate.getFullYear() === selectedYear
+  //       })
+  //       .reduce((totalGaji, tppRow) => totalGaji + tppRow.gajiPcl, 0)
+
+  //     const totalGajiBulanPML = tpp
+  //       .filter(tppRow => tppRow.pmlId === values.id)
+  //       .filter(tppRow => {
+  //         const tppDueDate = new Date(tppRow.task.duedate)
+  //         return tppDueDate.getMonth() === bulan && tppDueDate.getFullYear() === selectedYear
+  //       })
+  //       .reduce((totalGaji, tppRow) => totalGaji + tppRow.gajiPml, 0)
+  //     const totalGajiBulan = totalGajiBulanPCL + totalGajiBulanPML
+
+  //     const subKeg = tpp
+  //       .filter(tppRow => tppRow.pclId === values.id || tppRow.pmlId === values.id)
+  //       .filter(tppRow => {
+  //         const tppDueDate = new Date(tppRow.task.duedate)
+  //         return tppDueDate.getMonth() === bulan && tppDueDate.getFullYear() === selectedYear
+  //       })
+  //       .reduce((uniqueItems, data) => {
+  //         const existingItem = uniqueItems.find(item => item.taskId === data.taskId)
+
+  //         let gajiType
+  //         if (data.pclId === values.id) {
+  //           gajiType = 'PCL'
+  //         } else if (data.pmlId === values.id) {
+  //           gajiType = 'PML'
+  //         }
+
+  //         if (existingItem) {
+  //           existingItem.taskTotalGaji += gajiType === 'PCL' ? data.gajiPcl : data.gajiPml
+  //           existingItem.listPerusahaan.push({
+  //             nama: data.nama,
+  //             nbs: data.nbs,
+  //             nks: data.nks,
+  //             idSls: data.idSls
+  //           })
+  //           existingItem.gajiPerusahaan.push({
+  //             value: gajiType === 'PCL' ? data.gajiPcl : data.gajiPml,
+  //             type: gajiType
+  //           })
+  //         } else {
+  //           uniqueItems.push({
+  //             nama: data.task.title,
+  //             taskId: data.taskId,
+  //             taskTotalGaji: gajiType === 'PCL' ? data.gajiPcl : data.gajiPml,
+  //             listPerusahaan: [
+  //               {
+  //                 nama: data.nama,
+  //                 nbs: data.nbs,
+  //                 nks: data.nks,
+  //                 idSls: data.idSls
+  //               }
+  //             ],
+  //             gajiPerusahaan: [
+  //               {
+  //                 value: gajiType === 'PCL' ? data.gajiPcl : data.gajiPml,
+  //                 type: gajiType
+  //               }
+  //             ]
+  //           })
+  //         }
+
+  //         return uniqueItems
+  //       }, [])
+
+  //     bulanData.push({ totalGajiBulan, subKeg })
+  //   }
+
+  //   return bulanData
+  // })
+  const [bulanData, setBulanData] = useState([])
+
+  useEffect(() => {
+    // Di sini Anda dapat memperbarui bulanData sesuai dengan selectedYear
+    const updatedBulanData = []
 
     for (let bulan = 0; bulan < 12; bulan++) {
-      const totalGajiBulan = tpp
+      const totalGajiBulanPCL = tpp
         .filter(tppRow => tppRow.pclId === values.id)
         .filter(tppRow => {
           const tppDueDate = new Date(tppRow.task.duedate)
-          return tppDueDate.getMonth() === bulan
+          return tppDueDate.getMonth() === bulan && tppDueDate.getFullYear() === selectedYear
         })
         .reduce((totalGaji, tppRow) => totalGaji + tppRow.gajiPcl, 0)
 
-      const subKeg = tpp
-        .filter(tppRow => tppRow.pclId === values.id)
+      const totalGajiBulanPML = tpp
+        .filter(tppRow => tppRow.pmlId === values.id)
         .filter(tppRow => {
           const tppDueDate = new Date(tppRow.task.duedate)
-          return tppDueDate.getMonth() === bulan
+          return tppDueDate.getMonth() === bulan && tppDueDate.getFullYear() === selectedYear
+        })
+        .reduce((totalGaji, tppRow) => totalGaji + tppRow.gajiPml, 0)
+      const totalGajiBulan = totalGajiBulanPCL + totalGajiBulanPML
+
+      const subKeg = tpp
+        .filter(tppRow => tppRow.pclId === values.id || tppRow.pmlId === values.id)
+        .filter(tppRow => {
+          const tppDueDate = new Date(tppRow.task.duedate)
+          return tppDueDate.getMonth() === bulan && tppDueDate.getFullYear() === selectedYear
         })
         .reduce((uniqueItems, data) => {
           const existingItem = uniqueItems.find(item => item.taskId === data.taskId)
 
+          let gajiType
+          if (data.pclId === values.id) {
+            gajiType = 'PCL'
+          } else if (data.pmlId === values.id) {
+            gajiType = 'PML'
+          }
+
           if (existingItem) {
-            existingItem.taskTotalGaji += data.gajiPcl
-            existingItem.listPerusahaan.push(data.nama)
-            existingItem.gajiPerusahaan.push(data.gajiPcl)
+            existingItem.taskTotalGaji += gajiType === 'PCL' ? data.gajiPcl : data.gajiPml
+            existingItem.listPerusahaan.push({
+              nama: data.nama,
+              nbs: data.nbs,
+              nks: data.nks,
+              idSls: data.idSls
+            })
+            existingItem.gajiPerusahaan.push({
+              value: gajiType === 'PCL' ? data.gajiPcl : data.gajiPml,
+              type: gajiType
+            })
           } else {
             uniqueItems.push({
               nama: data.task.title,
               taskId: data.taskId,
-              taskTotalGaji: data.gajiPcl,
-              listPerusahaan: [data.nama],
-              gajiPerusahaan: [data.gajiPcl]
+              taskTotalGaji: gajiType === 'PCL' ? data.gajiPcl : data.gajiPml,
+              listPerusahaan: [
+                {
+                  nama: data.nama,
+                  nbs: data.nbs,
+                  nks: data.nks,
+                  idSls: data.idSls
+                }
+              ],
+              gajiPerusahaan: [
+                {
+                  value: gajiType === 'PCL' ? data.gajiPcl : data.gajiPml,
+                  type: gajiType
+                }
+              ]
             })
           }
 
           return uniqueItems
         }, [])
-
-      bulanData.push({ totalGajiBulan, subKeg })
+      updatedBulanData.push({ totalGajiBulan, subKeg })
     }
-
-    return bulanData
-  })
+    setBulanData(updatedBulanData)
+  }, [selectedYear])
 
   function BulanCard({ namaBulan, totalGaji, subKegData }) {
     const [collapseStates, setCollapseStates] = useState(subKegData.map(() => false))
@@ -238,18 +367,34 @@ const MitraDetailGajiViews = props => {
                     </CardActions>
                     <Collapse in={collapseStates[index]}>
                       <CardContent>
-                        {subKeg.listPerusahaan.map((nama, index) => (
-                          <>
-                            <Typography key={nama} variant={'caption'}>
-                              Perusahaan: {nama}
+                        {subKeg.listPerusahaan.map((perusahaan, index) => (
+                          <div key={index}>
+                            {perusahaan.nama ? (
+                              <>
+                                <Typography variant={'caption'}>Perusahaan/Dinas: {perusahaan.nama}</Typography>
+                                <br></br>
+                              </>
+                            ) : perusahaan.idSls ? (
+                              <>
+                                <Typography variant={'caption'}>ID SLS: {perusahaan.idSls}</Typography>
+                                <br></br>
+                              </>
+                            ) : (
+                              <>
+                                <Typography variant={'caption'}>NBS: {perusahaan.nbs}</Typography>
+                                <br></br>
+                                <Typography variant={'caption'}>NKS: {perusahaan.nks}</Typography>
+                                <br></br>
+                              </>
+                            )}
+
+                            <Typography variant={'caption'}>
+                              Gaji sebagai ({subKeg.gajiPerusahaan[index].type}): Rp
+                              {subKeg.gajiPerusahaan[index].value.toLocaleString('id-ID')}
                             </Typography>
-                            <br></br>
-                            <Typography key={nama} variant={'caption'}>
-                              Gaji : Rp{subKeg.gajiPerusahaan[index].toLocaleString('id-ID')}
-                            </Typography>
-                            <br></br>
-                            <br></br>
-                          </>
+                            <br />
+                            <br />
+                          </div>
                         ))}
                       </CardContent>
                       <Divider sx={{ margin: 0 }} />
@@ -277,8 +422,22 @@ const MitraDetailGajiViews = props => {
     )
   }
   const totalGaji = tpp
-    .filter(tppRow => tppRow.pclId === values.id)
-    .reduce((totalGaji, tppRow) => totalGaji + tppRow.gajiPcl, 0)
+    .filter(tppRow => tppRow.pclId === values.id || tppRow.pmlId === values.id)
+    .filter(tppRow => {
+      const tppDueDate = new Date(tppRow.task.duedate)
+      return tppDueDate.getFullYear() === selectedYear
+    })
+    .reduce((totalGaji, tppRow) => totalGaji + (tppRow.pclId === values.id ? tppRow.gajiPcl : tppRow.gajiPml), 0)
+
+  const totalGajiBulanNi = tpp
+    .filter(tppRow => tppRow.pclId === values.id || tppRow.pmlId === values.id)
+    .filter(tppRow => {
+      const tppDueDate = new Date(tppRow.task.duedate)
+      let sekarang = new Date() // Mendapatkan tanggal dan waktu saat ini
+      sekarang.setFullYear(selectedYear)
+      return tppDueDate.getMonth() === sekarang.getMonth() && tppDueDate.getFullYear() === selectedYear
+    })
+    .reduce((totalGaji, tppRow) => totalGaji + (tppRow.pclId === values.id ? tppRow.gajiPcl : tppRow.gajiPml), 0)
 
   return (
     <>
@@ -334,8 +493,8 @@ const MitraDetailGajiViews = props => {
               <Grid item md={2} xs={6}>
                 <Typography variant='body1'>Status Bulan Ini</Typography>
                 <Chip
-                  label={statusObj[totalGaji < 3000000 ? 1 : 0].status}
-                  color={statusObj[totalGaji < 3000000 ? 1 : 0].color}
+                  label={statusObj[totalGajiBulanNi < 3000000 ? 1 : 0].status}
+                  color={statusObj[totalGajiBulanNi < 3000000 ? 1 : 0].color}
                   sx={{
                     height: 24,
                     fontSize: '0.75rem',
@@ -381,6 +540,30 @@ const MitraDetailGajiViews = props => {
           </Box>
         </CardContent>
       </Card>
+      <Grid mt={3} item xs={12} md={12} justifyContent={'end'} display={'flex'}>
+        <Card sx={{ padding: 3 }}>
+          <FormControl sx={{ m: 1, minWidth: 120 }}>
+            <InputLabel id='demo-simple-select-helper-label'>Tahun</InputLabel>
+            <Select
+              labelId='demo-simple-select-helper-label'
+              id='demo-simple-select-helper'
+              value={selectedYear}
+              label='Tahun'
+              size={'small'}
+              onChange={handleYearChange}
+            >
+              <MenuItem value={2023}>2023</MenuItem>
+              <MenuItem value={2024}>2024</MenuItem>
+              <MenuItem value={2025}>2025</MenuItem>
+            </Select>
+          </FormControl>
+        </Card>
+      </Grid>
+      {/* <select value={selectedYear} onChange={handleYearChange}>
+        <option value={2023}>2023</option>
+        <option value={2024}>2024</option>
+        <option value={2025}>2025</option>
+      </select> */}
       <Grid container spacing={4} mt={5}>
         {bulanData.map((data, index) => (
           <BulanCard

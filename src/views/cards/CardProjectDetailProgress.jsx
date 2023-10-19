@@ -91,10 +91,10 @@ const CardProjectDetailProgress = props => {
           </Grid>
           <Divider sx={{ marginTop: 3.5 }} />
           <Typography textAlign={'center'} mt={4} variant={'body2'}>
-            "this is for quote lorem ipsum dolor dolor si Amet"
+            {/* "this is for quote lorem ipsum dolor dolor si Amet" */}
           </Typography>
           <Typography textAlign={'center'} variant={'body2'}>
-            - aabbcc
+            -
           </Typography>
         </CardContent>
       </Card>

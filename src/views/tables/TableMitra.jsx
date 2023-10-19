@@ -76,7 +76,7 @@ const TableMitra = props => {
   //   gajiBulanDepan: 0
   // }))
   const rows = mitra.map(row => {
-    const gajiBulanIni = tpp
+    const gajiBulanIniPCL = tpp
       .filter(tppRow => tppRow.pclId === row.id)
       .filter(tppRow => {
         const tppDueDate = new Date(tppRow.task.duedate)
@@ -87,7 +87,21 @@ const TableMitra = props => {
       })
       .reduce((totalGaji, tppRow) => totalGaji + tppRow.gajiPcl, 0)
 
-    const gajiBulanSblm = tpp
+    const gajiBulanIniPML = tpp
+      .filter(tppRow => tppRow.pmlId === row.id)
+      .filter(tppRow => {
+        const tppDueDate = new Date(tppRow.task.duedate)
+        const currentDate = new Date()
+        return (
+          tppDueDate.getFullYear() === currentDate.getFullYear() && tppDueDate.getMonth() === currentDate.getMonth()
+        )
+      })
+      .reduce((totalGaji, tppRow) => totalGaji + tppRow.gajiPml, 0)
+
+    // Gabungkan total gaji dari kedua kasus
+    const gajiBulanIni = gajiBulanIniPCL + gajiBulanIniPML
+
+    const gajiBulanSblmPCL = tpp
       .filter(tppRow => tppRow.pclId === row.id)
       .filter(tppRow => {
         const tppDueDate = new Date(tppRow.task.duedate)
@@ -99,7 +113,20 @@ const TableMitra = props => {
       })
       .reduce((totalGaji, tppRow) => totalGaji + tppRow.gajiPcl, 0)
 
-    const gajiBulanDepan = tpp
+    const gajiBulanSblmPML = tpp
+      .filter(tppRow => tppRow.pmlId === row.id)
+      .filter(tppRow => {
+        const tppDueDate = new Date(tppRow.task.duedate)
+        const currentDate = new Date()
+        return currentDate.getMonth != 0
+          ? tppDueDate.getFullYear() === currentDate.getFullYear() &&
+              tppDueDate.getMonth() === currentDate.getMonth() - 1
+          : tppDueDate.getFullYear() === currentDate.getFullYear() - 1 && tppDueDate.getMonth() === 12
+      })
+      .reduce((totalGaji, tppRow) => totalGaji + tppRow.gajiPcl, 0)
+    const gajiBulanSblm = gajiBulanSblmPML + gajiBulanSblmPCL
+
+    const gajiBulanDepanPCL = tpp
       .filter(tppRow => tppRow.pclId === row.id)
       .filter(tppRow => {
         const tppDueDate = new Date(tppRow.task.duedate)
@@ -110,6 +137,20 @@ const TableMitra = props => {
           : tppDueDate.getFullYear() === currentDate.getFullYear() + 1 && tppDueDate.getMonth() === 0
       })
       .reduce((totalGaji, tppRow) => totalGaji + tppRow.gajiPcl, 0)
+
+    const gajiBulanDepanPML = tpp
+      .filter(tppRow => tppRow.pclId === row.id)
+      .filter(tppRow => {
+        const tppDueDate = new Date(tppRow.task.duedate)
+        const currentDate = new Date()
+        return currentDate.getMonth != 11
+          ? tppDueDate.getFullYear() === currentDate.getFullYear() &&
+              tppDueDate.getMonth() === currentDate.getMonth() + 1
+          : tppDueDate.getFullYear() === currentDate.getFullYear() + 1 && tppDueDate.getMonth() === 0
+      })
+      .reduce((totalGaji, tppRow) => totalGaji + tppRow.gajiPcl, 0)
+
+    const gajiBulanDepan = gajiBulanDepanPCL + gajiBulanDepanPML
 
     return {
       id: row.id,
