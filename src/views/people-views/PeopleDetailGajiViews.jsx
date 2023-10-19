@@ -1,5 +1,5 @@
 // ** React Imports
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 // next
 import { useRouter } from 'next/dist/client/router'
 // ** MUI Imports
@@ -92,15 +92,18 @@ const PeopleDetailGajiViews = props => {
     pegawaiTanggalLahir: props.data[0].fungsi
   })
 
-  const [bulanData, setBulanData] = useState(() => {
-    const bulanData = []
+  const [bulanData, setBulanData] = useState([])
+
+  useEffect(() => {
+    // Di sini Anda dapat memperbarui bulanData sesuai dengan selectedYear
+    const updatedBulanData = []
 
     for (let bulan = 0; bulan < 12; bulan++) {
       const totalGajiBulan = tpp
         .filter(tppRow => tppRow.pmlId === values.id)
         .filter(tppRow => {
           const tppDueDate = new Date(tppRow.task.duedate)
-          return tppDueDate.getMonth() === bulan
+          return tppDueDate.getMonth() === bulan && tppDueDate.getFullYear() === selectedYear
         })
         .reduce((totalGaji, tppRow) => totalGaji + tppRow.gajiPml, 0)
 
@@ -108,7 +111,7 @@ const PeopleDetailGajiViews = props => {
         .filter(tppRow => tppRow.pmlId === values.id)
         .filter(tppRow => {
           const tppDueDate = new Date(tppRow.task.duedate)
-          return tppDueDate.getMonth() === bulan
+          return tppDueDate.getMonth() === bulan && tppDueDate.getFullYear() === selectedYear
         })
         .reduce((uniqueItems, data) => {
           const existingItem = uniqueItems.find(item => item.taskId === data.taskId)
@@ -130,11 +133,54 @@ const PeopleDetailGajiViews = props => {
           return uniqueItems
         }, [])
 
-      bulanData.push({ totalGajiBulan, subKeg })
+      updatedBulanData.push({ totalGajiBulan, subKeg })
     }
+    setBulanData(updatedBulanData)
+  }, [selectedYear])
 
-    return bulanData
-  })
+  // const [bulanData, setBulanData] = useState(() => {
+  //   const bulanData = []
+
+  //   for (let bulan = 0; bulan < 12; bulan++) {
+  //     const totalGajiBulan = tpp
+  //       .filter(tppRow => tppRow.pmlId === values.id)
+  //       .filter(tppRow => {
+  //         const tppDueDate = new Date(tppRow.task.duedate)
+  //         return tppDueDate.getMonth() === bulan
+  //       })
+  //       .reduce((totalGaji, tppRow) => totalGaji + tppRow.gajiPml, 0)
+
+  //     const subKeg = tpp
+  //       .filter(tppRow => tppRow.pmlId === values.id)
+  //       .filter(tppRow => {
+  //         const tppDueDate = new Date(tppRow.task.duedate)
+  //         return tppDueDate.getMonth() === bulan
+  //       })
+  //       .reduce((uniqueItems, data) => {
+  //         const existingItem = uniqueItems.find(item => item.taskId === data.taskId)
+
+  //         if (existingItem) {
+  //           existingItem.taskTotalGaji += data.gajiPml
+  //           existingItem.listPerusahaan.push(data.nama)
+  //           existingItem.gajiPerusahaan.push(data.gajiPml)
+  //         } else {
+  //           uniqueItems.push({
+  //             nama: data.task.title,
+  //             taskId: data.taskId,
+  //             taskTotalGaji: data.gajiPml,
+  //             listPerusahaan: [data.nama],
+  //             gajiPerusahaan: [data.gajiPml]
+  //           })
+  //         }
+
+  //         return uniqueItems
+  //       }, [])
+
+  //     bulanData.push({ totalGajiBulan, subKeg })
+  //   }
+
+  //   return bulanData
+  // })
 
   function BulanCard({ namaBulan, totalGaji, subKegData }) {
     const [collapseStates, setCollapseStates] = useState(subKegData.map(() => false))
@@ -241,6 +287,20 @@ const PeopleDetailGajiViews = props => {
   }
   const totalGaji = tpp
     .filter(tppRow => tppRow.pmlId === values.id)
+    .filter(tppRow => {
+      const tppDueDate = new Date(tppRow.task.duedate)
+      return tppDueDate.getFullYear() === selectedYear
+    })
+    .reduce((totalGaji, tppRow) => totalGaji + tppRow.gajiPml, 0)
+
+  const totalGajiBulanNi = tpp
+    .filter(tppRow => tppRow.pmlId === values.id)
+    .filter(tppRow => {
+      const tppDueDate = new Date(tppRow.task.duedate)
+      let sekarang = new Date() // Mendapatkan tanggal dan waktu saat ini
+      sekarang.setFullYear(selectedYear)
+      return tppDueDate.getMonth() === sekarang.getMonth() && tppDueDate.getFullYear() === selectedYear
+    })
     .reduce((totalGaji, tppRow) => totalGaji + tppRow.gajiPml, 0)
 
   return (
@@ -292,8 +352,8 @@ const PeopleDetailGajiViews = props => {
               <Grid item md={2} xs={6}>
                 <Typography variant='body1'>Status Bulan Ini</Typography>
                 <Chip
-                  label={statusObj[totalGaji < 3000000 ? 1 : 0].status}
-                  color={statusObj[totalGaji < 3000000 ? 1 : 0].color}
+                  label={statusObj[totalGajiBulanNi < 3000000 ? 1 : 0].status}
+                  color={statusObj[totalGajiBulanNi < 3000000 ? 1 : 0].color}
                   sx={{
                     height: 24,
                     fontSize: '0.75rem',
