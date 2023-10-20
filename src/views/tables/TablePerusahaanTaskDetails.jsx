@@ -67,7 +67,10 @@ const TableGroupPerusahaan = props => {
   const [mitra, setMitra] = useState(props.dataMitra)
   const [pml, setPML] = useState(props.dataPML)
   const fungsi = props.dataProjectFungsi
+  const jenisKeg = props.dataJenisKeg
   const jenisSample = props.dataTaskSample
+
+  console.log(jenisKeg)
 
   const [organikMitra, setOrganikMitra] = useState({
     value: '',

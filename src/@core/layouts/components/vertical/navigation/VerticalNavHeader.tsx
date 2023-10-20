@@ -57,9 +57,9 @@ const VerticalNavHeader = (props: Props) => {
 
   return (
     <MenuHeaderWrapper className='nav-header' sx={{ pl: 6 }}>
-      <Grid bgcolor={'grey.100'}>
+      <Grid>
         <Typography variant={'h5'} sx={{ fontWeight: 700 }}>
-          SIMAKOR/SINAKER
+          SIMAKOR
         </Typography>
       </Grid>
       {/* {userVerticalNavMenuBranding ? (

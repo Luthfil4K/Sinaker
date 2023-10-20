@@ -281,6 +281,7 @@ const TaskDetailViews = props => {
               dataMitra={mitra}
               dataPML={pegawai}
               dataTaskSample={values.jenisSample}
+              dataJenisKeg={values.jenisKeg}
             ></TablePerusahaanTaskDetails>
             // <Button type='submit' variant={'contained'} onClick={handleSimpan} fullWidth>
             //   Simpan

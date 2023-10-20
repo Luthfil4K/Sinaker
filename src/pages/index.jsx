@@ -273,12 +273,12 @@ const Dashboard = ({ dataTask }) => {
     labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'June', 'July', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
     datasets: [
       {
-        label: 'Realisasi',
+        label: 'Target',
         data: targetBar,
         backgroundColor: ['rgba(255, 99, 132,1)']
       },
       {
-        label: 'Target',
+        label: 'Realisasi',
         data: realisasiBar,
         backgroundColor: ['rgba(255, 159, 64,1)']
       }
@@ -306,7 +306,6 @@ const Dashboard = ({ dataTask }) => {
       {
         data: doughnut,
         backgroundColor: [
-          'rgba(255, 99, 132,1)',
           'rgba(49, 10, 49,1)',
           'rgba(115, 93, 120,1)',
           'rgba(167, 196, 194,1)',

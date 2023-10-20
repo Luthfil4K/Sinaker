@@ -42,18 +42,18 @@ export default async function handler(req, res) {
 
     console.log('masuk ke wodb')
     try {
-      const companies = await prisma.perusahaan.create({
-        data: {
-          kip: Number(kip),
-          nama,
-          desa,
-          kecamatan,
-          namaDesa: namadesa,
-          namaKec,
-          alamat,
-          kegiatan: ''
-        }
-      })
+      // const companies = await prisma.perusahaan.create({
+      //   data: {
+      //     kip: Number(kip),
+      //     nama,
+      //     desa,
+      //     kecamatan,
+      //     namaDesa: namadesa,
+      //     namaKec,
+      //     alamat,
+      //     kegiatan: ''
+      //   }
+      // })
 
       const tpp = await prisma.TaskPerusahaanProduksi.create({
         data: {
