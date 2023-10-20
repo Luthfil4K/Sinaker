@@ -334,7 +334,7 @@ const Dashboard = ({ dataTask }) => {
             </Grid>
             <Grid item xs={6} md={6}>
               <Card sx={{ padding: 4, height: 200 }}>
-                <Typography variant={'h6'}>Capaian Kegiatan</Typography>
+                <Typography variant={'body1'}>Tarel Perusahaan</Typography>
                 <Divider></Divider>
                 <Grid container spacing={0}>
                   <Grid item md={12} height={60} display={'flex'} justifyContent={'start'} alignItems={'end'}>
@@ -365,7 +365,7 @@ const Dashboard = ({ dataTask }) => {
             </Grid>
             <Grid item xs={6} md={6}>
               <Card sx={{ padding: 4, height: 200 }}>
-                <Typography variant={'h6'}>Capaian Kegiatan</Typography>
+                <Typography variant={'body1'}>Tarel Non Perusahaan</Typography>
                 <Divider></Divider>
                 <Grid container spacing={0}>
                   <Grid item md={12} height={60} display={'flex'} justifyContent={'start'} alignItems={'end'}>

@@ -16,10 +16,16 @@ import DeleteIcon from '@mui/icons-material/DeleteOutlined'
 import SaveIcon from '@mui/icons-material/Save'
 import Typography from '@mui/material/Typography'
 import CancelIcon from '@mui/icons-material/Close'
+
 import {
   GridRowModes,
+  GridToolbar,
   DataGrid,
   GridToolbarContainer,
+  GridToolbarColumnsButton,
+  GridToolbarFilterButton,
+  GridToolbarExport,
+  GridToolbarDensitySelector,
   GridActionsCellItem,
   GridRowEditStopReasons
 } from '@mui/x-data-grid'
@@ -48,6 +54,10 @@ function EditToolbar(props) {
       <Button color='primary' startIcon={<AddIcon />} onClick={handleClick}>
         Add record
       </Button>
+      <GridToolbarColumnsButton />
+      <GridToolbarFilterButton />
+      <GridToolbarDensitySelector />
+      <GridToolbarExport />
     </GridToolbarContainer>
   )
 }

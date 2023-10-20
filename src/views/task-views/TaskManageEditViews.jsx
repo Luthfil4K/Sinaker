@@ -68,25 +68,15 @@ const TaskManageEditViews = props => {
   }
   const jenisSubKegiatan = [
     {
-      id: 64,
-      nama: 'Persiapan'
-    },
-    {
       id: 65,
-      nama: 'Pelaksanaan'
+      nama: 'Lapangan'
     },
-    {
-      id: 66,
-      nama: 'Pengawasan '
-    },
+
     {
       id: 67,
       nama: 'Pengolahan '
     },
-    {
-      id: 68,
-      nama: 'Evaluasi '
-    },
+
     {
       id: 69,
       nama: 'Diseminasi '
