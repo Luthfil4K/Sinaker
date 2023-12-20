@@ -2,6 +2,12 @@
 import { useState } from 'react'
 import * as React from 'react'
 
+// import xlsx
+import MaterialTable from 'material-table'
+import * as XLSX from 'xlsx/xlsx.mjs'
+
+const EXTENSIONS = ['xlsx', 'xls', 'csv']
+
 // axios
 import axios from 'src/pages/api/axios'
 
@@ -15,6 +21,10 @@ import 'react-datepicker/dist/react-datepicker.css'
 import DatePickerWrapper from 'src/@core/styles/libs/react-datepicker'
 
 // Mui Import
+import Tab from '@mui/material/Tab'
+import TabList from '@mui/lab/TabList'
+import TabPanel from '@mui/lab/TabPanel'
+import TabContext from '@mui/lab/TabContext'
 import Box from '@mui/material/Box'
 import Card from '@mui/material/Card'
 import Grid from '@mui/material/Grid'
@@ -28,6 +38,7 @@ import Select, { SelectChangeEvent } from '@mui/material/Select'
 import InputLabel from '@mui/material/InputLabel'
 import FormControlLabel from '@mui/material/FormControlLabel'
 import Checkbox from '@mui/material/Checkbox'
+import CardContent from '@mui/material/CardContent'
 
 import MenuItem from '@mui/material/MenuItem'
 
@@ -43,13 +54,15 @@ const CreateKegiatanPerusahaanViews = props => {
       }
     })
   )
+
   const [values, setValues] = useState({
     kegFungsi: '',
     kegNama: ''
   })
+
   const handleChange = props => event => {
     setValues({ ...values, [props]: event.target.value })
-    console.log(values)
+    // console.log(values)
   }
 
   const handleFungsiChange = event => {
@@ -95,6 +108,50 @@ const CreateKegiatanPerusahaanViews = props => {
         confirmButtonText: 'OK'
       })
     }
+  }
+
+  const handleKegiatanPerusahaanNew = async e => {
+    e.preventDefault()
+
+    try {
+      while (true) {
+        const res = await axios.post('/perusahaan/new', {
+          nama: values.kegNama,
+          fungsi: values.kegFungsi,
+          participants: data
+        })
+
+        if (res.status === 201) {
+          Swal.fire({
+            title: 'Create Group Perusahaan Success',
+            text: 'Press OK to continue',
+            icon: 'success',
+            confirmButtonColor: '#68B92E',
+            confirmButtonText: 'OK'
+          }).then(router.push(`perusahaan-group-list`))
+
+          setValues({
+            kegNama: ''
+          })
+        }
+
+        break
+      }
+    } catch (error) {
+      Swal.fire({
+        title: 'Create Group Perusahaan Failed',
+        text: error,
+        icon: 'error',
+        confirmButtonColor: '#d33',
+        confirmButtonText: 'OK'
+      })
+    }
+  }
+
+  const [value, setValue] = useState('1')
+
+  const handleChangeTab = (event, newValue) => {
+    setValue(newValue)
   }
 
   const rows = participants.map(perusahaan => ({
@@ -159,7 +216,9 @@ const CreateKegiatanPerusahaanViews = props => {
     {
       field: 'nama',
       renderHeader: () => (
-        <Typography sx={{ fontWeight: 900, fontSize: '0.875rem !important', textAlign: 'center' }}>Name</Typography>
+        <Typography sx={{ fontWeight: 900, fontSize: '0.875rem !important', textAlign: 'center' }}>
+          Nama Perusahaan
+        </Typography>
       ),
       minWidth: 200,
       flex: 1,
@@ -205,82 +264,317 @@ const CreateKegiatanPerusahaanViews = props => {
   ]
 
   const router = useRouter()
+
+  // import excel,csv
+  const [colDefs, setColDefs] = useState()
+  const [data, setData] = useState({
+    id: 1,
+    kodeDesa: '',
+    kodeKecamatan: '',
+    namaDesa: '',
+    namaKecamatan: '',
+    namaPerusahaan: '',
+    alamat: ''
+  })
+  // const [rowsNew, setRowsNew] = useState()
+
+  const rowsNew = [
+    {
+      id: 1,
+      namaPerusahaan: '',
+      kodeDesa: '',
+      kodeKecamatan: '',
+      alamat: ''
+    }
+  ]
+
+  const getExention = file => {
+    const parts = file.name.split('.')
+    const extension = parts[parts.length - 1]
+    return EXTENSIONS.includes(extension) // return boolean
+  }
+
+  const convertToJson = (headers, data) => {
+    const rows = []
+    data.forEach(row => {
+      let rowData = {}
+      row.forEach((element, index) => {
+        rowData[headers[index]] = element
+      })
+      rows.push(rowData)
+    })
+    return rows
+  }
+
+  const importExcel = e => {
+    const file = e.target.files[0]
+
+    const reader = new FileReader()
+    reader.onload = event => {
+      //parse data
+
+      const bstr = event.target.result
+      const workBook = XLSX.read(bstr, { type: 'binary' })
+
+      //get first sheet
+      const workSheetName = workBook.SheetNames[0]
+      const workSheet = workBook.Sheets[workSheetName]
+      //convert to array
+      const fileData = XLSX.utils.sheet_to_json(workSheet, { header: 1 })
+      // console.log(fileData)
+      const headers = fileData[0]
+      const heads = headers.map(head => ({ title: head, field: head }))
+      setColDefs(heads)
+
+      //removing header
+      fileData.splice(0, 1)
+
+      setData(convertToJson(headers, fileData))
+    }
+    if (file) {
+      if (getExention(file)) {
+        reader.readAsBinaryString(file)
+      } else {
+        alert('Invalid file input, Select Excel, CSV file')
+      }
+    } else {
+      setData([])
+      setColDefs([])
+    }
+  }
+
+  // console.log(data)
+  const columnsNew = [
+    {
+      field: 'kodeDesa',
+      renderHeader: () => (
+        <Typography sx={{ fontWeight: 900, fontSize: '0.875rem !important', textAlign: 'center' }}>
+          Kode Desa
+        </Typography>
+      ),
+      minWidth: 200,
+      flex: 1
+    },
+    {
+      field: 'kodeKecamatan',
+      renderHeader: () => (
+        <Typography sx={{ fontWeight: 900, fontSize: '0.875rem !important', textAlign: 'center' }}>
+          Kode Kecamatan
+        </Typography>
+      ),
+      minWidth: 200,
+      flex: 1
+    },
+    {
+      field: 'namaDesa',
+      renderHeader: () => (
+        <Typography sx={{ fontWeight: 900, fontSize: '0.875rem !important', textAlign: 'center' }}>
+          Nama Desa
+        </Typography>
+      ),
+      minWidth: 200,
+      flex: 1
+    },
+    {
+      field: 'namaKecamatan',
+      renderHeader: () => (
+        <Typography sx={{ fontWeight: 900, fontSize: '0.875rem !important', textAlign: 'center' }}>
+          Nama Kecamatan
+        </Typography>
+      ),
+      minWidth: 200,
+      flex: 1
+    },
+
+    {
+      field: 'namaPerusahaan',
+      renderHeader: () => (
+        <Typography sx={{ fontWeight: 900, fontSize: '0.875rem !important', textAlign: 'center' }}>
+          Nama Perusahaan
+        </Typography>
+      ),
+      minWidth: 200,
+      flex: 1
+    },
+    {
+      field: 'alamat',
+      renderHeader: () => (
+        <Typography sx={{ fontWeight: 900, fontSize: '0.875rem !important', textAlign: 'center' }}>Alamat</Typography>
+      ),
+      minWidth: 200,
+      flex: 1
+    }
+  ]
+
   return (
     <Card>
-      <form action='post' onSubmit={e => e.preventDefault()}>
-        <Grid container spacing={4} sx={{ padding: '32px' }}>
-          <Grid item xs={12}>
-            <Typography variant='h5'>Buat Group Kegiatan Perusahan</Typography>
-          </Grid>
+      {/* <TableAddParticipant></TableAddParticipant> */}
 
-          <Grid item xs={12} md={6}>
-            <TextField
-              fullWidth
-              value={values.kegNama}
-              onChange={handleChange('kegNama')}
-              multiline
-              label='Nama Group Kegiatan Perusahaan'
-              name='namaKegiatan'
-            />
-          </Grid>
-          <Grid item xs={12} md={6}>
-            <FormControl fullWidth>
-              <InputLabel id='demo-simple-select-helper-label'>Fungsi</InputLabel>
-              <Select
-                fullWidth
-                labelId='demo-simple-select-helper-label'
-                onChange={handleFungsiChange}
-                value={values.kegFungsi}
-                id='demo-simple-select-helper'
-                label='Fungsi'
-                name='fungsi'
-              >
-                <MenuItem value={2}>Bagian Umum</MenuItem>
-                <MenuItem value={3}>Statistik Sosial </MenuItem>
-                <MenuItem value={4}>Statistik Produksi</MenuItem>
-                <MenuItem value={5}>Statistik Distribusi</MenuItem>
-                <MenuItem value={6}>Neraca Wilayah dan Analisis Statistik</MenuItem>
-                <MenuItem value={7}>Integrasi Pengolahan dan Diseminasi Statistik</MenuItem>
-              </Select>
-            </FormControl>
-          </Grid>
-          <Divider></Divider>
-          <Grid item xs={12}>
-            <Box sx={{ width: '100%' }}>
-              <DataGrid
-                initialState={{
-                  // filter: {
-                  //   filterModel: {
-                  //     items: [{ field: 'nama', value: 'antam' }]
-                  //   }
-                  // }
-                  sorting: {
-                    sortModel: [{ field: 'nama', sort: 'asc' }]
-                  }
-                }}
-                rows={rows}
-                columns={columns}
-                pprioritySize={5}
-                rowsPerPpriorityOptions={[5]}
-                disableSelectionOnClick
-                experimentalFeatures={{ newEditingApi: true }}
-                sx={{
-                  height: rows.length > 3 ? '70vh' : '45vh',
-                  overflowY: 'auto',
-                  width: '100%'
-                }}
-              />
-            </Box>
-          </Grid>
-        </Grid>
-        {/* <TableAddParticipant></TableAddParticipant> */}
-        <Divider sx={{ margin: 0 }} />
-        <Grid item m={4} display={'flex'} justifyContent={'end'}>
-          <Button size='medium' type='submit' variant='contained' onClick={handleKegiatanPerusahaan}>
-            Buat Group Perusahaan
-          </Button>
-        </Grid>
-      </form>
+      <TabContext value={value}>
+        <TabList onChange={handleChangeTab} aria-label='card navigation example'>
+          <Tab value='1' label='Input Perusahaan Baru' />
+          <Tab value='2' label='Gunakan Data yang Sudah Ada' />
+        </TabList>
+        <CardContent>
+          <TabPanel value='1' sx={{ p: 0, height: 770, overflowY: 'scroll' }}>
+            {' '}
+            <form action='post' onSubmit={e => e.preventDefault()}>
+              <Grid container spacing={4} sx={{ padding: '32px' }}>
+                <Grid item xs={12}>
+                  <Typography variant='h5'>Buat Group Kegiatan Perusahan</Typography>
+                </Grid>
+
+                <Grid item xs={12} md={6}>
+                  <TextField
+                    fullWidth
+                    value={values.kegNama}
+                    onChange={handleChange('kegNama')}
+                    multiline
+                    size='small'
+                    label='Nama Group Kegiatan Perusahaan'
+                    name='namaKegiatan'
+                  />
+                </Grid>
+                <Grid item xs={12} md={6}>
+                  <FormControl fullWidth>
+                    <InputLabel id='demo-simple-select-helper-label'>Fungsi</InputLabel>
+                    <Select
+                      fullWidth
+                      labelId='demo-simple-select-helper-label'
+                      onChange={handleFungsiChange}
+                      value={values.kegFungsi}
+                      id='demo-simple-select-helper'
+                      label='Fungsi'
+                      name='fungsi'
+                      size='small'
+                    >
+                      <MenuItem value={2}>Bagian Umum</MenuItem>
+                      <MenuItem value={3}>Statistik Sosial </MenuItem>
+                      <MenuItem value={4}>Statistik Produksi</MenuItem>
+                      <MenuItem value={5}>Statistik Distribusi</MenuItem>
+                      <MenuItem value={6}>Neraca Wilayah dan Analisis Statistik</MenuItem>
+                      <MenuItem value={7}>Integrasi Pengolahan dan Diseminasi Statistik</MenuItem>
+                    </Select>
+                  </FormControl>
+                </Grid>
+                <Grid mt={5} mb={5} xs={12} md={12}>
+                  <input type='file' onChange={importExcel} />
+                </Grid>
+                {/* <MaterialTable title='Olympic Data' data={data} columns={colDefs} /> */}
+                <Grid item xs={12} md={12}>
+                  <Box sx={{ width: '100%' }}>
+                    <DataGrid
+                      initialState={{
+                        // filter: {
+                        //   filterModel: {
+                        //     items: [{ field: 'nama', value: 'antam' }]
+                        //   }
+                        // }
+                        sorting: {
+                          sortModel: [{ field: 'nama', sort: 'asc' }]
+                        }
+                      }}
+                      rows={data}
+                      columns={columnsNew}
+                      pprioritySize={5}
+                      // rowsPerPpriorityOptions={[5]}
+                      // disableSelectionOnClick
+                      // experimentalFeatures={{ newEditingApi: true }}
+                      sx={{
+                        height: rows.length > 3 ? '70vh' : '45vh',
+                        overflowY: 'disabled',
+                        width: '100%'
+                      }}
+                    />
+                  </Box>
+                </Grid>
+              </Grid>
+              <Grid item m={4} display={'flex'} justifyContent={'end'}>
+                <Button size='small' type='submit' variant='contained' onClick={handleKegiatanPerusahaanNew}>
+                  Buat Group Perusahaan
+                </Button>
+              </Grid>
+            </form>
+          </TabPanel>
+
+          <TabPanel value='2' sx={{ p: 0, height: 770, overflowY: 'scroll' }}>
+            <form action='post' onSubmit={e => e.preventDefault()}>
+              <Grid container spacing={4} sx={{ padding: '32px' }}>
+                <Grid item xs={12}>
+                  <Typography variant='h5'>Buat Group Kegiatan Perusahan</Typography>
+                </Grid>
+
+                <Grid item xs={12} md={6}>
+                  <TextField
+                    fullWidth
+                    value={values.kegNama}
+                    onChange={handleChange('kegNama')}
+                    multiline
+                    size='small'
+                    label='Nama Group Kegiatan Perusahaan'
+                    name='namaKegiatan'
+                  />
+                </Grid>
+                <Grid item xs={12} md={6}>
+                  <FormControl fullWidth>
+                    <InputLabel id='demo-simple-select-helper-label'>Fungsi</InputLabel>
+                    <Select
+                      fullWidth
+                      labelId='demo-simple-select-helper-label'
+                      onChange={handleFungsiChange}
+                      value={values.kegFungsi}
+                      id='demo-simple-select-helper'
+                      label='Fungsi'
+                      name='fungsi'
+                      size='small'
+                    >
+                      <MenuItem value={2}>Bagian Umum</MenuItem>
+                      <MenuItem value={3}>Statistik Sosial </MenuItem>
+                      <MenuItem value={4}>Statistik Produksi</MenuItem>
+                      <MenuItem value={5}>Statistik Distribusi</MenuItem>
+                      <MenuItem value={6}>Neraca Wilayah dan Analisis Statistik</MenuItem>
+                      <MenuItem value={7}>Integrasi Pengolahan dan Diseminasi Statistik</MenuItem>
+                    </Select>
+                  </FormControl>
+                </Grid>
+                <Divider></Divider>
+                <Grid item xs={12}>
+                  <Box sx={{ width: '100%' }}>
+                    <DataGrid
+                      initialState={{
+                        // filter: {
+                        //   filterModel: {
+                        //     items: [{ field: 'nama', value: 'antam' }]
+                        //   }
+                        // }
+                        sorting: {
+                          sortModel: [{ field: 'nama', sort: 'asc' }]
+                        }
+                      }}
+                      rows={rows}
+                      columns={columns}
+                      pprioritySize={5}
+                      rowsPerPpriorityOptions={[5]}
+                      disableSelectionOnClick
+                      experimentalFeatures={{ newEditingApi: true }}
+                      sx={{
+                        height: rows.length > 3 ? '70vh' : '45vh',
+                        overflowY: 'disabled',
+                        width: '100%'
+                      }}
+                    />
+                  </Box>
+                </Grid>
+              </Grid>
+              <Grid item m={4} display={'flex'} justifyContent={'end'}>
+                <Button size='small' type='submit' variant='contained' onClick={handleKegiatanPerusahaan}>
+                  Buat Group Perusahaan
+                </Button>
+              </Grid>
+            </form>
+          </TabPanel>
+        </CardContent>
+      </TabContext>
     </Card>
   )
 }

@@ -139,7 +139,7 @@ const TaskManageAddViews = propss => {
     let pegawaiOrganik = []
     rowsO.map(a => {
       if (a.checked) {
-        console.log('ini dikliiiiiiiiiiiiiiiiiiiiiiiiiiik')
+        console.log('')
         pegawaiOrganik.push(a)
       }
     })
@@ -698,27 +698,27 @@ const TaskManageAddViews = propss => {
       field: 'checked',
       sortable: true,
       headerName: 'List',
-      // renderHeader: () => (
-      //   <FormControlLabel
-      //     control={
-      //       <Checkbox
-      //         checked={rowsO.filter(participant => participant.checked === true).length === rowsO.length}
-      //         onChange={e => {
-      //           let checked = e.target.checked
-      //           setRowsO(
-      //             rowsO.map(participant => {
-      //               return {
-      //                 ...participant,
-      //                 checked: checked
-      //               }
-      //             })
-      //           )
-      //         }}
-      //       />
-      //     }
-      //     label='All'
-      //   />
-      // ),
+      renderHeader: () => (
+        <FormControlLabel
+          control={
+            <Checkbox
+              checked={rowsO.filter(participant => participant.checked === true).length === rowsO.length}
+              onChange={e => {
+                let checked = e.target.checked
+                setRowsO(
+                  rowsO.map(participant => {
+                    return {
+                      ...participant,
+                      checked: checked
+                    }
+                  })
+                )
+              }}
+            />
+          }
+          label='All'
+        />
+      ),
       minWidth: 30,
       renderCell: params => (
         <FormControlLabel

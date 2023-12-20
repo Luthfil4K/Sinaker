@@ -17,6 +17,9 @@ import SaveIcon from '@mui/icons-material/Save'
 import Typography from '@mui/material/Typography'
 import CancelIcon from '@mui/icons-material/Close'
 
+
+
+
 import {
   GridRowModes,
   GridToolbar,
@@ -563,7 +566,11 @@ const TableGroupPerusahaan = props => {
         }
       }),
       renderHeader: () => (
-        <Typography sx={{ fontWeight: 900, fontSize: '0.875rem !important', textAlign: 'center' }}>PML</Typography>
+        <Typography sx={{ fontWeight: 900, fontSize: '0.875rem !important', textAlign: 'center' }}>
+          {jenisKeg === 65 //Produksi or Distribusi
+            ? 'PML'
+            : 'Operator'}
+        </Typography>
       ),
       width: 180,
       editable: true
@@ -573,7 +580,11 @@ const TableGroupPerusahaan = props => {
       headerName: 'Gaji PML',
       type: 'number',
       renderHeader: () => (
-        <Typography sx={{ fontWeight: 900, fontSize: '0.875rem !important', textAlign: 'center' }}>Gaji PML</Typography>
+        <Typography sx={{ fontWeight: 900, fontSize: '0.875rem !important', textAlign: 'center' }}>
+          {jenisKeg === 65 //Produksi or Distribusi
+            ? 'Gaji PML'
+            : 'Gaji Operator'}
+        </Typography>
       ),
       width: 120,
       editable: true
@@ -700,7 +711,7 @@ const TableGroupPerusahaan = props => {
                 </Typography>
               </Grid>
               <Grid item md={2} xs={6}>
-                <Typography variant='body1'>Total PML</Typography>
+                <Typography variant='body1'>Total Organik</Typography>
                 <Typography variant='caption'>{summary.totalPml} orang</Typography>
               </Grid>
               <Grid item md={2} xs={6}>

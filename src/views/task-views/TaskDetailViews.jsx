@@ -145,7 +145,7 @@ const TaskDetailViews = props => {
             <Grid item xs={12} md={8}>
               <Card>
                 {/* <CardHeader title='Nama Project' sx={{ color: 'primary.dark' }}></CardHeader> */}
-                <Grid container p={4}>
+                <Grid container p={4} height={450}>
                   <Grid item xs={8} md={10}>
                     <Typography color={'primary.dark'} variant={'h4'}>
                       {props.data.title}
@@ -180,7 +180,7 @@ const TaskDetailViews = props => {
 
                   <Grid mt={2} item xs={12} md={12} height={335} overflow={'auto'}>
                     <Divider sx={{ marginTop: 3.5 }} />
-                    <Typography variant={'body1'}>Deskripsi Kegiatan</Typography>
+
                     <Typography variant={'body2'}>{props.data.description}</Typography>
                   </Grid>
                 </Grid>
