@@ -23,7 +23,7 @@ model User {
   taskToDo       Task[]         @relation("taskToDo")
   ProjectCreated Project[]
   TaskOrganik    TaskOrganik[]
-
+  TimKerjaPegawai       TimKerjaPegawai[]
 }
 
 model Project {
@@ -103,6 +103,20 @@ model PerusahaanGroup {
   perusahaanId         Int
   groupPerusahaan      GroupPerusahaan    @relation(fields: [groupPerusahaanId], references: [id], onDelete: Cascade, onUpdate: Cascade)
   groupPerusahaanId    Int
+}
+
+model TimKerja {
+  id                  Int                  @id @default(autoincrement())
+  nama                String               @db.VarChar(128)
+  fungsi              Int                  @db.Int @default(0) 
+  timKerjaPegawai     TimKerjaPegawai[]
+}
+model TimKerjaPegawai {
+  id                   Int                @id @default(autoincrement())
+  userId_fkey          User               @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  userId               Int
+  timKerja_fkey        TimKerja           @relation(fields: [timKerjaId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  timKerjaId           Int
 }
 
 model TaskPerusahaanProduksi {

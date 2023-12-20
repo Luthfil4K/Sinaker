@@ -89,6 +89,20 @@ const navigation = (): VerticalNavItemsType => {
     },
 
     {
+      sectionTitle: 'Tim Kerja'
+    },
+    {
+      title: 'Tim Kerja',
+      icon: CubeOutline,
+      path: '/tim-kerja-list'
+    },
+    // {
+    //   title: 'Buat Tim Kerja',
+    //   icon: Login,
+    //   path: '/create-tim-kerja'
+    // },
+
+    {
       sectionTitle: 'Perusahaan'
     },
     {
@@ -101,6 +115,7 @@ const navigation = (): VerticalNavItemsType => {
       icon: Login,
       path: '/create-kegiatan-perusahaan'
     },
+
     {
       sectionTitle: 'Pustaka'
     },
