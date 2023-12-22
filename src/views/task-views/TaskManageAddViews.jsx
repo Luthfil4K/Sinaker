@@ -48,11 +48,12 @@ const TaskManageAddViews = propss => {
 
   const session = useSession()
   const [project, setProject] = useState(propss.data)
-  const [show, setShow] = useState(0)
+  const [timkerja, setTimkerja] = useState(propss.dataTimKerja)
   const [group, setGroup] = useState(propss.dataPerusahaan)
   const [participants, setParticipants] = useState([])
+  const [participantsTimKerja, setParticipantsTimKerja] = useState([])
   const [tpp, setTpp] = useState(propss.dataTaskPerusahaan)
-  // console.log(tpp)
+  console.log(timkerja)
 
   const [selectedDateE, setSelectedDateE] = useState(null)
   const [values, setValues] = useState({
@@ -62,6 +63,7 @@ const TaskManageAddViews = propss => {
     subKegUnitTarget: '',
     subKegJenisSample: '',
     subKegSamplePerusahaan: '',
+    subKegSampleTimKerja: '',
     subKegDl: '',
     subKegDesk: '',
     subKegProjectId: project.id,
@@ -78,6 +80,14 @@ const TaskManageAddViews = propss => {
     setParticipants(dataGroup)
   }, [values])
   // console.log(participants)
+
+  useEffect(() => {
+    let dataTimkerja = []
+    timkerja.map(dataG => {
+      dataG.id == values.subKegSampleTimKerja ? (dataTimkerja = dataG.timKerjaPegawai) : []
+    })
+    setParticipantsTimKerja(dataTimkerja)
+  }, [values])
 
   const handleChange = props => event => {
     setValues({ ...values, [props]: event.target.value })
@@ -113,6 +123,13 @@ const TaskManageAddViews = propss => {
     setValues(values => ({
       ...values,
       subKegSamplePerusahaan: e.target.value
+    }))
+  }
+
+  const handleSampleTimKerja = e => {
+    setValues(values => ({
+      ...values,
+      subKegSampleTimKerja: e.target.value
     }))
   }
 
@@ -437,6 +454,15 @@ const TaskManageAddViews = propss => {
     })
     setRows(updatedRows)
   }, [participants])
+
+  useEffect(() => {
+    // Saat participants berubah, periksa dan ubah status checked jika cocok
+    const updatedRowsO = rowsO.map(row => {
+      const participantTimKerjaExists = participantsTimKerja.some(participant => participant.userId_fkey.id === row.id)
+      return { ...row, checked: participantTimKerjaExists }
+    })
+    setRowsO(updatedRowsO)
+  }, [participantsTimKerja])
 
   const columns = [
     {
@@ -1070,8 +1096,32 @@ const TaskManageAddViews = propss => {
                       </Grid>
                     </Grid>
                   </Grid>
-
                   <Grid item md={6} xs={12}>
+                    <Typography variant={'h6'} mb={4}>
+                      Tim Kerja
+                    </Typography>
+                    <FormControl fullWidth>
+                      <InputLabel id='demo-simple-select-helper-label'>Tim Kerja</InputLabel>
+                      <Select
+                        fullWidth
+                        labelId='demo-simple-select-helper-label'
+                        id='demo-simple-select-helper'
+                        label='Group Perusahaan'
+                        onChange={handleSampleTimKerja}
+                        value={values.subKegSampleTimKerja}
+                      >
+                        <MenuItem key={''} value={''}>
+                          {''}
+                        </MenuItem>
+                        {timkerja.map(item => (
+                          <MenuItem key={item.id} value={item.id}>
+                            {item.nama}
+                          </MenuItem>
+                        ))}
+                      </Select>
+                    </FormControl>
+                  </Grid>
+                  <Grid item md={12} xs={12}>
                     <Typography variant={'h6'} mb={4}>
                       Organik
                     </Typography>

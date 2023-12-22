@@ -104,6 +104,7 @@ const CreateKegiatanPerusahaanViews = props => {
       nama: row.name,
       fungsi: row.fungsi,
       jumlahKegiatan: row.UserProject.length,
+      jumlahTimKerja: row.TimKerjaPegawai.length,
       gajiBulanIni,
       gajiBulanSblm,
       gajiBulanDepan,
@@ -323,6 +324,17 @@ const CreateKegiatanPerusahaanViews = props => {
       renderHeader: () => (
         <Typography sx={{ fontWeight: 900, fontSize: '0.875rem !important', textAlign: 'center' }}>
           Jumlah Kegiatan
+        </Typography>
+      ),
+
+      minWidth: 150
+    },
+    {
+      field: 'jumlahTimKerja',
+      headerName: 'Jumlah Tim Kerja',
+      renderHeader: () => (
+        <Typography sx={{ fontWeight: 900, fontSize: '0.875rem !important', textAlign: 'center' }}>
+          Jumlah Tim Kerja
         </Typography>
       ),
 

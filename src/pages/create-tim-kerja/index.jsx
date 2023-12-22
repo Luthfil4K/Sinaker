@@ -33,7 +33,13 @@ export async function getServerSideProps(context) {
       }
     },
     include: {
-      UserProject: true,
+      UserProject: {
+        select: {
+          id: true,
+          project: true
+        }
+      },
+      TimKerjaPegawai: true,
       taskToDo: true
     }
   })
