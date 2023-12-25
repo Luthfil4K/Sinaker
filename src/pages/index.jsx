@@ -409,7 +409,7 @@ const Dashboard = ({ dataTask }) => {
             <Grid item xs={12} md={12}>
               <Card sx={{ padding: 4, height: 410 }}>
                 <Typography textAlign={'center'} variant={'h6'}>
-                  Total Sub Kegiatan per KF
+                  Total Sub Kegiatan per Fungsi
                 </Typography>
                 <Divider></Divider>
                 <Doughnut
@@ -519,7 +519,7 @@ const Dashboard = ({ dataTask }) => {
             <Divider></Divider>
           </Card>
         </Grid>
-        <Grid item xs={12} md={12}>
+        {/* <Grid item xs={12} md={12}>
           <Card sx={{ padding: 4, height: 450 }}>
             <Grid container spacing={1}>
               <Grid item xs={1} md={8}>
@@ -582,7 +582,7 @@ const Dashboard = ({ dataTask }) => {
             />
             <Divider></Divider>
           </Card>
-        </Grid>
+        </Grid> */}
       </Grid>
     </ApexChartWrapper>
   )

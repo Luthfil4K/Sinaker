@@ -6,6 +6,8 @@ import * as React from 'react'
 import MaterialTable from 'material-table'
 import * as XLSX from 'xlsx/xlsx.mjs'
 
+// import TemplateExcel from './asd.pdf'
+
 const EXTENSIONS = ['xlsx', 'xls', 'csv']
 
 // axios
@@ -43,6 +45,7 @@ import CardContent from '@mui/material/CardContent'
 import MenuItem from '@mui/material/MenuItem'
 
 import { DataGrid } from '@mui/x-data-grid'
+import Link from '@mui/material/Link'
 import TableAddParticipant from 'src/views/tables/TableAddParticipant'
 
 const CreateKegiatanPerusahaanViews = props => {
@@ -416,12 +419,12 @@ const CreateKegiatanPerusahaanViews = props => {
           <Tab value='2' label='Gunakan Data yang Sudah Ada' />
         </TabList>
         <CardContent>
-          <TabPanel value='1' sx={{ p: 0, height: 770, overflowY: 'scroll' }}>
+          <TabPanel value='1' sx={{ p: 0, height: 800, overflowY: 'scroll' }}>
             {' '}
             <form action='post' onSubmit={e => e.preventDefault()}>
               <Grid container spacing={4} sx={{ padding: '32px' }}>
                 <Grid item xs={12}>
-                  <Typography variant='h5'>Buat Group Kegiatan Perusahan</Typography>
+                  <Typography variant='h5'>Buat Kegiatan Perusahaan</Typography>
                 </Grid>
 
                 <Grid item xs={12} md={6}>
@@ -457,8 +460,43 @@ const CreateKegiatanPerusahaanViews = props => {
                     </Select>
                   </FormControl>
                 </Grid>
-                <Grid mt={5} mb={5} xs={12} md={12}>
-                  <input type='file' onChange={importExcel} />
+                <Grid mt={5} mb={5} xs={12} md={12} style={{ paddingLeft: 18 }}>
+                  {/* <input type='file' onChange={importExcel} /> */}
+                  <input
+                    style={{ display: 'none' }}
+                    id='raised-button-file'
+                    multiple
+                    type='file'
+                    onChange={importExcel}
+                  />
+                  <label htmlFor='raised-button-file'>
+                    <Button variant='contained' component='span'>
+                      Upload
+                    </Button>
+                  </label>
+                  {/* <a id='unduhTemplate' style={{ display: 'none' }}></a>
+                  <label htmlFor='unduhTemplate'>
+                    <Button
+                      variant='raised'
+                      component='span'
+                      
+                      href='https://docs.google.com/spreadsheets/d/1cw4eBNZ5YZSgpJINsWdGosmgOLhlg61g/edit?usp=sharing&ouid=103239761030372990422&rtpof=true&sd=true'
+                    >
+                      template
+                    </Button>
+                  </label> */}
+                  <Button
+                    style={{ marginLeft: 30 }}
+                    variant='contained'
+                    target='_blank'
+                    href='https://docs.google.com/spreadsheets/d/1drqslfn5KY6GhR5N2Bc_ZbyMJWg4IF5SDVo6umsBlho/edit?usp=sharing'
+                  >
+                    Template Table
+                  </Button>
+
+                  {/* <a href={TemplateExcel} download='Example-PDF-document' target='_blank' rel='noopener noreferrer'>
+                    <button>Download .pdf file</button>
+                  </a> */}
                 </Grid>
                 {/* <MaterialTable title='Olympic Data' data={data} columns={colDefs} /> */}
                 <Grid item xs={12} md={12}>
@@ -491,7 +529,7 @@ const CreateKegiatanPerusahaanViews = props => {
               </Grid>
               <Grid item m={4} display={'flex'} justifyContent={'end'}>
                 <Button size='small' type='submit' variant='contained' onClick={handleKegiatanPerusahaanNew}>
-                  Buat Group Perusahaan
+                  Buat Kegiatan Perusahaan
                 </Button>
               </Grid>
             </form>
@@ -501,7 +539,7 @@ const CreateKegiatanPerusahaanViews = props => {
             <form action='post' onSubmit={e => e.preventDefault()}>
               <Grid container spacing={4} sx={{ padding: '32px' }}>
                 <Grid item xs={12}>
-                  <Typography variant='h5'>Buat Group Kegiatan Perusahan</Typography>
+                  <Typography variant='h5'>Buat Kegiatan Perusahaan</Typography>
                 </Grid>
 
                 <Grid item xs={12} md={6}>
@@ -568,7 +606,7 @@ const CreateKegiatanPerusahaanViews = props => {
               </Grid>
               <Grid item m={4} display={'flex'} justifyContent={'end'}>
                 <Button size='small' type='submit' variant='contained' onClick={handleKegiatanPerusahaan}>
-                  Buat Group Perusahaan
+                  Buat Kegiatan Perusahaan
                 </Button>
               </Grid>
             </form>

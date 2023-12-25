@@ -1,6 +1,14 @@
 import * as React from 'react'
 import { useState, useEffect, forwardRef } from 'react'
 
+// import xlsx
+import MaterialTable from 'material-table'
+import * as XLSX from 'xlsx/xlsx.mjs'
+
+// import TemplateExcel from './asd.pdf'
+
+const EXTENSIONS = ['xlsx', 'xls', 'csv']
+
 // axios
 import axios from 'src/pages/api/axios'
 
@@ -53,7 +61,7 @@ const TaskManageAddViews = propss => {
   const [participants, setParticipants] = useState([])
   const [participantsTimKerja, setParticipantsTimKerja] = useState([])
   const [tpp, setTpp] = useState(propss.dataTaskPerusahaan)
-  console.log(timkerja)
+  console.log(project.fungsi)
 
   const [selectedDateE, setSelectedDateE] = useState(null)
   const [values, setValues] = useState({
@@ -67,6 +75,7 @@ const TaskManageAddViews = propss => {
     subKegDl: '',
     subKegDesk: '',
     subKegProjectId: project.id,
+    subKegProjectFungsi: project.fungsi,
     subKegUserId: project.projectLeaderId,
     subKegMonth: '',
     subKegYear: ''
@@ -144,6 +153,7 @@ const TaskManageAddViews = propss => {
   //     : console.log('a')
   // }, [values])
 
+  // intinya disini pas mau add ke db, value-value
   const handleAddTask = async e => {
     e.preventDefault()
     let dataPCL = []
@@ -877,6 +887,125 @@ const TaskManageAddViews = propss => {
     }
   ]
 
+  const columnsRT = [
+    {
+      field: 'kodeDesa',
+      renderHeader: () => (
+        <Typography sx={{ fontWeight: 900, fontSize: '0.875rem !important', textAlign: 'center' }}>
+          Kode Desa
+        </Typography>
+      ),
+      minWidth: 200,
+      flex: 1
+    },
+    {
+      field: 'kodeKecamatan',
+      renderHeader: () => (
+        <Typography sx={{ fontWeight: 900, fontSize: '0.875rem !important', textAlign: 'center' }}>
+          Kode Kecamatan
+        </Typography>
+      ),
+      minWidth: 200,
+      flex: 1
+    },
+    {
+      field: 'namaDesa',
+      renderHeader: () => (
+        <Typography sx={{ fontWeight: 900, fontSize: '0.875rem !important', textAlign: 'center' }}>
+          Nama Desa
+        </Typography>
+      ),
+      minWidth: 200,
+      flex: 1
+    },
+    {
+      field: 'namaKecamatan',
+      renderHeader: () => (
+        <Typography sx={{ fontWeight: 900, fontSize: '0.875rem !important', textAlign: 'center' }}>
+          Nama Kecamatan
+        </Typography>
+      ),
+      minWidth: 200,
+      flex: 1
+    },
+
+    {
+      field: 'nomorBlokSensus',
+      renderHeader: () => (
+        <Typography sx={{ fontWeight: 900, fontSize: '0.875rem !important', textAlign: 'center' }}>
+          Nomor Blok Sensus
+        </Typography>
+      ),
+      minWidth: 200,
+      flex: 1
+    }
+  ]
+  // ini kebawah buat keperluan import excel,csv
+  const [colDefs, setColDefs] = useState()
+  const [data, setData] = useState({
+    id: 1,
+    kodeDesa: '',
+    kodeKecamatan: '',
+    namaDesa: '',
+    namaKecamatan: '',
+    namaPerusahaan: ''
+  })
+
+  const getExention = file => {
+    const parts = file.name.split('.')
+    const extension = parts[parts.length - 1]
+    return EXTENSIONS.includes(extension) // return boolean
+  }
+
+  const convertToJson = (headers, data) => {
+    const rows = []
+    data.forEach(row => {
+      let rowData = {}
+      row.forEach((element, index) => {
+        rowData[headers[index]] = element
+      })
+      rows.push(rowData)
+    })
+    return rows
+  }
+
+  const importExcel = e => {
+    const file = e.target.files[0]
+
+    const reader = new FileReader()
+    reader.onload = event => {
+      //parse data
+
+      const bstr = event.target.result
+      const workBook = XLSX.read(bstr, { type: 'binary' })
+
+      //get first sheet
+      const workSheetName = workBook.SheetNames[0]
+      const workSheet = workBook.Sheets[workSheetName]
+      //convert to array
+      const fileData = XLSX.utils.sheet_to_json(workSheet, { header: 1 })
+      // console.log(fileData)
+      const headers = fileData[0]
+      const heads = headers.map(head => ({ title: head, field: head }))
+      setColDefs(heads)
+
+      //removing header
+      fileData.splice(0, 1)
+
+      setData(convertToJson(headers, fileData))
+    }
+    if (file) {
+      if (getExention(file)) {
+        reader.readAsBinaryString(file)
+      } else {
+        alert('Invalid file input, Select Excel, CSV file')
+      }
+    } else {
+      setData([])
+      setColDefs([])
+    }
+  }
+  // sampe sini import excel kelar
   return (
     <>
       <Card sx={{ padding: 4 }}>
@@ -1054,6 +1183,60 @@ const TaskManageAddViews = propss => {
                           sx={{
                             height: rows.length > 3 ? '70vh' : '45vh',
                             // overflowY: 'auto',
+                            width: '100%'
+                          }}
+                        />
+                      </Box>
+                    </Grid>
+                  </Grid>
+                </Grid>
+              </>
+            )}
+            {session.status === 'authenticated' && (session.data.uid === 999 || values.subKegJenisSample === 0) && (
+              <>
+                <Grid item md={6} xs={12}>
+                  <Typography variant={'h6'} mb={4}>
+                    Sample Perusahaan
+                  </Typography>
+                </Grid>
+                <Grid mt={2} mb={2} xs={12} md={12} style={{ paddingLeft: 18 }}>
+                  <input
+                    style={{ display: 'none' }}
+                    id='raised-button-file'
+                    multiple
+                    type='file'
+                    onChange={importExcel}
+                  />
+                  <label htmlFor='raised-button-file'>
+                    <Button variant='contained' component='span'>
+                      Upload
+                    </Button>
+                  </label>
+                  <Button
+                    style={{ marginLeft: 30 }}
+                    variant='contained'
+                    target='_blank'
+                    href='https://docs.google.com/spreadsheets/d/1drqslfn5KY6GhR5N2Bc_ZbyMJWg4IF5SDVo6umsBlho/edit?usp=sharing'
+                  >
+                    Template Table
+                  </Button>
+                </Grid>
+                <Grid item md={12} xs={12}>
+                  <Grid container spacing={4}>
+                    <Grid item xs={12}>
+                      <Box sx={{ width: '100%' }}>
+                        <DataGrid
+                          initialState={{
+                            sorting: {
+                              sortModel: [{ field: 'nama', sort: 'asc' }]
+                            }
+                          }}
+                          rows={data}
+                          columns={columnsRT}
+                          pprioritySize={5}
+                          sx={{
+                            height: rows.length > 3 ? '70vh' : '45vh',
+                            overflowY: 'disabled',
                             width: '100%'
                           }}
                         />
