@@ -61,8 +61,7 @@ const TaskManageAddViews = propss => {
   const [participants, setParticipants] = useState([])
   const [participantsTimKerja, setParticipantsTimKerja] = useState([])
   const [tpp, setTpp] = useState(propss.dataTaskPerusahaan)
-  console.log(project.fungsi)
-
+  const [fungsi, setFungsi] = useState(project.fungsi)
   const [selectedDateE, setSelectedDateE] = useState(null)
   const [values, setValues] = useState({
     subKegNama: '',
@@ -181,7 +180,8 @@ const TaskManageAddViews = propss => {
           duedate: values.subKegDl ? values.subKegDl : new Date(),
           bulan: new Date(values.subKegDl).getMonth(),
           jenisSample: values.subKegJenis == 65 || values.subKegJenis == 67 ? values.subKegJenisSample : 0,
-          participants: rows,
+          participants: values.subKegJenisSample === 1 ? rows : data,
+          fungsi: fungsi,
           peserta: dataPCL,
           persertaOrganik: pegawaiOrganik,
           description: values.subKegDesk,
@@ -221,7 +221,7 @@ const TaskManageAddViews = propss => {
     } catch (error) {
       Swal.fire({
         title: 'Tambah Sub Kegiatan Gagal',
-        text: error,
+        text: 'Pastikan form sudah lengkap terisi',
         icon: 'error',
         confirmButtonColor: '#d33',
         confirmButtonText: 'OK'
@@ -527,7 +527,9 @@ const TaskManageAddViews = propss => {
     {
       field: 'nama',
       renderHeader: () => (
-        <Typography sx={{ fontWeight: 900, fontSize: '0.875rem !important', textAlign: 'center' }}>Name</Typography>
+        <Typography sx={{ fontWeight: 900, fontSize: '0.875rem !important', textAlign: 'center' }}>
+          Nama Perusahaan
+        </Typography>
       ),
       minWidth: 200,
       flex: 1,
@@ -889,30 +891,10 @@ const TaskManageAddViews = propss => {
 
   const columnsRT = [
     {
-      field: 'kodeDesa',
-      renderHeader: () => (
-        <Typography sx={{ fontWeight: 900, fontSize: '0.875rem !important', textAlign: 'center' }}>
-          Kode Desa
-        </Typography>
-      ),
-      minWidth: 200,
-      flex: 1
-    },
-    {
       field: 'kodeKecamatan',
       renderHeader: () => (
         <Typography sx={{ fontWeight: 900, fontSize: '0.875rem !important', textAlign: 'center' }}>
           Kode Kecamatan
-        </Typography>
-      ),
-      minWidth: 200,
-      flex: 1
-    },
-    {
-      field: 'namaDesa',
-      renderHeader: () => (
-        <Typography sx={{ fontWeight: 900, fontSize: '0.875rem !important', textAlign: 'center' }}>
-          Nama Desa
         </Typography>
       ),
       minWidth: 200,
@@ -928,12 +910,84 @@ const TaskManageAddViews = propss => {
       minWidth: 200,
       flex: 1
     },
-
     {
-      field: 'nomorBlokSensus',
+      field: 'kodeDesa',
       renderHeader: () => (
         <Typography sx={{ fontWeight: 900, fontSize: '0.875rem !important', textAlign: 'center' }}>
-          Nomor Blok Sensus
+          Kode Desa
+        </Typography>
+      ),
+      minWidth: 200,
+      flex: 1
+    },
+    {
+      field: 'namaDesa',
+      renderHeader: () => (
+        <Typography sx={{ fontWeight: 900, fontSize: '0.875rem !important', textAlign: 'center' }}>
+          Nama Desa
+        </Typography>
+      ),
+      minWidth: 200,
+      flex: 1
+    },
+
+    {
+      field:
+        fungsi === 4 || fungsi === 5 //Produksi or Distribusi
+          ? 'alamat'
+          : fungsi === 3 || (fungsi === 7 && values.subKegJenisSample === 0) //Sosial or IPDS dokumen
+          ? 'nbs'
+          : fungsi === 6 && values.subKegJenisSample === 0 // Nerwilis Dok
+          ? 'idSls'
+          : fungsi === 7 && values.subKegJenisSample === 1 // IPDS Responden
+          ? 'idSbr'
+          : fungsi === 6 && values.subKegJenisSample === 1 //Nerwilis responden
+          ? 'nus'
+          : '',
+      renderHeader: () => (
+        <Typography sx={{ fontWeight: 900, fontSize: '0.875rem !important', textAlign: 'center' }}>
+          {fungsi === 4 || fungsi === 5 //Produksi or Distribusi
+            ? 'Alamat'
+            : fungsi === 3 || (fungsi === 7 && values.subKegJenisSample === 0) //Sosial or IPDS dokumen
+            ? 'NBS'
+            : fungsi === 6 && values.subKegJenisSample === 0 // Nerwilis Dok
+            ? 'ID SLS'
+            : fungsi === 7 && values.subKegJenisSample === 1 // IPDS Responden
+            ? 'ID SBR'
+            : fungsi === 6 && values.subKegJenisSample === 1 //Nerwilis responden
+            ? 'NUS'
+            : ''}
+        </Typography>
+      ),
+      minWidth: 200,
+      flex: 1
+    },
+    {
+      field:
+        fungsi === 4 || fungsi === 5 //Produksi or Distribusi
+          ? 'nama'
+          : (fungsi === 6 && values.subKegJenisSample === 1) || (fungsi === 7 && values.subKegJenisSample === 1) //NerwilisResponden or IPDS Responden
+          ? 'nama'
+          : fungsi === 6 && values.subKegJenisSample === 0 // Nerwilis Dok
+          ? 'nbs'
+          : fungsi === 3 //Sosial
+          ? 'nks'
+          : fungsi === 7 && values.subKegJenisSample === 0 //IPDS Dok
+          ? 'idSls'
+          : '',
+      renderHeader: () => (
+        <Typography sx={{ fontWeight: 900, fontSize: '0.875rem !important', textAlign: 'center' }}>
+          {fungsi === 4 || fungsi === 5 //Produksi or Distribusi
+            ? 'Nama Perusahaan'
+            : (fungsi === 6 && values.subKegJenisSample === 1) || (fungsi === 7 && values.subKegJenisSample === 1) //NerwilisResponden or IPDS Responden
+            ? 'Nama Perusahaan'
+            : fungsi === 6 && values.subKegJenisSample === 0 // Nerwilis Dok
+            ? 'NBS'
+            : fungsi === 3 //Sosial
+            ? 'NKS'
+            : fungsi === 7 && values.subKegJenisSample === 0 //IPDS Dok
+            ? 'ID SLS'
+            : ''}
         </Typography>
       ),
       minWidth: 200,
@@ -1212,14 +1266,32 @@ const TaskManageAddViews = propss => {
                       Upload
                     </Button>
                   </label>
-                  <Button
-                    style={{ marginLeft: 30 }}
-                    variant='contained'
-                    target='_blank'
-                    href='https://docs.google.com/spreadsheets/d/1drqslfn5KY6GhR5N2Bc_ZbyMJWg4IF5SDVo6umsBlho/edit?usp=sharing'
-                  >
-                    Template Table
-                  </Button>
+                  {session.status === 'authenticated' && (session.data.uid === 999 || fungsi === 3) && (
+                    <>
+                      {' '}
+                      <Button
+                        style={{ marginLeft: 30 }}
+                        variant='contained'
+                        target='_blank'
+                        href='https://docs.google.com/spreadsheets/d/1r7-45vtZHeJc8NIHt-_37nSNvv6b_sdyL-k_RRJY1CA/edit?usp=sharing'
+                      >
+                        Template Table
+                      </Button>
+                    </>
+                  )}
+                  {session.status === 'authenticated' && (session.data.uid === 999 || fungsi === 6 || fungsi === 7) && (
+                    <>
+                      {' '}
+                      <Button
+                        style={{ marginLeft: 30 }}
+                        variant='contained'
+                        target='_blank'
+                        href='https://docs.google.com/spreadsheets/d/1SMEoofTuCwTbz0S8wWv50c0NdQR7YdTZMkD-MheQ05w/edit?usp=sharing'
+                      >
+                        Template Table
+                      </Button>
+                    </>
+                  )}
                 </Grid>
                 <Grid item md={12} xs={12}>
                   <Grid container spacing={4}>

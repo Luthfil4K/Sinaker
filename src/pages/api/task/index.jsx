@@ -1,7 +1,7 @@
 import prisma from '../../../services/db'
 
 export default async function handler(req, res) {
-  console.log('asdwadad')
+  // console.log('asdwadad')
   const { method } = req
 
   if (method === 'GET') {
@@ -14,7 +14,7 @@ export default async function handler(req, res) {
   }
 
   if (method === 'POST') {
-    console.log('dah sampe post')
+    // console.log('dah sampe post')
     const {
       title,
       jenisKeg,
@@ -25,6 +25,7 @@ export default async function handler(req, res) {
       realisasi,
       jenisSample,
       month,
+      fungsi,
       year,
       projectId,
       userId,
@@ -33,7 +34,8 @@ export default async function handler(req, res) {
       peserta,
       persertaOrganik
     } = req.body
-
+    console.log('dah sampe post')
+    console.log(fungsi)
     try {
       const task = await prisma.task.create({
         data: {
@@ -55,6 +57,7 @@ export default async function handler(req, res) {
 
       if (jenisSample === 1) {
         if (jenisKeg == 65 || jenisKeg == 67) {
+          // ini misal sample perusahaam
           participants.map(async participant => {
             if (participant.checked) {
               const tpp = await prisma.TaskPerusahaanProduksi.create({
@@ -97,7 +100,7 @@ export default async function handler(req, res) {
           })
 
           persertaOrganik.map(async peserta => {
-            console.log(peserta.id)
+            // console.log(peserta.id)
             const to = await prisma.TaskOrganik.create({
               data: {
                 taskId: task.id,
@@ -107,8 +110,37 @@ export default async function handler(req, res) {
           })
         }
       } else {
+        // ini misal sample non perusahaam
+        participants.map(async participant => {
+          const tnp = await prisma.TaskPerusahaanProduksi.create({
+            data: {
+              taskId: task.id,
+              perusahaanId: 9999999,
+              nama: '',
+              desa: participant.kodeDesa.toString(),
+              namadesa: participant.namaDesa,
+              kecamatan: participant.kodeKecamatan.toString(),
+              namaKec: participant.namaKecamatan,
+              alamat: '',
+              target: 0,
+              realisasi: 0,
+              hasilPencacahan: '',
+              duedate: new Date(),
+              pmlId: 0,
+              pclId: 0,
+              gajiPml: 0,
+              gajiPcl: 0,
+              idSls: fungsi == 6 || fungsi == 7 ? participant.idSls : '',
+              nbs: fungsi == 6 || fungsi == 7 || fungsi == 3 ? participant.nbs : '',
+              nks: fungsi == 3 ? participant.nks : '',
+              idSbr: '',
+              nus: ''
+            }
+          })
+        })
+
         peserta.map(async peserta => {
-          console.log(peserta.id)
+          // console.log(peserta.id)
           const tp = await prisma.TaskPeserta.create({
             data: {
               taskId: task.id,
@@ -118,7 +150,7 @@ export default async function handler(req, res) {
         })
 
         persertaOrganik.map(async peserta => {
-          console.log(peserta.id)
+          // console.log(peserta.id)
           const to = await prisma.TaskOrganik.create({
             data: {
               taskId: task.id,
