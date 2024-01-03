@@ -13,10 +13,15 @@ import { useRouter } from 'next/dist/client/router'
 import { styled } from '@mui/material/styles'
 import FormControl from '@mui/material/FormControl'
 import Select, { SelectChangeEvent } from '@mui/material/Select'
-
-// icon
+import Button from '@mui/material/Button'
 
 import CardProjectDetails from 'src/views/cards/CardProjectDetails'
+import TableKegiatanList from 'src/views/tables/TableKegiatanList'
+
+// icon
+import GridViewIcon from '@mui/icons-material/GridView'
+import IconButton from '@mui/material/IconButton'
+import FormatListBulletedIcon from '@mui/icons-material/FormatListBulleted'
 
 const ProjectListViews = props => {
   const [gaji, setGaji] = useState(0)
@@ -26,6 +31,14 @@ const ProjectListViews = props => {
     bulan: new Date().getMonth() + 1,
     fungsi: 10
   })
+  const [viewData, setViewData] = useState(1)
+
+  const handleViewDataGrid = params => {
+    setViewData(1)
+  }
+  const handleViewDataTable = params => {
+    setViewData(0)
+  }
 
   const handleDropDownTahun = params => {
     setValueDropDown(valueDropDown => ({
@@ -61,18 +74,33 @@ const ProjectListViews = props => {
     let tmp = []
     cardP.map(data => {
       // console.log(valueDropDown.bulan == new Date(data.project.startdate).getMonth() + 1)
-      console.log(data.project.fungsi)
+      // console.log(data.project.fungsi)
+
       new Date(data.project.startdate).getMonth() + 1 == valueDropDown.bulan ||
       new Date(data.project.enddate).getMonth() + 1 == valueDropDown.bulan
-        ? new Date(data.project.startdate).getFullYear() == valueDropDown.tahun &&
-          data.project.fungsi == valueDropDown.fungsi
+        ? new Date(data.project.startdate).getFullYear() == valueDropDown.tahun // && data.project.fungsi == valueDropDown.fungsi
+          ? tmp.push(data)
+          : 0
+        : valueDropDown.bulan == 13
+        ? new Date(data.project.startdate).getFullYear() == valueDropDown.tahun // && data.project.fungsi == valueDropDown.fungsi
           ? tmp.push(data)
           : 0
         : 0
     })
     setCardP2(tmp)
   }, [valueDropDown])
-  // console.log(cardP2)
+
+  // useEffect(() => {
+  //   let tmp = []
+  //   cardP.map(data => {
+  // valueDropDown.bulan == 13
+  //   ? new Date(data.project.startdate).getFullYear() == valueDropDown.tahun // && data.project.fungsi == valueDropDown.fungsi
+  //     ? tmp.push(data)
+  //     : 0
+  //   : 0
+  //   })
+  //   setCardP2(tmp)
+  // }, [valueDropDown])
 
   const handleTandaRef = id => {
     cardPRef.current = [...cardPRef.current, { id }]
@@ -85,7 +113,31 @@ const ProjectListViews = props => {
   return (
     <>
       <Grid container spacing={4}>
-        <Grid item md={12} display={'flex'} justifyContent={'end'}>
+        <Grid item md={6}>
+          <Button
+            onClick={handleViewDataTable}
+            sx={{
+              width: 10,
+              paddingLeft: 8
+            }}
+            size='medium'
+            variant='contained'
+            startIcon={<FormatListBulletedIcon />}
+          ></Button>
+
+          <Button
+            onClick={handleViewDataGrid}
+            sx={{
+              marginLeft: 2,
+              width: 10,
+              paddingLeft: 8
+            }}
+            size='medium'
+            variant='contained'
+            startIcon={<GridViewIcon />}
+          ></Button>
+        </Grid>
+        <Grid item md={6} display={'flex'} justifyContent={'end'}>
           <FormControl sx={{ m: 1, minWidth: 120 }}>
             <InputLabel id='demo-simple-select-helper-label'>Tahun</InputLabel>
             <Select
@@ -111,6 +163,7 @@ const ProjectListViews = props => {
               size={'small'}
               onChange={handleDropDownBulan}
             >
+              <MenuItem value={13}>--Semua--</MenuItem>
               <MenuItem value={1}>Januari</MenuItem>
               <MenuItem value={2}>Februari</MenuItem>
               <MenuItem value={3}>Maret</MenuItem>
@@ -125,7 +178,7 @@ const ProjectListViews = props => {
               <MenuItem value={12}>Desember</MenuItem>
             </Select>
           </FormControl>
-          <FormControl sx={{ m: 1, minWidth: 120, maxWidth: 121 }}>
+          {/* <FormControl sx={{ m: 1, minWidth: 120, maxWidth: 121 }}>
             <InputLabel id='demo-simple-select-helper-label'>Fungsi</InputLabel>
             <Select
               labelId='demo-simple-select-helper-label'
@@ -142,12 +195,49 @@ const ProjectListViews = props => {
               <MenuItem value={6}>Neraca Wilayah dan Analisis Statistik</MenuItem>
               <MenuItem value={7}>Integrasi Pengolahan dan Diseminasi Statistik</MenuItem>
             </Select>
-          </FormControl>
+          </FormControl> */}
         </Grid>
         <Grid item md={12}>
           {' '}
           <Grid container spacing={6}>
-            {cardP2.length > 0 ? (
+            {viewData == 1 ? (
+              cardP2.length > 0 ? (
+                cardP2.map(kegiatan => (
+                  <>
+                    <Grid key={kegiatan.id} item md={6} xs={12}>
+                      <CardProjectDetails
+                        id={kegiatan.project.id}
+                        namaKegiatan={kegiatan.project.title}
+                        intervalWaktu={kegiatan.project.rentangWaktu}
+                        tanggalDimulai={kegiatan.project.startdate}
+                        tanggalBerakhir={kegiatan.project.enddate}
+                        jumlahParicipant={kegiatan.project.projectLeader.name}
+                        totalSubKegiatan={kegiatan.project.Task}
+                        totalGaji={kegiatan.totalGaji}
+                        penanggungJawab={kegiatan.project.title}
+                      ></CardProjectDetails>
+                    </Grid>
+                  </>
+                ))
+              ) : (
+                <>
+                  <Grid item md={12} xs={12}>
+                    <Typography>Tidak Ada Kegiatan Bulan Ini </Typography>
+                  </Grid>
+                </>
+              )
+            ) : cardP2.length > 0 ? (
+              <>
+                <TableKegiatanList data={cardP}></TableKegiatanList>
+              </>
+            ) : (
+              <>
+                <Grid item md={12} xs={12}>
+                  <Typography>Tidak Ada Kegiatan Bulan Ini </Typography>
+                </Grid>
+              </>
+            )}
+            {/* {cardP2.length > 0 ? (
               cardP2.map(kegiatan => (
                 <>
                   <Grid key={kegiatan.id} item md={6} xs={12}>
@@ -171,7 +261,7 @@ const ProjectListViews = props => {
                   <Typography>Tidak Ada Kegiatan Bulan Ini </Typography>
                 </Grid>
               </>
-            )}
+            )} */}
           </Grid>
         </Grid>
       </Grid>
