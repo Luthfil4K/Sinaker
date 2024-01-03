@@ -60,12 +60,14 @@ const data = [
 ]
 
 const jenisSub = {
+  63: { namaJenisSub: 'Pelatihan', color: 'warning' },
   64: { namaJenisSub: 'Persiapan', color: 'warning' },
   66: { namaJenisSub: 'Pelaksanaan', color: 'warning' },
   65: { namaJenisSub: 'Lapangan', color: 'warning' },
-  67: { namaJenisSub: 'Pengolahan', color: 'warning' },
+  67: { namaJenisSub: 'Pengolahan-Entri', color: 'warning' },
   68: { namaJenisSub: 'Evaluasi', color: 'warning' },
-  69: { namaJenisSub: 'Diseminasi', color: 'warning' }
+  69: { namaJenisSub: 'Diseminasi', color: 'warning' },
+  70: { namaJenisSub: 'Pengolahan-Validasi', color: 'warning' }
 }
 const statusObj = {
   0: { color: 'warning', status: 'On Progress' },

@@ -77,7 +77,8 @@ const TaskManageAddViews = propss => {
     subKegProjectFungsi: project.fungsi,
     subKegUserId: project.projectLeaderId,
     subKegMonth: '',
-    subKegYear: ''
+    subKegYear: '',
+    subKegGajiPerPerusahaan: 0
   })
 
   useEffect(() => {
@@ -140,6 +141,12 @@ const TaskManageAddViews = propss => {
       subKegSampleTimKerja: e.target.value
     }))
   }
+  const handleDokumenResponden = e => {
+    setValues(values => ({
+      ...values,
+      subKegUnitTarget: e.target.value
+    }))
+  }
 
   // useEffect(() => {
   //   values.subKegJenisSample === 0
@@ -175,7 +182,7 @@ const TaskManageAddViews = propss => {
         const res = await axios.post('/task', {
           title: values.subKegNama,
           jenisKeg: values.subKegJenis,
-          target: parseInt(values.subKegTarget),
+          targetTotal: parseInt(values.subKegTarget),
           unitTarget: values.subKegUnitTarget,
           duedate: values.subKegDl ? values.subKegDl : new Date(),
           bulan: new Date(values.subKegDl).getMonth(),
@@ -190,7 +197,8 @@ const TaskManageAddViews = propss => {
           year: parseInt(values.subKegYear),
           projectId: values.subKegProjectId,
           userId: values.subKegUserId,
-          notes: '-'
+          notes: '-',
+          gaji: values.subKegJenisSample == 1 ? parseInt(values.subKegGajiPerPerusahaan) : 0
         })
 
         if (res.status === 201) {
@@ -240,27 +248,47 @@ const TaskManageAddViews = propss => {
       nama: 'Non Perusahaan'
     }
   ]
+  const dokumenResponden = [
+    {
+      id: 163,
+      nama: 'Dokumen'
+    },
+
+    {
+      id: 164,
+      nama: 'Responden'
+    }
+  ]
+
   const jenisSubKegiatan = [
+    {
+      id: 63,
+      nama: 'Pelatihan'
+    },
     // {
     //   id: 64,
     //   nama: 'Persiapan'
     // },
     {
       id: 65,
-      nama: 'Lapangan'
+      nama: 'Pencacahan'
     },
 
     {
       id: 67,
-      nama: 'Pengolahan '
+      nama: 'Pengolahan-Entri'
     },
     // {
     //   id: 68,
     //   nama: 'Evaluasi '
     // },
+    // {
+    //   id: 69,
+    //   nama: 'Diseminasi '
+    // },
     {
-      id: 69,
-      nama: 'Diseminasi '
+      id: 70,
+      nama: 'Pengolahan-Validasi'
     }
   ]
 
@@ -965,7 +993,7 @@ const TaskManageAddViews = propss => {
     {
       field:
         fungsi === 4 || fungsi === 5 //Produksi or Distribusi
-          ? 'nama'
+          ? 'nbs/nks/idsls'
           : (fungsi === 6 && values.subKegJenisSample === 1) || (fungsi === 7 && values.subKegJenisSample === 1) //NerwilisResponden or IPDS Responden
           ? 'nama'
           : fungsi === 6 && values.subKegJenisSample === 0 // Nerwilis Dok
@@ -978,7 +1006,7 @@ const TaskManageAddViews = propss => {
       renderHeader: () => (
         <Typography sx={{ fontWeight: 900, fontSize: '0.875rem !important', textAlign: 'center' }}>
           {fungsi === 4 || fungsi === 5 //Produksi or Distribusi
-            ? 'Nama Perusahaan'
+            ? 'NBS/NKS/IDSLS'
             : (fungsi === 6 && values.subKegJenisSample === 1) || (fungsi === 7 && values.subKegJenisSample === 1) //NerwilisResponden or IPDS Responden
             ? 'Nama Perusahaan'
             : fungsi === 6 && values.subKegJenisSample === 0 // Nerwilis Dok
@@ -1130,32 +1158,58 @@ const TaskManageAddViews = propss => {
                   </Grid>
                 </>
               )}
-
-            <Grid item md={6} xs={12}>
-              <TextField
-                name='targetSubKeg'
-                value={values.subKegTarget}
-                onChange={handleChange('subKegTarget')}
-                autoFocus
-                type={'number'}
-                fullWidth
-                id='target'
-                label='Target'
-              />
-            </Grid>
-            <Grid item md={6} xs={12}>
-              <TextField
-                name='unitTargetSubKeg'
-                value={values.subKegUnitTarget}
-                onChange={handleChange('subKegUnitTarget')}
-                autoFocus
-                fullWidth
-                id='unitTarget'
-                label='Dokumen/Responden'
-              />
-            </Grid>
-
-            <Grid item md={6} xs={12}>
+            {session.status === 'authenticated' &&
+              (session.data.uid === 9988 ||
+                values.subKegJenis === 65 ||
+                values.subKegJenis === 67 ||
+                values.subKegJenis === 70) && (
+                <>
+                  <Grid item md={6} xs={12}>
+                    {/* <TextField
+                      name='unitTargetSubKeg'
+                      value={values.subKegUnitTarget}
+                      onChange={handleChange('subKegUnitTarget')}
+                      autoFocus
+                      fullWidth
+                      id='unitTarget'
+                      label='Dokumen/Responden'
+                    /> */}
+                    <FormControl fullWidth>
+                      <InputLabel id='demo-simple-select-helper-label'>Dokumen/Responden</InputLabel>
+                      <Select
+                        fullWidth
+                        labelId='demo-simple-select-helper-label'
+                        id='demo-simple-select-helper'
+                        label='Rentang Waktu'
+                        onChange={handleDokumenResponden}
+                        value={values.subKegUnitTarget}
+                      >
+                        <MenuItem key={''} value={''}>
+                          {''}
+                        </MenuItem>
+                        {dokumenResponden.map(item => (
+                          <MenuItem key={item.id} value={item.nama}>
+                            {item.nama}
+                          </MenuItem>
+                        ))}
+                      </Select>
+                    </FormControl>
+                  </Grid>
+                  <Grid item md={6} xs={12}>
+                    <TextField
+                      name='targetSubKeg'
+                      value={values.subKegTarget}
+                      onChange={handleChange('subKegTarget')}
+                      autoFocus
+                      type={'number'}
+                      fullWidth
+                      id='target'
+                      label='Target'
+                    />
+                  </Grid>
+                </>
+              )}
+            <Grid item md={values.subKegJenis === 65 || values.subKegJenis === 67 ? 6 : 12} xs={12}>
               <DatePickerWrapper>
                 <DatePicker
                   selected={selectedDateE}
@@ -1171,8 +1225,26 @@ const TaskManageAddViews = propss => {
                 />
               </DatePickerWrapper>
             </Grid>
+
             <Grid item md={12} xs={12}>
               {' '}
+              {session.status === 'authenticated' &&
+                values.subKegJenisSample === 1 &&
+                (values.subKegJenis === 65 || values.subKegJenis === 67) && (
+                  <>
+                    {' '}
+                    <TextField
+                      required
+                      name='namaSubKeg'
+                      value={values.subKegGajiPerPerusahaan}
+                      onChange={handleChange('subKegGajiPerPerusahaan')}
+                      fullWidth
+                      id='kegGajiPerPerusahaan'
+                      label='Harga Dokumen Per Perusahaan'
+                      sx={{ marginBottom: 4 }}
+                    />
+                  </>
+                )}
               {/* <TextField
                 name='deskripsiSubKeg'
                 value={values.subKegDesk}
@@ -1186,71 +1258,73 @@ const TaskManageAddViews = propss => {
               <Divider mt={2}></Divider>
             </Grid>
 
-            {session.status === 'authenticated' && (session.data.uid === 999 || values.subKegJenisSample === 1) && (
-              <>
-                <Grid item md={6} xs={12}>
-                  <Typography variant={'h6'} mb={4}>
-                    Sample Perusahaan
-                  </Typography>
-                  <FormControl fullWidth>
-                    <InputLabel id='demo-simple-select-helper-label'>Group Perusahaan</InputLabel>
-                    <Select
-                      fullWidth
-                      labelId='demo-simple-select-helper-label'
-                      id='demo-simple-select-helper'
-                      label='Group Perusahaan'
-                      onChange={handleSamplePerusahaan}
-                      value={values.subKegSamplePerusahaan}
-                    >
-                      <MenuItem key={''} value={''}>
-                        {''}
-                      </MenuItem>
-                      {group.map(item => (
-                        <MenuItem key={item.id} value={item.id}>
-                          {item.nama}
+            {session.status === 'authenticated' &&
+              (session.data.uid === 999 ||
+                (values.subKegJenisSample === 1 && (values.subKegJenis === 65 || values.subKegJenis === 67))) && (
+                <>
+                  <Grid item md={6} xs={12}>
+                    <Typography variant={'h6'} mb={4}>
+                      Sample Perusahaan
+                    </Typography>
+                    <FormControl fullWidth>
+                      <InputLabel id='demo-simple-select-helper-label'>Group Perusahaan</InputLabel>
+                      <Select
+                        fullWidth
+                        labelId='demo-simple-select-helper-label'
+                        id='demo-simple-select-helper'
+                        label='Group Perusahaan'
+                        onChange={handleSamplePerusahaan}
+                        value={values.subKegSamplePerusahaan}
+                      >
+                        <MenuItem key={''} value={''}>
+                          {''}
                         </MenuItem>
-                      ))}
-                    </Select>
-                  </FormControl>
-                </Grid>
-                <Grid item md={12} xs={12}>
-                  <Grid container spacing={4}>
-                    <Grid item xs={12}>
-                      <Box sx={{ width: '100%' }}>
-                        <DataGrid
-                          initialState={{
-                            // filter: {
-                            //   filterModel: {
-                            //     items: [{ field: 'nama', value: 'antam' }]
-                            //   }
-                            // }
-                            sorting: {
-                              sortModel: [{ field: 'checked', sort: 'desc' }]
-                            }
-                          }}
-                          rows={rows}
-                          columns={columns}
-                          pprioritySize={5}
-                          rowsPerPpriorityOptions={[5]}
-                          disableSelectionOnClick
-                          experimentalFeatures={{ newEditingApi: true }}
-                          sx={{
-                            height: rows.length > 3 ? '70vh' : '45vh',
-                            // overflowY: 'auto',
-                            width: '100%'
-                          }}
-                        />
-                      </Box>
+                        {group.map(item => (
+                          <MenuItem key={item.id} value={item.id}>
+                            {item.nama}
+                          </MenuItem>
+                        ))}
+                      </Select>
+                    </FormControl>
+                  </Grid>
+                  <Grid item md={12} xs={12}>
+                    <Grid container spacing={4}>
+                      <Grid item xs={12}>
+                        <Box sx={{ width: '100%' }}>
+                          <DataGrid
+                            initialState={{
+                              // filter: {
+                              //   filterModel: {
+                              //     items: [{ field: 'nama', value: 'antam' }]
+                              //   }
+                              // }
+                              sorting: {
+                                sortModel: [{ field: 'checked', sort: 'desc' }]
+                              }
+                            }}
+                            rows={rows}
+                            columns={columns}
+                            pprioritySize={5}
+                            rowsPerPpriorityOptions={[5]}
+                            disableSelectionOnClick
+                            experimentalFeatures={{ newEditingApi: true }}
+                            sx={{
+                              height: rows.length > 3 ? '70vh' : '45vh',
+                              // overflowY: 'auto',
+                              width: '100%'
+                            }}
+                          />
+                        </Box>
+                      </Grid>
                     </Grid>
                   </Grid>
-                </Grid>
-              </>
-            )}
+                </>
+              )}
             {session.status === 'authenticated' && (session.data.uid === 999 || values.subKegJenisSample === 0) && (
               <>
                 <Grid item md={6} xs={12}>
                   <Typography variant={'h6'} mb={4}>
-                    Sample Perusahaan
+                    Sample Non Perusahaan
                   </Typography>
                 </Grid>
                 <Grid mt={2} mb={2} xs={12} md={12} style={{ paddingLeft: 18 }}>
@@ -1274,6 +1348,19 @@ const TaskManageAddViews = propss => {
                         variant='contained'
                         target='_blank'
                         href='https://docs.google.com/spreadsheets/d/1r7-45vtZHeJc8NIHt-_37nSNvv6b_sdyL-k_RRJY1CA/edit?usp=sharing'
+                      >
+                        Template Table
+                      </Button>
+                    </>
+                  )}
+                  {session.status === 'authenticated' && (fungsi === 4 || fungsi === 5) && (
+                    <>
+                      {' '}
+                      <Button
+                        style={{ marginLeft: 30 }}
+                        variant='contained'
+                        target='_blank'
+                        href='https://docs.google.com/spreadsheets/d/1nha7eWj4wYb_9XxZ4_HOi2g1K9mJpw73I3C4IiqGlgY/edit?usp=sharing'
                       >
                         Template Table
                       </Button>
@@ -1377,9 +1464,7 @@ const TaskManageAddViews = propss => {
                     </FormControl>
                   </Grid>
                   <Grid item md={12} xs={12}>
-                    <Typography variant={'h6'} mb={4}>
-                      Organik
-                    </Typography>
+                    <Typography variant={'h6'} mb={4}></Typography>
                   </Grid>
                   <Grid item md={12} xs={12}>
                     <Grid container spacing={4}>

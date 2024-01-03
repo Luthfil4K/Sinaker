@@ -16,12 +16,14 @@ const statusObj = {
 }
 
 const jenisSub = {
+  63: { namaJenisSub: 'Pelatihan', color: 'warning' },
   64: { namaJenisSub: 'Persiapan', color: 'warning' },
   65: { namaJenisSub: 'Lapangan', color: 'warning' },
   66: { namaJenisSub: 'Pengawasan', color: 'warning' },
   67: { namaJenisSub: 'Pengolahan', color: 'warning' },
   68: { namaJenisSub: 'Evaluasi', color: 'warning' },
-  69: { namaJenisSub: 'Diseminasi', color: 'warning' }
+  69: { namaJenisSub: 'Diseminasi', color: 'warning' },
+  70: { namaJenisSub: 'Pengolahan-Validasi', color: 'warning' }
 }
 
 const TableTask = props => {
