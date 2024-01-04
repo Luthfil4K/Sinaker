@@ -46,7 +46,7 @@ const TableKegiatanList = props => {
       ),
       renderHeader: () => (
         <Typography sx={{ fontWeight: 900, fontSize: '0.875rem !important', textAlign: 'center' }}>
-          Penanngung Jawab Kegiatan
+          Penanggung Jawab Kegiatan
         </Typography>
       ),
       headerName: 'Penanngung Jawab Kegiatan',
