@@ -66,7 +66,7 @@ const TaskManageAddViews = propss => {
   const [values, setValues] = useState({
     subKegNama: '',
     subKegJenis: '',
-    subKegTarget: '',
+    subKegTarget: 0,
     subKegUnitTarget: '',
     subKegJenisSample: '',
     subKegSamplePerusahaan: '',
@@ -78,6 +78,7 @@ const TaskManageAddViews = propss => {
     subKegUserId: project.projectLeaderId,
     subKegMonth: '',
     subKegYear: '',
+    templateTable: 4,
     subKegGajiPerPerusahaan: 0
   })
 
@@ -97,6 +98,13 @@ const TaskManageAddViews = propss => {
     })
     setParticipantsTimKerja(dataTimkerja)
   }, [values])
+
+  const handleTemplateChange = event => {
+    setValues(values => ({
+      ...values, // Pertahankan nilai properti lainnya
+      templateTable: event.target.value // Perbarui nilai kegRentang
+    }))
+  }
 
   const handleChange = props => event => {
     setValues({ ...values, [props]: event.target.value })
@@ -198,7 +206,8 @@ const TaskManageAddViews = propss => {
           projectId: values.subKegProjectId,
           userId: values.subKegUserId,
           notes: '-',
-          gaji: values.subKegJenisSample == 1 ? parseInt(values.subKegGajiPerPerusahaan) : 0
+          gaji: values.subKegJenisSample == 1 ? parseInt(values.subKegGajiPerPerusahaan) : 0,
+          templateTable: values.templateTable
         })
 
         if (res.status === 201) {
@@ -917,12 +926,139 @@ const TaskManageAddViews = propss => {
     }
   ]
 
-  const columnsRT = [
+  // const columnsRT = [
+  //   {
+  //     field: 'kodeKecamatan',
+  //     renderHeader: () => (
+  //       <Typography sx={{ fontWeight: 900, fontSize: '0.875rem !important', textAlign: 'center' }}>
+  //         Kode Kecamatan
+  //       </Typography>
+  //     ),
+  //     minWidth: 200,
+  //     flex: 1
+  //   },
+  //   {
+  //     field: 'namaKecamatan',
+  //     renderHeader: () => (
+  //       <Typography sx={{ fontWeight: 900, fontSize: '0.875rem !important', textAlign: 'center' }}>
+  //         Nama Kecamatan
+  //       </Typography>
+  //     ),
+  //     minWidth: 200,
+  //     flex: 1
+  //   },
+  //   {
+  //     field: 'kodeDesa',
+  //     renderHeader: () => (
+  //       <Typography sx={{ fontWeight: 900, fontSize: '0.875rem !important', textAlign: 'center' }}>
+  //         Kode Desa
+  //       </Typography>
+  //     ),
+  //     minWidth: 200,
+  //     flex: 1
+  //   },
+  //   {
+  //     field: 'namaDesa',
+  //     renderHeader: () => (
+  //       <Typography sx={{ fontWeight: 900, fontSize: '0.875rem !important', textAlign: 'center' }}>
+  //         Nama Desa
+  //       </Typography>
+  //     ),
+  //     minWidth: 200,
+  //     flex: 1
+  //   },
+
+  //   {
+  //     field:
+  //       fungsi === 4 || fungsi === 5 //Produksi or Distribusi
+  //         ? 'alamat'
+  //         : fungsi === 3 || (fungsi === 7 && values.subKegJenisSample === 0) //Sosial or IPDS dokumen
+  //         ? 'nbs'
+  //         : fungsi === 6 && values.subKegJenisSample === 0 // Nerwilis Dok
+  //         ? 'idSls'
+  //         : fungsi === 7 && values.subKegJenisSample === 1 // IPDS Responden
+  //         ? 'idSbr'
+  //         : fungsi === 6 && values.subKegJenisSample === 1 //Nerwilis responden
+  //         ? 'nus'
+  //         : '',
+  //     renderHeader: () => (
+  //       <Typography sx={{ fontWeight: 900, fontSize: '0.875rem !important', textAlign: 'center' }}>
+  //         {fungsi === 4 || fungsi === 5 //Produksi or Distribusi
+  //           ? 'Alamat'
+  //           : fungsi === 3 || (fungsi === 7 && values.subKegJenisSample === 0) //Sosial or IPDS dokumen
+  //           ? 'NBS'
+  //           : fungsi === 6 && values.subKegJenisSample === 0 // Nerwilis Dok
+  //           ? 'ID SLS'
+  //           : fungsi === 7 && values.subKegJenisSample === 1 // IPDS Responden
+  //           ? 'ID SBR'
+  //           : fungsi === 6 && values.subKegJenisSample === 1 //Nerwilis responden
+  //           ? 'NUS'
+  //           : ''}
+  //       </Typography>
+  //     ),
+  //     minWidth: 200,
+  //     flex: 1
+  //   },
+  //   {
+  //     field:
+  //       fungsi === 4 || fungsi === 5 //Produksi or Distribusi
+  //         ? 'nbs/nks/idsls'
+  //         : (fungsi === 6 && values.subKegJenisSample === 1) || (fungsi === 7 && values.subKegJenisSample === 1) //NerwilisResponden or IPDS Responden
+  //         ? 'nama'
+  //         : fungsi === 6 && values.subKegJenisSample === 0 // Nerwilis Dok
+  //         ? 'nbs'
+  //         : fungsi === 3 //Sosial
+  //         ? 'nks'
+  //         : fungsi === 7 && values.subKegJenisSample === 0 //IPDS Dok
+  //         ? 'idSls'
+  //         : '',
+  //     renderHeader: () => (
+  //       <Typography sx={{ fontWeight: 900, fontSize: '0.875rem !important', textAlign: 'center' }}>
+  //         {fungsi === 4 || fungsi === 5 //Produksi or Distribusi
+  //           ? 'NBS/NKS/IDSLS'
+  //           : (fungsi === 6 && values.subKegJenisSample === 1) || (fungsi === 7 && values.subKegJenisSample === 1) //NerwilisResponden or IPDS Responden
+  //           ? 'Nama Perusahaan'
+  //           : fungsi === 6 && values.subKegJenisSample === 0 // Nerwilis Dok
+  //           ? 'NBS'
+  //           : fungsi === 3 //Sosial
+  //           ? 'NKS'
+  //           : fungsi === 7 && values.subKegJenisSample === 0 //IPDS Dok
+  //           ? 'ID SLS'
+  //           : ''}
+  //       </Typography>
+  //     ),
+  //     minWidth: 200,
+  //     flex: 1
+  //   }
+  // ]
+  // ini kebawah buat keperluan import excel,csv
+
+  const columnsNew = [
+    {
+      field: 'kodeDesa',
+      renderHeader: () => (
+        <Typography sx={{ fontWeight: 900, fontSize: '0.875rem !important', textAlign: 'center' }}>
+          Kode Desa
+        </Typography>
+      ),
+      minWidth: 200,
+      flex: 1
+    },
     {
       field: 'kodeKecamatan',
       renderHeader: () => (
         <Typography sx={{ fontWeight: 900, fontSize: '0.875rem !important', textAlign: 'center' }}>
           Kode Kecamatan
+        </Typography>
+      ),
+      minWidth: 200,
+      flex: 1
+    },
+    {
+      field: 'namaDesa',
+      renderHeader: () => (
+        <Typography sx={{ fontWeight: 900, fontSize: '0.875rem !important', textAlign: 'center' }}>
+          Nama Desa
         </Typography>
       ),
       minWidth: 200,
@@ -939,20 +1075,27 @@ const TaskManageAddViews = propss => {
       flex: 1
     },
     {
-      field: 'kodeDesa',
+      field:
+        values.templateTable == 5 //Produksi or Distribusi
+          ? 'alamat'
+          : values.templateTable == 4 || values.templateTable == 3 //Sosial or IPDS dokumen
+          ? 'nbs'
+          : values.templateTable == 7 // IPDS Responden
+          ? 'idSbr'
+          : values.templateTable == 6 //Nerwilis responden
+          ? 'nus'
+          : '',
       renderHeader: () => (
         <Typography sx={{ fontWeight: 900, fontSize: '0.875rem !important', textAlign: 'center' }}>
-          Kode Desa
-        </Typography>
-      ),
-      minWidth: 200,
-      flex: 1
-    },
-    {
-      field: 'namaDesa',
-      renderHeader: () => (
-        <Typography sx={{ fontWeight: 900, fontSize: '0.875rem !important', textAlign: 'center' }}>
-          Nama Desa
+          {values.templateTable == 5 //Produksi or Distribusi
+            ? 'Alamat'
+            : values.templateTable == 4 || values.templateTable == 3 //Sosial or IPDS dokumen
+            ? 'NBS'
+            : values.templateTable == 7 // IPDS Responden
+            ? 'ID SBR'
+            : values.templateTable == 6 //Nerwilis responden
+            ? 'NUS'
+            : ''}
         </Typography>
       ),
       minWidth: 200,
@@ -961,60 +1104,25 @@ const TaskManageAddViews = propss => {
 
     {
       field:
-        fungsi === 4 || fungsi === 5 //Produksi or Distribusi
-          ? 'alamat'
-          : fungsi === 3 || (fungsi === 7 && values.subKegJenisSample === 0) //Sosial or IPDS dokumen
-          ? 'nbs'
-          : fungsi === 6 && values.subKegJenisSample === 0 // Nerwilis Dok
+        values.templateTable == 5 || values.templateTable == 6 //NerwilisResponden or IPDS Responden
+          ? 'namaPerusahaan'
+          : values.templateTable == 4 // Nerwilis Dok
           ? 'idSls'
-          : fungsi === 7 && values.subKegJenisSample === 1 // IPDS Responden
-          ? 'idSbr'
-          : fungsi === 6 && values.subKegJenisSample === 1 //Nerwilis responden
-          ? 'nus'
-          : '',
-      renderHeader: () => (
-        <Typography sx={{ fontWeight: 900, fontSize: '0.875rem !important', textAlign: 'center' }}>
-          {fungsi === 4 || fungsi === 5 //Produksi or Distribusi
-            ? 'Alamat'
-            : fungsi === 3 || (fungsi === 7 && values.subKegJenisSample === 0) //Sosial or IPDS dokumen
-            ? 'NBS'
-            : fungsi === 6 && values.subKegJenisSample === 0 // Nerwilis Dok
-            ? 'ID SLS'
-            : fungsi === 7 && values.subKegJenisSample === 1 // IPDS Responden
-            ? 'ID SBR'
-            : fungsi === 6 && values.subKegJenisSample === 1 //Nerwilis responden
-            ? 'NUS'
-            : ''}
-        </Typography>
-      ),
-      minWidth: 200,
-      flex: 1
-    },
-    {
-      field:
-        fungsi === 4 || fungsi === 5 //Produksi or Distribusi
-          ? 'nbs/nks/idsls'
-          : (fungsi === 6 && values.subKegJenisSample === 1) || (fungsi === 7 && values.subKegJenisSample === 1) //NerwilisResponden or IPDS Responden
-          ? 'nama'
-          : fungsi === 6 && values.subKegJenisSample === 0 // Nerwilis Dok
-          ? 'nbs'
-          : fungsi === 3 //Sosial
+          : values.templateTable == 3 //Sosial
           ? 'nks'
-          : fungsi === 7 && values.subKegJenisSample === 0 //IPDS Dok
-          ? 'idSls'
+          : values.templateTable == 7 //IPDS Dok
+          ? 'namaPerusahaan'
           : '',
       renderHeader: () => (
         <Typography sx={{ fontWeight: 900, fontSize: '0.875rem !important', textAlign: 'center' }}>
-          {fungsi === 4 || fungsi === 5 //Produksi or Distribusi
-            ? 'NBS/NKS/IDSLS'
-            : (fungsi === 6 && values.subKegJenisSample === 1) || (fungsi === 7 && values.subKegJenisSample === 1) //NerwilisResponden or IPDS Responden
+          {values.templateTable == 5 || values.templateTable == 6 //Nerwilis Responden or IPDS Responden
             ? 'Nama Perusahaan'
-            : fungsi === 6 && values.subKegJenisSample === 0 // Nerwilis Dok
-            ? 'NBS'
-            : fungsi === 3 //Sosial
-            ? 'NKS'
-            : fungsi === 7 && values.subKegJenisSample === 0 //IPDS Dok
+            : values.templateTable == 4 // Nerwilis Dok
             ? 'ID SLS'
+            : values.templateTable == 3 //Sosial
+            ? 'NKS'
+            : values.templateTable == 7 //IPDS Dok
+            ? 'Nama Perusahaan'
             : ''}
         </Typography>
       ),
@@ -1022,7 +1130,6 @@ const TaskManageAddViews = propss => {
       flex: 1
     }
   ]
-  // ini kebawah buat keperluan import excel,csv
   const [colDefs, setColDefs] = useState()
   const [data, setData] = useState({
     id: 1,
@@ -1030,7 +1137,8 @@ const TaskManageAddViews = propss => {
     kodeKecamatan: '',
     namaDesa: '',
     namaKecamatan: '',
-    namaPerusahaan: ''
+    namaPerusahaan: '',
+    alamat: ''
   })
 
   const getExention = file => {
@@ -1131,33 +1239,23 @@ const TaskManageAddViews = propss => {
                 </Select>
               </FormControl>
             </Grid>
-            {session.status === 'authenticated' &&
-              (session.data.uid === 9988 || values.subKegJenis === 65 || values.subKegJenis === 67) && (
-                <>
-                  <Grid item md={6} xs={12}>
-                    <FormControl fullWidth>
-                      <InputLabel id='demo-simple-select-helper-label'>Jenis Sample</InputLabel>
-                      <Select
-                        fullWidth
-                        labelId='demo-simple-select-helper-label'
-                        id='demo-simple-select-helper'
-                        label='Rentang Waktu'
-                        onChange={handleJenisSample}
-                        value={values.subKegJenisSample}
-                      >
-                        <MenuItem key={''} value={''}>
-                          {''}
-                        </MenuItem>
-                        {jenisSample.map(item => (
-                          <MenuItem key={item.id} value={item.id}>
-                            {item.nama}
-                          </MenuItem>
-                        ))}
-                      </Select>
-                    </FormControl>
-                  </Grid>
-                </>
-              )}
+            <Grid item md={values.subKegJenis === 65 || values.subKegJenis === 67 ? 6 : 12} xs={12}>
+              <DatePickerWrapper>
+                <DatePicker
+                  selected={selectedDateE}
+                  sx={{ width: 1000 }}
+                  showYearDropdown
+                  showMonthDropdown
+                  placeholderText='Tanggal Berakhir'
+                  value={selectedDateE}
+                  onChange={handleDateChangeE}
+                  customInput={<CustomInputStart />}
+                  dateFormat='dd/MM/yyyy'
+                  className='custom-datepicker'
+                />
+              </DatePickerWrapper>
+            </Grid>
+
             {session.status === 'authenticated' &&
               (session.data.uid === 9988 ||
                 values.subKegJenis === 65 ||
@@ -1180,7 +1278,7 @@ const TaskManageAddViews = propss => {
                         fullWidth
                         labelId='demo-simple-select-helper-label'
                         id='demo-simple-select-helper'
-                        label='Rentang Waktu'
+                        label='Dokumen/Responden'
                         onChange={handleDokumenResponden}
                         value={values.subKegUnitTarget}
                       >
@@ -1195,7 +1293,7 @@ const TaskManageAddViews = propss => {
                       </Select>
                     </FormControl>
                   </Grid>
-                  <Grid item md={6} xs={12}>
+                  {/* <Grid item md={6} xs={12}>
                     <TextField
                       name='targetSubKeg'
                       value={values.subKegTarget}
@@ -1206,25 +1304,72 @@ const TaskManageAddViews = propss => {
                       id='target'
                       label='Target'
                     />
+                  </Grid> */}
+                </>
+              )}
+            {session.status === 'authenticated' &&
+              (session.data.uid === 9988 || values.subKegJenis === 65 || values.subKegJenis === 67) && (
+                <>
+                  <Grid item md={6} xs={12}>
+                    <FormControl fullWidth>
+                      <InputLabel id='demo-simple-select-helper-label'>Jenis Sample</InputLabel>
+                      <Select
+                        fullWidth
+                        labelId='demo-simple-select-helper-label'
+                        id='demo-simple-select-helper'
+                        label='Jenis Sample'
+                        onChange={handleJenisSample}
+                        value={values.subKegJenisSample}
+                      >
+                        <MenuItem key={''} value={''}>
+                          {''}
+                        </MenuItem>
+                        {jenisSample.map(item => (
+                          <MenuItem key={item.id} value={item.id}>
+                            {item.nama}
+                          </MenuItem>
+                        ))}
+                      </Select>
+                    </FormControl>
+                  </Grid>
+                  <Grid item xs={12} md={6}>
+                    <FormControl fullWidth>
+                      <InputLabel id='demo-simple-select-helper-label'>Template Table</InputLabel>
+                      {session.status === 'authenticated' && values.subKegJenisSample === 0 && (
+                        <Select
+                          fullWidth
+                          labelId='demo-simple-select-helper-label'
+                          onChange={handleTemplateChange}
+                          value={values.templateTable}
+                          id='demo-simple-select-helper'
+                          label='Template Table'
+                          name='Template Table'
+                          size='medium'
+                        >
+                          <MenuItem value={3}>NBS-NKS</MenuItem>
+                          <MenuItem value={4}>NBS-ID SLS</MenuItem>
+                        </Select>
+                      )}
+                      {session.status === 'authenticated' && values.subKegJenisSample === 1 && (
+                        <Select
+                          fullWidth
+                          labelId='demo-simple-select-helper-label'
+                          onChange={handleTemplateChange}
+                          value={values.templateTable}
+                          id='demo-simple-select-helper'
+                          label='Template Table'
+                          name='Template Table'
+                          size='medium'
+                        >
+                          <MenuItem value={5}>Alamat-Nama Perusahaan</MenuItem>
+                          <MenuItem value={6}>NUS-Nama Perusahaan/Dinas</MenuItem>
+                          <MenuItem value={7}>ID SBR-Nama Perusahaan</MenuItem>
+                        </Select>
+                      )}
+                    </FormControl>
                   </Grid>
                 </>
               )}
-            <Grid item md={values.subKegJenis === 65 || values.subKegJenis === 67 ? 6 : 12} xs={12}>
-              <DatePickerWrapper>
-                <DatePicker
-                  selected={selectedDateE}
-                  sx={{ width: 1000 }}
-                  showYearDropdown
-                  showMonthDropdown
-                  placeholderText='Tanggal Berakhir'
-                  value={selectedDateE}
-                  onChange={handleDateChangeE}
-                  customInput={<CustomInputStart />}
-                  dateFormat='dd/MM/yyyy'
-                  className='custom-datepicker'
-                />
-              </DatePickerWrapper>
-            </Grid>
 
             <Grid item md={12} xs={12}>
               {' '}
@@ -1258,7 +1403,7 @@ const TaskManageAddViews = propss => {
               <Divider mt={2}></Divider>
             </Grid>
 
-            {session.status === 'authenticated' &&
+            {/* {session.status === 'authenticated' &&
               (session.data.uid === 999 ||
                 (values.subKegJenisSample === 1 && (values.subKegJenis === 65 || values.subKegJenis === 67))) && (
                 <>
@@ -1319,92 +1464,122 @@ const TaskManageAddViews = propss => {
                     </Grid>
                   </Grid>
                 </>
-              )}
-            {session.status === 'authenticated' && (session.data.uid === 999 || values.subKegJenisSample === 0) && (
-              <>
-                <Grid item md={6} xs={12}>
-                  <Typography variant={'h6'} mb={4}>
-                    Sample Non Perusahaan
-                  </Typography>
-                </Grid>
-                <Grid mt={2} mb={2} xs={12} md={12} style={{ paddingLeft: 18 }}>
-                  <input
-                    style={{ display: 'none' }}
-                    id='raised-button-file'
-                    multiple
-                    type='file'
-                    onChange={importExcel}
-                  />
-                  <label htmlFor='raised-button-file'>
-                    <Button variant='contained' component='span'>
-                      Upload
-                    </Button>
-                  </label>
-                  {session.status === 'authenticated' && (session.data.uid === 999 || fungsi === 3) && (
-                    <>
-                      {' '}
-                      <Button
-                        style={{ marginLeft: 30 }}
-                        variant='contained'
-                        target='_blank'
-                        href='https://docs.google.com/spreadsheets/d/1r7-45vtZHeJc8NIHt-_37nSNvv6b_sdyL-k_RRJY1CA/edit?usp=sharing'
-                      >
-                        Template Table
+              )} */}
+            {session.status === 'authenticated' &&
+              (session.data.uid === 999 || values.subKegJenisSample === 0 || values.subKegJenisSample === 1) && (
+                <>
+                  <Grid item md={6} xs={12}>
+                    <Typography variant={'h6'} mb={4}>
+                      Sample Non Perusahaan
+                    </Typography>
+                  </Grid>
+                  <Grid mt={2} mb={2} xs={12} md={12} style={{ paddingLeft: 18 }}>
+                    <input
+                      style={{ display: 'none' }}
+                      id='raised-button-file'
+                      multiple
+                      type='file'
+                      onChange={importExcel}
+                    />
+                    <label htmlFor='raised-button-file'>
+                      <Button variant='contained' component='span'>
+                        Upload
                       </Button>
-                    </>
-                  )}
-                  {session.status === 'authenticated' && (fungsi === 4 || fungsi === 5) && (
-                    <>
-                      {' '}
-                      <Button
-                        style={{ marginLeft: 30 }}
-                        variant='contained'
-                        target='_blank'
-                        href='https://docs.google.com/spreadsheets/d/1nha7eWj4wYb_9XxZ4_HOi2g1K9mJpw73I3C4IiqGlgY/edit?usp=sharing'
-                      >
-                        Template Table
-                      </Button>
-                    </>
-                  )}
-                  {session.status === 'authenticated' && (session.data.uid === 999 || fungsi === 6 || fungsi === 7) && (
-                    <>
-                      {' '}
-                      <Button
-                        style={{ marginLeft: 30 }}
-                        variant='contained'
-                        target='_blank'
-                        href='https://docs.google.com/spreadsheets/d/1SMEoofTuCwTbz0S8wWv50c0NdQR7YdTZMkD-MheQ05w/edit?usp=sharing'
-                      >
-                        Template Table
-                      </Button>
-                    </>
-                  )}
-                </Grid>
-                <Grid item md={12} xs={12}>
-                  <Grid container spacing={4}>
-                    <Grid item xs={12}>
-                      <Box sx={{ width: '100%' }}>
-                        <DataGrid
-                          initialState={{
-                            sorting: {
-                              sortModel: [{ field: 'nama', sort: 'asc' }]
-                            }
-                          }}
-                          rows={data}
-                          columns={columnsRT}
-                          pprioritySize={5}
-                          sx={{
-                            height: rows.length > 3 ? '70vh' : '45vh',
-                            overflowY: 'disabled',
-                            width: '100%'
-                          }}
-                        />
-                      </Box>
+                    </label>
+                    {values.templateTable == 3 && (
+                      <>
+                        {' '}
+                        <Button
+                          style={{ marginLeft: 30 }}
+                          variant='contained'
+                          target='_blank'
+                          href='https://docs.google.com/spreadsheets/d/1r7-45vtZHeJc8NIHt-_37nSNvv6b_sdyL-k_RRJY1CA/edit?usp=sharing'
+                        >
+                          Template Table
+                        </Button>
+                      </>
+                    )}
+                    {values.templateTable == 4 && (
+                      <>
+                        {' '}
+                        <Button
+                          style={{ marginLeft: 30 }}
+                          variant='contained'
+                          target='_blank'
+                          href='https://docs.google.com/spreadsheets/d/1SMEoofTuCwTbz0S8wWv50c0NdQR7YdTZMkD-MheQ05w/edit?usp=sharing'
+                        >
+                          Template Table
+                        </Button>
+                      </>
+                    )}
+
+                    {values.templateTable == 5 && (
+                      <>
+                        {' '}
+                        <Button
+                          style={{ marginLeft: 30 }}
+                          variant='contained'
+                          target='_blank'
+                          href='https://docs.google.com/spreadsheets/d/1drqslfn5KY6GhR5N2Bc_ZbyMJWg4IF5SDVo6umsBlho/edit?usp=sharing'
+                        >
+                          Template Table
+                        </Button>
+                      </>
+                    )}
+
+                    {values.templateTable == 7 && (
+                      <>
+                        {' '}
+                        <Button
+                          style={{ marginLeft: 30 }}
+                          variant='contained'
+                          target='_blank'
+                          href='https://docs.google.com/spreadsheets/d/1nWR6_tsLBXa1qLdTry5fsx1Hgmvfj---oNsiCQO3ods/edit?usp=sharing'
+                        >
+                          Template Table
+                        </Button>
+                      </>
+                    )}
+
+                    {values.templateTable == 6 && (
+                      <>
+                        {' '}
+                        <Button
+                          style={{ marginLeft: 30 }}
+                          variant='contained'
+                          target='_blank'
+                          href='https://docs.google.com/spreadsheets/d/1s9k74pPMlJc8wotQRV1jpBxPAYFqh-BD1sH8BhEFb4Q/edit?usp=sharing'
+                        >
+                          Template Table
+                        </Button>
+                      </>
+                    )}
+                  </Grid>
+                  <Grid item md={12} xs={12}>
+                    <Grid container spacing={4}>
+                      <Grid item xs={12}>
+                        <Box sx={{ width: '100%' }}>
+                          <DataGrid
+                            initialState={{
+                              sorting: {
+                                sortModel: [{ field: 'nama', sort: 'asc' }]
+                              }
+                            }}
+                            rows={data}
+                            columns={columnsNew}
+                            pprioritySize={5}
+                            sx={{
+                              height: rows.length > 3 ? '70vh' : '45vh',
+                              overflowY: 'disabled',
+                              width: '100%'
+                            }}
+                          />
+                        </Box>
+                      </Grid>
                     </Grid>
                   </Grid>
-                </Grid>
-              </>
-            )}
+                </>
+              )}
             {session.status === 'authenticated' &&
               (session.data.uid === 9988 || values.subKegJenis === 65 || values.subKegJenis === 67) && (
                 <>
@@ -1448,7 +1623,7 @@ const TaskManageAddViews = propss => {
                         fullWidth
                         labelId='demo-simple-select-helper-label'
                         id='demo-simple-select-helper'
-                        label='Group Perusahaan'
+                        label='Tim Kerja'
                         onChange={handleSampleTimKerja}
                         value={values.subKegSampleTimKerja}
                       >

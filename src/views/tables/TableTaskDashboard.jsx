@@ -33,7 +33,7 @@ const TableTaskDashboard = props => {
   //   tahun: new Date().getFullYear()
   // })
 
-  console.log(task)
+  // console.log(task)
   // useEffect(() => {
   //   task.map(task => {
   //     task.month == new Date().getMonth() + 1 && task.year == new Date().getFullYear() ? setTask(task) : 0

@@ -44,7 +44,7 @@ const UserDropdown = props => {
   const [anchorEl, setAnchorEl] = useState('')
 
   const session = useSession()
-  console.log(session)
+  // console.log(session)
 
   const getUser = async () => {
     setUser(prev => {

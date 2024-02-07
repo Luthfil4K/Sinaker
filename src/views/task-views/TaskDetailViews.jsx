@@ -48,6 +48,13 @@ const TaskDetailViews = props => {
     jenisKeg: props.data.jenisKeg,
     jenisSample: props.data.jenisSample
   })
+
+  // ganti tarel di your task sesuai dengan tabel dibawah
+  const handleTaskUpdate = trgt => {
+    setValues({ target: trgt })
+  }
+
+  const getRealisasi = target => {}
   console.log(values)
 
   const handleChange = props => event => {
@@ -282,6 +289,7 @@ const TaskDetailViews = props => {
               dataPML={pegawai}
               dataTaskSample={values.jenisSample}
               dataJenisKeg={values.jenisKeg}
+              dataUpdateTarget={handleTaskUpdate}
             ></TablePerusahaanTaskDetails>
             // <Button type='submit' variant={'contained'} onClick={handleSimpan} fullWidth>
             //   Simpan

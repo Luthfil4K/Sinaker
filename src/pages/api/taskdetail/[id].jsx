@@ -4,7 +4,7 @@ export default async function handler(req, res) {
   const id = req.query.id
 
   const { method } = req
-  console.log('awkoakow')
+
   if (method === 'GET') {
     const task = await prisma.task.findUnique({
       where: {

@@ -13,41 +13,70 @@ export default async function handler(req, res) {
   }
 
   if (method === 'POST') {
-    const { nama, fungsi, participants } = req.body
+    const { nama, fungsi, sample } = req.body
 
     try {
       console.log(nama)
-      const groupperusahaan = await prisma.groupPerusahaan.create({
-        data: {
-          nama,
-          fungsi
-        }
-      })
 
-      participants.map(async company => {
-        console.log(company.kodeDesa)
-        const companies = await prisma.perusahaan.create({
+      if (fungsi == 4 || fungsi == 5) {
+        const groupperusahaan = await prisma.groupPerusahaan.create({
           data: {
-            kip: 88787,
-            nama: company.namaPerusahaan,
-            desa: String(company.kodeDesa),
-            kecamatan: String(company.kodeKecamatan),
-            namaDesa: company.namaDesa,
-            namaKec: company.namaKecamatan,
-            alamat: company.alamat,
-            kegiatan: ''
+            nama,
+            fungsi
           }
         })
+        sample.map(async company => {
+          console.log(company.kodeDesa)
+          const companies = await prisma.perusahaan.create({
+            data: {
+              kip: 88787,
+              nama: company.namaPerusahaan,
+              desa: String(company.kodeDesa),
+              kecamatan: String(company.kodeKecamatan),
+              namaDesa: company.namaDesa,
+              namaKec: company.namaKecamatan,
+              alamat: company.alamat,
+              kegiatan: ''
+            }
+          })
 
-        const pkNew = await prisma.perusahaanGroup.create({
-          data: {
-            perusahaanId: companies.id,
-            groupPerusahaanId: groupperusahaan.id
-          }
+          const pkNew = await prisma.perusahaanGroup.create({
+            data: {
+              perusahaanId: companies.id,
+              groupPerusahaanId: groupperusahaan.id
+            }
+          })
         })
-      })
-
-      //   participants.map(async participant => {
+      } else if (fungsi == 7) {
+        sample.map(async sbrPerusahaan => {
+          console.log(sbrPerusahaan.kodeDesa)
+          const sampleSbrPerusahaan = await prisma.idsbr_perusahaan.create({
+            data: {
+              desa: String(sbrPerusahaan.kodeDesa),
+              kecamatan: String(sbrPerusahaan.kodeKecamatan),
+              namadesa: sbrPerusahaan.namaDesa,
+              namaKec: sbrPerusahaan.namaKecamatan,
+              idSbr: Number(sbrPerusahaan.idSbr),
+              namaPerusahaan: Number(sbrPerusahaan.idSls)
+            }
+          })
+        })
+      } else if (fungsi == 6) {
+        sample.map(async nusDinas => {
+          console.log(nusDinas.kodeDesa)
+          const sampleNusDinas = await prisma.nus_dinas.create({
+            data: {
+              desa: String(nusDinas.kodeDesa),
+              kecamatan: String(nusDinas.kodeKecamatan),
+              namadesa: nusDinas.namaDesa,
+              namaKec: nusDinas.namaKecamatan,
+              nus: Number(nusDinas.nus),
+              dinas: nusDinas.namaPerusahaan
+            }
+          })
+        })
+      }
+      //   sample.map(async participant => {
       //     const pkNew = await prisma.perusahaanGroup.create({
       //       data: {
       //         perusahaanId: companies.id,
@@ -56,7 +85,7 @@ export default async function handler(req, res) {
       //     })
       //   })
 
-      return res.status(201).json({ success: true, data: groupperusahaan })
+      return res.status(201).json({ success: true })
     } catch (error) {
       console.log(error)
 

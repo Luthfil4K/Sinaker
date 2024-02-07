@@ -33,7 +33,8 @@ export default async function handler(req, res) {
       participants,
       peserta,
       persertaOrganik,
-      gaji
+      gaji,
+      templateTable
     } = req.body
     console.log('dah sampe post')
     console.log(fungsi)
@@ -66,12 +67,12 @@ export default async function handler(req, res) {
                   data: {
                     taskId: task.id,
                     perusahaanId: participant.id,
-                    nama: participant.nama,
+                    nama: templateTable == 5 || templateTable == 6 || templateTable == 7 ? participant.nama : '',
                     desa: participant.desa,
                     namadesa: participant.namaDesa,
                     kecamatan: participant.kecamatan,
                     namaKec: participant.namaKec,
-                    alamat: participant.alamat,
+                    alamat: templateTable == 5 ? participant.alamat : '',
                     target: 0,
                     realisasi: 0,
                     hasilPencacahan: '',
@@ -83,8 +84,9 @@ export default async function handler(req, res) {
                     idSls: '',
                     nbs: '',
                     nks: '',
-                    idSbr: '',
-                    nus: ''
+                    nus: templateTable == 6 ? participant.nus : '',
+                    idSbr: templateTable == 7 ? participant.idSbr : '',
+                    templateTable: templateTable.toString()
                   }
                 })
               }
@@ -117,6 +119,27 @@ export default async function handler(req, res) {
             participants.map(async participant => {
               const tnp = await prisma.TaskPerusahaanProduksi.create({
                 data: {
+                  // taskId: task.id,
+                  // perusahaanId: 9999999,
+                  // nama: '',
+                  // desa: participant.kodeDesa.toString(),
+                  // namadesa: participant.namaDesa,
+                  // kecamatan: participant.kodeKecamatan.toString(),
+                  // namaKec: participant.namaKecamatan,
+                  // alamat: fungsi == 4 || fungsi == 5 ? participant.alamat : '',
+                  // target: 0,
+                  // realisasi: 0,
+                  // hasilPencacahan: '',
+                  // duedate: new Date(),
+                  // pmlId: 0,
+                  // pclId: 0,
+                  // gajiPml: 0,
+                  // gajiPcl: 0,
+                  // idSls: fungsi == 6 || fungsi == 7 ? participant.idSls : '',
+                  // nbs: fungsi == 6 || fungsi == 7 || fungsi == 3 ? participant.nbs : '',
+                  // nks: fungsi == 3 ? participant.nks : '',
+                  // idSbr: '',
+                  // nus: ''
                   taskId: task.id,
                   perusahaanId: 9999999,
                   nama: '',
@@ -124,7 +147,7 @@ export default async function handler(req, res) {
                   namadesa: participant.namaDesa,
                   kecamatan: participant.kodeKecamatan.toString(),
                   namaKec: participant.namaKecamatan,
-                  alamat: fungsi == 4 || fungsi == 5 ? participant.alamat : '',
+                  alamat: '',
                   target: 0,
                   realisasi: 0,
                   hasilPencacahan: '',
@@ -133,11 +156,12 @@ export default async function handler(req, res) {
                   pclId: 0,
                   gajiPml: 0,
                   gajiPcl: 0,
-                  idSls: fungsi == 6 || fungsi == 7 ? participant.idSls : '',
-                  nbs: fungsi == 6 || fungsi == 7 || fungsi == 3 ? participant.nbs : '',
-                  nks: fungsi == 3 ? participant.nks : '',
+                  idSls: templateTable == 4 ? participant.idSls : '',
+                  nbs: templateTable == 3 || templateTable == 4 ? participant.nbs : '',
+                  nks: templateTable == 3 ? participant.nks : '',
                   idSbr: '',
-                  nus: ''
+                  nus: '',
+                  templateTable: templateTable.toString()
                 }
               })
             })

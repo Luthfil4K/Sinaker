@@ -59,13 +59,21 @@ const CreateKegiatanPerusahaanViews = props => {
   )
 
   const [values, setValues] = useState({
-    kegFungsi: '',
-    kegNama: ''
+    kegFungsi: 5,
+    kegNama: '',
+    jenisSample: 1
   })
 
   const handleChange = props => event => {
     setValues({ ...values, [props]: event.target.value })
     // console.log(values)
+  }
+
+  const handleJenisSample = e => {
+    setValues(values => ({
+      ...values,
+      jenisSample: e.target.value
+    }))
   }
 
   const handleFungsiChange = event => {
@@ -121,7 +129,7 @@ const CreateKegiatanPerusahaanViews = props => {
         const res = await axios.post('/perusahaan/new', {
           nama: values.kegNama,
           fungsi: values.kegFungsi,
-          participants: data
+          sample: data
         })
 
         if (res.status === 201) {
@@ -388,26 +396,110 @@ const CreateKegiatanPerusahaanViews = props => {
       minWidth: 200,
       flex: 1
     },
-
     {
-      field: 'namaPerusahaan',
+      field:
+        values.kegFungsi === 4 || values.kegFungsi === 5 //Produksi or Distribusi
+          ? 'alamat'
+          : values.kegFungsi === 3 || (values.kegFungsi === 7 && values.jenisSample === 0) //Sosial or IPDS dokumen
+          ? 'nbs'
+          : values.kegFungsi === 6 && values.jenisSample === 0 // Nerwilis Dok
+          ? 'idSls'
+          : values.kegFungsi === 7 && values.jenisSample === 1 // IPDS Responden
+          ? 'idSbr'
+          : values.kegFungsi === 6 && values.jenisSample === 1 //Nerwilis responden
+          ? 'nus'
+          : '',
       renderHeader: () => (
         <Typography sx={{ fontWeight: 900, fontSize: '0.875rem !important', textAlign: 'center' }}>
-          Nama Perusahaan
+          {values.kegFungsi === 4 || values.kegFungsi === 5 //Produksi or Distribusi
+            ? 'Alamat'
+            : values.kegFungsi === 3 || (values.kegFungsi === 7 && values.jenisSample === 0) //Sosial or IPDS dokumen
+            ? 'NBS'
+            : values.kegFungsi === 6 && values.jenisSample === 0 // Nerwilis Dok
+            ? 'ID SLS'
+            : values.kegFungsi === 7 && values.jenisSample === 1 // IPDS Responden
+            ? 'ID SBR'
+            : values.kegFungsi === 6 && values.jenisSample === 1 //Nerwilis responden
+            ? 'NUS'
+            : ''}
         </Typography>
       ),
       minWidth: 200,
       flex: 1
     },
     {
-      field: 'alamat',
+      field:
+        (values.kegFungsi === 4 || values.kegFungsi === 5) && values.jenisSample == 0 //Produksi or Distribusi
+          ? 'nbs/nks/idsls'
+          : (values.kegFungsi === 6 && values.jenisSample === 1) || (values.kegFungsi === 7 && values.jenisSample === 1) //NerwilisResponden or IPDS Responden
+          ? 'namaPerusahaan'
+          : values.kegFungsi === 6 && values.jenisSample === 0 // Nerwilis Dok
+          ? 'nbs'
+          : values.kegFungsi === 3 //Sosial
+          ? 'nks'
+          : values.kegFungsi === 7 && values.jenisSample === 0 //IPDS Dok
+          ? 'idSls'
+          : '',
       renderHeader: () => (
-        <Typography sx={{ fontWeight: 900, fontSize: '0.875rem !important', textAlign: 'center' }}>Alamat</Typography>
+        <Typography sx={{ fontWeight: 900, fontSize: '0.875rem !important', textAlign: 'center' }}>
+          {(values.kegFungsi === 4 || values.kegFungsi === 5) && values.jenisSample == 0 //Produksi or Distribusi
+            ? 'NBS/NKS/IDSLS'
+            : (values.kegFungsi === 6 && values.jenisSample === 1) ||
+              (values.kegFungsi === 7 && values.jenisSample === 1) ||
+              (values.kegFungsi === 4 && values.jenisSample === 1) ||
+              (values.kegFungsi === 5 && values.jenisSample === 1) //Nerwilis Responden or IPDS Responden
+            ? 'Nama Perusahaan'
+            : values.kegFungsi === 6 && values.jenisSample === 0 // Nerwilis Dok
+            ? 'NBS'
+            : values.kegFungsi === 3 //Sosial
+            ? 'NKS'
+            : values.kegFungsi === 7 && values.jenisSample === 0 //IPDS Dok
+            ? 'ID SLS'
+            : ''}
+        </Typography>
       ),
       minWidth: 200,
       flex: 1
     }
   ]
+
+  const handleImportRt = async e => {
+    e.preventDefault()
+
+    try {
+      while (true) {
+        const res = await axios.post('/kegiatan-sample/rumahTangga', {
+          nama: values.kegNama,
+          fungsi: values.kegFungsi,
+          sample: data
+        })
+
+        if (res.status === 201) {
+          Swal.fire({
+            title: 'Create Group Perusahaan Success',
+            text: 'Press OK to continue',
+            icon: 'success',
+            confirmButtonColor: '#68B92E',
+            confirmButtonText: 'OK'
+          }).then(router.push(`perusahaan-group-list`))
+
+          setValues({
+            kegNama: ''
+          })
+        }
+
+        break
+      }
+    } catch (error) {
+      Swal.fire({
+        title: 'Create Group Perusahaan Failed',
+        text: error,
+        icon: 'error',
+        confirmButtonColor: '#d33',
+        confirmButtonText: 'OK'
+      })
+    }
+  }
 
   return (
     <Card>
@@ -416,7 +508,7 @@ const CreateKegiatanPerusahaanViews = props => {
       <TabContext value={value}>
         <TabList onChange={handleChangeTab} aria-label='card navigation example'>
           <Tab value='1' label='Input Perusahaan Baru' />
-          <Tab value='2' label='Gunakan Data yang Sudah Ada' />
+          {/* <Tab value='2' label='Gunakan Data yang Sudah Ada' /> */}
         </TabList>
         <CardContent>
           <TabPanel value='1' sx={{ p: 0, height: 800, overflowY: 'scroll' }}>
@@ -433,7 +525,7 @@ const CreateKegiatanPerusahaanViews = props => {
                     value={values.kegNama}
                     onChange={handleChange('kegNama')}
                     multiline
-                    size='small'
+                    size='medium'
                     label='Nama Group Kegiatan Perusahaan'
                     name='namaKegiatan'
                   />
@@ -449,14 +541,32 @@ const CreateKegiatanPerusahaanViews = props => {
                       id='demo-simple-select-helper'
                       label='Fungsi'
                       name='fungsi'
-                      size='small'
+                      size='medium'
                     >
-                      <MenuItem value={2}>Bagian Umum</MenuItem>
+                      {/* <MenuItem value={2}>Bagian Umum</MenuItem> */}
                       <MenuItem value={3}>Statistik Sosial </MenuItem>
                       <MenuItem value={4}>Statistik Produksi</MenuItem>
                       <MenuItem value={5}>Statistik Distribusi</MenuItem>
                       <MenuItem value={6}>Neraca Wilayah dan Analisis Statistik</MenuItem>
                       <MenuItem value={7}>Integrasi Pengolahan dan Diseminasi Statistik</MenuItem>
+                    </Select>
+                  </FormControl>
+                </Grid>
+                <Grid item xs={12} md={12}>
+                  <FormControl fullWidth>
+                    <InputLabel id='demo-simple-select-helper-label'>Jenis Sample</InputLabel>
+                    <Select
+                      fullWidth
+                      labelId='demo-simple-select-helper-label'
+                      onChange={handleJenisSample}
+                      value={values.jenisSample}
+                      id='demo-simple-select-helper'
+                      label='Jenis Sample'
+                      name='Jenis Sample'
+                      size='medium'
+                    >
+                      <MenuItem value={0}>Rumah Tangga</MenuItem>
+                      <MenuItem value={1}>Perusahaan</MenuItem>
                     </Select>
                   </FormControl>
                 </Grid>
@@ -474,7 +584,92 @@ const CreateKegiatanPerusahaanViews = props => {
                       Upload
                     </Button>
                   </label>
-                  {/* <a id='unduhTemplate' style={{ display: 'none' }}></a>
+                  {/* template button */}
+                  <>
+                    {values.kegFungsi === 3 && values.jenisSample === 0 && (
+                      <>
+                        {' '}
+                        <Button
+                          style={{ marginLeft: 30 }}
+                          variant='contained'
+                          target='_blank'
+                          href='https://docs.google.com/spreadsheets/d/1r7-45vtZHeJc8NIHt-_37nSNvv6b_sdyL-k_RRJY1CA/edit?usp=sharing'
+                        >
+                          Template Table
+                        </Button>
+                      </>
+                    )}
+                    {(values.kegFungsi === 4 || values.kegFungsi === 5) && values.jenisSample === 0 && (
+                      <>
+                        {' '}
+                        <Button
+                          style={{ marginLeft: 30 }}
+                          variant='contained'
+                          target='_blank'
+                          href='https://docs.google.com/spreadsheets/d/1nha7eWj4wYb_9XxZ4_HOi2g1K9mJpw73I3C4IiqGlgY/edit?usp=sharing'
+                        >
+                          Template Table
+                        </Button>
+                      </>
+                    )}
+                    {(values.kegFungsi === 6 || values.kegFungsi === 7) && values.jenisSample === 0 && (
+                      <>
+                        {' '}
+                        <Button
+                          style={{ marginLeft: 30 }}
+                          variant='contained'
+                          target='_blank'
+                          href='https://docs.google.com/spreadsheets/d/1SMEoofTuCwTbz0S8wWv50c0NdQR7YdTZMkD-MheQ05w/edit?usp=sharing'
+                        >
+                          Template Table
+                        </Button>
+                      </>
+                    )}
+
+                    {(values.kegFungsi === 4 || values.kegFungsi === 5) && values.jenisSample === 1 && (
+                      <>
+                        {' '}
+                        <Button
+                          style={{ marginLeft: 30 }}
+                          variant='contained'
+                          target='_blank'
+                          href='https://docs.google.com/spreadsheets/d/1drqslfn5KY6GhR5N2Bc_ZbyMJWg4IF5SDVo6umsBlho/edit?usp=sharing'
+                        >
+                          Template Table
+                        </Button>
+                      </>
+                    )}
+
+                    {values.kegFungsi === 7 && values.jenisSample === 1 && (
+                      <>
+                        {' '}
+                        <Button
+                          style={{ marginLeft: 30 }}
+                          variant='contained'
+                          target='_blank'
+                          href='https://docs.google.com/spreadsheets/d/1nWR6_tsLBXa1qLdTry5fsx1Hgmvfj---oNsiCQO3ods/edit?usp=sharing'
+                        >
+                          Template Table
+                        </Button>
+                      </>
+                    )}
+
+                    {values.kegFungsi === 6 && values.jenisSample === 1 && (
+                      <>
+                        {' '}
+                        <Button
+                          style={{ marginLeft: 30 }}
+                          variant='contained'
+                          target='_blank'
+                          href='https://docs.google.com/spreadsheets/d/1s9k74pPMlJc8wotQRV1jpBxPAYFqh-BD1sH8BhEFb4Q/edit?usp=sharing'
+                        >
+                          Template Table
+                        </Button>
+                      </>
+                    )}
+                  </>
+                  <>
+                    {/* <a id='unduhTemplate' style={{ display: 'none' }}></a>
                   <label htmlFor='unduhTemplate'>
                     <Button
                       variant='raised'
@@ -484,21 +679,22 @@ const CreateKegiatanPerusahaanViews = props => {
                     >
                       template
                     </Button>
-                  </label> */}
-                  <Button
+                  </label> 
+                   <Button
                     style={{ marginLeft: 30 }}
                     variant='contained'
                     target='_blank'
                     href='https://docs.google.com/spreadsheets/d/1drqslfn5KY6GhR5N2Bc_ZbyMJWg4IF5SDVo6umsBlho/edit?usp=sharing'
                   >
                     Template Table
-                  </Button>
+                  </Button> 
 
-                  {/* <a href={TemplateExcel} download='Example-PDF-document' target='_blank' rel='noopener noreferrer'>
+                   <a href={TemplateExcel} download='Example-PDF-document' target='_blank' rel='noopener noreferrer'>
                     <button>Download .pdf file</button>
-                  </a> */}
+                  </a> 
+                   <MaterialTable title='Olympic Data' data={data} columns={colDefs} /> */}
+                  </>
                 </Grid>
-                {/* <MaterialTable title='Olympic Data' data={data} columns={colDefs} /> */}
                 <Grid item xs={12} md={12}>
                   <Box sx={{ width: '100%' }}>
                     <DataGrid
@@ -528,7 +724,12 @@ const CreateKegiatanPerusahaanViews = props => {
                 </Grid>
               </Grid>
               <Grid item m={4} display={'flex'} justifyContent={'end'}>
-                <Button size='small' type='submit' variant='contained' onClick={handleKegiatanPerusahaanNew}>
+                <Button
+                  size='small'
+                  type='submit'
+                  variant='contained'
+                  onClick={values.jenisSample == 1 ? handleKegiatanPerusahaanNew : handleImportRt}
+                >
                   Buat Kegiatan Perusahaan
                 </Button>
               </Grid>
@@ -575,6 +776,7 @@ const CreateKegiatanPerusahaanViews = props => {
                     </Select>
                   </FormControl>
                 </Grid>
+
                 <Divider></Divider>
                 <Grid item xs={12}>
                   <Box sx={{ width: '100%' }}>
@@ -616,5 +818,34 @@ const CreateKegiatanPerusahaanViews = props => {
     </Card>
   )
 }
+
+// const daftarA = [
+//   { daftarId: 1, target: 90, realisasi: 90, harga: 1000 },
+//   { daftarId: 2, target: 10, realisasi: 8, harga: 2000 },
+//   { daftarId: 3, target: 80, realisasi: 70, harga: 1500 }
+// ];
+
+// // Contoh data dari tabel nhs_table
+// const nhs_table = [
+//   { daftarId: 1, nhs: '001' },
+//   { daftarId: 2, nhs: '002' },
+//   { daftarId: 3, nhs: '003' }
+// ];
+
+// // Menggabungkan data berdasarkan daftarId
+// const joinedData = daftarA.reduce((result, daftarAItem) => {
+//   const matchingNHS = nhs_table.find(nhsItem => nhsItem.daftarId === daftarAItem.daftarId);
+
+//   if (matchingNHS) {
+//     result.push({
+//       ...daftarAItem,
+//       nhs: matchingNHS.nhs
+//     });
+//   }
+
+//   return result;
+// }, []);
+
+// console.log(joinedData);
 
 export default CreateKegiatanPerusahaanViews

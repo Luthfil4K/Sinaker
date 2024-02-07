@@ -53,8 +53,12 @@ const Dashboard = ({ dataTask }) => {
       getUser()
     }
   }, [session])
+  const BulanSekarang = new Date().getMonth() + 1
   const [task, setTask] = useState(JSON.parse(dataTask))
-  console.log(task)
+  const [targetBulanIni, setTargetBulanIni] = useState(0)
+  const [realisasiBulanIni, setRealisasiBulanIni] = useState(0)
+
+  // console.log(task)
   const dataawal = [12, 19, 3, 5, 2, 3, 8, 10, 6, 7, 14, 12]
   const realisasiAwal = Array.from({ length: 12 }, () => Math.floor(Math.random() * 100))
 
@@ -198,6 +202,40 @@ const Dashboard = ({ dataTask }) => {
   }, [])
 
   useEffect(() => {
+    let tmp = 0
+    let hasil = task.reduce(
+      (acc, angka) => {
+        if (angka.month === BulanSekarang && angka.year === new Date().getFullYear()) {
+          tmp += Number(angka.target)
+        }
+        return tmp
+      },
+      [0]
+    )
+    setTargetBulanIni(hasil)
+    // console.log(hasil)
+  }, [])
+
+  useEffect(() => {
+    let tmp = 0
+    let hasil = task.reduce(
+      (acc, angka) => {
+        if (angka.month === BulanSekarang && angka.year === new Date().getFullYear()) {
+          tmp += Number(angka.realisasi)
+        }
+        return tmp
+      },
+      [0]
+    )
+    setRealisasiBulanIni(hasil)
+    // console.log(hasil)
+  }, [])
+
+  console.log(targetBulanIni + '+' + realisasiBulanIni)
+  console.log(new Date().getFullYear())
+  console.log(BulanSekarang)
+
+  useEffect(() => {
     const untukTargetLine = []
     const untukRealisasiLine = []
     const untukLabelsLine = []
@@ -243,13 +281,13 @@ const Dashboard = ({ dataTask }) => {
       if (task.jenisSample === 1) {
         targetLinear += task.target
         realisasiLinear += task.realisasi
-        console.log(
-          task.id + 'masuk ke jenis sample 1 dengan realisasi :' + task.realisasi + 'dan target : ' + task.target
-        )
+        // console.log(
+        //   task.id + 'masuk ke jenis sample 1 dengan realisasi :' + task.realisasi + 'dan target : ' + task.target
+        // )
       } else if (task.jenisSample == 0) {
-        console.log(
-          task.id + 'masuk ke jenis sample 0 dengan realisasi :' + task.realisasi + 'dan target : ' + task.target
-        )
+        // console.log(
+        //   task.id + 'masuk ke jenis sample 0 dengan realisasi :' + task.realisasi + 'dan target : ' + task.target
+        // )
         targetLinearP += task.target
         realisasiLinearP += task.realisasi
       }
@@ -304,18 +342,19 @@ const Dashboard = ({ dataTask }) => {
   const dataDoughnut = {
     datasets: [
       {
-        data: doughnut,
+        data: [targetBulanIni, realisasiBulanIni],
         backgroundColor: [
-          'rgba(49, 10, 49,1)',
-          'rgba(115, 93, 120,1)',
+          // 'rgba(49, 10, 49,1)',
+          // 'rgba(115, 93, 120,1)'
           'rgba(167, 196, 194,1)',
-          'rgba(151, 239, 233,1)',
-          'rgba(255, 159, 64,1)'
+          'rgba(151, 239, 233,1)'
+          // 'rgba(255, 159, 64,1)'
         ]
       }
     ],
 
-    labels: ['Sosial', 'Produksi', 'IPDS', 'Distribusi', 'Nerwilis']
+    // labels: ['Sosial', 'Produksi', 'IPDS', 'Distribusi', 'Nerwilis']
+    labels: ['Target', 'Realisasi']
   }
 
   return (
@@ -327,7 +366,6 @@ const Dashboard = ({ dataTask }) => {
             <Grid item xs={12} md={12}>
               <Card sx={{ overflowY: 'scroll', padding: 4, height: 250 }}>
                 <Typography variant={'h6'}>Sub Kegiatan bulan ini</Typography>
-
                 <TableTaskDashboard data={task}></TableTaskDashboard>
               </Card>
             </Grid>
@@ -408,8 +446,8 @@ const Dashboard = ({ dataTask }) => {
             </Grid>
             <Grid item xs={12} md={12}>
               <Card sx={{ padding: 4, height: 410 }}>
-                <Typography textAlign={'center'} variant={'h6'}>
-                  Total Sub Kegiatan per Fungsi
+                <Typography textAlign={'center'} variant={'body2'}>
+                  Total Target dan Realisasi Bulan Ini
                 </Typography>
                 <Divider></Divider>
                 <Doughnut

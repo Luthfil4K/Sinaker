@@ -40,7 +40,7 @@ export default async function handler(req, res) {
       nus
     } = req.body
 
-    console.log('masuk ke wodb')
+    console.log('masuk ke wdb')
     try {
       // const companies = await prisma.perusahaan.create({
       //   data: {

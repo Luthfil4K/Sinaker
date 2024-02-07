@@ -17,9 +17,6 @@ import SaveIcon from '@mui/icons-material/Save'
 import Typography from '@mui/material/Typography'
 import CancelIcon from '@mui/icons-material/Close'
 
-
-
-
 import {
   GridRowModes,
   GridToolbar,
@@ -69,11 +66,13 @@ const TableGroupPerusahaan = props => {
   const [idAja, setidAja] = useState(props.dataId)
   const [mitra, setMitra] = useState(props.dataMitra)
   const [pml, setPML] = useState(props.dataPML)
+  const [participants, setParticipants] = useState(props.data)
   const fungsi = props.dataProjectFungsi
   const jenisKeg = props.dataJenisKeg
   const jenisSample = props.dataTaskSample
 
-  console.log(jenisKeg)
+  const templateTable = participants[1].templateTable
+  console.log(participants[1].templateTable)
 
   const [organikMitra, setOrganikMitra] = useState({
     value: '',
@@ -90,8 +89,7 @@ const TableGroupPerusahaan = props => {
   }))
 
   const combinedOptions = [...optionPCL, ...optionPML]
-  console.log(combinedOptions)
-  const [participants, setParticipants] = useState(props.data)
+  // console.log(combinedOptions)
   const apapa = props.dataProjectFungsi
   const initialRows = participants.map(row => ({
     id: row.id,
@@ -166,12 +164,15 @@ const TableGroupPerusahaan = props => {
       68: { namaJenisSub: 'Evaluasi', color: 'warning' },
       69: { namaJenisSub: 'Diseminasi', color: 'warning' }
     }
+    useEffect(() => {
+      props.dataUpdateTarget(4567)
+    }, [rows])
 
     // console.log(jenisSub)
   }
-  useEffect(() => {
-    // console.log('update persentase')
-  }, [rows])
+  // useEffect(() => {
+  //   // console.log('update persentase')
+  // }, [rows])
 
   const handleDeleteClick = id => () => {
     Swal.fire({
@@ -279,7 +280,7 @@ const TableGroupPerusahaan = props => {
         })
       }
     } else {
-      if (fungsi === 4 || fungsi === 5 || (fungsi === 7 && jenisSample === 1)) {
+      if (jenisSample === 1) {
         axios
           .post(`/task-perusahaan/addWoDB`, data)
           .then(res => {
@@ -298,7 +299,7 @@ const TableGroupPerusahaan = props => {
               confirmButtonText: 'Ok'
             })
           })
-      } else if (fungsi === 3 || fungsi === 6 || (fungsi === 7 && jenisSample === 0)) {
+      } else if (jenisSample === 0) {
         axios
           .post(`/task-perusahaan`, data)
           .then(res => {
@@ -414,105 +415,162 @@ const TableGroupPerusahaan = props => {
     },
     {
       field:
-        fungsi === 4 || fungsi === 5 //Produksi or Distribusi
+        templateTable == 5 //Produksi or Distribusi
           ? 'alamat'
-          : fungsi === 3 || (fungsi === 7 && jenisSample === 0) //Sosial or IPDS dokumen
+          : templateTable == 4 || templateTable == 3 //Sosial or IPDS dokumen
           ? 'nbs'
-          : fungsi === 6 && jenisSample === 0 // Nerwilis Dok
-          ? 'idSls'
-          : fungsi === 7 && jenisSample === 1 // IPDS Responden
+          : templateTable == 7 // IPDS Responden
           ? 'idSbr'
-          : fungsi === 6 && jenisSample === 1 //Nerwilis responden
+          : templateTable == 6 //Nerwilis responden
           ? 'nus'
           : '',
-      headerName:
-        fungsi === 4 || fungsi === 5 //Produksi or Distribusi
-          ? 'Alamat'
-          : fungsi === 3 || (fungsi === 7 && jenisSample === 0) //Sosial or IPDS dokumen
-          ? 'NBS'
-          : fungsi === 6 && jenisSample === 0 // Nerwilis Dok
-          ? 'ID SLS'
-          : fungsi === 7 && jenisSample === 1 // IPDS Responden
-          ? 'ID SBR'
-          : fungsi === 6 && jenisSample === 1 //Nerwilis responden
-          ? 'NUS'
-          : '',
       renderHeader: () => (
         <Typography sx={{ fontWeight: 900, fontSize: '0.875rem !important', textAlign: 'center' }}>
-          {fungsi === 4 || fungsi === 5 //Produksi or Distribusi
+          {templateTable == 5 //Produksi or Distribusi
             ? 'Alamat'
-            : fungsi === 3 || (fungsi === 7 && jenisSample === 0) //Sosial or IPDS dokumen
+            : templateTable == 4 || templateTable == 3 //Sosial or IPDS dokumen
             ? 'NBS'
-            : fungsi === 6 && jenisSample === 0 // Nerwilis Dok
-            ? 'ID SLS'
-            : fungsi === 7 && jenisSample === 1 // IPDS Responden
+            : templateTable == 7 // IPDS Responden
             ? 'ID SBR'
-            : fungsi === 6 && jenisSample === 1 //Nerwilis responden
+            : templateTable == 6 //Nerwilis responden
             ? 'NUS'
             : ''}
         </Typography>
       ),
-      width: 200,
-      renderHeader: () => (
-        <Typography sx={{ fontWeight: 900, fontSize: '0.875rem !important', textAlign: 'center' }}>
-          {fungsi === 4 || fungsi === 5 //Produksi or Distribusi
-            ? 'Alamat'
-            : fungsi === 3 || (fungsi === 7 && jenisSample === 0) //Sosial or IPDS dokumen
-            ? 'NBS'
-            : fungsi === 6 && jenisSample === 0 // Nerwilis Dok
-            ? 'ID SLS'
-            : fungsi === 7 && jenisSample === 1 // IPDS Responden
-            ? 'ID SBR'
-            : fungsi === 6 && jenisSample === 1 //Nerwilis responden
-            ? 'NUS'
-            : ''}
-        </Typography>
-      ),
-      editable: true
+      minWidth: 200,
+      flex: 1
     },
+
     {
       field:
-        fungsi === 4 || fungsi === 5 //Produksi or Distribusi
-          ? 'nama'
-          : (fungsi === 6 && jenisSample === 1) || (fungsi === 7 && jenisSample === 1) //NerwilisResponden or IPDS Responden
-          ? 'nama'
-          : fungsi === 6 && jenisSample === 0 // Nerwilis Dok
-          ? 'nbs'
-          : fungsi === 3 //Sosial
-          ? 'nks'
-          : fungsi === 7 && jenisSample === 0 //IPDS Dok
+        templateTable == 5 || templateTable == 6 //NerwilisResponden or IPDS Responden
+          ? 'namaPerusahaan'
+          : templateTable == 4 // Nerwilis Dok
           ? 'idSls'
-          : '',
-      headerName:
-        fungsi === 4 || fungsi === 5 //Produksi or Distribusi
-          ? 'Nama Perusahaan'
-          : (fungsi === 6 && jenisSample === 1) || (fungsi === 7 && jenisSample === 1) //NerwilisResponden or IPDS Responden
-          ? 'Nama Perusahaan'
-          : fungsi === 6 && jenisSample === 0 // Nerwilis Dok
-          ? 'NBS'
-          : fungsi === 3 //Sosial
-          ? 'NKS'
-          : fungsi === 7 && jenisSample === 0 //IPDS Dok
-          ? 'ID SLS'
+          : templateTable == 3 //Sosial
+          ? 'nks'
+          : templateTable == 7 //IPDS Dok
+          ? 'namaPerusahaan'
           : '',
       renderHeader: () => (
         <Typography sx={{ fontWeight: 900, fontSize: '0.875rem !important', textAlign: 'center' }}>
-          {fungsi === 4 || fungsi === 5 //Produksi or Distribusi
+          {templateTable == 5 || templateTable == 6 //Nerwilis Responden or IPDS Responden
             ? 'Nama Perusahaan'
-            : (fungsi === 6 && jenisSample === 1) || (fungsi === 7 && jenisSample === 1) //NerwilisResponden or IPDS Responden
-            ? 'Nama Perusahaan'
-            : fungsi === 6 && jenisSample === 0 // Nerwilis Dok
-            ? 'NBS'
-            : fungsi === 3 //Sosial
-            ? 'NKS'
-            : fungsi === 7 && jenisSample === 0 //IPDS Dok
+            : templateTable == 4 // Nerwilis Dok
             ? 'ID SLS'
+            : templateTable == 3 //Sosial
+            ? 'NKS'
+            : templateTable == 7 //IPDS Dok
+            ? 'Nama Perusahaan'
             : ''}
         </Typography>
       ),
-      width: 280,
-      editable: true
+      minWidth: 200,
+      flex: 1
     },
+
+    // <>{
+    //   field:
+    //     fungsi === 4 || fungsi === 5 //Produksi or Distribusi
+    //       ? 'alamat'
+    //       : fungsi === 3 || (fungsi === 7 && jenisSample === 0) //Sosial or IPDS dokumen
+    //       ? 'nbs'
+    //       : fungsi === 6 && jenisSample === 0 // Nerwilis Dok
+    //       ? 'idSls'
+    //       : fungsi === 7 && jenisSample === 1 // IPDS Responden
+    //       ? 'idSbr'
+    //       : fungsi === 6 && jenisSample === 1 //Nerwilis responden
+    //       ? 'nus'
+    //       : '',
+    //   headerName:
+    //     fungsi === 4 || fungsi === 5 //Produksi or Distribusi
+    //       ? 'Alamat'
+    //       : fungsi === 3 || (fungsi === 7 && jenisSample === 0) //Sosial or IPDS dokumen
+    //       ? 'NBS'
+    //       : fungsi === 6 && jenisSample === 0 // Nerwilis Dok
+    //       ? 'ID SLS'
+    //       : fungsi === 7 && jenisSample === 1 // IPDS Responden
+    //       ? 'ID SBR'
+    //       : fungsi === 6 && jenisSample === 1 //Nerwilis responden
+    //       ? 'NUS'
+    //       : '',
+    //   renderHeader: () => (
+    //     <Typography sx={{ fontWeight: 900, fontSize: '0.875rem !important', textAlign: 'center' }}>
+    //       {fungsi === 4 || fungsi === 5 //Produksi or Distribusi
+    //         ? 'Alamat'
+    //         : fungsi === 3 || (fungsi === 7 && jenisSample === 0) //Sosial or IPDS dokumen
+    //         ? 'NBS'
+    //         : fungsi === 6 && jenisSample === 0 // Nerwilis Dok
+    //         ? 'ID SLS'
+    //         : fungsi === 7 && jenisSample === 1 // IPDS Responden
+    //         ? 'ID SBR'
+    //         : fungsi === 6 && jenisSample === 1 //Nerwilis responden
+    //         ? 'NUS'
+    //         : ''}
+    //     </Typography>
+    //   ),
+    //   width: 200,
+    //   renderHeader: () => (
+    //     <Typography sx={{ fontWeight: 900, fontSize: '0.875rem !important', textAlign: 'center' }}>
+    //       {fungsi === 4 || fungsi === 5 //Produksi or Distribusi
+    //         ? 'Alamat'
+    //         : fungsi === 3 || (fungsi === 7 && jenisSample === 0) //Sosial or IPDS dokumen
+    //         ? 'NBS'
+    //         : fungsi === 6 && jenisSample === 0 // Nerwilis Dok
+    //         ? 'ID SLS'
+    //         : fungsi === 7 && jenisSample === 1 // IPDS Responden
+    //         ? 'ID SBR'
+    //         : fungsi === 6 && jenisSample === 1 //Nerwilis responden
+    //         ? 'NUS'
+    //         : ''}
+    //     </Typography>
+    //   ),
+    //   editable: true
+    // },
+    // {
+    //   field:
+    //     fungsi === 4 || fungsi === 5 //Produksi or Distribusi
+    //       ? 'nama'
+    //       : (fungsi === 6 && jenisSample === 1) || (fungsi === 7 && jenisSample === 1) //NerwilisResponden or IPDS Responden
+    //       ? 'nama'
+    //       : fungsi === 6 && jenisSample === 0 // Nerwilis Dok
+    //       ? 'nbs'
+    //       : fungsi === 3 //Sosial
+    //       ? 'nks'
+    //       : fungsi === 7 && jenisSample === 0 //IPDS Dok
+    //       ? 'idSls'
+    //       : '',
+    //   headerName:
+    //     fungsi === 4 || fungsi === 5 //Produksi or Distribusi
+    //       ? 'Nama Perusahaan'
+    //       : (fungsi === 6 && jenisSample === 1) || (fungsi === 7 && jenisSample === 1) //NerwilisResponden or IPDS Responden
+    //       ? 'Nama Perusahaan'
+    //       : fungsi === 6 && jenisSample === 0 // Nerwilis Dok
+    //       ? 'NBS'
+    //       : fungsi === 3 //Sosial
+    //       ? 'NKS'
+    //       : fungsi === 7 && jenisSample === 0 //IPDS Dok
+    //       ? 'ID SLS'
+    //       : '',
+    //   renderHeader: () => (
+    //     <Typography sx={{ fontWeight: 900, fontSize: '0.875rem !important', textAlign: 'center' }}>
+    //       {fungsi === 4 || fungsi === 5 //Produksi or Distribusi
+    //         ? 'Nama Perusahaan'
+    //         : (fungsi === 6 && jenisSample === 1) || (fungsi === 7 && jenisSample === 1) //NerwilisResponden or IPDS Responden
+    //         ? 'Nama Perusahaan'
+    //         : fungsi === 6 && jenisSample === 0 // Nerwilis Dok
+    //         ? 'NBS'
+    //         : fungsi === 3 //Sosial
+    //         ? 'NKS'
+    //         : fungsi === 7 && jenisSample === 0 //IPDS Dok
+    //         ? 'ID SLS'
+    //         : ''}
+    //     </Typography>
+    //   ),
+    //   width: 280,
+    //   editable: true
+    // }</>,
+
     {
       field: 'realisasi',
       headerName: 'Realisasi',

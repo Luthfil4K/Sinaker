@@ -228,7 +228,7 @@ const ProjectListViews = props => {
               )
             ) : cardP2.length > 0 ? (
               <>
-                <TableKegiatanList data={cardP}></TableKegiatanList>
+                <TableKegiatanList data={cardP2}></TableKegiatanList>
               </>
             ) : (
               <>
