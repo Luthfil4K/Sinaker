@@ -58,11 +58,21 @@ const CreateKegiatanPerusahaanViews = props => {
       }
     })
   )
+  // console.log(participants)
   const [tpp, setTpp] = useState(props.dataTpp)
   const [values, setValues] = useState({
     kegFungsi: '',
-    kegNama: ''
+    kegNama: '',
+    kegKetua: ''
   })
+
+  const handlePJ = event => {
+    setValues(values => ({
+      ...values, // Pertahankan nilai properti lainnya
+      kegKetua: event.target.value // Perbarui nilai kegRentang
+    }))
+    console.log(values)
+  }
   const rows = participants.map(row => {
     const gajiBulanIni = tpp
       .filter(tppRow => tppRow.pmlId === row.id)
@@ -412,6 +422,7 @@ const CreateKegiatanPerusahaanViews = props => {
       while (true) {
         const res = await axios.post('/tim-kerja', {
           nama: values.kegNama,
+          ketuaTim: values.kegKetua,
           fungsi: values.kegFungsi,
           participants: participants
         })
@@ -423,10 +434,11 @@ const CreateKegiatanPerusahaanViews = props => {
             icon: 'success',
             confirmButtonColor: '#68B92E',
             confirmButtonText: 'OK'
-          }).then(router.push(`perusahaan-group-list`))
+          }).then(router.push(`tim-kerja-list`))
 
           setValues({
-            kegNama: ''
+            kegNama: '',
+            kegKetua: 0
           })
         }
 
@@ -460,6 +472,28 @@ const CreateKegiatanPerusahaanViews = props => {
               label='Nama Tim Kerja'
               name='namaKegiatan'
             />
+          </Grid>
+          <Grid item xs={12} md={12}>
+            <Typography variant='h6' sx={{ py: '5px' }}></Typography>
+
+            <FormControl fullWidth>
+              <InputLabel id='demo-simple-select-helper-label'>Penanggung Jawab</InputLabel>
+              <Select
+                fullWidth
+                labelId='demo-simple-select-helper-label'
+                id='demo-simple-select-helper'
+                value={values.kegKetua}
+                onChange={handlePJ}
+                label='Penanggung Jawab'
+                name='penanggungJawab'
+              >
+                {participants.map(item => (
+                  <MenuItem key={item.id} value={item.id}>
+                    {item.name}
+                  </MenuItem>
+                ))}
+              </Select>
+            </FormControl>
           </Grid>
           <Divider></Divider>
           <Grid item xs={12}>

@@ -6,10 +6,10 @@ import prisma from '../../services/db'
 import { getToken } from 'next-auth/jwt'
 
 const CreateProject = ({ data }) => {
-  const [user, setUser] = useState(JSON.parse(data))
+  const [dataCreate, setDataCerate] = useState(JSON.parse(data))
   return (
     <>
-      <CreateProjectViews data={user}></CreateProjectViews>
+      <CreateProjectViews data={dataCreate.user} dataTim={dataCreate.timkerja}></CreateProjectViews>
     </>
   )
 }
@@ -37,9 +37,24 @@ export async function getServerSideProps(context) {
       taskToDo: true
     }
   })
+
+  let timkerja
+
+  timkerja = await prisma.TimKerja.findMany({
+    include: {
+      userId_fkey: true,
+      timKerjaPegawai: true
+    }
+  })
+
+  const data = {
+    user,
+    timkerja
+  }
+
   return {
     props: {
-      data: JSON.stringify(user)
+      data: JSON.stringify(data)
     }
   }
 }

@@ -14,10 +14,22 @@ export default async function handler(req, res) {
   }
 
   if (method === 'POST') {
-    const { title, startdate, enddate, description, projectLeaderId, createdById, fungsi, rentangWaktu, bulan } =
-      req.body
+    const {
+      title,
+      startdate,
+      enddate,
+      description,
+      projectLeaderId,
+      createdById,
+      fungsi,
+      rentangWaktu,
+      bulan,
+      anggotaTimId
+    } = req.body
     console.log('asdwadad')
-    console.log(bulan)
+    console.log(anggotaTimId)
+    console.log('asdwadad')
+    console.log(projectLeaderId)
     try {
       const project = await prisma.project.create({
         data: {
@@ -33,12 +45,32 @@ export default async function handler(req, res) {
         }
       })
 
-      const userProject = await prisma.userProject.create({
+      const isLeader = await prisma.userProject.create({
         data: {
+          isLeader: 1,
           userId: projectLeaderId,
           projectId: project.id
         }
       })
+
+      anggotaTimId.map(async anggota => {
+        const usP = await prisma.userProject.create({
+          data: {
+            userId: anggota,
+            projectId: project.id,
+            isLeader: 0
+          }
+        })
+      })
+
+      // const userProject = await prisma.userProject.create({
+
+      //   data: {
+      //     userId: projectLeaderId,
+      //     projectId: project.id,
+
+      //   }
+      // })
 
       return res.status(201).json({ success: true, data: project })
     } catch (error) {

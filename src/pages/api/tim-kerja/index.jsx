@@ -13,14 +13,15 @@ export default async function handler(req, res) {
   }
 
   if (method === 'POST') {
-    const { nama, participants } = req.body
+    const { nama, participants, ketuaTim } = req.body
 
     try {
       console.log(nama)
       const timkerja = await prisma.TimKerja.create({
         data: {
-          nama
+          nama,
           // fungsi
+          ketuaTim
         }
       })
 

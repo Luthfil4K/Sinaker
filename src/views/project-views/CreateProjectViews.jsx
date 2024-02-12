@@ -23,7 +23,7 @@ import TextField from '@mui/material/TextField'
 import Typography from '@mui/material/Typography'
 import { styled } from '@mui/material/styles'
 import { useRouter } from 'next/dist/client/router'
-import { Autocomplete } from '@mui/lab'
+import { Autocomplete } from '@mui/material'
 import FormControl from '@mui/material/FormControl'
 import Select, { SelectChangeEvent } from '@mui/material/Select'
 import InputLabel from '@mui/material/InputLabel'
@@ -49,7 +49,14 @@ const CustomInputEnd = forwardRef((props, ref) => {
 
 const CreateProjectViews = props => {
   const [dataUser, setDataUser] = useState(props.data)
-  // console.log(dataUser)
+  const [timKerja, setTimKerja] = useState(props.dataTim)
+  const [anggota, setAnggota] = useState(0)
+  const [defaultProps, setDefaultProps] = useState({
+    options: dataUser,
+    getOptionLabel: option => option.name
+  })
+  console.log(timKerja)
+
   const [selectedDate, setSelectedDate] = useState(null)
   const [selectedDateE, setSelectedDateE] = useState(null)
   const [disabled, setDisabled] = useState({
@@ -73,10 +80,12 @@ const CreateProjectViews = props => {
     kegGajiPcl: '',
     kegFungsi: '',
     kegDesk: '',
-    kegKetua: ''
+    kegTim: '',
+    kegAnggotaId: '',
+    kegAnggota: [dataUser[3].name, dataUser[1].name],
+    kegKetuaId: ''
   })
-  // const label = { inputProps: { 'aria-label': 'Checkbox demo' } }
-
+  console.log(values)
   const [bulan, setBulan] = useState({
     jan: false,
     feb: false,
@@ -92,16 +101,6 @@ const CreateProjectViews = props => {
     dec: false
   })
 
-  const top100Films = [
-    { title: 'The Shawshank Redemption', year: 1994 },
-    { title: 'The Godfather', year: 1972 },
-    { title: 'The Godfather: Part II', year: 1974 },
-    { title: 'The Dark Knight', year: 2008 },
-    { title: '12 Angry Men', year: 1957 },
-    { title: "Schindler's List", year: 1993 },
-    { title: 'Pulp Fiction', year: 1994 }
-  ]
-
   const handleChangeBulan = event => {
     setBulan({
       ...bulan,
@@ -109,6 +108,44 @@ const CreateProjectViews = props => {
     })
     // console.log(bulan)
   }
+
+  useEffect(() => {
+    const dataAnggota = {}
+    const dataAnggotaId = []
+    const ketuaTimId = 0
+    timKerja.map(data => {
+      data.id === values.kegTim ? (dataAnggota = data.timKerjaPegawai) : 0
+    })
+
+    timKerja.map(data => {
+      data.id === values.kegTim ? (ketuaTimId = data.ketuaTim) : 0
+    })
+
+    if (Object.keys(dataAnggota).length > 0) {
+      dataAnggota.map(member => {
+        dataAnggotaId.push(member.userId)
+      })
+    }
+
+    const userNames = dataUser
+      .map(pengguna => (dataAnggotaId.includes(parseInt(pengguna.id)) ? pengguna.name : null))
+      .filter(id => id !== null)
+
+    const userIds = dataUser
+      .map(pengguna => (dataAnggotaId.includes(parseInt(pengguna.id)) ? pengguna.id : null))
+      .filter(id => id !== null)
+
+    setValues({ ...values, kegAnggota: userNames, kegAnggotaId: userIds, kegKetuaId: ketuaTimId })
+  }, [values.kegTim])
+
+  useEffect(() => {
+    setDefaultProps({
+      options: dataUser,
+      getOptionLabel: option => option.title
+    })
+  }, [])
+
+  // console.log(anggota)
 
   useEffect(() => {
     setBulan(prevBulan => {
@@ -243,7 +280,7 @@ const CreateProjectViews = props => {
   const handlePJ = event => {
     setValues(values => ({
       ...values, // Pertahankan nilai properti lainnya
-      kegKetua: event.target.value // Perbarui nilai kegRentang
+      kegTim: event.target.value // Perbarui nilai kegRentang
     }))
   }
 
@@ -262,7 +299,7 @@ const CreateProjectViews = props => {
     //     '||' +
     //     values.kegDesk +
     //     '||' +
-    //     values.kegKetua
+    //     values.kegTim
     // )
     try {
       while (true) {
@@ -274,7 +311,8 @@ const CreateProjectViews = props => {
           bulan,
           fungsi: values.kegFungsi,
           description: values.kegDesk,
-          projectLeaderId: values.kegKetua,
+          projectLeaderId: values.kegKetuaId,
+          anggotaTimId: values.kegAnggotaId,
           createdById: 99
         })
 
@@ -294,7 +332,10 @@ const CreateProjectViews = props => {
             kegGajiPcl: '',
             kegFungsi: '',
             kegDesk: '',
-            kegKetua: ''
+            kegTim: '',
+            kegAnggotaId: '',
+            kegAnggota: [dataUser[3].name, dataUser[1].name],
+            kegKetuaId: ''
           })
 
           setSelectedDate(new Date())
@@ -355,20 +396,6 @@ const CreateProjectViews = props => {
             />
           </Grid>
           <Grid item xs={12} md={12} sx={{ backgroundColor: 'primary' }}>
-            {/* <Checkbox label='aselole' defaultChecked />
-            <Checkbox label='aselole' defaultChecked color='secondary' />
-            <Checkbox label='aselole' defaultChecked color='success' />
-            <Checkbox label='aselole' defaultChecked color='default' />
-            <Checkbox
-              defaultChecked
-              sx={{
-                color: pink[800],
-                '&.Mui-checked': {
-                  color: pink[600]
-                }
-              }}
-            /> */}
-
             <FormGroup row>
               <FormControlLabel
                 value='Januari'
@@ -469,26 +496,6 @@ const CreateProjectViews = props => {
             </FormGroup>
           </Grid>
 
-          {/* <Grid item xs={12} sm={12} lg={6}>
-          <TextField
-            fullWidth
-            value={values.kegGajiPml}
-            type={'number'}
-            onChange={handleChange('kegGajiPml')}
-            label='Gaji Satuan PML'
-            name='gajiPML'
-          />
-        </Grid>
-        <Grid item xs={12} sm={12} lg={6}>
-          <TextField
-            fullWidth
-            value={values.kegGajiPcl}
-            type={'number'}
-            onChange={handleChange('kegGajiPcl')}
-            label='Gaji Satuan PCL'
-            name='gajiPCL'
-          />
-        </Grid> */}
           <Grid item xs={12} sm={12} lg={12}>
             <FormControl fullWidth>
               <InputLabel id='demo-simple-select-helper-label'>Fungsi</InputLabel>
@@ -561,9 +568,9 @@ const CreateProjectViews = props => {
             </DatePickerWrapper>
           </Grid>
           <Grid item xs={12} md={12}>
-            <Typography variant='h6' sx={{ py: '5px' }}>
+            {/* <Typography variant='h6' sx={{ py: '5px' }}>
               Penanggung Jawab Kegiatan
-            </Typography>
+            </Typography> */}
 
             <FormControl fullWidth>
               <InputLabel id='demo-simple-select-helper-label'>Penanggung Jawab</InputLabel>
@@ -571,14 +578,14 @@ const CreateProjectViews = props => {
                 fullWidth
                 labelId='demo-simple-select-helper-label'
                 id='demo-simple-select-helper'
-                value={values.kegKetua}
+                value={values.kegTim}
                 onChange={handlePJ}
                 label='Penanggung Jawab'
                 name='penanggungJawab'
               >
-                {dataUser.map(item => (
+                {timKerja.map(item => (
                   <MenuItem key={item.id} value={item.id}>
-                    {item.name}
+                    {item.nama} - {item.userId_fkey.name}
                   </MenuItem>
                 ))}
               </Select>
@@ -587,15 +594,21 @@ const CreateProjectViews = props => {
           <Grid item xs={12} md={12} lg={12}>
             <Autocomplete
               multiple
-              id='tags-filled'
+              // options={dataUser}
+              // getOptionLabel={option => option.name}
               options={dataUser.map(option => option.name)}
+              id='tags-filled'
+              value={values.kegAnggota}
+              onChange={(event, newValue) => {
+                setValues({ ...values, kegAnggota: newValue })
+              }}
               defaultValue={[dataUser[2].name]}
-              freeSolo
+              filterSelectedOptions
               renderTags={(value, getTagProps) =>
                 value.map((option, index) => <Chip variant='outlined' label={option} {...getTagProps({ index })} />)
               }
               renderInput={params => (
-                <TextField {...params} variant='filled' label='freeSolo' placeholder='Favorites' />
+                <TextField {...params} variant='outlined' label='Anggota Tim' placeholder='Favorites' />
               )}
             />
           </Grid>
