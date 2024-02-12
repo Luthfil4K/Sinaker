@@ -49,13 +49,20 @@ const CustomInputEnd = forwardRef((props, ref) => {
 
 const CreateProjectViews = props => {
   const [dataUser, setDataUser] = useState(props.data)
+  const [dataPengguna, setDataPengguna] = useState(
+    props.data.map(siyap => ({
+      id: siyap.id,
+      label: siyap.name
+    }))
+  )
+  // console.log(dataUser)
   const [timKerja, setTimKerja] = useState(props.dataTim)
   const [anggota, setAnggota] = useState(0)
-  const [defaultProps, setDefaultProps] = useState({
-    options: dataUser,
-    getOptionLabel: option => option.name
-  })
-  console.log(timKerja)
+  // const [defaultProps, setDefaultProps] = useState({
+  //   options: dataUser,
+  //   getOptionLabel: option => option.name
+  // })
+  // console.log(timKerja)
 
   const [selectedDate, setSelectedDate] = useState(null)
   const [selectedDateE, setSelectedDateE] = useState(null)
@@ -113,6 +120,7 @@ const CreateProjectViews = props => {
     const dataAnggota = {}
     const dataAnggotaId = []
     const ketuaTimId = 0
+
     timKerja.map(data => {
       data.id === values.kegTim ? (dataAnggota = data.timKerjaPegawai) : 0
     })
@@ -131,19 +139,26 @@ const CreateProjectViews = props => {
       .map(pengguna => (dataAnggotaId.includes(parseInt(pengguna.id)) ? pengguna.name : null))
       .filter(id => id !== null)
 
-    const userIds = dataUser
-      .map(pengguna => (dataAnggotaId.includes(parseInt(pengguna.id)) ? pengguna.id : null))
-      .filter(id => id !== null)
+    // const userIds = dataUser
+    //   .map(pengguna => (dataAnggotaId.includes(parseInt(pengguna.id)) ? pengguna.id : null))
+    //   .filter(id => id !== null)
 
-    setValues({ ...values, kegAnggota: userNames, kegAnggotaId: userIds, kegKetuaId: ketuaTimId })
+    setValues({ ...values, kegAnggota: userNames, kegKetuaId: ketuaTimId })
   }, [values.kegTim])
 
   useEffect(() => {
-    setDefaultProps({
-      options: dataUser,
-      getOptionLabel: option => option.title
+    const tmpId = []
+    const testId = dataUser.map(itemB => {
+      // Periksa apakah nama pada itemB ada di arrayA
+      if (values.kegAnggota.includes(itemB.name)) {
+        // Jika ada, kembalikan id itemB
+        tmpId.push(itemB.id)
+      }
     })
-  }, [])
+
+    console.log(tmpId)
+    setValues({ ...values, kegAnggotaId: tmpId })
+  }, [values.kegAnggota])
 
   // console.log(anggota)
 
@@ -595,14 +610,13 @@ const CreateProjectViews = props => {
             <Autocomplete
               multiple
               // options={dataUser}
-              // getOptionLabel={option => option.name}
-              options={dataUser.map(option => option.name)}
               id='tags-filled'
               value={values.kegAnggota}
+              // options={dataPengguna}
+              options={dataUser.map(data => data.name)}
               onChange={(event, newValue) => {
                 setValues({ ...values, kegAnggota: newValue })
               }}
-              defaultValue={[dataUser[2].name]}
               filterSelectedOptions
               renderTags={(value, getTagProps) =>
                 value.map((option, index) => <Chip variant='outlined' label={option} {...getTagProps({ index })} />)
