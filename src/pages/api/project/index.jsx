@@ -45,7 +45,15 @@ export default async function handler(req, res) {
         }
       })
 
-      const isLeader = await prisma.userProject.create({
+      const isLeader_leader = await prisma.userProject.create({
+        data: {
+          isLeader: 1,
+          userId: projectLeaderId,
+          projectId: project.id
+        }
+      })
+
+      const isLeader_member = await prisma.userProject_member.create({
         data: {
           isLeader: 1,
           userId: projectLeaderId,
@@ -54,7 +62,7 @@ export default async function handler(req, res) {
       })
 
       anggotaTimId.map(async anggota => {
-        const usP = await prisma.userProject.create({
+        const usP = await prisma.userProject_member.create({
           data: {
             userId: anggota,
             projectId: project.id,

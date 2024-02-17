@@ -39,6 +39,11 @@ export async function getServerSideProps(context) {
         include: {
           user: true
         }
+      },
+      UserProject_member: {
+        include: {
+          user: true
+        }
       }
     }
   })

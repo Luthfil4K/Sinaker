@@ -622,7 +622,7 @@ const CreateProjectViews = props => {
                 value.map((option, index) => <Chip variant='outlined' label={option} {...getTagProps({ index })} />)
               }
               renderInput={params => (
-                <TextField {...params} variant='outlined' label='Anggota Tim' placeholder='Favorites' />
+                <TextField {...params} variant='outlined' label='Anggota Tim' placeholder='Tambah Anggota Tim' />
               )}
             />
           </Grid>

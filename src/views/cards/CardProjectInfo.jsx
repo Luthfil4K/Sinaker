@@ -221,8 +221,7 @@ const CardProjectDetail = props => {
           )}`
         )
       : 100
-  console.log(valueProgressBar)
-  console.log(project)
+  console.log(project.UserProject_member)
   const router = useRouter()
   // ** State
   const [value, setValue] = useState('1')
@@ -294,7 +293,7 @@ const CardProjectDetail = props => {
                     Peserta Kegiatan
                   </Typography>
                   <Typography textAlign={'center'} variant='body1' component='span' sx={{ display: 'inline' }}>
-                    {project.UserProject.length}
+                    {project.UserProject_member.length}
                   </Typography>
                 </Grid>
                 <Grid
@@ -370,35 +369,43 @@ const CardProjectDetail = props => {
               </Typography>
             </TabPanel>
             <TabPanel value='4' sx={{ p: 0, height: 170, overflowY: 'scroll' }}>
-              {userProject.map(projek => (
-                <>
-                  <Grid
-                    justifyContent='center'
-                    sx={{ alignContent: 'center', alignItems: 'center' }}
-                    item
-                    flexDirection={'column'}
-                    xs={6}
-                    md={3}
-                    display={'flex'}
-                    // bgcolor={'secondary.dark'}
-                  >
-                    <Avatar
-                      sx={{
-                        boxShadow: 3,
-                        width: 60,
-                        height: 60,
-                        color: 'common.white',
-                        backgroundColor: `primary.main`
-                      }}
+              <>
+                <Grid
+                  justifyContent='center'
+                  sx={{ alignContent: 'center', alignItems: 'center' }}
+                  container
+                  flexDirection={'row'}
+                  display={'flex'}
+                  // bgcolor={'secondary.light'}
+                >
+                  {project.UserProject_member.map(projek => (
+                    <Grid
+                      item
+                      md={3}
+                      xs={6}
+                      justifyContent='center'
+                      sx={{ alignContent: 'center', alignItems: 'center' }}
+                      flexDirection={'column'}
+                      display={'flex'}
                     >
-                      {<AccountGroup />}
-                    </Avatar>
-                    <Typography textAlign={'center'} variant='body2'>
-                      {projek.user.name}
-                    </Typography>
-                  </Grid>
-                </>
-              ))}
+                      <Avatar
+                        sx={{
+                          boxShadow: 3,
+                          width: 60,
+                          height: 60,
+                          color: 'common.white',
+                          backgroundColor: `primary.main`
+                        }}
+                      >
+                        {<AccountGroup />}
+                      </Avatar>
+                      <Typography marginLeft={0} mb={4} textAlign={'start'} variant='body2'>
+                        {projek.user.name}
+                      </Typography>
+                    </Grid>
+                  ))}
+                </Grid>
+              </>
             </TabPanel>
             <Divider sx={{ marginTop: 3.5 }} />
 

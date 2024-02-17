@@ -22,6 +22,7 @@ import CardProjectDetailProgress from 'src/views/cards/CardProjectDetailProgress
 const ProjectDetailsViews = props => {
   const router = useRouter()
   const [project, setProject] = useState(props.data)
+
   const handleEdit = () => {
     Swal.fire({
       title: 'Apa Anda Yakin?',
