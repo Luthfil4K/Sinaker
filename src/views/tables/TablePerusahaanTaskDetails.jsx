@@ -6,6 +6,7 @@ import Swal from 'sweetalert2'
 
 import * as React from 'react'
 import { useState, useEffect } from 'react'
+import { Autocomplete } from '@mui/material'
 import Box from '@mui/material/Box'
 import Grid from '@mui/material/Grid'
 import Button from '@mui/material/Button'
@@ -164,12 +165,10 @@ const TableGroupPerusahaan = props => {
       68: { namaJenisSub: 'Evaluasi', color: 'warning' },
       69: { namaJenisSub: 'Diseminasi', color: 'warning' }
     }
-    useEffect(() => {
-      props.dataUpdateTarget(4567)
-    }, [rows])
 
     // console.log(jenisSub)
   }
+
   // useEffect(() => {
   //   // console.log('update persentase')
   // }, [rows])
@@ -338,6 +337,19 @@ const TableGroupPerusahaan = props => {
     totalGajiPcl: 0,
     totalGajiPml: 0
   })
+
+  useEffect(() => {
+    props.dataUpdateTarget(summary.totalRealisasi, summary.totalTarget)
+  }, [summary])
+
+  // useEffect(() => {
+  //   const intervalId = setInterval(() => {
+  //     props.dataUpdateTarget(4567)
+  //   }, 2000) // 5000 milliseconds, atau 5 detik
+
+  //   // Membersihkan interval pada unmount atau saat useEffect berubah
+  //   return () => clearInterval(intervalId)
+  // }, [summary])
 
   useEffect(() => {
     setSummary(prevSummary => ({
@@ -656,6 +668,9 @@ const TableGroupPerusahaan = props => {
       type: 'singleSelect',
       valueOptions: optionPCL.sort((a, b) => a.label.localeCompare(b.label)),
 
+      // renderCell: params => (
+      //   <Autocomplete {...params} options={optionPCL} freeSolo={false} multiple={false} disableClearable />
+      // ),
       width: 180,
       editable: true
     },
@@ -680,16 +695,19 @@ const TableGroupPerusahaan = props => {
         </Typography>
       ),
       type: 'singleSelect',
-      valueOptions: ['Masuk', 'Menunggu Masuk', 'Tutup', 'Tidak Aktif', 'Tidak Ditemukan', 'Non Respon'],
+      valueOptions:
+        fungsi === 4 || fungsi === 5 || fungsi === 3
+          ? ['Masuk', 'Menunggu Masuk', 'Tutup', 'Tidak Aktif', 'Tidak Ditemukan', 'Non Respon']
+          : ['Proses'],
       width: 180,
       editable: true
     },
     {
       field: 'tanggalDob',
-      headerName: 'Tanggal Terima Dok Dikab',
+      headerName: jenisSample === 0 ? 'Tanggal Terima Dok Dikab' : 'Tanggal Selesai Pengerjaan',
       renderHeader: () => (
         <Typography sx={{ fontWeight: 900, fontSize: '0.875rem !important', textAlign: 'center' }}>
-          Tanggal Terima Dok Di Kab
+          {jenisSample === 1 ? 'Tanggal Terima Dok Dikab' : 'Tanggal Selesai Pengerjaan'}
         </Typography>
       ),
       type: 'date',

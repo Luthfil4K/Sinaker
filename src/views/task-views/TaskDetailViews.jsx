@@ -50,8 +50,8 @@ const TaskDetailViews = props => {
   })
 
   // ganti tarel di your task sesuai dengan tabel dibawah
-  const handleTaskUpdate = trgt => {
-    setValues({ target: trgt })
+  const handleTaskUpdate = (realisasi, trgt) => {
+    setValues({ ...values, target: trgt, realisasi })
   }
 
   const getRealisasi = target => {}

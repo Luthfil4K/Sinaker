@@ -1334,37 +1334,42 @@ const TaskManageAddViews = propss => {
                   </Grid>
                   <Grid item xs={12} md={6}>
                     <FormControl fullWidth>
-                      <InputLabel id='demo-simple-select-helper-label'>Template Table</InputLabel>
                       {session.status === 'authenticated' && values.subKegJenisSample === 0 && (
-                        <Select
-                          fullWidth
-                          labelId='demo-simple-select-helper-label'
-                          onChange={handleTemplateChange}
-                          value={values.templateTable}
-                          id='demo-simple-select-helper'
-                          label='Template Table'
-                          name='Template Table'
-                          size='medium'
-                        >
-                          <MenuItem value={3}>NBS-NKS</MenuItem>
-                          <MenuItem value={4}>NBS-ID SLS</MenuItem>
-                        </Select>
+                        <>
+                          <InputLabel id='demo-simple-select-helper-label'>Template Table</InputLabel>
+                          <Select
+                            fullWidth
+                            labelId='demo-simple-select-helper-label'
+                            onChange={handleTemplateChange}
+                            value={values.templateTable}
+                            id='demo-simple-select-helper'
+                            label='Template Table'
+                            name='Template Table'
+                            size='medium'
+                          >
+                            <MenuItem value={3}>NBS-NKS</MenuItem>
+                            <MenuItem value={4}>NBS-ID SLS</MenuItem>
+                          </Select>
+                        </>
                       )}
                       {session.status === 'authenticated' && values.subKegJenisSample === 1 && (
-                        <Select
-                          fullWidth
-                          labelId='demo-simple-select-helper-label'
-                          onChange={handleTemplateChange}
-                          value={values.templateTable}
-                          id='demo-simple-select-helper'
-                          label='Template Table'
-                          name='Template Table'
-                          size='medium'
-                        >
-                          <MenuItem value={5}>Alamat-Nama Perusahaan</MenuItem>
-                          <MenuItem value={6}>NUS-Nama Perusahaan/Dinas</MenuItem>
-                          <MenuItem value={7}>ID SBR-Nama Perusahaan</MenuItem>
-                        </Select>
+                        <>
+                          <InputLabel id='demo-simple-select-helper-label'>Template Table</InputLabel>
+                          <Select
+                            fullWidth
+                            labelId='demo-simple-select-helper-label'
+                            onChange={handleTemplateChange}
+                            value={values.templateTable}
+                            id='demo-simple-select-helper'
+                            label='Template Table'
+                            name='Template Table'
+                            size='medium'
+                          >
+                            <MenuItem value={5}>Alamat-Nama Perusahaan</MenuItem>
+                            <MenuItem value={6}>NUS-Nama Perusahaan/Dinas</MenuItem>
+                            <MenuItem value={7}>ID SBR-Nama Perusahaan</MenuItem>
+                          </Select>
+                        </>
                       )}
                     </FormControl>
                   </Grid>
