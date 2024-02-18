@@ -55,15 +55,8 @@ const CreateProjectViews = props => {
       label: siyap.name
     }))
   )
-  // console.log(dataUser)
   const [timKerja, setTimKerja] = useState(props.dataTim)
   const [anggota, setAnggota] = useState(0)
-  // const [defaultProps, setDefaultProps] = useState({
-  //   options: dataUser,
-  //   getOptionLabel: option => option.name
-  // })
-  // console.log(timKerja)
-
   const [selectedDate, setSelectedDate] = useState(null)
   const [selectedDateE, setSelectedDateE] = useState(null)
   const [disabled, setDisabled] = useState({
@@ -90,9 +83,10 @@ const CreateProjectViews = props => {
     kegTim: '',
     kegAnggotaId: '',
     kegAnggota: [dataUser[3].name, dataUser[1].name],
-    kegKetuaId: ''
+    kegKetuaId: '',
+    kegJumlah: 0,
+    kegBulan: 0
   })
-  console.log(values)
   const [bulan, setBulan] = useState({
     jan: false,
     feb: false,
@@ -108,14 +102,72 @@ const CreateProjectViews = props => {
     dec: false
   })
 
-  const handleChangeBulan = event => {
-    setBulan({
-      ...bulan,
-      [event.target.name]: event.target.checked
-    })
-    // console.log(bulan)
-  }
+  // transform bulan bulan ke array date, nyaring mana aja yang true
+  useEffect(() => {
+    const jumlahTrue = Object.values(bulan).filter(value => value === true).length
+    const bulanTrue = Object.keys(bulan)
+      .filter(key => bulan[key])
+      .map(key => {
+        const monthNumber = (() => {
+          switch (key) {
+            case 'jan':
+              return 0
+            case 'feb':
+              return 1
+            case 'mar':
+              return 2
+            case 'apr':
+              return 3
+            case 'may':
+              return 4
+            case 'june':
+              return 5
+            case 'july':
+              return 6
+            case 'aug':
+              return 7
+            case 'sep':
+              return 8
+            case 'oct':
+              return 9
+            case 'nov':
+              return 10
+            case 'dec':
+              return 11
+            default:
+              return null
+          }
+        })()
 
+        if (monthNumber !== null) {
+          const firstDateOfMonth = new Date(new Date().getFullYear(), monthNumber, 2)
+          const lastDateOfMonth = new Date(new Date().getFullYear(), monthNumber + 1, 0) // Last day of the month
+          return { firstDate: firstDateOfMonth, lastDate: lastDateOfMonth }
+        } else {
+          return null
+        }
+      })
+      .filter(date => date !== null)
+
+    console.log('Tanggal pertama dan terakhir bulan yang memiliki nilai true:', bulanTrue)
+    setValues({ ...values, kegJumlah: jumlahTrue, kegBulan: bulanTrue })
+  }, [bulan])
+
+  // coba asal bre,
+  // useEffect(() => {
+  //   const nilai = Object.values(bulan)
+  //   const kunci = Object.keys(bulan)
+  //   console.log(kunci)
+  //   const tmpJmlh = 0
+  //   const tmpBln = []
+  //   nilai.map(n => {
+  //     n === true ? (tmpJmlh = tmpJmlh + 1) : 0
+  //   })
+
+  //   setValues({ ...values, kegJumlah: tmpJmlh })
+  // }, [bulan])
+
+  // buat nyimpen di [values] dari input pilih tim kerja sama anggota tim (intinya handle tim dan anggotanya)
   useEffect(() => {
     const dataAnggota = {}
     const dataAnggotaId = []
@@ -146,6 +198,8 @@ const CreateProjectViews = props => {
     setValues({ ...values, kegAnggota: userNames, kegKetuaId: ketuaTimId })
   }, [values.kegTim])
 
+  // masih nyambung sama atas, input autocomplete cuma handle berdasar dropdown tim kerja,
+  // disini diatur lagi kalo misal ada inputan pegawai lain di luar anggota tim
   useEffect(() => {
     const tmpId = []
     const testId = dataUser.map(itemB => {
@@ -156,12 +210,11 @@ const CreateProjectViews = props => {
       }
     })
 
-    console.log(tmpId)
+    // console.log(tmpId)
     setValues({ ...values, kegAnggotaId: tmpId })
   }, [values.kegAnggota])
 
-  // console.log(anggota)
-
+  // nguubah semua checkbox bulan jadi uncheked / checked
   useEffect(() => {
     setBulan(prevBulan => {
       // nguubah semua checkbox bulan jadi uncheked
@@ -175,7 +228,7 @@ const CreateProjectViews = props => {
     let tmp = values.kegRentang
     tmp === 59
       ? setBulan(prevBulan => {
-          // nguubah semua checkbox bulan jadi uncheked
+          // nguubah semua checkbox bulan jadi checked karena periode bulanan
           const newBulan = {}
           Object.keys(prevBulan).map(key => {
             newBulan[key] = true
@@ -185,6 +238,7 @@ const CreateProjectViews = props => {
       : 0
   }, [values.kegRentang])
 
+  // buat ngatur checkbox bulan bisa di isi berapa aja berdasar input periode
   useEffect(() => {
     let tmp = values.kegRentang
 
@@ -206,7 +260,7 @@ const CreateProjectViews = props => {
       return acc
     }, [])
 
-    // newBulanFalse sekarang berisi daftar key bulan yang memiliki nilai false
+    // newBulanFalse skrg isiny daftar key bulan yang  false
     // console.log(newBulanFalse)
 
     const bulanTrueValues = bulanValues.filter(value => value === true)
@@ -264,6 +318,14 @@ const CreateProjectViews = props => {
       : 0
   }, [bulan])
 
+  const handleChangeBulan = event => {
+    setBulan({
+      ...bulan,
+      [event.target.name]: event.target.checked
+    })
+    // console.log(bulan)
+  }
+
   const handleDateChange = date => {
     setSelectedDate(date)
     // console.log(date)
@@ -298,24 +360,10 @@ const CreateProjectViews = props => {
       kegTim: event.target.value // Perbarui nilai kegRentang
     }))
   }
-
+  // handle submit disini
   const handleProject = async e => {
     e.preventDefault()
-    // console.log(
-    //   values.kegNama +
-    //     '||' +
-    //     values.kegRentang +
-    //     '||' +
-    //     selectedDate +
-    //     '||' +
-    //     selectedDateE +
-    //     '||' +
-    //     values.kegFungsi +
-    //     '||' +
-    //     values.kegDesk +
-    //     '||' +
-    //     values.kegTim
-    // )
+
     try {
       while (true) {
         const res = await axios.post('/project', {
@@ -328,7 +376,9 @@ const CreateProjectViews = props => {
           description: values.kegDesk,
           projectLeaderId: values.kegKetuaId,
           anggotaTimId: values.kegAnggotaId,
-          createdById: 99
+          createdById: 99,
+          jumlahKegiatan: values.kegJumlah,
+          bulanKegiatan: values.kegBulan
         })
 
         if (res.status === 201) {
@@ -338,7 +388,7 @@ const CreateProjectViews = props => {
             icon: 'success',
             confirmButtonColor: '#68B92E',
             confirmButtonText: 'OK'
-          })
+          }).then(router.push('/project-list'))
 
           setValues({
             kegNama: '',

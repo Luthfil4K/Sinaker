@@ -24,20 +24,23 @@ model User {
   ProjectCreated            Project[]
   TaskOrganik               TaskOrganik[]
   TimKerjaPegawai           TimKerjaPegawai[]
+  TimKerja                  TimKerja[]                  @relation("leadBy")
+  UserProject_member        UserProject_member[]
 }
 
 model Project {
   id                        Int                         @id @default(autoincrement())
   title                     String                      @db.VarChar(128)
   rentangWaktu              String                      @db.VarChar(128)
-  startdate                 DateTime                    @db.Date
   fungsi                    Int                         @db.Int
+  startdate                 DateTime                    @db.Date
   enddate                   DateTime                    @db.Date
   description               String?                     @db.LongText
   isArchived                Boolean                     @db.TinyInt()
   projectLeader             User                        @relation("projectToLead", fields: [projectLeaderId], references: [id], onDelete: Cascade, onUpdate: Cascade)
   projectLeaderId           Int
   UserProject               UserProject[]
+  UserProject_member        UserProject_member[]
   Task                      Task[]
   createdBy                 User                        @relation(fields: [createdById], references: [id], onDelete: Cascade, onUpdate: Cascade)
   createdById               Int
@@ -49,6 +52,16 @@ model UserProject {
   userId                    Int
   project                   Project                     @relation(fields: [projectId], references: [id], onDelete: Cascade, onUpdate: Cascade)
   projectId                 Int
+  isLeader                  Int
+}
+
+model UserProject_member {
+  id                        Int                         @id @default(autoincrement())
+  user                      User                        @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  userId                    Int
+  project                   Project                     @relation(fields: [projectId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  projectId                 Int
+  isLeader                  Int
 }
 
 model Task {
@@ -92,7 +105,6 @@ model Perusahaan {
 
 }
 
-
 model GroupPerusahaan {
   id                        Int                         @id @default(autoincrement())
   nama                      String                      @db.VarChar(128)
@@ -110,7 +122,9 @@ model PerusahaanGroup {
 model TimKerja {
   id                        Int                         @id @default(autoincrement())
   nama                      String                      @db.VarChar(128)
-  fungsi                    Int                         @db.Int @default(0) 
+  fungsi                    Int                         @db.Int @default(0)
+  userId_fkey               User                        @relation("leadBy", fields: [ketuaTim], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  ketuaTim                  Int                         @db.Int @default(0)
   timKerjaPegawai           TimKerjaPegawai[]
 }
 model TimKerjaPegawai {
