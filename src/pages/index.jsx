@@ -15,6 +15,7 @@ import Card from '@mui/material/Card'
 import Typography from '@mui/material/Typography'
 
 import Divider from '@mui/material/Divider'
+import { signOut, useSession } from 'next-auth/react'
 
 // ** MUI chart
 // import { BarPlot } from '@mui/x-charts/BarChart'
@@ -24,7 +25,6 @@ import Divider from '@mui/material/Divider'
 import { Line, Bar, Doughnut } from 'react-chartjs-2'
 import { CategoryScale } from 'chart.js'
 import Chart from 'chart.js/auto'
-import { signOut, useSession } from 'next-auth/react'
 Chart.register(CategoryScale)
 
 import LinearProgress from '@mui/material/LinearProgress'
@@ -231,9 +231,9 @@ const Dashboard = ({ dataTask }) => {
     // console.log(hasil)
   }, [])
 
-  console.log(targetBulanIni + '+' + realisasiBulanIni)
-  console.log(new Date().getFullYear())
-  console.log(BulanSekarang)
+  // console.log(targetBulanIni + '+' + realisasiBulanIni)
+  // console.log(new Date().getFullYear())
+  // console.log(BulanSekarang)
 
   useEffect(() => {
     const untukTargetLine = []
@@ -339,6 +339,9 @@ const Dashboard = ({ dataTask }) => {
     ]
   }
 
+  console.log(labelsLine)
+  console.log(targetLine)
+  console.log(realisasiLine)
   const dataDoughnut = {
     datasets: [
       {

@@ -73,7 +73,7 @@ const TableGroupPerusahaan = props => {
   const jenisSample = props.dataTaskSample
 
   const templateTable = participants[1].templateTable
-  console.log(participants[1].templateTable)
+  // console.log(participants[1].templateTable)
 
   const [organikMitra, setOrganikMitra] = useState({
     value: '',

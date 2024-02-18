@@ -8,9 +8,7 @@ import Swal from 'sweetalert2'
 
 import Chip from '@mui/material/Chip'
 import Button from '@mui/material/Button'
-import TabContext from '@mui/lab/TabContext'
 import Typography from '@mui/material/Typography'
-import CardContent from '@mui/material/CardContent'
 import Box from '@mui/material/Box'
 import Grid from '@mui/material/Grid'
 import Card from '@mui/material/Card'
@@ -23,12 +21,25 @@ import TextField from '@mui/material/TextField'
 import SendIcon from 'mdi-material-ui/Send'
 import AccountIcon from 'mdi-material-ui/Account'
 import { useSession } from 'next-auth/react'
-
 import { useState } from 'react'
+
+// tab
+import Tab from '@mui/material/Tab'
+import TabList from '@mui/lab/TabList'
+import TabPanel from '@mui/lab/TabPanel'
+import TabContext from '@mui/lab/TabContext'
+import CardContent from '@mui/material/CardContent'
 
 import TablePerusahaanTaskDetails from 'src/views/tables/TablePerusahaanTaskDetails'
 import CardTaskDetail from 'src/views/cards/CardTaskDetail'
 import CardTaskComment from 'src/views/cards/CardTaskComment'
+
+// chartjs dan visualiasi lain
+import { Line, Bar, Doughnut } from 'react-chartjs-2'
+import { CategoryScale } from 'chart.js'
+import Chart from 'chart.js/auto'
+Chart.register(CategoryScale)
+import LinearProgress from '@mui/material/LinearProgress'
 
 const TaskDetailViews = props => {
   const statusObj = {
@@ -48,6 +59,12 @@ const TaskDetailViews = props => {
     jenisKeg: props.data.jenisKeg,
     jenisSample: props.data.jenisSample
   })
+  // console.log(participants)
+
+  const [value, setValue] = useState('1')
+  const handleChangeTab = (event, newValue) => {
+    setValue(newValue)
+  }
 
   // ganti tarel di your task sesuai dengan tabel dibawah
   const handleTaskUpdate = (realisasi, trgt) => {
@@ -55,7 +72,7 @@ const TaskDetailViews = props => {
   }
 
   const getRealisasi = target => {}
-  console.log(values)
+  // console.log(values)
 
   const handleChange = props => event => {
     setValues({ ...values, [props]: event.target.value })
@@ -139,10 +156,37 @@ const TaskDetailViews = props => {
   }
 
   const s = () => {
-    console.log(values.realisasi)
-    console.log(values.target)
-    console.log(values.id)
-    console.log(values.notes)
+    // console.log(values.realisasi)
+    // console.log(values.target)
+    // console.log(values.id)
+    // console.log(values.notes)
+  }
+
+  // untuk chart
+
+  // State Line
+
+  const [labelTaRel, setLabeTaRel] = useState({
+    target: props.dataPerusahaan.map(pr => pr.target),
+    realisasi: props.dataPerusahaan.map(pr => pr.realisasi),
+    label: props.dataPerusahaan.map(pr => 'NBS ' + pr.nbs)
+  })
+  console.log(labelTaRel)
+
+  const dataLine = {
+    labels: labelTaRel.label,
+    datasets: [
+      {
+        label: 'Target',
+        data: labelTaRel.target,
+        backgroundColor: ['rgba(255, 99, 132, 1)']
+      },
+      {
+        label: 'Realisasi',
+        data: labelTaRel.realisasi,
+        backgroundColor: ['rgba(25, 19, 132, 1)']
+      }
+    ]
   }
   return (
     <>
@@ -189,6 +233,49 @@ const TaskDetailViews = props => {
                     <Divider sx={{ marginTop: 3.5 }} />
 
                     <Typography variant={'body2'}>{props.data.description}</Typography>
+                    <TabContext value={value}>
+                      <TabList variant='fullWidth' onChange={handleChangeTab} aria-label='card navigation example'>
+                        <Tab value='1' label='Grafik' />
+                        <Tab value='2' label='Catatan' />
+                      </TabList>
+                      <TabPanel value='1' sx={{ p: 0, height: 170 }}>
+                        <Typography mt={4} textAlign={'center'} variant={'body1'}>
+                          Total Target dan Realisasi Bulan Ini
+                        </Typography>
+                        <Grid item md={12} xs={12}>
+                          <Line
+                            datasetIdKey='id'
+                            data={dataLine}
+                            width={500}
+                            height={140}
+                            options={{
+                              responsive: true,
+                              scales: {
+                                x: {
+                                  ticks: {
+                                    display: true
+                                  }
+                                }
+                              },
+                              plugins: {
+                                legend: {
+                                  position: 'top'
+                                },
+                                title: {
+                                  display: true,
+                                  text: ` `
+                                }
+                              }
+                            }}
+                          />
+                        </Grid>
+                      </TabPanel>
+                      <TabPanel value='2' sx={{ p: 0, height: 170 }}>
+                        <Typography variant='h6' sx={{ marginBottom: 2 }}>
+                          Catatan
+                        </Typography>
+                      </TabPanel>
+                    </TabContext>
                   </Grid>
                 </Grid>
               </Card>
