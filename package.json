@@ -54,6 +54,7 @@
     "@mui/icons-material": "^5.14.8",
     "@mui/lab": "^5.0.0-alpha.70",
     "@mui/material": "^5.4.3",
+    "@mui/styles": "^5.15.0",
     "@mui/x-charts": "^6.0.0-alpha.10",
     "@mui/x-data-grid": "^6.12.0",
     "@mui/x-data-grid-generator": "^6.16.0",
@@ -68,6 +69,7 @@
     "clsx": "^1.1.1",
     "dayjs": "^1.11.9",
     "i": "^0.3.7",
+    "material-table": "^2.0.5",
     "mdi-material-ui": "^7.1.0",
     "next": "12.0.4",
     "next-auth": "^4.23.2",
@@ -82,7 +84,8 @@
     "react-dom": "17.0.2",
     "react-perfect-scrollbar": "^1.5.8",
     "react-popper": "^2.2.5",
-    "sweetalert2": "^11.7.27"
+    "sweetalert2": "^11.7.27",
+    "xlsx": "^0.18.5"
   },
   "devDependencies": {
     "@types/node": "16.11.11",
