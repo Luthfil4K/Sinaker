@@ -56,6 +56,7 @@ const TaskManageAddViews = propss => {
 
   const session = useSession()
   const [project, setProject] = useState(propss.data)
+  const [organikProject_member, setOrganikProject_member] = useState(propss.dataOrganikProject_member)
   const [timkerja, setTimkerja] = useState(propss.dataTimKerja)
   const [group, setGroup] = useState(propss.dataPerusahaan)
   const [participants, setParticipants] = useState([])
@@ -180,7 +181,7 @@ const TaskManageAddViews = propss => {
     let pegawaiOrganik = []
     rowsO.map(a => {
       if (a.checked) {
-        console.log('')
+        // console.log('')
         pegawaiOrganik.push(a)
       }
     })
@@ -191,8 +192,9 @@ const TaskManageAddViews = propss => {
           title: values.subKegNama,
           jenisKeg: values.subKegJenis,
           targetTotal: parseInt(values.subKegTarget),
+          deadLaneAwal: project.enddate,
           unitTarget: values.subKegUnitTarget,
-          duedate: values.subKegDl ? values.subKegDl : new Date(),
+          duedate: values.subKegDl > project.enddate ? values.subKegDl : project.enddate,
           bulan: new Date(values.subKegDl).getMonth(),
           jenisSample: values.subKegJenis == 65 || values.subKegJenis == 67 ? values.subKegJenisSample : 0,
           participants: values.subKegJenisSample === 1 ? rows : data,
@@ -320,13 +322,55 @@ const TaskManageAddViews = propss => {
   )
 
   const [dataOrganik, setDataOrganik] = useState(
-    propss.dataOrganik.map(meetra => {
+    propss.dataOrganik.map(obj => {
       return {
-        ...meetra,
+        ...obj,
         checked: false
       }
     })
   )
+
+  const [datadata, setdatata] = useState(
+    organikProject_member
+      .map(obj => {
+        const hasilFilter = propss.dataOrganik.find(member => member.id === obj.userId)
+        if (hasilFilter) {
+          return {
+            id: hasilFilter.id,
+            email: hasilFilter.email,
+            name: hasilFilter.name,
+            fungsi: hasilFilter.fungsi,
+            role: hasilFilter.role,
+            nip: hasilFilter.nip,
+            password: hasilFilter.password,
+            checked: true
+          }
+        }
+        return null // Mengembalikan null jika tidak ada yang cocok
+      })
+      .filter(obj => obj !== null) // Menghapus nilai null dari array
+  )
+  console.log(datadata)
+  console.log(dataOrganik)
+  // console.log(organikProject_member)
+
+  // const [anggotaTim, setAnggotaTim] = useState(0)
+  // useEffect(() => {
+  //   // const hasilFilter = organikProject_member.filter(member => {
+  //   //   return member.userId === dataOrganik.id
+  //   // })
+  //   //
+
+  //   dataOrganik.map(obj => {
+  //     const hasilFilter = organikProject_member.filter(member => member.userId === obj.id)
+  //     if (hasilFilter.length > 0) {
+  //       objekYangSama.push(...hasilFilter)
+  //     }
+  //   })
+  //   setAnggotaTim(objekYangSama)
+  // }, [])
+
+  // console.log(anggotaTim)
 
   // const rows = company.map(perusahaan => ({
   //   id: perusahaan.id,
@@ -445,7 +489,7 @@ const TaskManageAddViews = propss => {
   )
 
   const [rowsO, setRowsO] = useState(
-    dataOrganik.map(row => {
+    datadata.map(row => {
       const gajiBulanIni = tpp
         .filter(tppRow => tppRow.pmlId === row.id)
         .filter(tppRow => {
@@ -1618,13 +1662,14 @@ const TaskManageAddViews = propss => {
                       </Grid>
                     </Grid>
                   </Grid>
-                  <Grid item md={6} xs={12}>
+                  {/* <Grid item md={6} xs={12}>
                     <Typography variant={'h6'} mb={4}>
                       Tim Kerja
                     </Typography>
                     <FormControl fullWidth>
                       <InputLabel id='demo-simple-select-helper-label'>Tim Kerja</InputLabel>
                       <Select
+                        disabled
                         fullWidth
                         labelId='demo-simple-select-helper-label'
                         id='demo-simple-select-helper'
@@ -1642,7 +1687,7 @@ const TaskManageAddViews = propss => {
                         ))}
                       </Select>
                     </FormControl>
-                  </Grid>
+                  </Grid> */}
                   <Grid item md={12} xs={12}>
                     <Typography variant={'h6'} mb={4}></Typography>
                   </Grid>

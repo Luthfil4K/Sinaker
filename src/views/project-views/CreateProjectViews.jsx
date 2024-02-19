@@ -78,7 +78,7 @@ const CreateProjectViews = props => {
     kegRentang: '',
     kegGajiPml: '',
     kegGajiPcl: '',
-    kegFungsi: '',
+    kegFungsi: 7,
     kegDesk: '',
     kegTim: '',
     kegAnggotaId: '',
@@ -561,7 +561,7 @@ const CreateProjectViews = props => {
             </FormGroup>
           </Grid>
 
-          <Grid item xs={12} sm={12} lg={12}>
+          {/* <Grid item xs={12} sm={12} lg={12}>
             <FormControl fullWidth>
               <InputLabel id='demo-simple-select-helper-label'>Fungsi</InputLabel>
               <Select
@@ -581,7 +581,7 @@ const CreateProjectViews = props => {
                 <MenuItem value={7}>Integrasi Pengolahan dan Diseminasi Statistik</MenuItem>
               </Select>
             </FormControl>
-          </Grid>
+          </Grid> */}
 
           <Grid item xs={12}>
             <TextField
@@ -596,7 +596,7 @@ const CreateProjectViews = props => {
             />
           </Grid>
 
-          <Grid item xs={12} sm={12} lg={6}>
+          {/* <Grid item xs={12} sm={12} lg={6}>
             <DatePickerWrapper>
               <DatePicker
                 sx={{ width: 1000 }}
@@ -612,7 +612,6 @@ const CreateProjectViews = props => {
                 name='tanggalMulai'
               />
             </DatePickerWrapper>
-            {/* <TextField fullWidth multiline label='Tanggal Dimulai' placeholder='Tanggal Dimulai' /> */}
           </Grid>
 
           <Grid item xs={12} sm={12} lg={6}>
@@ -631,7 +630,7 @@ const CreateProjectViews = props => {
                 name='tanggalBerakhir'
               />
             </DatePickerWrapper>
-          </Grid>
+          </Grid> */}
           <Grid item xs={12} md={12}>
             {/* <Typography variant='h6' sx={{ py: '5px' }}>
               Penanggung Jawab Kegiatan

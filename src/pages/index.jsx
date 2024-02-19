@@ -235,12 +235,13 @@ const Dashboard = ({ dataTask }) => {
   // console.log(new Date().getFullYear())
   // console.log(BulanSekarang)
 
+  // update data saat dropdown bulan line diganti
   useEffect(() => {
     const untukTargetLine = []
     const untukRealisasiLine = []
     const untukLabelsLine = []
     task.map(task => {
-      if (task.month === bulan && task.project.fungsi === valueDropLine) {
+      if (task.month === bulan) {
         untukTargetLine.push(task.target)
         untukRealisasiLine.push(task.realisasi)
         untukLabelsLine.push(task.title)
@@ -252,22 +253,24 @@ const Dashboard = ({ dataTask }) => {
     // // console.log(bulan + 'ini pas ganti bulan' + valueDropLine)
   }, [bulan])
 
-  useEffect(() => {
-    const untukTargetLine = []
-    const untukRealisasiLine = []
-    const untukLabelsLine = []
-    task.map(task => {
-      if (task.month === bulan && task.project.fungsi === valueDropLine) {
-        untukTargetLine.push(task.target)
-        untukRealisasiLine.push(task.realisasi)
-        untukLabelsLine.push(task.title)
-      }
-    })
-    setTargetLine(untukTargetLine)
-    setRealisasiLine(untukRealisasiLine)
-    setLabelsLine(untukLabelsLine)
-    // console.log(bulan + 'ini pas ganti valuedropline' + valueDropLine)
-  }, [valueDropLine])
+  // update data saat dropdown fungsi line diganti
+
+  // useEffect(() => {
+  //   const untukTargetLine = []
+  //   const untukRealisasiLine = []
+  //   const untukLabelsLine = []
+  //   task.map(task => {
+  //     if (task.month === bulan && task.project.fungsi === valueDropLine) {
+  //       untukTargetLine.push(task.target)
+  //       untukRealisasiLine.push(task.realisasi)
+  //       untukLabelsLine.push(task.title)
+  //     }
+  //   })
+  //   setTargetLine(untukTargetLine)
+  //   setRealisasiLine(untukRealisasiLine)
+  //   setLabelsLine(untukLabelsLine)
+  //   // console.log(bulan + 'ini pas ganti valuedropline' + valueDropLine)
+  // }, [valueDropLine])
 
   useEffect(() => {
     const untukLinearProgress = 0
@@ -482,7 +485,8 @@ const Dashboard = ({ dataTask }) => {
               <Grid item xs={6} md={8}>
                 <Typography variant={'h6'}>Target dan Realisasi per Sub Kegiatan {tahunBar}</Typography>
               </Grid>
-              <Grid item xs={3} md={2} display={'flex'} justifyContent={'end'} mb={4}>
+              {/* <Grid item xs={3} md={2} display={'flex'} justifyContent={'end'} mb={4}> */}
+              <Grid item xs={6} md={4} display={'flex'} justifyContent={'end'} mb={4}>
                 <FormControl sx={{ m: 1, minWidth: 120 }}>
                   <InputLabel id='demo-simple-select-helper-label'>Bulan</InputLabel>
                   <Select
@@ -508,7 +512,7 @@ const Dashboard = ({ dataTask }) => {
                   </Select>
                 </FormControl>
               </Grid>
-              <Grid item xs={3} md={2} display={'flex'} justifyContent={'end'} mb={4}>
+              {/* <Grid item xs={3} md={2} display={'flex'} justifyContent={'end'} mb={4}>
                 <FormControl sx={{ m: 1, minWidth: 120 }}>
                   <InputLabel id='demo-simple-select-helper-label'>Fungsi</InputLabel>
                   <Select
@@ -527,7 +531,7 @@ const Dashboard = ({ dataTask }) => {
                     <MenuItem value={7}>Integrasi Pengolahan dan Diseminasi Statistik</MenuItem>
                   </Select>
                 </FormControl>
-              </Grid>
+              </Grid> */}
             </Grid>
             <Grid item md={12} xs={12}>
               <Line

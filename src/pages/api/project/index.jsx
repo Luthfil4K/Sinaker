@@ -59,7 +59,7 @@ export default async function handler(req, res) {
           }
         })
         rent = rent + 1
-        console.log('woi masalah gini doang anjing: ' + rent)
+        // console.log('woi masalah gini doang : ' + rent)
 
         const isLeader_leader = await prisma.userProject.create({
           data: {
@@ -69,13 +69,13 @@ export default async function handler(req, res) {
           }
         })
 
-        const isLeader_member = await prisma.userProject_member.create({
-          data: {
-            isLeader: 1,
-            userId: projectLeaderId,
-            projectId: project.id
-          }
-        })
+        // const isLeader_member = await prisma.userProject_member.create({
+        //   data: {
+        //     isLeader: 1,
+        //     userId: projectLeaderId,
+        //     projectId: project.id
+        //   }
+        // })
 
         anggotaTimId.map(async anggota => {
           const usP = await prisma.userProject_member.create({

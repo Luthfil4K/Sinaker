@@ -17,6 +17,7 @@ const TaskManageAdd = ({ data }) => {
         dataTaskPerusahaan={project.perusahaanTask}
         dataOrganik={project.oraganik}
         dataTimKerja={project.timkerja}
+        dataOrganikProject_member={project.oraganikProject_member}
       ></TaskManageAddViews>
     </>
   )
@@ -128,6 +129,13 @@ export async function getServerSideProps(context) {
     }
   })
 
+  let oraganikProject_member
+  oraganikProject_member = await prisma.userProject_member.findMany({
+    where: {
+      projectId: parseInt(context.params.id)
+    }
+  })
+
   const data = {
     project,
     companies,
@@ -135,7 +143,8 @@ export async function getServerSideProps(context) {
     mitras,
     perusahaanTask,
     oraganik,
-    timkerja
+    timkerja,
+    oraganikProject_member
   }
 
   return {

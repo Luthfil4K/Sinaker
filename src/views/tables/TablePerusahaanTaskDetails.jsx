@@ -365,7 +365,7 @@ const TableGroupPerusahaan = props => {
     }))
   }, [rows])
 
-  // console.log(summary)
+  // re(summary)
   const handleRowModesModelChange = newRowModesModel => {
     setRowModesModel(newRowModesModel)
   }
