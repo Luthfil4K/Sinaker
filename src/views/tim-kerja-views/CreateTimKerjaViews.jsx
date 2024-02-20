@@ -35,6 +35,7 @@ import Link from '@mui/material/Link'
 
 import { DataGrid } from '@mui/x-data-grid'
 import TableAddParticipant from 'src/views/tables/TableAddParticipant'
+import { number } from 'mathjs'
 
 const statusObj = {
   0: { color: 'error', status: 'Overload' },
@@ -109,15 +110,19 @@ const CreateKegiatanPerusahaanViews = props => {
       })
       .reduce((totalGaji, tppRow) => totalGaji + tppRow.gajiPml, 0)
 
+    const bebanKerja = row.beban_kerja_pegawai[0].bebanKerja
+    const nilaiBebanKerja = number(bebanKerja).toFixed(2)
+
     return {
       id: row.id,
       nama: row.name,
       fungsi: row.fungsi,
-      jumlahKegiatan: row.UserProject.length,
+      jumlahKegiatan: row.TaskOrganik.length,
       jumlahTimKerja: row.TimKerjaPegawai.length,
       gajiBulanIni,
       gajiBulanSblm,
       gajiBulanDepan,
+      bebanKerja: nilaiBebanKerja,
       over: gajiBulanIni,
       checked: row.checked
     }
@@ -333,7 +338,7 @@ const CreateKegiatanPerusahaanViews = props => {
       headerName: 'Jumlah Kegiatan',
       renderHeader: () => (
         <Typography sx={{ fontWeight: 900, fontSize: '0.875rem !important', textAlign: 'center' }}>
-          Jumlah Kegiatan
+          Jumlah Pekerjaan
         </Typography>
       ),
 
@@ -345,6 +350,17 @@ const CreateKegiatanPerusahaanViews = props => {
       renderHeader: () => (
         <Typography sx={{ fontWeight: 900, fontSize: '0.875rem !important', textAlign: 'center' }}>
           Jumlah Tim Kerja
+        </Typography>
+      ),
+
+      minWidth: 150
+    },
+    {
+      field: 'bebanKerja',
+      headerName: 'Beban Kerja',
+      renderHeader: () => (
+        <Typography sx={{ fontWeight: 900, fontSize: '0.875rem !important', textAlign: 'center' }}>
+          Beban Kerja
         </Typography>
       ),
 

@@ -1,4 +1,7 @@
 import prisma from '../../../services/db'
+import { create, all } from 'mathjs'
+import { getBest } from '../../topsis'
+import { getToken } from 'next-auth/jwt'
 
 export default async function handler(req, res) {
   // console.log('asdwadad')
@@ -34,6 +37,8 @@ export default async function handler(req, res) {
       peserta,
       persertaOrganik,
       gaji,
+      arrayUser,
+      arrayMitra,
       templateTable
     } = req.body
     console.log('dah sampe post')
@@ -208,6 +213,48 @@ export default async function handler(req, res) {
           }
         })
       }
+
+      // topsis
+      const config = {}
+      const math = create(all, config)
+
+      // pegawai
+      let m = math.matrix(arrayUser)
+      let w = [0.33, 0.33]
+      let ia = ['min', 'min']
+      let result = getBest(m, w, ia)
+
+      console.log(result)
+      result.map(async peserta => {
+        // console.log(peserta.id)
+        const beban_pegawai = await prisma.beban_kerja_pegawai.update({
+          where: {
+            id: peserta.index + 1
+          },
+          data: {
+            bebanKerja: 1 - peserta.ps
+          }
+        })
+      })
+
+      // mitra
+      let mm = math.matrix(arrayMitra)
+      let wm = [0.33, 0.33]
+      let iam = ['min', 'min']
+      let resultm = getBest(mm, wm, iam)
+
+      console.log(resultm)
+      resultm.map(async mitra => {
+        // console.log(mitra.id)
+        const beban_pegawai = await prisma.beban_kerja_mitra.update({
+          where: {
+            id: mitra.index + 1
+          },
+          data: {
+            bebanKerja: 1 - mitra.ps
+          }
+        })
+      })
 
       return res.status(201).json({ success: true })
     } catch (error) {

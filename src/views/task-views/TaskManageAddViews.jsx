@@ -41,6 +41,7 @@ import DatePicker from 'react-datepicker'
 import 'react-datepicker/dist/react-datepicker.css'
 import DatePickerWrapper from 'src/@core/styles/libs/react-datepicker'
 import { DataGrid } from '@mui/x-data-grid'
+import { number } from 'mathjs'
 
 import TableAddParticipant from 'src/views/tables/TableAddParticipant'
 
@@ -186,6 +187,155 @@ const TaskManageAddViews = propss => {
       }
     })
 
+    const userAll = dataOrganik.map(row => {
+      const gajiBulanIni = tpp
+        .filter(tppRow => tppRow.pmlId === row.id)
+        .filter(tppRow => {
+          const tppDueDate = new Date(tppRow.task.duedate)
+          const currentDate = new Date()
+          return (
+            tppDueDate.getFullYear() === currentDate.getFullYear() && tppDueDate.getMonth() === currentDate.getMonth()
+          )
+        })
+        .reduce((totalGaji, tppRow) => totalGaji + tppRow.gajiPml, 0)
+
+      const gajiBulanSblm = tpp
+        .filter(tppRow => tppRow.pmlId === row.id)
+        .filter(tppRow => {
+          const tppDueDate = new Date(tppRow.task.duedate)
+          const currentDate = new Date()
+          return currentDate.getMonth != 0
+            ? tppDueDate.getFullYear() === currentDate.getFullYear() &&
+                tppDueDate.getMonth() === currentDate.getMonth() - 1
+            : tppDueDate.getFullYear() === currentDate.getFullYear() - 1 && tppDueDate.getMonth() === 12
+        })
+        .reduce((totalGaji, tppRow) => totalGaji + tppRow.gajiPml, 0)
+
+      const gajiBulanDepan = tpp
+        .filter(tppRow => tppRow.pmlId === row.id)
+        .filter(tppRow => {
+          const tppDueDate = new Date(tppRow.task.duedate)
+          const currentDate = new Date()
+          return currentDate.getMonth != 11
+            ? tppDueDate.getFullYear() === currentDate.getFullYear() &&
+                tppDueDate.getMonth() === currentDate.getMonth() + 1
+            : tppDueDate.getFullYear() === currentDate.getFullYear() + 1 && tppDueDate.getMonth() === 0
+        })
+        .reduce((totalGaji, tppRow) => totalGaji + tppRow.gajiPml, 0)
+
+      const jumlahKegiatan = 0
+
+      pegawaiOrganik.map(tambah => {
+        if (tambah.id === row.id) {
+          return (jumlahKegiatan = row.TaskOrganik.length + 1)
+        } else {
+          return (jumlahKegiatan = row.TaskOrganik.length)
+        }
+      })
+
+      return {
+        jumlahKegiatan,
+        gajiBulanIni
+      }
+    })
+
+    const arrayUser = userAll.map(item => [item.jumlahKegiatan, item.gajiBulanIni])
+
+    const mitraAll = dataMitra.map(row => {
+      const gajiBulanIniPCL = tpp
+        .filter(tppRow => tppRow.pclId === row.id)
+        .filter(tppRow => {
+          const tppDueDate = new Date(tppRow.task.duedate)
+          const currentDate = new Date()
+          return (
+            tppDueDate.getFullYear() === currentDate.getFullYear() && tppDueDate.getMonth() === currentDate.getMonth()
+          )
+        })
+        .reduce((totalGaji, tppRow) => totalGaji + tppRow.gajiPcl, 0)
+
+      const gajiBulanIniPML = tpp
+        .filter(tppRow => tppRow.pmlId === row.id)
+        .filter(tppRow => {
+          const tppDueDate = new Date(tppRow.task.duedate)
+          const currentDate = new Date()
+          return (
+            tppDueDate.getFullYear() === currentDate.getFullYear() && tppDueDate.getMonth() === currentDate.getMonth()
+          )
+        })
+        .reduce((totalGaji, tppRow) => totalGaji + tppRow.gajiPml, 0)
+
+      // Gabungkan total gaji dari kedua kasus
+      const gajiBulanIni = gajiBulanIniPCL + gajiBulanIniPML
+
+      const gajiBulanSblmPCL = tpp
+        .filter(tppRow => tppRow.pclId === row.id)
+        .filter(tppRow => {
+          const tppDueDate = new Date(tppRow.task.duedate)
+          const currentDate = new Date()
+          return currentDate.getMonth != 0
+            ? tppDueDate.getFullYear() === currentDate.getFullYear() &&
+                tppDueDate.getMonth() === currentDate.getMonth() - 1
+            : tppDueDate.getFullYear() === currentDate.getFullYear() - 1 && tppDueDate.getMonth() === 12
+        })
+        .reduce((totalGaji, tppRow) => totalGaji + tppRow.gajiPcl, 0)
+
+      const gajiBulanSblmPML = tpp
+        .filter(tppRow => tppRow.pmlId === row.id)
+        .filter(tppRow => {
+          const tppDueDate = new Date(tppRow.task.duedate)
+          const currentDate = new Date()
+          return currentDate.getMonth != 0
+            ? tppDueDate.getFullYear() === currentDate.getFullYear() &&
+                tppDueDate.getMonth() === currentDate.getMonth() - 1
+            : tppDueDate.getFullYear() === currentDate.getFullYear() - 1 && tppDueDate.getMonth() === 12
+        })
+        .reduce((totalGaji, tppRow) => totalGaji + tppRow.gajiPcl, 0)
+      const gajiBulanSblm = gajiBulanSblmPML + gajiBulanSblmPCL
+
+      const gajiBulanDepanPCL = tpp
+        .filter(tppRow => tppRow.pclId === row.id)
+        .filter(tppRow => {
+          const tppDueDate = new Date(tppRow.task.duedate)
+          const currentDate = new Date()
+          return currentDate.getMonth != 11
+            ? tppDueDate.getFullYear() === currentDate.getFullYear() &&
+                tppDueDate.getMonth() === currentDate.getMonth() + 1
+            : tppDueDate.getFullYear() === currentDate.getFullYear() + 1 && tppDueDate.getMonth() === 0
+        })
+        .reduce((totalGaji, tppRow) => totalGaji + tppRow.gajiPcl, 0)
+
+      const gajiBulanDepanPML = tpp
+        .filter(tppRow => tppRow.pclId === row.id)
+        .filter(tppRow => {
+          const tppDueDate = new Date(tppRow.task.duedate)
+          const currentDate = new Date()
+          return currentDate.getMonth != 11
+            ? tppDueDate.getFullYear() === currentDate.getFullYear() &&
+                tppDueDate.getMonth() === currentDate.getMonth() + 1
+            : tppDueDate.getFullYear() === currentDate.getFullYear() + 1 && tppDueDate.getMonth() === 0
+        })
+        .reduce((totalGaji, tppRow) => totalGaji + tppRow.gajiPcl, 0)
+
+      const gajiBulanDepan = gajiBulanDepanPCL + gajiBulanDepanPML
+
+      const jumlahKegiatan = 0
+
+      pegawaiOrganik.map(tambah => {
+        if (tambah.id === row.id) {
+          return (jumlahKegiatan = row.TaskPeserta.length + 1)
+        } else {
+          return (jumlahKegiatan = row.TaskPeserta.length)
+        }
+      })
+
+      return {
+        jumlahKegiatan,
+        gajiBulanIni
+      }
+    })
+
+    const arrayMitra = mitraAll.map(item => [item.jumlahKegiatan, item.gajiBulanIni])
+
     try {
       while (true) {
         const res = await axios.post('/task', {
@@ -200,6 +350,8 @@ const TaskManageAddViews = propss => {
           participants: values.subKegJenisSample === 1 ? rows : data,
           fungsi: fungsi,
           peserta: dataPCL,
+          arrayUser: arrayUser,
+          arrayMitra: arrayMitra,
           persertaOrganik: pegawaiOrganik,
           description: values.subKegDesk,
           realisasi: 0,
@@ -343,6 +495,7 @@ const TaskManageAddViews = propss => {
             role: hasilFilter.role,
             nip: hasilFilter.nip,
             password: hasilFilter.password,
+            beban_kerja_pegawai: hasilFilter.beban_kerja_pegawai,
             checked: true
           }
         }
@@ -350,8 +503,8 @@ const TaskManageAddViews = propss => {
       })
       .filter(obj => obj !== null) // Menghapus nilai null dari array
   )
-  console.log(datadata)
-  console.log(dataOrganik)
+  console.log(propss.dataOrganik)
+  console.log(propss.dataOrganikProject_member)
   // console.log(organikProject_member)
 
   // const [anggotaTim, setAnggotaTim] = useState(0)
@@ -476,6 +629,9 @@ const TaskManageAddViews = propss => {
 
       const gajiBulanDepan = gajiBulanDepanPCL + gajiBulanDepanPML
 
+      const bebanKerjaM = row.beban_kerja_mitra[0].bebanKerja
+      const nilaiBebanKerjaM = number(bebanKerjaM).toFixed(2)
+
       return {
         id: row.id,
         nik: row.nik.toString(),
@@ -483,6 +639,7 @@ const TaskManageAddViews = propss => {
         gajiBulanIni,
         gajiBulanSblm,
         gajiBulanDepan,
+        bebanKerjaM: nilaiBebanKerjaM,
         over: gajiBulanIni
       }
     })
@@ -525,6 +682,9 @@ const TaskManageAddViews = propss => {
         })
         .reduce((totalGaji, tppRow) => totalGaji + tppRow.gajiPml, 0)
 
+      const bebanKerja = row.beban_kerja_pegawai[0].bebanKerja
+      const nilaiBebanKerja = number(bebanKerja).toFixed(2)
+
       return {
         id: row.id,
         nip: row.nip.toString(),
@@ -532,10 +692,13 @@ const TaskManageAddViews = propss => {
         gajiBulanIni,
         gajiBulanSblm,
         gajiBulanDepan,
+        bebanKerjaO: nilaiBebanKerja,
         over: gajiBulanIni
       }
     })
   )
+
+  // console.log(rowsO)
 
   useEffect(() => {
     // Saat participants berubah, periksa dan ubah status checked jika cocok
@@ -809,6 +972,17 @@ const TaskManageAddViews = propss => {
           </Typography>
         </>
       )
+    },
+    {
+      field: 'bebanKerjaM',
+      headerName: 'Beban Kerja',
+      renderHeader: () => (
+        <Typography sx={{ fontWeight: 900, fontSize: '0.875rem !important', textAlign: 'center' }}>
+          Beban Kerja
+        </Typography>
+      ),
+
+      minWidth: 150
     }
   ]
 
@@ -967,6 +1141,17 @@ const TaskManageAddViews = propss => {
           </Typography>
         </>
       )
+    },
+    {
+      field: 'bebanKerjaO',
+      headerName: 'Beban Kerja',
+      renderHeader: () => (
+        <Typography sx={{ fontWeight: 900, fontSize: '0.875rem !important', textAlign: 'center' }}>
+          Beban Kerja
+        </Typography>
+      ),
+
+      minWidth: 150
     }
   ]
 
@@ -1609,11 +1794,11 @@ const TaskManageAddViews = propss => {
                       <Grid item xs={12}>
                         <Box sx={{ width: '100%' }}>
                           <DataGrid
-                            initialState={{
-                              sorting: {
-                                sortModel: [{ field: 'nama', sort: 'asc' }]
-                              }
-                            }}
+                            // initialState={{
+                            //   sorting: {
+                            //     sortModel: [{ field: 'nama', sort: 'asc' }]
+                            //   }
+                            // }}
                             rows={data}
                             columns={columnsNew}
                             pprioritySize={5}
@@ -1644,7 +1829,12 @@ const TaskManageAddViews = propss => {
                           <DataGrid
                             initialState={{
                               sorting: {
-                                sortModel: [{ field: 'checked', sort: 'desc' }]
+                                sortModel: [
+                                  {
+                                    field: 'bebanKerja',
+                                    sort: 'asc'
+                                  }
+                                ]
                               }
                             }}
                             rows={rowsM}
@@ -1698,7 +1888,12 @@ const TaskManageAddViews = propss => {
                           <DataGrid
                             initialState={{
                               sorting: {
-                                sortModel: [{ field: 'checked', sort: 'desc' }]
+                                sortModel: [
+                                  {
+                                    field: 'bebanKerja',
+                                    sort: 'asc'
+                                  }
+                                ]
                               }
                             }}
                             rows={rowsO}

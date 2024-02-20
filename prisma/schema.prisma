@@ -26,6 +26,8 @@ model User {
   TimKerjaPegawai           TimKerjaPegawai[]
   TimKerja                  TimKerja[]                  @relation("leadBy")
   UserProject_member        UserProject_member[]
+  beban_kerja_pegawai       beban_kerja_pegawai[]
+  beban_kerja_tim_pegawai   beban_kerja_tim_pegawai[]
 }
 
 model Project {
@@ -179,7 +181,7 @@ model Mitra {
   status                    String                      @default("internal") @db.VarChar(64)
   TaskPeserta               TaskPeserta[]
   PesertaGaji               PesertaGaji[]
- 
+  beban_kerja_mitra         beban_kerja_mitra[]
 }
 
 model TaskPeserta {
@@ -263,5 +265,38 @@ model idsbr_perusahaan {
 //  taskPerusahaanProduksi      TaskPerusahaanProduksi     @relation(fields: [TaskPerusahaanProduksiId], references: [id], onDelete: Cascade, onUpdate: Cascade)
 //  TaskPerusahaanProduksiId    Int
 } 
+
+model beban_kerja_pegawai{
+  id                        Int                         @id @default(autoincrement())
+  userId_fkey               User                        @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  userId                    Int
+  bebanKerja                Decimal
+}
+
+model beban_kerja_tim_pegawai{
+  id                        Int                         @id @default(autoincrement())
+  userId_fkey               User                        @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  userId                    Int
+  bebanKerjaTim             Decimal
+}
+
+model beban_kerja_mitra{
+  id                        Int                         @id @default(autoincrement())
+  mitra                     Mitra                       @relation(fields: [mitraId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  mitraId                   Int
+  bebanKerja                Decimal
+}
+
+model kriteria_beban_kerja_pegawai{
+  id                        Int                         @id @default(autoincrement())
+  kriteria1                 Decimal
+  kriteria2                 Decimal
+}
+
+model kriteria_beban_kerja_mitra{
+  id                        Int                         @id @default(autoincrement())
+  kriteria1                 Decimal
+  kriteria2                 Decimal
+}
 
 

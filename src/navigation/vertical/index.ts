@@ -2,7 +2,9 @@
 import Login from 'mdi-material-ui/Login'
 import Table from 'mdi-material-ui/Table'
 import CubeOutline from 'mdi-material-ui/CubeOutline'
+import FilterSettings from 'mdi-material-ui/FilterSettings'
 import HomeOutline from 'mdi-material-ui/HomeOutline'
+import Account from 'mdi-material-ui/Account'
 import FormatLetterCase from 'mdi-material-ui/FormatLetterCase'
 import AccountCogOutline from 'mdi-material-ui/AccountCogOutline'
 import CreditCardOutline from 'mdi-material-ui/CreditCardOutline'
@@ -12,6 +14,7 @@ import GoogleCirclesExtended from 'mdi-material-ui/GoogleCirclesExtended'
 
 // ** Type import
 import { VerticalNavItemsType } from 'src/@core/layouts/types'
+import { SettingsConsumer } from 'src/@core/context/settingsContext'
 
 const navigation = (): VerticalNavItemsType => {
   return [
@@ -121,7 +124,7 @@ const navigation = (): VerticalNavItemsType => {
     },
     {
       title: 'Daftar Pegawai',
-      icon: Login,
+      icon: Account,
       path: '/pegawai'
     },
     {
@@ -133,6 +136,14 @@ const navigation = (): VerticalNavItemsType => {
       title: 'Daftar Mitra',
       icon: FormatLetterCase,
       path: '/mitra'
+    },
+    {
+      sectionTitle: 'Pengaturan'
+    },
+    {
+      title: 'Pengaturan Bobot Kriteria',
+      icon: FilterSettings,
+      path: '/pengaturan-rekomendasi'
     }
 
     // {
