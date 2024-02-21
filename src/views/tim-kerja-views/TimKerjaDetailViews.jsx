@@ -35,6 +35,7 @@ import MenuItem from '@mui/material/MenuItem'
 
 import { DataGrid } from '@mui/x-data-grid'
 import TableGroupPerusahaan from 'src/views/tables/TableGroupPerusahaan'
+import { number } from 'mathjs'
 
 const statusObj = {
   0: { color: 'error', status: 'Overload' },
@@ -59,10 +60,11 @@ const CreateKegiatanPerusahaanViews = props => {
   const [values, setValues] = useState({
     idGroup: props.data.id,
     kegFungsi: props.data.fungsi,
-    kegNama: props.data.nama
+    kegNama: props.data.nama,
+    kegKetua: props.data.userId_fkey.name
   })
 
-  console.log(timMember)
+  // console.log(props.data)
 
   const rows = timMember.map(row => {
     const gajiBulanIni = tpp
@@ -100,6 +102,9 @@ const CreateKegiatanPerusahaanViews = props => {
       })
       .reduce((totalGaji, tppRow) => totalGaji + tppRow.gajiPml, 0)
 
+    const bebanKerja = row.userId_fkey.beban_kerja_pegawai[0].bebanKerja
+    const nilaiBebanKerja = number(bebanKerja).toFixed(2)
+
     return {
       id: row.userId_fkey.id,
       nama: row.userId_fkey.name,
@@ -108,6 +113,7 @@ const CreateKegiatanPerusahaanViews = props => {
       gajiBulanIni,
       gajiBulanSblm,
       gajiBulanDepan,
+      bebanKerjaO: nilaiBebanKerja,
       over: gajiBulanIni
       // checked: row.checked
     }
@@ -328,6 +334,17 @@ const CreateKegiatanPerusahaanViews = props => {
       ),
 
       minWidth: 150
+    },
+    {
+      field: 'bebanKerjaO',
+      headerName: 'Beban Kerja',
+      renderHeader: () => (
+        <Typography sx={{ fontWeight: 900, fontSize: '0.875rem !important', textAlign: 'center' }}>
+          Beban Kerja
+        </Typography>
+      ),
+
+      minWidth: 150
     }
 
     // {
@@ -432,10 +449,12 @@ const CreateKegiatanPerusahaanViews = props => {
     <Card>
       <form action='post' onSubmit={e => e.preventDefault()}>
         <Grid container spacing={4} sx={{ padding: '32px' }}>
-          <Grid item xs={12}>
-            <Typography variant='h5'>{values.kegNama}</Typography>
+          <Grid item xl={12}>
+            <Typography variant='h4'>{values.kegNama}</Typography>
           </Grid>
-
+          <Grid item xs={12}>
+            <Typography>Ketua Tim: {values.kegKetua}</Typography>
+          </Grid>
           <Grid item xs={12} md={6}>
             {/* <TextField
               fullWidth
@@ -477,7 +496,7 @@ const CreateKegiatanPerusahaanViews = props => {
                 rowHeight={65}
                 initialState={{
                   sorting: {
-                    sortModel: [{ field: 'deadline', sort: 'asc' }]
+                    sortModel: [{ field: 'bebanKerjaO', sort: 'asc' }]
                   },
                   pagination: { paginationModel: { pageSize: 100 } }
                 }}
