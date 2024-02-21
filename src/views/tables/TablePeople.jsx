@@ -372,13 +372,13 @@ const TablePeople = props => {
           rowHeight={65}
           initialState={{
             sorting: {
-              sortModel: [{ field: 'deadline', sort: 'asc' }]
+              sortModel: [{ field: 'nama', sort: 'asc' }]
             }
           }}
           rows={rows}
           columns={columns}
           sx={{
-            height: rows.length > 3 ? '70vh' : '45vh',
+            height: rows.length > 3 ? '80vh' : '45vh',
             // overflowY: 'auto',
             width: '100%'
           }}

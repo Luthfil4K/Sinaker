@@ -30,7 +30,6 @@ const TableTask = props => {
   const router = useRouter()
   const [task, setTask] = useState(props.data)
 
-  console.log(task)
   const columns = [
     // { field: 'id', headerName: 'No', type: 'string', width: 70 },
     {
@@ -187,17 +186,18 @@ const TableTask = props => {
         Sub Kegiatan
       </Typography>
       <Grid item md={12}>
-        <Card>
+        <Card height={300}>
           <DataGrid
-            initialState={{
-              sorting: {
-                sortModel: [{ field: 'deadline', sort: 'asc' }]
-              }
-            }}
+            height={300}
+            // initialState={{
+            //   sorting: {
+            //     sortModel: [{ field: 'deadline', sort: 'asc' }]
+            //   }
+            // }}
             rows={rows}
             columns={columns}
             sx={{
-              overflowY: 'auto',
+              height: rows.length > 3 ? '81vh' : '45vh',
               width: '100%'
             }}
           />

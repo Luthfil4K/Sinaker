@@ -39,13 +39,21 @@ export default async function handler(req, res) {
       gaji,
       arrayUser,
       arrayMitra,
-      templateTable
+      templateTable,
+      deadLaneAwal
     } = req.body
-    console.log('dah sampe post')
-    console.log(fungsi)
+
+    const project = await prisma.project.update({
+      where: {
+        id: Number(projectId)
+      },
+      data: {
+        enddate: deadLaneAwal
+      }
+    })
+
     try {
       if (jenisKeg == 65 || jenisKeg == 67 || jenisKeg == 70) {
-        console.log('masuk656770 data task')
         const task = await prisma.task.create({
           data: {
             title,

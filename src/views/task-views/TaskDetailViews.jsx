@@ -21,7 +21,7 @@ import TextField from '@mui/material/TextField'
 import SendIcon from 'mdi-material-ui/Send'
 import AccountIcon from 'mdi-material-ui/Account'
 import { useSession } from 'next-auth/react'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 
 // tab
 import Tab from '@mui/material/Tab'
@@ -49,6 +49,7 @@ const TaskDetailViews = props => {
   const [participants, setParticipants] = useState(props.dataPerusahaan)
   const [mitra, setMitra] = useState(props.dataMitra)
   const [pegawai, setPegawai] = useState(props.dataPML)
+  const [dataTask, setDataTasl] = useState(props.data)
   const session = useSession()
   const [values, setValues] = useState({
     id: props.data.id,
@@ -59,7 +60,30 @@ const TaskDetailViews = props => {
     jenisKeg: props.data.jenisKeg,
     jenisSample: props.data.jenisSample
   })
-  // console.log(participants)
+
+  const [templateTable2, setTemplateTable2] = useState(Number(props.dataPerusahaan[0].templateTable))
+  const [judulGrafik, setJudulGrafik] = useState('asd')
+
+  useEffect(() => {
+    let templateTable = Number(props.dataPerusahaan[0].templateTable)
+    console.log(templateTable)
+    switch (templateTable) {
+      case 3:
+        return setJudulGrafik('NBS/NKS')
+      case 4:
+        return setJudulGrafik('NBS/ID SLS')
+      case 5:
+        return setJudulGrafik('Nama Perusahaan')
+      case 6:
+        return setJudulGrafik('NUS/Nama Perusahaan')
+      case 7:
+        return setJudulGrafik('Id SBR/Nama Perusahaan')
+      default:
+        return ' '
+    }
+  }, [values])
+
+  // console.log(judulGrafik)
 
   const [value, setValue] = useState('1')
   const handleChangeTab = (event, newValue) => {
@@ -68,7 +92,7 @@ const TaskDetailViews = props => {
 
   // ganti tarel di your task sesuai dengan tabel dibawah
   const handleTaskUpdate = (realisasi, trgt) => {
-    setValues({ ...values, target: trgt, realisasi })
+    // setValues({ ...values, target: trgt, realisasi })
   }
 
   const getRealisasi = target => {}
@@ -163,27 +187,38 @@ const TaskDetailViews = props => {
   }
 
   // untuk chart
-
   // State Line
 
-  const [labelTaRel, setLabeTaRel] = useState({
+  const [lineTarel, setLineTaRel] = useState({
     target: props.dataPerusahaan.map(pr => pr.target),
     realisasi: props.dataPerusahaan.map(pr => pr.realisasi),
-    label: props.dataPerusahaan.map(pr => 'NBS ' + pr.nbs)
+    label: props.dataPerusahaan.map(pr =>
+      Number(pr.templateTable) === 3
+        ? pr.nbs + '/' + pr.nks
+        : Number(pr.templateTable) === 4
+        ? pr.nbs + '/' + pr.idSls
+        : Number(pr.templateTable) === 5
+        ? pr.namaPerusahaan
+        : Number(pr.templateTable) === 6
+        ? pr.nus + '/' + pr.namaPerusahaan
+        : Number(pr.templateTable) === 7
+        ? pr.idSbr + '/' + pr.namaPerusahaan
+        : ''
+    )
   })
-  console.log(labelTaRel)
+  // console.log(lineTarel)
 
   const dataLine = {
-    labels: labelTaRel.label,
+    labels: lineTarel.label,
     datasets: [
       {
         label: 'Target',
-        data: labelTaRel.target,
+        data: lineTarel.target,
         backgroundColor: ['rgba(255, 99, 132, 1)']
       },
       {
         label: 'Realisasi',
-        data: labelTaRel.realisasi,
+        data: lineTarel.realisasi,
         backgroundColor: ['rgba(25, 19, 132, 1)']
       }
     ]
@@ -240,7 +275,7 @@ const TaskDetailViews = props => {
                       </TabList>
                       <TabPanel value='1' sx={{ p: 0, height: 170 }}>
                         <Typography mt={4} textAlign={'center'} variant={'body1'}>
-                          Total Target dan Realisasi Bulan Ini
+                          Target Realisasi per {judulGrafik}
                         </Typography>
                         <Grid item md={12} xs={12}>
                           <Line
@@ -272,7 +307,7 @@ const TaskDetailViews = props => {
                       </TabPanel>
                       <TabPanel value='2' sx={{ p: 0, height: 170 }}>
                         <Typography variant='h6' sx={{ marginBottom: 2 }}>
-                          Catatan
+                          {values.notesSubKeg}
                         </Typography>
                       </TabPanel>
                     </TabContext>
