@@ -20,6 +20,7 @@ import * as React from 'react'
 // next
 import { useRouter } from 'next/dist/client/router'
 
+import { useSession } from 'next-auth/react'
 // icon
 import ClipboardCheck from 'mdi-material-ui/ClipboardCheck'
 import AccountCog from 'mdi-material-ui/AccountCog'
@@ -212,6 +213,8 @@ const TabPanel4 = () => {
 const CardProjectDetail = props => {
   const [project, setProject] = useState(props.data)
   const [userProject, setUserProject] = useState(props.data.UserProject)
+  const [arrId, setArrId] = useState(props.dataArrayIdProjectMember)
+  const session = useSession()
   const valueProgressBar =
     Math.ceil((new Date(project.enddate) - new Date()) / (1000 * 3600 * 24)) >= 0
       ? parseInt(
@@ -221,7 +224,6 @@ const CardProjectDetail = props => {
           )}`
         )
       : 100
-  console.log(project.UserProject_member)
   const router = useRouter()
   // ** State
   const [value, setValue] = useState('1')
@@ -229,7 +231,21 @@ const CardProjectDetail = props => {
   const handleChange = (event, newValue) => {
     setValue(newValue)
   }
+  // const a = [103214]
+  // console.log(a in arrId)
+  // console.log(a in arrId)
+  // console.log(a in arrId)
 
+  const a = [1, 2, 3, 4, 5]
+  const b = 3
+
+  console.log(a)
+  console.log(arrId)
+  console.log(arrId.includes(103214))
+  console.log(a.includes(3))
+  console.log(arrId.includes(103214))
+  console.log(arrId.includes(103214))
+  console.log(arrId.includes(103214))
   return (
     <>
       <Card sx={{ height: 350 }}>
@@ -408,21 +424,24 @@ const CardProjectDetail = props => {
               </>
             </TabPanel>
             <Divider sx={{ marginTop: 3.5 }} />
-
-            <Grid container sx={{ mt: 3 }} spacing={4}>
-              <Grid item>
-                <Link onClick={e => router.push(`/task-manage/${project.id}`)}>
-                  <Button component='div' variant='contained'>
-                    Pengaturan Sub Kegiatan
-                  </Button>
-                </Link>
-              </Grid>
-              <Grid item>
-                {/* <Button component='div' variant='contained'>
+            {session.status === 'authenticated' && (arrId.includes(session.data.uid) || session.data.uid === 1099999) && (
+              <>
+                <Grid container sx={{ mt: 3 }} spacing={4}>
+                  <Grid item>
+                    <Link onClick={e => router.push(`/task-manage/${project.id}`)}>
+                      <Button component='div' variant='contained'>
+                        Pengaturan Sub Kegiatan
+                      </Button>
+                    </Link>
+                  </Grid>
+                  <Grid item>
+                    {/* <Button component='div' variant='contained'>
                   Buat rapat
                 </Button> */}
-              </Grid>
-            </Grid>
+                  </Grid>
+                </Grid>
+              </>
+            )}
           </CardContent>
         </TabContext>
       </Card>

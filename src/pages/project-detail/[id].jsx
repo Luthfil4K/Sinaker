@@ -4,11 +4,11 @@ import { getToken } from 'next-auth/jwt'
 import ProjectDetailsViews from 'src/views/project-views/ProjectDetailsViews'
 
 const ProjectDetail = ({ data }) => {
-  const [project, setProject] = useState(JSON.parse(data))
+  const [dataPd, setDataPd] = useState(JSON.parse(data))
   // console.log(project)
   return (
     <>
-      <ProjectDetailsViews data={project} />
+      <ProjectDetailsViews data={dataPd.project} dataUpm={dataPd.upm} />
     </>
   )
 }
@@ -48,9 +48,17 @@ export async function getServerSideProps(context) {
     }
   })
 
+  const upm = await prisma.userProject_member.findMany({
+    where: {
+      projectId: parseInt(context.params.id)
+    }
+  })
+
+  const dataPd = { project, upm }
+
   return {
     props: {
-      data: JSON.stringify(project)
+      data: JSON.stringify(dataPd)
     }
   }
 }

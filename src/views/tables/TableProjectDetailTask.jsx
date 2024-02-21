@@ -76,7 +76,6 @@ const statusObj = {
 const TableProjectDetailTask = props => {
   const router = useRouter()
   const [subkeg, setSubKeg] = useState(props.data)
-  console.log(subkeg)
 
   const rows = subkeg.map(row => ({
     id: row.id,
