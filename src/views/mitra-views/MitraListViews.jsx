@@ -7,11 +7,13 @@ import Box from '@mui/material/Box'
 
 //other
 import { useRouter } from 'next/dist/client/router'
+import { useSession } from 'next-auth/react'
 
 import TableMitra from 'src/views/tables/TableMitra'
 
 const MitraListViews = props => {
   const router = useRouter()
+  const session = useSession()
 
   const [mitra, setMitra] = useState(props.data)
   const [tpp, setTpp] = useState(props.dataTpp)
@@ -23,9 +25,11 @@ const MitraListViews = props => {
           <Typography variant={'h5'}>Daftar Mitra</Typography>
         </Grid>
         <Grid item md={6} xs={6} display={'flex'} justifyContent={'end'}>
-          <Link onClick={e => router.push(`/mitra-add`)}>
-            <Button variant={'contained'}> Tambah Mitra</Button>
-          </Link>
+          {session.status === 'authenticated' && session.data.uid === 1099999 && (
+            <Link onClick={e => router.push(`/mitra-add`)}>
+              <Button variant={'contained'}> Tambah Mitra</Button>
+            </Link>
+          )}
         </Grid>
         {/* <Typography>{gaji.toLocaleString('id-ID', { currency: 'IDR' })}</Typography> */}
         <Grid item md={12} xs={12}>

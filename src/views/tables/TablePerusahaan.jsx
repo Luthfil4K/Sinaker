@@ -17,7 +17,7 @@ import MenuItem from '@mui/material/MenuItem'
 import { DataGrid } from '@mui/x-data-grid'
 import Swal from 'sweetalert2'
 import { useRouter } from 'next/dist/client/router'
-
+import { useSession } from 'next-auth/react'
 // icon
 
 import PencilOutline from 'mdi-material-ui/PencilOutline'
@@ -36,6 +36,7 @@ const jenisFungsi = {
 }
 
 const TablePerusahaan = props => {
+  const session = useSession()
   const { dataUser } = props
   const rows = dataUser.map(row => ({
     id: row.id,
@@ -130,49 +131,59 @@ const TablePerusahaan = props => {
 
     {
       field: 'action',
-      renderHeader: () => <Typography sx={{ fontSize: '0.875rem !important', textAlign: 'center' }}>Action</Typography>,
+      renderHeader: () =>
+        session.status === 'authenticated' && session.data.uid === 1099999 ? (
+          <>
+            <Typography sx={{ fontSize: '0.875rem !important', textAlign: 'center' }}>Action</Typography>
+          </>
+        ) : (
+          <></>
+        ),
       minWidth: 250,
       flex: 1,
-      renderCell: params => (
-        <>
-          <Button
-            onClick={e => {
-              console.log('edit')
-              router.push(`/perusahaan-edit/${params.row.id}`)
-            }}
-            type='submit'
-            sx={{ mr: 1 }}
-            color='info'
-            variant='text'
-          >
-            <PencilOutline />
-          </Button>
+      renderCell: params =>
+        session.status === 'authenticated' && session.data.uid === 1099999 ? (
+          <>
+            <Button
+              onClick={e => {
+                console.log('edit')
+                router.push(`/perusahaan-edit/${params.row.id}`)
+              }}
+              type='submit'
+              sx={{ mr: 1 }}
+              color='info'
+              variant='text'
+            >
+              <PencilOutline />
+            </Button>
 
-          <Button
-            onClick={() => {
-              Swal.fire({
-                title: 'Hapus Perusahaan?',
+            <Button
+              onClick={() => {
+                Swal.fire({
+                  title: 'Hapus Perusahaan?',
 
-                icon: 'warning',
-                showCancelButton: true,
-                confirmButtonColor: '#3085d6',
-                cancelButtonColor: '#d33',
-                confirmButtonText: 'Ya, Hapus Perusahaan'
-              }).then(result => {
-                if (result.isConfirmed) {
-                  handleDelete(params.row.id)
-                }
-              })
-            }}
-            type='submit'
-            sx={{ mr: 1 }}
-            color='error'
-            variant='text'
-          >
-            <DeleteOutline />
-          </Button>
-        </>
-      )
+                  icon: 'warning',
+                  showCancelButton: true,
+                  confirmButtonColor: '#3085d6',
+                  cancelButtonColor: '#d33',
+                  confirmButtonText: 'Ya, Hapus Perusahaan'
+                }).then(result => {
+                  if (result.isConfirmed) {
+                    handleDelete(params.row.id)
+                  }
+                })
+              }}
+              type='submit'
+              sx={{ mr: 1 }}
+              color='error'
+              variant='text'
+            >
+              <DeleteOutline />
+            </Button>
+          </>
+        ) : (
+          <></>
+        )
     }
   ]
 
@@ -192,6 +203,9 @@ const TablePerusahaan = props => {
             height: rows.length > 3 ? '70vh' : '45vh',
             // overflowY: 'auto',
             width: '100%'
+          }}
+          columnVisibilityModel={{
+            action: session.status === 'authenticated' && session.data.uid === 1099999 ? true : false
           }}
         />
       </Card>

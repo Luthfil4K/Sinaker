@@ -4,8 +4,8 @@ import Button from '@mui/material/Button'
 import Box from '@mui/material/Box'
 import Typography from '@mui/material/Typography'
 import Link from '@mui/material/Link'
+import { useSession } from 'next-auth/react'
 import { useRouter } from 'next/dist/client/router'
-
 import { useState, useEffect, useRef } from 'react'
 
 const PerusahaanViews = props => {
@@ -17,6 +17,7 @@ const PerusahaanViews = props => {
       }
     })
   )
+  const session = useSession()
   // console.log(cardP)
   return (
     <>
@@ -25,9 +26,11 @@ const PerusahaanViews = props => {
           <Typography variant={'h5'}>Daftar Perusahaan</Typography>
         </Grid>
         <Grid item md={6} xs={6} display={'flex'} justifyContent={'end'}>
-          <Link onClick={e => router.push(`/add-perusahaan`)}>
-            <Button variant={'contained'}>Tambah Perusahaan</Button>
-          </Link>
+          {session.status === 'authenticated' && session.data.uid === 1099999 && (
+            <Link onClick={e => router.push(`/add-perusahaan`)}>
+              <Button variant={'contained'}>Tambah Perusahaan</Button>
+            </Link>
+          )}
         </Grid>
         <Grid item md={12} xs={12}>
           <Box sx={{ width: '100%' }}>

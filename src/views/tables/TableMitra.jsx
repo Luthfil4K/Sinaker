@@ -15,6 +15,7 @@ import { DataGrid } from '@mui/x-data-grid'
 import { useRouter } from 'next/dist/client/router'
 import Swal from 'sweetalert2'
 import Link from '@mui/material/Link'
+import { useSession } from 'next-auth/react'
 
 // icon
 import PencilOutline from 'mdi-material-ui/PencilOutline'
@@ -48,9 +49,10 @@ const TableMitra = props => {
     0: { color: 'error', status: 'Overload' },
     1: { color: 'success', status: 'Available' }
   }
-  // const { dataMitra } = props.data
+
   const [mitra, setMitra] = useState(props.data)
   const [tpp, setTpp] = useState(props.dataTpp)
+  const session = useSession()
   // const rows = mitra.map(row => ({
   //   id: row.id,
   //   nik: row.nik.toString(),
@@ -371,51 +373,61 @@ const TableMitra = props => {
 
     {
       field: 'action',
-      renderHeader: () => (
-        <Typography sx={{ fontWeight: 900, fontSize: '0.875rem !important', textAlign: 'center' }}>Action</Typography>
-      ),
+      renderHeader: () =>
+        session.status === 'authenticated' && session.data.uid === 1099999 ? (
+          <>
+            <Typography sx={{ fontWeight: 900, fontSize: '0.875rem !important', textAlign: 'center' }}>
+              Action
+            </Typography>
+          </>
+        ) : (
+          <></>
+        ),
       minWidth: 215,
       flex: 1,
-      renderCell: params => (
-        <>
-          <Button
-            onClick={e => {
-              e.preventDefault()
-              router.push(`/mitra-edit/${params.row.id}`)
-            }}
-            type='submit'
-            sx={{ mr: 1 }}
-            color='info'
-            variant='text'
-          >
-            <PencilOutline />
-          </Button>
+      renderCell: params =>
+        session.status === 'authenticated' && session.data.uid === 1099999 ? (
+          <>
+            <Button
+              onClick={e => {
+                e.preventDefault()
+                router.push(`/mitra-edit/${params.row.id}`)
+              }}
+              type='submit'
+              sx={{ mr: 1 }}
+              color='info'
+              variant='text'
+            >
+              <PencilOutline />
+            </Button>
 
-          <Button
-            onClick={() => {
-              Swal.fire({
-                title: 'Hapus Mitra?',
-                text: '',
-                icon: 'warning',
-                showCancelButton: true,
-                confirmButtonColor: '#3085d6',
-                cancelButtonColor: '#d33',
-                confirmButtonText: 'Ya, Hapus Mitra'
-              }).then(result => {
-                if (result.isConfirmed) {
-                  handleDelete(params.row.id)
-                }
-              })
-            }}
-            type='submit'
-            sx={{ mr: 1 }}
-            color='error'
-            variant='text'
-          >
-            <DeleteOutline />
-          </Button>
-        </>
-      )
+            <Button
+              onClick={() => {
+                Swal.fire({
+                  title: 'Hapus Mitra?',
+                  text: '',
+                  icon: 'warning',
+                  showCancelButton: true,
+                  confirmButtonColor: '#3085d6',
+                  cancelButtonColor: '#d33',
+                  confirmButtonText: 'Ya, Hapus Mitra'
+                }).then(result => {
+                  if (result.isConfirmed) {
+                    handleDelete(params.row.id)
+                  }
+                })
+              }}
+              type='submit'
+              sx={{ mr: 1 }}
+              color='error'
+              variant='text'
+            >
+              <DeleteOutline />
+            </Button>
+          </>
+        ) : (
+          <></>
+        )
     }
   ]
   return (
@@ -430,6 +442,9 @@ const TableMitra = props => {
               height: rows.length > 3 ? '70vh' : '45vh',
               // overflowY: 'auto',
               width: '100%'
+            }}
+            columnVisibilityModel={{
+              action: session.status === 'authenticated' && session.data.uid === 1099999 ? true : false
             }}
           />
         </Box>

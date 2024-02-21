@@ -10,13 +10,13 @@ import FormControl from '@mui/material/FormControl'
 import InputLabel from '@mui/material/InputLabel'
 import Select from '@mui/material/Select'
 import MenuItem from '@mui/material/MenuItem'
-
 import Link from '@mui/material/Link'
 
 // other, swall
 import { DataGrid } from '@mui/x-data-grid'
 import Swal from 'sweetalert2'
 import { useRouter } from 'next/dist/client/router'
+import { useSession } from 'next-auth/react'
 
 // icon
 
@@ -61,6 +61,7 @@ const data = [
 ]
 
 const TablePeople = props => {
+  const session = useSession()
   const statusObj = {
     0: { color: 'error', status: 'Overload' },
     1: { color: 'success', status: 'Available' }
@@ -317,6 +318,7 @@ const TablePeople = props => {
     //     </form>
     //   )
     // },
+
     {
       field: 'action',
       renderHeader: () => (
@@ -343,7 +345,8 @@ const TablePeople = props => {
             <DeleteOutline />
           </Button> */}
         </>
-      )
+      ),
+      hide: true
     }
   ]
 
@@ -381,6 +384,9 @@ const TablePeople = props => {
             height: rows.length > 3 ? '80vh' : '45vh',
             // overflowY: 'auto',
             width: '100%'
+          }}
+          columnVisibilityModel={{
+            action: session.status === 'authenticated' && session.data.uid === 1099999 ? true : false
           }}
         />
       </Card>
