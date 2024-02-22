@@ -52,7 +52,7 @@ const rows = [
 const TableManageTaskList = () => {
   return (
     <>
-      <Grid item md={12} xs={12}>
+      <Grid item md={12} xs={11}>
         <Card>
           <DataGrid
             initialState={{
