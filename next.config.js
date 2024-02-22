@@ -3,6 +3,7 @@ const path = require('path')
 module.exports = {
   trailingSlash: true,
   reactStrictMode: false,
+  pageExtensions: ['page.tsx', 'page.ts', 'page.jsx', 'page.js'],
   experimental: {
     esmExternals: false,
     jsconfigPaths: true // enables it for both jsconfig.json and tsconfig.json
