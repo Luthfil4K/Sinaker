@@ -4,6 +4,8 @@
 // const Matrix = linearAlgebra.Matrix
 
 import { create, all } from 'mathjs'
+import { useState, useEffect } from 'react'
+import Grid from '@mui/material/Grid'
 
 const config = {}
 const math = create(all, config)
@@ -21,6 +23,15 @@ function sortedBy(elm) {
   }
 }
 
+const TableManageTaskList = () => {
+  return (
+    <>
+      <Grid item md={12} xs={11}>
+        test
+      </Grid>
+    </>
+  )
+}
 function getBest(m, w, ia) {
   // ERROR HANDLERS
 
@@ -171,4 +182,4 @@ function getBest(m, w, ia) {
   return rankedPerformanceScore
 } // TERMINA FUNCION
 
-export { getBest }
+export { getBest, TableManageTaskList }
