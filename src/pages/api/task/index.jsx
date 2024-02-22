@@ -39,6 +39,8 @@ export default async function handler(req, res) {
       gaji,
       arrayUser,
       arrayMitra,
+      arrayBebanPegawai,
+      arrayBebanMitra,
       templateTable,
       deadLaneAwal
     } = req.body
@@ -228,7 +230,7 @@ export default async function handler(req, res) {
 
       // pegawai
       let m = math.matrix(arrayUser)
-      let w = [0.33, 0.33]
+      let w = arrayBebanPegawai
       let ia = ['min', 'min']
       let result = getBest(m, w, ia)
 
@@ -247,7 +249,7 @@ export default async function handler(req, res) {
 
       // mitra
       let mm = math.matrix(arrayMitra)
-      let wm = [0.33, 0.33]
+      let wm = arrayBebanMitra
       let iam = ['min', 'min']
       let resultm = getBest(mm, wm, iam)
 

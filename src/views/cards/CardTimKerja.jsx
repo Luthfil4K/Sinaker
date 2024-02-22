@@ -36,7 +36,7 @@ const CardProjectDetails = props => {
     7: { bagFungsi: 'Integrasi Pengolahan dan Diseminasi Statistik', color: 'warning' }
   }
 
-  const { id, namaGroupPerusahaan, jumlahPerusahaan, fungsi } = props
+  const { id, namaGroupPerusahaan, jumlahPerusahaan, fungsi, namaKetuaTim } = props
   return (
     <Card>
       <CardContent key={id} sx={{ padding: theme => `${theme.spacing(0, 0, 0, 0)} !important` }}>
@@ -47,6 +47,7 @@ const CardProjectDetails = props => {
                 {namaGroupPerusahaan}
               </Typography>
               <Typography variant='body2'>{jenisFungsi[fungsi].bagFungsi}</Typography>
+              <Typography variant='body2'>Ketua Tim: {namaKetuaTim}</Typography>
               <Divider sx={{ marginTop: 1.5 }} />
               <Grid justifyContent='start' display='flex'>
                 <Link onClick={e => router.push(`/tim-kerja-detail/${id}`)}>

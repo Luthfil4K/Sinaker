@@ -44,7 +44,8 @@ export async function getServerSideProps(context) {
         }
       },
       nama: true,
-      fungsi: true
+      fungsi: true,
+      userId_fkey: true
     }
   })
 

@@ -17,6 +17,8 @@ const TaskManageAdd = ({ data }) => {
         dataTaskPerusahaan={project.perusahaanTask}
         dataOrganik={project.oraganik}
         dataTimKerja={project.timkerja}
+        dataBobotMitra={project.kriteriaMitra}
+        dataBobotPegawai={project.kriteriaPegawai}
         dataOrganikProject_member={project.oraganikProject_member}
       ></TaskManageAddViews>
     </>
@@ -163,6 +165,14 @@ export async function getServerSideProps(context) {
     }
   })
 
+  let kriteriaPegawai = await prisma.kriteria_beban_kerja_pegawai.findUnique({
+    where: { id: 1 }
+  })
+
+  let kriteriaMitra = await prisma.kriteria_beban_kerja_mitra.findUnique({
+    where: { id: 1 }
+  })
+
   let oraganikProject_member
   oraganikProject_member = await prisma.userProject_member.findMany({
     where: {
@@ -178,7 +188,9 @@ export async function getServerSideProps(context) {
     perusahaanTask,
     oraganik,
     timkerja,
-    oraganikProject_member
+    oraganikProject_member,
+    kriteriaMitra,
+    kriteriaPegawai
   }
 
   return {

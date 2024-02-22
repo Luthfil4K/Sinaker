@@ -60,6 +60,8 @@ const TaskManageAddViews = propss => {
   const [organikProject_member, setOrganikProject_member] = useState(propss.dataOrganikProject_member)
   const [timkerja, setTimkerja] = useState(propss.dataTimKerja)
   const [group, setGroup] = useState(propss.dataPerusahaan)
+  const [bobotMitra, setBobotMitra] = useState(propss.dataBobotMitra)
+  const [bobotPegawai, setBobotPegawai] = useState(propss.dataBobotPegawai)
   const [participants, setParticipants] = useState([])
   const [participantsTimKerja, setParticipantsTimKerja] = useState([])
   const [tpp, setTpp] = useState(propss.dataTaskPerusahaan)
@@ -83,6 +85,14 @@ const TaskManageAddViews = propss => {
     templateTable: 4,
     subKegGajiPerPerusahaan: 0
   })
+
+  const kriteria1M = parseFloat(bobotMitra.kriteria1)
+  const kriteria2M = parseFloat(bobotMitra.kriteria2)
+  const arrayBebanMitra = [kriteria1M, kriteria2M]
+
+  const kriteria1P = parseFloat(bobotPegawai.kriteria1)
+  const kriteria2P = parseFloat(bobotPegawai.kriteria2)
+  const arrayBebanPegawai = [kriteria1P, kriteria2P]
 
   useEffect(() => {
     let dataGroup = []
@@ -344,7 +354,7 @@ const TaskManageAddViews = propss => {
           targetTotal: parseInt(values.subKegTarget),
           deadLaneAwal: values.subKegDl > project.enddate ? values.subKegDl : project.enddate,
           unitTarget: values.subKegUnitTarget,
-          duedate: values.subKegDl ,
+          duedate: values.subKegDl,
           bulan: new Date(values.subKegDl).getMonth(),
           jenisSample: values.subKegJenis == 65 || values.subKegJenis == 67 ? values.subKegJenisSample : 0,
           participants: values.subKegJenisSample === 1 ? rows : data,
@@ -352,6 +362,8 @@ const TaskManageAddViews = propss => {
           peserta: dataPCL,
           arrayUser: arrayUser,
           arrayMitra: arrayMitra,
+          arrayBebanPegawai: arrayBebanPegawai,
+          arrayBebanMitra: arrayBebanMitra,
           persertaOrganik: pegawaiOrganik,
           description: values.subKegDesk,
           realisasi: 0,

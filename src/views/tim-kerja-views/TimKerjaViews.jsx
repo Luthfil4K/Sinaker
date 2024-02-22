@@ -55,6 +55,8 @@ const TimKerjaViews = props => {
 
   const router = useRouter()
 
+  console.log(cardP)
+
   return (
     <>
       <Grid container spacing={4}>
@@ -96,6 +98,7 @@ const TimKerjaViews = props => {
                     <CardTimKerja
                       id={group.id}
                       namaGroupPerusahaan={group.nama}
+                      namaKetuaTim={group.userId_fkey.name}
                       fungsi={group.fungsi}
                       jumlahPerusahaan={group.timKerjaPegawai}
                     ></CardTimKerja>

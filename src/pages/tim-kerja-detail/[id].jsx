@@ -38,11 +38,17 @@ export async function getServerSideProps(context) {
           userId_fkey: {
             include: {
               UserProject: true,
-              taskToDo: true
+              taskToDo: true,
+              beban_kerja_pegawai: {
+                select: {
+                  bebanKerja: true
+                }
+              }
             }
           }
         }
-      }
+      },
+      userId_fkey: true
     }
   })
 
