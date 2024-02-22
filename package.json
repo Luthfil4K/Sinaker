@@ -41,7 +41,8 @@
     "start": "next start",
     "export": "next export",
     "lint": "eslint --fix \"src/**/*.{js,jsx,ts,tsx}\"",
-    "format": "prettier --write \"src/**/*.{js,jsx,ts,tsx}\""
+    "format": "prettier --write \"src/**/*.{js,jsx,ts,tsx}\"",
+    "postinstall": "prisma generate"
   },
   "dependencies": {
     "@devexpress/dx-react-core": "^4.0.5",
