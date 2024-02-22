@@ -70,6 +70,7 @@
     "dayjs": "^1.11.9",
     "i": "^0.3.7",
     "material-table": "^2.0.5",
+    "mathjs": "^12.3.2",
     "mdi-material-ui": "^7.1.0",
     "next": "12.0.4",
     "next-auth": "^4.23.2",
