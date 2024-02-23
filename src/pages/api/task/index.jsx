@@ -1,6 +1,6 @@
 import prisma from '../../../services/db'
 import { create, all } from 'mathjs'
-import { getBest } from '../../topsis'
+import { getBest } from '../../../function/topsis'
 import { getToken } from 'next-auth/jwt'
 
 export default async function handler(req, res) {
