@@ -11,7 +11,20 @@ const authOptions = {
   providers: [
     CredentialsProvider({
       type: 'credentials',
-      credentials: {},
+      credentials: {
+        name: {
+          label: 'username',
+          type: 'text'
+        },
+        password: {
+          label: 'Password',
+          type: 'password'
+        },
+        email: {
+          label: 'Email',
+          type: 'email'
+        }
+      },
       async authorize(credentials, req) {
         const { email, password } = credentials
 
@@ -48,7 +61,6 @@ const authOptions = {
   secret: 'ko/XuIWVx3wD9m9+7FaPTBahJl70czxugHuc/HmCxXg=',
   pages: {
     signIn: '/pages/login',
-
     error: '/auth/error'
   },
   callbacks: {
