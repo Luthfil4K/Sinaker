@@ -45,6 +45,7 @@ const authOptions = {
       }
     })
   ],
+  secret: 'ko/XuIWVx3wD9m9+7FaPTBahJl70czxugHuc/HmCxXg=',
   pages: {
     signIn: '/pages/login',
 
