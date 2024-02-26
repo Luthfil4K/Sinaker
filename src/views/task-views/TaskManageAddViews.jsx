@@ -102,7 +102,6 @@ const TaskManageAddViews = propss => {
     })
     setParticipants(dataGroup)
   }, [values])
-  // console.log(participants)
 
   useEffect(() => {
     let dataTimkerja = []
@@ -177,7 +176,7 @@ const TaskManageAddViews = propss => {
   //           checked: false
   //         }))
   //       })
-  //     : console.log('a')
+  //     :
   // }, [values])
 
   // intinya disini pas mau add ke db, value-value
@@ -193,7 +192,6 @@ const TaskManageAddViews = propss => {
     let pegawaiOrganik = []
     rowsO.map(a => {
       if (a.checked) {
-        // console.log('')
         pegawaiOrganik.push(a)
       }
     })
@@ -348,9 +346,6 @@ const TaskManageAddViews = propss => {
 
     const arrayMitra = mitraAll.map(item => [item.jumlahKegiatan, item.gajiBulanIni])
 
-    // console.log(arrayMitra)
-    // console.log(arrayUser)
-
     try {
       while (true) {
         const res = await axios.post('/task', {
@@ -362,7 +357,7 @@ const TaskManageAddViews = propss => {
           duedate: values.subKegDl,
           bulan: new Date(values.subKegDl).getMonth(),
           jenisSample: values.subKegJenis == 65 || values.subKegJenis == 67 ? values.subKegJenisSample : 0,
-          participants: values.subKegJenisSample === 1 ? rows : data,
+          participants: data,
           fungsi: fungsi,
           peserta: dataPCL,
           arrayUser: arrayUser,
@@ -521,9 +516,6 @@ const TaskManageAddViews = propss => {
       })
       .filter(obj => obj !== null) // Menghapus nilai null dari array
   )
-  // console.log(propss.dataOrganik)
-  // console.log(propss.dataOrganikProject_member)
-  // console.log(organikProject_member)
 
   // const [anggotaTim, setAnggotaTim] = useState(0)
   // useEffect(() => {
@@ -541,7 +533,7 @@ const TaskManageAddViews = propss => {
   //   setAnggotaTim(objekYangSama)
   // }, [])
 
-  // console.log(anggotaTim)
+  //
 
   // const rows = company.map(perusahaan => ({
   //   id: perusahaan.id,
@@ -702,7 +694,6 @@ const TaskManageAddViews = propss => {
 
       const bebanKerja = row.beban_kerja_pegawai[0].bebanKerja
       const nilaiBebanKerja = number(bebanKerja).toFixed(2)
-      // console.log(row)
 
       return {
         id: row.id,
@@ -1429,7 +1420,7 @@ const TaskManageAddViews = propss => {
       const workSheet = workBook.Sheets[workSheetName]
       //convert to array
       const fileData = XLSX.utils.sheet_to_json(workSheet, { header: 1 })
-      // console.log(fileData)
+
       const headers = fileData[0]
       const heads = headers.map(head => ({ title: head, field: head }))
       setColDefs(heads)
@@ -1730,7 +1721,7 @@ const TaskManageAddViews = propss => {
                 <>
                   <Grid item md={6} xs={12}>
                     <Typography variant={'h6'} mb={4}>
-                      Sample Non Perusahaan
+                      Import Sample
                     </Typography>
                   </Grid>
                   <Grid mt={2} mb={2} xs={12} md={12} style={{ paddingLeft: 18 }}>
