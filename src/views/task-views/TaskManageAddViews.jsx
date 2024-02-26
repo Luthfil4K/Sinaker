@@ -243,12 +243,14 @@ const TaskManageAddViews = propss => {
       })
 
       return {
+        pegawai_id: row.id,
         jumlahKegiatan,
         gajiBulanIni
       }
     })
 
     const arrayUser = userAll.map(item => [item.jumlahKegiatan, item.gajiBulanIni])
+    const arrayUserId = userAll.map(item => item.pegawai_id)
 
     const mitraAll = dataMitra.map(row => {
       const gajiBulanIniPCL = tpp
@@ -338,13 +340,15 @@ const TaskManageAddViews = propss => {
       })
 
       return {
+        mitra_id: row.id,
         jumlahKegiatan,
         gajiBulanIni,
         gajiBulanSblm
       }
     })
 
-    const arrayMitra = mitraAll.map(item => [item.jumlahKegiatan, item.gajiBulanIni])
+    const arrayMitra = mitraAll.map(item => [item.jumlahKegiatan, item.gajiBulanIni, item.gajiBulanSblm])
+    const arrayMitraId = mitraAll.map(item => item.mitra_id)
 
     try {
       while (true) {
@@ -362,6 +366,8 @@ const TaskManageAddViews = propss => {
           peserta: dataPCL,
           arrayUser: arrayUser,
           arrayMitra: arrayMitra,
+          arrayUserId: arrayUserId,
+          arrayMitraId: arrayMitraId,
           arrayBebanPegawai: arrayBebanPegawai,
           arrayBebanMitra: arrayBebanMitra,
           persertaOrganik: pegawaiOrganik,
@@ -646,6 +652,7 @@ const TaskManageAddViews = propss => {
         id: row.id,
         nik: row.nik.toString(),
         name: row.name,
+        jumlahKegiatanM: row.TaskPeserta.length,
         gajiBulanIni,
         gajiBulanSblm,
         gajiBulanDepan,
@@ -895,8 +902,8 @@ const TaskManageAddViews = propss => {
       renderCell: params => (
         <>
           <Chip
-            label={statusObj[params.row.gajiBulanIni < 3000000 ? 1 : 0].status}
-            color={statusObj[params.row.gajiBulanIni < 3000000 ? 1 : 0].color}
+            label={statusObj[params.row.bebanKerjaM < 0.7 ? (params.row.gajiBulanIni < 3000000 ? 1 : 0) : 0].status}
+            color={statusObj[params.row.bebanKerjaM < 0.7 ? (params.row.gajiBulanIni < 3000000 ? 1 : 0) : 0].color}
             sx={{
               height: 24,
               fontSize: '0.75rem',
@@ -914,6 +921,17 @@ const TaskManageAddViews = propss => {
       ),
       type: 'string',
       width: 140
+    },
+    {
+      field: 'jumlahKegiatanM',
+      headerName: 'Beban Kerja',
+      renderHeader: () => (
+        <Typography sx={{ fontWeight: 900, fontSize: '0.875rem !important', textAlign: 'center' }}>
+          Jumlah Pekerjaan
+        </Typography>
+      ),
+
+      minWidth: 150
     },
 
     {

@@ -39,6 +39,8 @@ export default async function handler(req, res) {
       gaji,
       arrayUser,
       arrayMitra,
+      arrayUserId,
+      arrayMitraId,
       arrayBebanPegawai,
       arrayBebanMitra,
       templateTable,
@@ -229,14 +231,15 @@ export default async function handler(req, res) {
       }
 
       // topsis
-      // const config = {}
-      // const math = create(all, config)
+      const config = {}
+      const math = create(all, config)
 
-      // // pegawai
-      // let m = math.matrix(arrayUser)
-      // let w = arrayBebanPegawai
-      // let ia = ['min', 'min']
-      // let result = getBest(m, w, ia)
+      // pegawai
+      let m = math.matrix(arrayUser)
+      let w = arrayBebanPegawai
+      let ia = ['min', 'min']
+      let id = arrayUserId
+      let result = getBest(m, w, ia, id)
 
       // console.log(result)
       // result.map(async peserta => {
@@ -251,16 +254,27 @@ export default async function handler(req, res) {
       //   })
       // })
 
-      // // mitra
-      // let mm = math.matrix(arrayMitra)
-      // let wm = arrayBebanMitra
-      // let iam = ['min', 'min']
-      // let resultm = getBest(mm, wm, iam)
+      const deleteBebanPegawai = await prisma.beban_kerja_pegawai.deleteMany({})
+
+      const resultBaru = result.map(item => {
+        return { id: item.index, userId: item.petugasId, bebanKerja: item.ps }
+      })
+      // console.log(resultBaru)
+      const createMany = await prisma.beban_kerja_pegawai.createMany({
+        data: resultBaru
+      })
+
+      // mitra
+      let mm = math.matrix(arrayMitra)
+      let wm = arrayBebanMitra
+      let iam = ['min', 'min', 'min']
+      let idm = arrayMitraId
+      let resultm = getBest(mm, wm, iam, idm)
 
       // console.log(resultm)
       // resultm.map(async mitra => {
       //   // console.log(mitra.id)
-      //   const beban_pegawai = await prisma.beban_kerja_mitra.update({
+      //   const beban_mitra = await prisma.beban_kerja_mitra.update({
       //     where: {
       //       id: mitra.index + 1
       //     },
@@ -269,6 +283,15 @@ export default async function handler(req, res) {
       //     }
       //   })
       // })
+
+      const deleteBebanMitra = await prisma.beban_kerja_mitra.deleteMany({})
+      const resultmBaru = resultm.map(item => {
+        return { id: item.index, mitraId: item.petugasId, bebanKerja: item.ps }
+      })
+      // console.log(resultmBaru)
+      const createMMany = await prisma.beban_kerja_mitra.createMany({
+        data: resultmBaru
+      })
 
       return res.status(201).json({ success: true })
     } catch (error) {
