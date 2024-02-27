@@ -11,8 +11,6 @@ const TaskManageAdd = ({ data }) => {
     <>
       <TaskManageAddViews
         data={project.project}
-        dataPerusahaan={project.companies}
-        dataAllPerusahaan={project.perusahaans}
         dataMitra={project.mitras}
         dataTaskPerusahaan={project.perusahaanTask}
         dataOrganik={project.oraganik}
@@ -59,20 +57,6 @@ export async function getServerSideProps(context) {
 
   let companies
 
-  companies = await prisma.groupPerusahaan.findMany({
-    select: {
-      id: true,
-      Perusahaangroup: {
-        select: {
-          id: true,
-          perusahaan: true
-        }
-      },
-      nama: true,
-      fungsi: true
-    }
-  })
-
   let timkerja
 
   timkerja = await prisma.TimKerja.findMany({
@@ -90,19 +74,6 @@ export async function getServerSideProps(context) {
   })
 
   let perusahaans
-
-  perusahaans = await prisma.perusahaan.findMany({
-    select: {
-      id: true,
-      kip: true,
-      nama: true,
-      desa: true,
-      namaDesa: true,
-      kecamatan: true,
-      namaKec: true,
-      alamat: true
-    }
-  })
 
   const perusahaanTask = await prisma.taskPerusahaanProduksi.findMany({
     include: {
@@ -182,8 +153,6 @@ export async function getServerSideProps(context) {
 
   const data = {
     project,
-    companies,
-    perusahaans,
     mitras,
     perusahaanTask,
     oraganik,

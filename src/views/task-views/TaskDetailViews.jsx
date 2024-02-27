@@ -61,6 +61,8 @@ const TaskDetailViews = props => {
     jenisSample: props.data.jenisSample
   })
 
+  console.log(props.dataPerusahaan)
+
   const [templateTable2, setTemplateTable2] = useState(Number(props.dataPerusahaan[0].templateTable))
   const [judulGrafik, setJudulGrafik] = useState('asd')
 
@@ -94,9 +96,6 @@ const TaskDetailViews = props => {
   const handleTaskUpdate = (realisasi, trgt) => {
     // setValues({ ...values, target: trgt, realisasi })
   }
-
-  const getRealisasi = target => {}
-  // console.log(values)
 
   const handleChange = props => event => {
     setValues({ ...values, [props]: event.target.value })
@@ -141,12 +140,6 @@ const TaskDetailViews = props => {
   }
 
   const handleSimpanPerusahaan = e => {
-    // const data = {
-    //   target: rows.id.target,
-    //   realisasi:rows.id.realisasi,
-    //   hasilPencacahan: rows.id.hasilPencacahan,
-    //   duedate: rows.id.tanggalDob
-    // }
     values.realisasi <= values.target
       ? axios
           .put(`/taskdetail/${values.id}`, data)
@@ -179,13 +172,6 @@ const TaskDetailViews = props => {
         )
   }
 
-  const s = () => {
-    // console.log(values.realisasi)
-    // console.log(values.target)
-    // console.log(values.id)
-    // console.log(values.notes)
-  }
-
   // untuk chart
   // State Line
 
@@ -198,11 +184,11 @@ const TaskDetailViews = props => {
         : Number(pr.templateTable) === 4
         ? pr.nbs + '/' + pr.idSls
         : Number(pr.templateTable) === 5
-        ? pr.namaPerusahaan
+        ? pr.nama
         : Number(pr.templateTable) === 6
-        ? pr.nus + '/' + pr.namaPerusahaan
+        ? pr.nus + '/' + pr.nama
         : Number(pr.templateTable) === 7
-        ? pr.idSbr + '/' + pr.namaPerusahaan
+        ? pr.idSbr + '/' + pr.nama
         : ''
     )
   })

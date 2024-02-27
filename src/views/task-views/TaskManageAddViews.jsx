@@ -54,12 +54,12 @@ const TaskManageAddViews = propss => {
     0: { color: 'error', status: 'Overload' },
     1: { color: 'success', status: 'Available' }
   }
-
+  const router = useRouter()
   const session = useSession()
+
   const [project, setProject] = useState(propss.data)
   const [organikProject_member, setOrganikProject_member] = useState(propss.dataOrganikProject_member)
   const [timkerja, setTimkerja] = useState(propss.dataTimKerja)
-  const [group, setGroup] = useState(propss.dataPerusahaan)
   const [bobotMitra, setBobotMitra] = useState(propss.dataBobotMitra)
   const [bobotPegawai, setBobotPegawai] = useState(propss.dataBobotPegawai)
   const [participants, setParticipants] = useState([])
@@ -94,14 +94,6 @@ const TaskManageAddViews = propss => {
   const kriteria1P = parseFloat(bobotPegawai.kriteria1)
   const kriteria2P = parseFloat(bobotPegawai.kriteria2)
   const arrayBebanPegawai = [kriteria1P, kriteria2P]
-
-  useEffect(() => {
-    let dataGroup = []
-    group.map(dataG => {
-      dataG.id == values.subKegSamplePerusahaan ? (dataGroup = dataG.Perusahaangroup) : []
-    })
-    setParticipants(dataGroup)
-  }, [values])
 
   useEffect(() => {
     let dataTimkerja = []
@@ -167,17 +159,6 @@ const TaskManageAddViews = propss => {
       subKegUnitTarget: e.target.value
     }))
   }
-
-  // useEffect(() => {
-  //   values.subKegJenisSample === 0
-  //     ? rows.map(row => {
-  //         setRows(values => ({
-  //           ...values,
-  //           checked: false
-  //         }))
-  //       })
-  //     :
-  // }, [values])
 
   // intinya disini pas mau add ke db, value-value
   const handleAddTask = async e => {
@@ -418,7 +399,6 @@ const TaskManageAddViews = propss => {
     }
   }
 
-  const router = useRouter()
   const jenisSample = [
     {
       id: 1,
@@ -473,15 +453,6 @@ const TaskManageAddViews = propss => {
     }
   ]
 
-  const [company, setCompany] = useState(
-    propss.dataAllPerusahaan.map(perusahaan => {
-      return {
-        ...perusahaan,
-        checked: false
-      }
-    })
-  )
-
   const [dataMitra, setDataMitra] = useState(
     propss.dataMitra.map(meetra => {
       return {
@@ -521,50 +492,6 @@ const TaskManageAddViews = propss => {
         return null // Mengembalikan null jika tidak ada yang cocok
       })
       .filter(obj => obj !== null) // Menghapus nilai null dari array
-  )
-
-  // const [anggotaTim, setAnggotaTim] = useState(0)
-  // useEffect(() => {
-  //   // const hasilFilter = organikProject_member.filter(member => {
-  //   //   return member.userId === dataOrganik.id
-  //   // })
-  //   //
-
-  //   dataOrganik.map(obj => {
-  //     const hasilFilter = organikProject_member.filter(member => member.userId === obj.id)
-  //     if (hasilFilter.length > 0) {
-  //       objekYangSama.push(...hasilFilter)
-  //     }
-  //   })
-  //   setAnggotaTim(objekYangSama)
-  // }, [])
-
-  //
-
-  // const rows = company.map(perusahaan => ({
-  //   id: perusahaan.id,
-  //   nama: perusahaan.nama,
-  //   desa: perusahaan.desa,
-  //   kecamatan: perusahaan.kecamatan,
-  //   alamat: perusahaan.alamat,
-  //   checked: perusahaan.checked
-  // }))
-
-  const [rows, setRows] = useState(
-    company.map(perusahaan => ({
-      id: perusahaan.id,
-      nama: perusahaan.nama,
-      desa: perusahaan.desa,
-      namaDesa: perusahaan.namaDesa,
-      kecamatan: perusahaan.kecamatan,
-      namaKec: perusahaan.namaKec,
-      alamat: perusahaan.alamat,
-      checked: perusahaan.checked,
-      realisasi: 0,
-      target: 0,
-      hasilPencacahan: '',
-      tanggal: new Date()
-    }))
   )
 
   const [rowsM, setRowsM] = useState(
@@ -715,121 +642,12 @@ const TaskManageAddViews = propss => {
 
   useEffect(() => {
     // Saat participants berubah, periksa dan ubah status checked jika cocok
-    const updatedRows = rows.map(row => {
-      const participantExists = participants.some(participant => participant.perusahaan.id === row.id)
-      return { ...row, checked: participantExists }
-    })
-    setRows(updatedRows)
-  }, [participants])
-
-  useEffect(() => {
-    // Saat participants berubah, periksa dan ubah status checked jika cocok
     const updatedRowsO = rowsO.map(row => {
       const participantTimKerjaExists = participantsTimKerja.some(participant => participant.userId_fkey.id === row.id)
       return { ...row, checked: participantTimKerjaExists }
     })
     setRowsO(updatedRowsO)
   }, [participantsTimKerja])
-
-  const columns = [
-    {
-      field: 'checked',
-      sortable: true,
-      renderHeader: () => (
-        <FormControlLabel
-          control={
-            <Checkbox
-              checked={rows.filter(participant => participant.checked === true).length === rows.length}
-              onChange={e => {
-                let checked = e.target.checked
-                setRows(
-                  rows.map(participant => {
-                    return {
-                      ...participant,
-                      checked: checked
-                    }
-                  })
-                )
-              }}
-            />
-          }
-          label='All'
-        />
-      ),
-      minWidth: 30,
-      renderCell: params => (
-        <FormControlLabel
-          control={
-            <Checkbox
-              checked={params.value}
-              onChange={e => {
-                let checked = e.target.checked
-                setRows(
-                  rows.map(participant => {
-                    if (participant.id === params.id) {
-                      participant.checked = checked
-                    }
-
-                    return participant
-                  })
-                )
-              }}
-            />
-          }
-          label=''
-        />
-      ),
-      align: 'left'
-    },
-    {
-      field: 'nama',
-      renderHeader: () => (
-        <Typography sx={{ fontWeight: 900, fontSize: '0.875rem !important', textAlign: 'center' }}>
-          Nama Perusahaan
-        </Typography>
-      ),
-      minWidth: 200,
-      flex: 1,
-      renderCell: params => (
-        <Typography sx={{ fontWeight: 500, fontSize: '0.875rem !important' }}>{params.value}</Typography>
-      )
-    },
-    {
-      field: 'desa',
-      renderHeader: () => (
-        <Typography sx={{ fontWeight: 900, fontSize: '0.875rem !important', textAlign: 'center' }}>Desa</Typography>
-      ),
-      minWidth: 200,
-      flex: 1,
-      renderCell: params => (
-        <Typography sx={{ fontWeight: 500, fontSize: '0.875rem !important' }}>{params.value}</Typography>
-      )
-    },
-    {
-      field: 'kecamatan',
-      renderHeader: () => (
-        <Typography sx={{ fontWeight: 900, fontSize: '0.875rem !important', textAlign: 'center' }}>
-          Kecamatan
-        </Typography>
-      ),
-      minWidth: 200,
-      flex: 1,
-      renderCell: params => (
-        <Typography sx={{ fontWeight: 500, fontSize: '0.875rem !important' }}>{params.value}</Typography>
-      )
-    },
-    {
-      field: 'alamat',
-      renderHeader: () => (
-        <Typography sx={{ fontWeight: 900, fontSize: '0.875rem !important', textAlign: 'center' }}>Alamat</Typography>
-      ),
-      minWidth: 200,
-      flex: 1,
-      renderCell: params => (
-        <Typography sx={{ fontWeight: 500, fontSize: '0.875rem !important' }}>{params.value}</Typography>
-      )
-    }
-  ]
 
   const columnsM = [
     {
@@ -1190,113 +1008,7 @@ const TaskManageAddViews = propss => {
     }
   ]
 
-  // const columnsRT = [
-  //   {
-  //     field: 'kodeKecamatan',
-  //     renderHeader: () => (
-  //       <Typography sx={{ fontWeight: 900, fontSize: '0.875rem !important', textAlign: 'center' }}>
-  //         Kode Kecamatan
-  //       </Typography>
-  //     ),
-  //     minWidth: 200,
-  //     flex: 1
-  //   },
-  //   {
-  //     field: 'namaKecamatan',
-  //     renderHeader: () => (
-  //       <Typography sx={{ fontWeight: 900, fontSize: '0.875rem !important', textAlign: 'center' }}>
-  //         Nama Kecamatan
-  //       </Typography>
-  //     ),
-  //     minWidth: 200,
-  //     flex: 1
-  //   },
-  //   {
-  //     field: 'kodeDesa',
-  //     renderHeader: () => (
-  //       <Typography sx={{ fontWeight: 900, fontSize: '0.875rem !important', textAlign: 'center' }}>
-  //         Kode Desa
-  //       </Typography>
-  //     ),
-  //     minWidth: 200,
-  //     flex: 1
-  //   },
-  //   {
-  //     field: 'namaDesa',
-  //     renderHeader: () => (
-  //       <Typography sx={{ fontWeight: 900, fontSize: '0.875rem !important', textAlign: 'center' }}>
-  //         Nama Desa
-  //       </Typography>
-  //     ),
-  //     minWidth: 200,
-  //     flex: 1
-  //   },
-
-  //   {
-  //     field:
-  //       fungsi === 4 || fungsi === 5 //Produksi or Distribusi
-  //         ? 'alamat'
-  //         : fungsi === 3 || (fungsi === 7 && values.subKegJenisSample === 0) //Sosial or IPDS dokumen
-  //         ? 'nbs'
-  //         : fungsi === 6 && values.subKegJenisSample === 0 // Nerwilis Dok
-  //         ? 'idSls'
-  //         : fungsi === 7 && values.subKegJenisSample === 1 // IPDS Responden
-  //         ? 'idSbr'
-  //         : fungsi === 6 && values.subKegJenisSample === 1 //Nerwilis responden
-  //         ? 'nus'
-  //         : '',
-  //     renderHeader: () => (
-  //       <Typography sx={{ fontWeight: 900, fontSize: '0.875rem !important', textAlign: 'center' }}>
-  //         {fungsi === 4 || fungsi === 5 //Produksi or Distribusi
-  //           ? 'Alamat'
-  //           : fungsi === 3 || (fungsi === 7 && values.subKegJenisSample === 0) //Sosial or IPDS dokumen
-  //           ? 'NBS'
-  //           : fungsi === 6 && values.subKegJenisSample === 0 // Nerwilis Dok
-  //           ? 'ID SLS'
-  //           : fungsi === 7 && values.subKegJenisSample === 1 // IPDS Responden
-  //           ? 'ID SBR'
-  //           : fungsi === 6 && values.subKegJenisSample === 1 //Nerwilis responden
-  //           ? 'NUS'
-  //           : ''}
-  //       </Typography>
-  //     ),
-  //     minWidth: 200,
-  //     flex: 1
-  //   },
-  //   {
-  //     field:
-  //       fungsi === 4 || fungsi === 5 //Produksi or Distribusi
-  //         ? 'nbs/nks/idsls'
-  //         : (fungsi === 6 && values.subKegJenisSample === 1) || (fungsi === 7 && values.subKegJenisSample === 1) //NerwilisResponden or IPDS Responden
-  //         ? 'nama'
-  //         : fungsi === 6 && values.subKegJenisSample === 0 // Nerwilis Dok
-  //         ? 'nbs'
-  //         : fungsi === 3 //Sosial
-  //         ? 'nks'
-  //         : fungsi === 7 && values.subKegJenisSample === 0 //IPDS Dok
-  //         ? 'idSls'
-  //         : '',
-  //     renderHeader: () => (
-  //       <Typography sx={{ fontWeight: 900, fontSize: '0.875rem !important', textAlign: 'center' }}>
-  //         {fungsi === 4 || fungsi === 5 //Produksi or Distribusi
-  //           ? 'NBS/NKS/IDSLS'
-  //           : (fungsi === 6 && values.subKegJenisSample === 1) || (fungsi === 7 && values.subKegJenisSample === 1) //NerwilisResponden or IPDS Responden
-  //           ? 'Nama Perusahaan'
-  //           : fungsi === 6 && values.subKegJenisSample === 0 // Nerwilis Dok
-  //           ? 'NBS'
-  //           : fungsi === 3 //Sosial
-  //           ? 'NKS'
-  //           : fungsi === 7 && values.subKegJenisSample === 0 //IPDS Dok
-  //           ? 'ID SLS'
-  //           : ''}
-  //       </Typography>
-  //     ),
-  //     minWidth: 200,
-  //     flex: 1
-  //   }
-  // ]
-  // ini kebawah buat keperluan import excel,csv
-
+  // dari sini kebawah buat keperluan import excel,csv
   const columnsNew = [
     {
       field: 'kodeDesa',
@@ -1838,7 +1550,7 @@ const TaskManageAddViews = propss => {
                             columns={columnsNew}
                             pprioritySize={5}
                             sx={{
-                              height: rows.length > 3 ? '70vh' : '45vh',
+                              height: '70vh',
                               overflowY: 'disabled',
                               width: '100%'
                             }}
