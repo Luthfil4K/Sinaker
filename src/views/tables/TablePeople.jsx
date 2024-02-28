@@ -68,7 +68,7 @@ const TablePeople = props => {
   }
   const [tpp, setTpp] = useState(props.dataTpp)
   const { dataUser } = props
-  console.log(tpp)
+  // console.log(tpp)
   const rows = dataUser.map(row => {
     // const gajiBulanIni = tpp
     //   .filter(tppRow => tppRow.pmlId === row.id)
@@ -243,21 +243,21 @@ const TablePeople = props => {
     //     </>
     //   )
     // },
-    {
-      field: 'fungsi',
-      headerName: 'Fungsi',
-      renderHeader: () => (
-        <Typography sx={{ fontWeight: 900, fontSize: '0.875rem !important', textAlign: 'center' }}>Fungsi</Typography>
-      ),
+    // {
+    //   field: 'fungsi',
+    //   headerName: 'Fungsi',
+    //   renderHeader: () => (
+    //     <Typography sx={{ fontWeight: 900, fontSize: '0.875rem !important', textAlign: 'center' }}>Fungsi</Typography>
+    //   ),
 
-      minWidth: 170,
-      renderCell: params => (
-        <Typography sx={{ fontWeight: 500, fontSize: '0.875rem !important' }}>
-          {' '}
-          {jenisFungsi[parseInt(params.row.fungsi)].bagFungsi}
-        </Typography>
-      )
-    },
+    //   minWidth: 170,
+    //   renderCell: params => (
+    //     <Typography sx={{ fontWeight: 500, fontSize: '0.875rem !important' }}>
+    //       {' '}
+    //       {jenisFungsi[parseInt(params.row.fungsi)].bagFungsi}
+    //     </Typography>
+    //   )
+    // },
     // {
     //   field: 'totalGaji',
     //   headerName: 'Total Gaji',

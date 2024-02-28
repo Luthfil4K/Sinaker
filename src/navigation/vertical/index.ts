@@ -90,6 +90,11 @@ const navigation = (): VerticalNavItemsType => {
       icon: CubeOutline,
       path: '/task'
     },
+    // {
+    //   title: 'Table Kegiatan',
+    //   icon: Table,
+    //   path: '/template-table-list'
+    // },
 
     {
       sectionTitle: 'Tim Kerja'
@@ -105,19 +110,19 @@ const navigation = (): VerticalNavItemsType => {
     //   path: '/create-tim-kerja'
     // },
 
-    {
-      sectionTitle: 'Perusahaan'
-    },
-    {
-      title: 'List Group Perusahaan',
-      icon: Table,
-      path: '/perusahaan-group-list'
-    },
-    {
-      title: 'Buat Group Perusahaan',
-      icon: Login,
-      path: '/create-kegiatan-perusahaan'
-    },
+    // {
+    //   sectionTitle: 'Perusahaan'
+    // },
+    // {
+    //   title: 'List Group Perusahaan',
+    //   icon: Table,
+    //   path: '/perusahaan-group-list'
+    // },
+    // {
+    //   title: 'Buat Group Perusahaan',
+    //   icon: Login,
+    //   path: '/create-kegiatan-perusahaan'
+    // },
 
     {
       sectionTitle: 'Pustaka'

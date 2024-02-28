@@ -53,30 +53,7 @@ const TableMitra = props => {
   const [mitra, setMitra] = useState(props.data)
   const [tpp, setTpp] = useState(props.dataTpp)
   const session = useSession()
-  // const rows = mitra.map(row => ({
-  //   id: row.id,
-  //   nik: row.nik.toString(),
-  //   name: row.name,
-  //   jenisKelamin: row.jenisKelamin,
-  //   tanggalLahir: new Date(row.tanggalLahir).toLocaleDateString('id'),
-  //   umur: row.umur,
-  //   pendidikan: row.pendidikan,
-  //   email: row.email,
-  //   status: row.status,
-  //   gajiBulanIni: tpp.map(tpp => {
-  //     tpp.pclId === row.id
-  //       ? new Date(tpp.task.duedate).getMonth() + 1 == new Date().getMonth() + 1
-  //         ? (gaji = gaji + tpp.gajipcl)
-  //         : (gaji = gaji + 0)
-  //       : (gaji = gaji + 0)
-  //     let totalgaji = gaji
-  //     gaji = 0
-  //     return totalgaji
-  //   }),
-  //   // gajiBulanIni: 0,
-  //   gajiBulanSblm: 0,
-  //   gajiBulanDepan: 0
-  // }))
+
   const rows = mitra.map(row => {
     const gajiBulanIniPCL = tpp
       .filter(tppRow => tppRow.pclId === row.id)

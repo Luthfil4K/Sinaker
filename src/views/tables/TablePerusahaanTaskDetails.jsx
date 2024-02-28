@@ -256,10 +256,12 @@ const TableGroupPerusahaan = props => {
           .put(`/perusahaan/${updatedRow.id}`, data)
           .then(res => {
             Swal.fire({
-              title: 'Success!',
-              text: 'Berhasil disimpan',
+              position: 'bottom-end',
               icon: 'success',
-              confirmButtonText: 'Ok'
+              title: 'Berhasil Disimpan',
+              showConfirmButton: false,
+              timer: 1000,
+              width: 300
             })
           })
           .catch(err => {
@@ -284,16 +286,18 @@ const TableGroupPerusahaan = props => {
           .post(`/task-perusahaan/addWoDB`, data)
           .then(res => {
             Swal.fire({
-              title: 'Success!',
-              text: 'Berhasil disimpan',
+              position: 'bottom-end',
               icon: 'success',
-              confirmButtonText: 'Ok'
+              title: 'Berhasil Disimpan',
+              showConfirmButton: false,
+              timer: 1000,
+              width: 300
             })
           })
           .catch(err => {
             Swal.fire({
               title: 'Error!',
-              text: 'Something went wrong',
+              text: 'Berhasil Disimpan',
               icon: 'error',
               confirmButtonText: 'Ok'
             })
@@ -303,10 +307,12 @@ const TableGroupPerusahaan = props => {
           .post(`/task-perusahaan`, data)
           .then(res => {
             Swal.fire({
-              title: 'Success!',
-              text: 'Berhasil disimpan',
+              position: 'bottom-end',
               icon: 'success',
-              confirmButtonText: 'Ok'
+              title: 'Your work has been saved',
+              showConfirmButton: false,
+              timer: 1000,
+              width: 300
             })
           })
           .catch(err => {
