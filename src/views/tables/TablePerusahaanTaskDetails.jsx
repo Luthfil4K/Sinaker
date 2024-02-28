@@ -456,13 +456,13 @@ const TableGroupPerusahaan = props => {
     {
       field:
         templateTable == 5 || templateTable == 6 //NerwilisResponden or IPDS Responden
-          ? 'namaPerusahaan'
+          ? 'nama'
           : templateTable == 4 // Nerwilis Dok
           ? 'idSls'
           : templateTable == 3 //Sosial
           ? 'nks'
           : templateTable == 7 //IPDS Dok
-          ? 'namaPerusahaan'
+          ? 'nama'
           : '',
       renderHeader: () => (
         <Typography sx={{ fontWeight: 900, fontSize: '0.875rem !important', textAlign: 'center' }}>

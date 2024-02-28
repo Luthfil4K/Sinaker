@@ -20,8 +20,7 @@ import CircularProgress from '@mui/material/CircularProgress'
 
 const CardProjectDetailProgress = props => {
   const [task, setTask] = useState(props.data)
-  console.log('progres')
-  console.log(task)
+
   const totalRealisasi = task.reduce((accumulator, currentTask) => accumulator + currentTask.realisasi, 0)
   const totalTarget = task.reduce((accumulator, currentTask) => accumulator + currentTask.target, 0)
   const projectProgress =

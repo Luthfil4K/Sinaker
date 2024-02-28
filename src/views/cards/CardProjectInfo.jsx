@@ -232,20 +232,10 @@ const CardProjectDetail = props => {
     setValue(newValue)
   }
   // const a = [103214]
-  // console.log(a in arrId)
-  // console.log(a in arrId)
-  // console.log(a in arrId)
 
   const a = [1, 2, 3, 4, 5]
   const b = 3
 
-  console.log(a)
-  console.log(arrId)
-  console.log(arrId.includes(103214))
-  console.log(a.includes(3))
-  console.log(arrId.includes(103214))
-  console.log(arrId.includes(103214))
-  console.log(arrId.includes(103214))
   return (
     <>
       <Card sx={{ height: 350 }}>

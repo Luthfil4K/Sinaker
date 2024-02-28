@@ -34,7 +34,7 @@ const ProjectDetailsViews = props => {
   const [tampil, setTampil] = useState(false)
   const session = useSession()
 
-  console.log(session)
+  // console.log(session)
   useEffect(() => {
     let ar = []
     // let idUserLogin = session.data.uid
