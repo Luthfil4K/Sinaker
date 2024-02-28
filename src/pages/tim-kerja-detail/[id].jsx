@@ -43,7 +43,8 @@ export async function getServerSideProps(context) {
                 select: {
                   bebanKerja: true
                 }
-              }
+              },
+              TaskOrganik: true
             }
           }
         }

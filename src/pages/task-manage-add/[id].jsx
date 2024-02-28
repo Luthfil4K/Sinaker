@@ -14,7 +14,6 @@ const TaskManageAdd = ({ data }) => {
         dataMitra={project.mitras}
         dataTaskPerusahaan={project.perusahaanTask}
         dataOrganik={project.oraganik}
-        // dataTimKerja={project.timkerja}
         dataBobotMitra={project.kriteriaMitra}
         dataBobotPegawai={project.kriteriaPegawai}
         dataOrganikProject_member={project.oraganikProject_member}

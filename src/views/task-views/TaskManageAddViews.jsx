@@ -59,12 +59,7 @@ const TaskManageAddViews = propss => {
 
   const [project, setProject] = useState(propss.data)
   const [organikProject_member, setOrganikProject_member] = useState(propss.dataOrganikProject_member)
-<<<<<<< HEAD
   const [timkerja, setTimkerja] = useState(propss.dataTimKerja)
-  const [group, setGroup] = useState(propss.dataPerusahaan)
-=======
-  const [timkerja, setTimkerja] = useState(propss.dataTimKerja)
->>>>>>> 0b099b046058f08eaa98d4e544c289c520f32a9b
   const [bobotMitra, setBobotMitra] = useState(propss.dataBobotMitra)
   const [bobotPegawai, setBobotPegawai] = useState(propss.dataBobotPegawai)
   const [participants, setParticipants] = useState([])
@@ -99,31 +94,6 @@ const TaskManageAddViews = propss => {
   const kriteria1P = parseFloat(bobotPegawai.kriteria1)
   const kriteria2P = parseFloat(bobotPegawai.kriteria2)
   const arrayBebanPegawai = [kriteria1P, kriteria2P]
-
-  useEffect(() => {
-<<<<<<< HEAD
-    let dataGroup = []
-    group.map(dataG => {
-      dataG.id == values.subKegSamplePerusahaan ? (dataGroup = dataG.Perusahaangroup) : []
-    })
-    setParticipants(dataGroup)
-  }, [values])
-
-  useEffect(() => {
-    let dataTimkerja = []
-    timkerja.map(dataG => {
-      dataG.id == values.subKegSampleTimKerja ? (dataTimkerja = dataG.timKerjaPegawai) : []
-    })
-    setParticipantsTimKerja(dataTimkerja)
-  }, [values])
-=======
-    let dataTimkerja = []
-    timkerja.map(dataG => {
-      dataG.id == values.subKegSampleTimKerja ? (dataTimkerja = dataG.timKerjaPegawai) : []
-    })
-    setParticipantsTimKerja(dataTimkerja)
-  }, [values])
->>>>>>> 0b099b046058f08eaa98d4e544c289c520f32a9b
 
   const handleTemplateChange = event => {
     setValues(values => ({
@@ -751,8 +721,8 @@ const TaskManageAddViews = propss => {
       renderCell: params => (
         <>
           <Chip
-            label={statusObj[params.row.bebanKerjaM < 0.7 ? (params.row.gajiBulanIni < 3000000 ? 1 : 0) : 0].status}
-            color={statusObj[params.row.bebanKerjaM < 0.7 ? (params.row.gajiBulanIni < 3000000 ? 1 : 0) : 0].color}
+            label={statusObj[params.row.bebanKerjaM < 0.5 ? (params.row.gajiBulanIni < 3000000 ? 1 : 0) : 0].status}
+            color={statusObj[params.row.bebanKerjaM < 0.5 ? (params.row.gajiBulanIni < 3000000 ? 1 : 0) : 0].color}
             sx={{
               height: 24,
               fontSize: '0.75rem',

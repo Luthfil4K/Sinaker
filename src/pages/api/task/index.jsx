@@ -77,9 +77,9 @@ export default async function handler(req, res) {
         })
         if (jenisSample === 1) {
           if (jenisKeg == 65 || jenisKeg == 67) {
-            // console.log('disini buat 65/pencacahan')
+            console.log('disini buat 65/pencacahan')
 
-            // console.log(participants)
+            console.log(participants)
             // ini misal sample perusahaam
             participants.map(async participant => {
               const tpp = await prisma.TaskPerusahaanProduksi.create({
@@ -241,7 +241,7 @@ export default async function handler(req, res) {
       let id = arrayUserId
       let result = getBest(m, w, ia, id)
 
-      // console.log(m)
+      // console.log(result)
       // result.map(async peserta => {
       //   // console.log(peserta.id)
       //   const beban_pegawai = await prisma.beban_kerja_pegawai.update({
@@ -255,6 +255,7 @@ export default async function handler(req, res) {
       // })
 
       const deleteBebanPegawai = await prisma.beban_kerja_pegawai.deleteMany({})
+
       const resultBaru = result.map(item => {
         return { id: item.index, userId: item.petugasId, bebanKerja: item.ps }
       })
@@ -270,7 +271,7 @@ export default async function handler(req, res) {
       let idm = arrayMitraId
       let resultm = getBest(mm, wm, iam, idm)
 
-      // console.log(arrayMitra)
+      // console.log(resultm)
       // resultm.map(async mitra => {
       //   // console.log(mitra.id)
       //   const beban_mitra = await prisma.beban_kerja_mitra.update({
