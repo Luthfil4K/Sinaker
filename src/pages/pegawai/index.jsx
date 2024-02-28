@@ -35,7 +35,13 @@ export async function getServerSideProps(context) {
     },
     include: {
       UserProject: true,
-      taskToDo: true
+      taskToDo: true,
+      beban_kerja_pegawai: {
+        select: {
+          bebanKerja: true
+        }
+      },
+      TaskOrganik: true
     }
   })
 

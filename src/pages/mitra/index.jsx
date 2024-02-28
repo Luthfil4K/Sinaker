@@ -30,6 +30,19 @@ export async function getServerSideProps(context) {
       id: {
         not: 0
       }
+    },
+    include: {
+      TaskPeserta: {
+        select: {
+          id: true,
+          task: true
+        }
+      },
+      beban_kerja_mitra: {
+        select: {
+          bebanKerja: true
+        }
+      }
     }
   })
 

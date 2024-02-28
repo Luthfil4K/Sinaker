@@ -154,6 +154,9 @@ const TableMitra = props => {
 
     const gajiBulanDepan = gajiBulanDepanPCL + gajiBulanDepanPML
 
+    const bebanKerja = row.beban_kerja_mitra[0].bebanKerja
+    const nilaiBebanKerja = Number(bebanKerja).toFixed(2)
+
     return {
       id: row.id,
       nik: row.nik.toString(),
@@ -162,6 +165,8 @@ const TableMitra = props => {
       tanggalLahir: new Date(row.tanggalLahir).toLocaleDateString('id'),
       umur: new Date().getFullYear() - new Date(row.tanggalLahir).getFullYear(),
       pendidikan: row.pendidikan,
+      jumlahKegiatan: row.TaskPeserta.length,
+      bebanKerja: nilaiBebanKerja,
       email: row.email,
       status: row.status,
       gajiBulanIni,
@@ -170,6 +175,7 @@ const TableMitra = props => {
       over: gajiBulanIni
     }
   })
+  // console.log(rows)
   const handleDelete = async id => {
     axios
       .delete(`mitra/${id}`)
@@ -225,8 +231,8 @@ const TableMitra = props => {
       renderCell: params => (
         <>
           <Chip
-            label={statusObj[params.row.gajiBulanIni < 3000000 ? 1 : 0].status}
-            color={statusObj[params.row.gajiBulanIni < 3000000 ? 1 : 0].color}
+            label={statusObj[params.row.bebanKerja < 0.5 ? (params.row.gajiBulanIni < 3000000 ? 1 : 0) : 0].status}
+            color={statusObj[params.row.bebanKerja < 0.5 ? (params.row.gajiBulanIni < 3000000 ? 1 : 0) : 0].color}
             sx={{
               height: 24,
               fontSize: '0.75rem',
@@ -244,6 +250,16 @@ const TableMitra = props => {
       ),
       type: 'string',
       width: 140
+    },
+    {
+      field: 'jumlahKegiatan',
+      renderHeader: () => (
+        <Typography sx={{ fontWeight: 900, fontSize: '0.875rem !important', textAlign: 'center' }}>
+          Jumlah Kegiatan
+        </Typography>
+      ),
+      headerName: 'Jumlah Kegiatan',
+      width: 150
     },
 
     {
@@ -308,6 +324,16 @@ const TableMitra = props => {
           </Typography>
         </>
       )
+    },
+    {
+      field: 'bebanKerja',
+      renderHeader: () => (
+        <Typography sx={{ fontWeight: 900, fontSize: '0.875rem !important', textAlign: 'center' }}>
+          Beban Kerja
+        </Typography>
+      ),
+      headerName: 'Beban Kerja',
+      width: 150
     },
     {
       field: 'jenisKelamin',

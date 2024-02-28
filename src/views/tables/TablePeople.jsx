@@ -70,50 +70,54 @@ const TablePeople = props => {
   const { dataUser } = props
   console.log(tpp)
   const rows = dataUser.map(row => {
-    const gajiBulanIni = tpp
-      .filter(tppRow => tppRow.pmlId === row.id)
-      .filter(tppRow => {
-        const tppDueDate = new Date(tppRow.task.duedate)
-        const currentDate = new Date()
-        return (
-          tppDueDate.getFullYear() === currentDate.getFullYear() && tppDueDate.getMonth() === currentDate.getMonth()
-        )
-      })
-      .reduce((totalGaji, tppRow) => totalGaji + tppRow.gajiPml, 0)
+    // const gajiBulanIni = tpp
+    //   .filter(tppRow => tppRow.pmlId === row.id)
+    //   .filter(tppRow => {
+    //     const tppDueDate = new Date(tppRow.task.duedate)
+    //     const currentDate = new Date()
+    //     return (
+    //       tppDueDate.getFullYear() === currentDate.getFullYear() && tppDueDate.getMonth() === currentDate.getMonth()
+    //     )
+    //   })
+    //   .reduce((totalGaji, tppRow) => totalGaji + tppRow.gajiPml, 0)
 
-    const gajiBulanSblm = tpp
-      .filter(tppRow => tppRow.pmlId === row.id)
-      .filter(tppRow => {
-        const tppDueDate = new Date(tppRow.task.duedate)
-        const currentDate = new Date()
-        return currentDate.getMonth != 0
-          ? tppDueDate.getFullYear() === currentDate.getFullYear() &&
-              tppDueDate.getMonth() === currentDate.getMonth() - 1
-          : tppDueDate.getFullYear() === currentDate.getFullYear() - 1 && tppDueDate.getMonth() === 12
-      })
-      .reduce((totalGaji, tppRow) => totalGaji + tppRow.gajiPml, 0)
+    // const gajiBulanSblm = tpp
+    //   .filter(tppRow => tppRow.pmlId === row.id)
+    //   .filter(tppRow => {
+    //     const tppDueDate = new Date(tppRow.task.duedate)
+    //     const currentDate = new Date()
+    //     return currentDate.getMonth != 0
+    //       ? tppDueDate.getFullYear() === currentDate.getFullYear() &&
+    //           tppDueDate.getMonth() === currentDate.getMonth() - 1
+    //       : tppDueDate.getFullYear() === currentDate.getFullYear() - 1 && tppDueDate.getMonth() === 12
+    //   })
+    //   .reduce((totalGaji, tppRow) => totalGaji + tppRow.gajiPml, 0)
 
-    const gajiBulanDepan = tpp
-      .filter(tppRow => tppRow.pmlId === row.id)
-      .filter(tppRow => {
-        const tppDueDate = new Date(tppRow.task.duedate)
-        const currentDate = new Date()
-        return currentDate.getMonth != 11
-          ? tppDueDate.getFullYear() === currentDate.getFullYear() &&
-              tppDueDate.getMonth() === currentDate.getMonth() + 1
-          : tppDueDate.getFullYear() === currentDate.getFullYear() + 1 && tppDueDate.getMonth() === 0
-      })
-      .reduce((totalGaji, tppRow) => totalGaji + tppRow.gajiPml, 0)
+    // const gajiBulanDepan = tpp
+    //   .filter(tppRow => tppRow.pmlId === row.id)
+    //   .filter(tppRow => {
+    //     const tppDueDate = new Date(tppRow.task.duedate)
+    //     const currentDate = new Date()
+    //     return currentDate.getMonth != 11
+    //       ? tppDueDate.getFullYear() === currentDate.getFullYear() &&
+    //           tppDueDate.getMonth() === currentDate.getMonth() + 1
+    //       : tppDueDate.getFullYear() === currentDate.getFullYear() + 1 && tppDueDate.getMonth() === 0
+    //   })
+    //   .reduce((totalGaji, tppRow) => totalGaji + tppRow.gajiPml, 0)
+
+    const bebanKerja = row.beban_kerja_pegawai[0].bebanKerja
+    const nilaiBebanKerja = Number(bebanKerja).toFixed(2)
 
     return {
       id: row.id,
       nama: row.name,
       fungsi: row.fungsi,
-      jumlahKegiatan: row.UserProject.length,
-      gajiBulanIni,
-      gajiBulanSblm,
-      gajiBulanDepan,
-      over: gajiBulanIni
+      jumlahKegiatan: row.TaskOrganik.length,
+      bebanKerja: nilaiBebanKerja,
+      // gajiBulanIni,
+      // gajiBulanSblm,
+      // gajiBulanDepan,
+      over: nilaiBebanKerja
     }
   })
   //   id: row.id,
@@ -155,8 +159,8 @@ const TablePeople = props => {
       renderCell: params => (
         <>
           <Chip
-            label={statusObj[params.row.gajiBulanIni < 3000000 ? 1 : 0].status}
-            color={statusObj[params.row.gajiBulanIni < 3000000 ? 1 : 0].color}
+            label={statusObj[params.row.bebanKerja < 0.5 ? (params.row.jumlahKegiatan < 15 ? 1 : 0) : 0].status}
+            color={statusObj[params.row.bebanKerja < 0.5 ? (params.row.jumlahKegiatan < 15 ? 1 : 0) : 0].color}
             sx={{
               height: 24,
               fontSize: '0.75rem',
@@ -176,69 +180,69 @@ const TablePeople = props => {
       width: 140
     },
 
-    {
-      field: 'gajiBulanIni',
-      renderHeader: () => (
-        <Typography sx={{ fontWeight: 900, fontSize: '0.875rem !important', textAlign: 'center' }}>
-          Gaji Bulan Ini
-        </Typography>
-      ),
-      headerName: 'Gaji Bulan Ini ',
-      type: 'string',
-      width: 140,
-      renderCell: params => (
-        <>
-          <Typography
-            color={params.row.gajiBulanIni < 3000000 ? 'secondary.main' : 'error.main'}
-            sx={{ fontWeight: 500, fontSize: '0.875rem !important', textAlign: 'center' }}
-          >
-            {`Rp ${params.row.gajiBulanIni.toLocaleString('id-ID')}`}
-          </Typography>
-        </>
-      )
-    },
-    {
-      field: 'gajiBulanSblm',
-      renderHeader: () => (
-        <Typography sx={{ fontWeight: 900, fontSize: '0.875rem !important', textAlign: 'center' }}>
-          Gaji Bulan Sebelumnya
-        </Typography>
-      ),
-      headerName: 'Gaji Bulan Sebelumnya ',
-      type: 'string',
-      width: 140,
-      renderCell: params => (
-        <>
-          <Typography
-            color={params.row.gajiBulanSblm < 3000000 ? 'secondary.main' : 'error.main'}
-            sx={{ fontWeight: 500, fontSize: '0.875rem !important', textAlign: 'center' }}
-          >
-            {`Rp ${params.row.gajiBulanSblm.toLocaleString('id-ID')}`}
-          </Typography>
-        </>
-      )
-    },
-    {
-      field: 'gajiBulanDepan',
-      renderHeader: () => (
-        <Typography sx={{ fontWeight: 900, fontSize: '0.875rem !important', textAlign: 'center' }}>
-          Gaji Bulan Depan
-        </Typography>
-      ),
-      headerName: 'Gaji Bulan Depan ',
-      type: 'string',
-      width: 140,
-      renderCell: params => (
-        <>
-          <Typography
-            color={params.row.gajiBulanDepan < 3000000 ? 'secondary.main' : 'error.main'}
-            sx={{ fontWeight: 500, fontSize: '0.875rem !important', textAlign: 'center' }}
-          >
-            {`Rp ${params.row.gajiBulanDepan.toLocaleString('id-ID')}`}
-          </Typography>
-        </>
-      )
-    },
+    // {
+    //   field: 'gajiBulanIni',
+    //   renderHeader: () => (
+    //     <Typography sx={{ fontWeight: 900, fontSize: '0.875rem !important', textAlign: 'center' }}>
+    //       Gaji Bulan Ini
+    //     </Typography>
+    //   ),
+    //   headerName: 'Gaji Bulan Ini ',
+    //   type: 'string',
+    //   width: 140,
+    //   renderCell: params => (
+    //     <>
+    //       <Typography
+    //         color={params.row.gajiBulanIni < 3000000 ? 'secondary.main' : 'error.main'}
+    //         sx={{ fontWeight: 500, fontSize: '0.875rem !important', textAlign: 'center' }}
+    //       >
+    //         {`Rp ${params.row.gajiBulanIni.toLocaleString('id-ID')}`}
+    //       </Typography>
+    //     </>
+    //   )
+    // },
+    // {
+    //   field: 'gajiBulanSblm',
+    //   renderHeader: () => (
+    //     <Typography sx={{ fontWeight: 900, fontSize: '0.875rem !important', textAlign: 'center' }}>
+    //       Gaji Bulan Sebelumnya
+    //     </Typography>
+    //   ),
+    //   headerName: 'Gaji Bulan Sebelumnya ',
+    //   type: 'string',
+    //   width: 140,
+    //   renderCell: params => (
+    //     <>
+    //       <Typography
+    //         color={params.row.gajiBulanSblm < 3000000 ? 'secondary.main' : 'error.main'}
+    //         sx={{ fontWeight: 500, fontSize: '0.875rem !important', textAlign: 'center' }}
+    //       >
+    //         {`Rp ${params.row.gajiBulanSblm.toLocaleString('id-ID')}`}
+    //       </Typography>
+    //     </>
+    //   )
+    // },
+    // {
+    //   field: 'gajiBulanDepan',
+    //   renderHeader: () => (
+    //     <Typography sx={{ fontWeight: 900, fontSize: '0.875rem !important', textAlign: 'center' }}>
+    //       Gaji Bulan Depan
+    //     </Typography>
+    //   ),
+    //   headerName: 'Gaji Bulan Depan ',
+    //   type: 'string',
+    //   width: 140,
+    //   renderCell: params => (
+    //     <>
+    //       <Typography
+    //         color={params.row.gajiBulanDepan < 3000000 ? 'secondary.main' : 'error.main'}
+    //         sx={{ fontWeight: 500, fontSize: '0.875rem !important', textAlign: 'center' }}
+    //       >
+    //         {`Rp ${params.row.gajiBulanDepan.toLocaleString('id-ID')}`}
+    //       </Typography>
+    //     </>
+    //   )
+    // },
     {
       field: 'fungsi',
       headerName: 'Fungsi',
@@ -290,6 +294,17 @@ const TablePeople = props => {
       renderHeader: () => (
         <Typography sx={{ fontWeight: 900, fontSize: '0.875rem !important', textAlign: 'center' }}>
           Jumlah Kegiatan
+        </Typography>
+      ),
+
+      minWidth: 150
+    },
+    {
+      field: 'bebanKerja',
+      headerName: 'Beban Kerja',
+      renderHeader: () => (
+        <Typography sx={{ fontWeight: 900, fontSize: '0.875rem !important', textAlign: 'center' }}>
+          Beban Kerja
         </Typography>
       ),
 

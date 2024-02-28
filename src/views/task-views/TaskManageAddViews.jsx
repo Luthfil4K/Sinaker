@@ -152,174 +152,175 @@ const TaskManageAddViews = propss => {
     }))
   }
 
+  let dataPCL = []
+  rowsM.map(a => {
+    if (a.checked) {
+      dataPCL.push(a)
+    }
+  })
+
+  let pegawaiOrganik = []
+  rowsO.map(a => {
+    if (a.checked) {
+      pegawaiOrganik.push(a)
+    }
+  })
+
+  const userAll = dataOrganik.map(row => {
+    const gajiBulanIni = tpp
+      .filter(tppRow => tppRow.pmlId === row.id)
+      .filter(tppRow => {
+        const tppDueDate = new Date(tppRow.task.duedate)
+        const currentDate = new Date()
+        return (
+          tppDueDate.getFullYear() === currentDate.getFullYear() && tppDueDate.getMonth() === currentDate.getMonth()
+        )
+      })
+      .reduce((totalGaji, tppRow) => totalGaji + tppRow.gajiPml, 0)
+
+    const gajiBulanSblm = tpp
+      .filter(tppRow => tppRow.pmlId === row.id)
+      .filter(tppRow => {
+        const tppDueDate = new Date(tppRow.task.duedate)
+        const currentDate = new Date()
+        return currentDate.getMonth != 0
+          ? tppDueDate.getFullYear() === currentDate.getFullYear() &&
+              tppDueDate.getMonth() === currentDate.getMonth() - 1
+          : tppDueDate.getFullYear() === currentDate.getFullYear() - 1 && tppDueDate.getMonth() === 12
+      })
+      .reduce((totalGaji, tppRow) => totalGaji + tppRow.gajiPml, 0)
+
+    const gajiBulanDepan = tpp
+      .filter(tppRow => tppRow.pmlId === row.id)
+      .filter(tppRow => {
+        const tppDueDate = new Date(tppRow.task.duedate)
+        const currentDate = new Date()
+        return currentDate.getMonth != 11
+          ? tppDueDate.getFullYear() === currentDate.getFullYear() &&
+              tppDueDate.getMonth() === currentDate.getMonth() + 1
+          : tppDueDate.getFullYear() === currentDate.getFullYear() + 1 && tppDueDate.getMonth() === 0
+      })
+      .reduce((totalGaji, tppRow) => totalGaji + tppRow.gajiPml, 0)
+
+    const jumlahKegiatan = 0
+
+    pegawaiOrganik.map(tambah => {
+      if (tambah.id === row.id) {
+        return (jumlahKegiatan = row.TaskOrganik.length + 1)
+      } else {
+        return (jumlahKegiatan = row.TaskOrganik.length)
+      }
+    })
+
+    return {
+      pegawai_id: row.id,
+      jumlahKegiatan,
+      gajiBulanIni
+    }
+  })
+
+  const arrayUser = userAll.map(item => [item.jumlahKegiatan, item.gajiBulanIni])
+  const arrayUserId = userAll.map(item => item.pegawai_id)
+
+  const mitraAll = dataMitra.map(row => {
+    const gajiBulanIniPCL = tpp
+      .filter(tppRow => tppRow.pclId === row.id)
+      .filter(tppRow => {
+        const tppDueDate = new Date(tppRow.task.duedate)
+        const currentDate = new Date()
+        return (
+          tppDueDate.getFullYear() === currentDate.getFullYear() && tppDueDate.getMonth() === currentDate.getMonth()
+        )
+      })
+      .reduce((totalGaji, tppRow) => totalGaji + tppRow.gajiPcl, 0)
+
+    const gajiBulanIniPML = tpp
+      .filter(tppRow => tppRow.pmlId === row.id)
+      .filter(tppRow => {
+        const tppDueDate = new Date(tppRow.task.duedate)
+        const currentDate = new Date()
+        return (
+          tppDueDate.getFullYear() === currentDate.getFullYear() && tppDueDate.getMonth() === currentDate.getMonth()
+        )
+      })
+      .reduce((totalGaji, tppRow) => totalGaji + tppRow.gajiPml, 0)
+
+    // Gabungkan total gaji dari kedua kasus
+    const gajiBulanIni = gajiBulanIniPCL + gajiBulanIniPML
+
+    const gajiBulanSblmPCL = tpp
+      .filter(tppRow => tppRow.pclId === row.id)
+      .filter(tppRow => {
+        const tppDueDate = new Date(tppRow.task.duedate)
+        const currentDate = new Date()
+        return currentDate.getMonth != 0
+          ? tppDueDate.getFullYear() === currentDate.getFullYear() &&
+              tppDueDate.getMonth() === currentDate.getMonth() - 1
+          : tppDueDate.getFullYear() === currentDate.getFullYear() - 1 && tppDueDate.getMonth() === 12
+      })
+      .reduce((totalGaji, tppRow) => totalGaji + tppRow.gajiPcl, 0)
+
+    const gajiBulanSblmPML = tpp
+      .filter(tppRow => tppRow.pmlId === row.id)
+      .filter(tppRow => {
+        const tppDueDate = new Date(tppRow.task.duedate)
+        const currentDate = new Date()
+        return currentDate.getMonth != 0
+          ? tppDueDate.getFullYear() === currentDate.getFullYear() &&
+              tppDueDate.getMonth() === currentDate.getMonth() - 1
+          : tppDueDate.getFullYear() === currentDate.getFullYear() - 1 && tppDueDate.getMonth() === 12
+      })
+      .reduce((totalGaji, tppRow) => totalGaji + tppRow.gajiPcl, 0)
+    const gajiBulanSblm = gajiBulanSblmPML + gajiBulanSblmPCL
+
+    const gajiBulanDepanPCL = tpp
+      .filter(tppRow => tppRow.pclId === row.id)
+      .filter(tppRow => {
+        const tppDueDate = new Date(tppRow.task.duedate)
+        const currentDate = new Date()
+        return currentDate.getMonth != 11
+          ? tppDueDate.getFullYear() === currentDate.getFullYear() &&
+              tppDueDate.getMonth() === currentDate.getMonth() + 1
+          : tppDueDate.getFullYear() === currentDate.getFullYear() + 1 && tppDueDate.getMonth() === 0
+      })
+      .reduce((totalGaji, tppRow) => totalGaji + tppRow.gajiPcl, 0)
+
+    const gajiBulanDepanPML = tpp
+      .filter(tppRow => tppRow.pclId === row.id)
+      .filter(tppRow => {
+        const tppDueDate = new Date(tppRow.task.duedate)
+        const currentDate = new Date()
+        return currentDate.getMonth != 11
+          ? tppDueDate.getFullYear() === currentDate.getFullYear() &&
+              tppDueDate.getMonth() === currentDate.getMonth() + 1
+          : tppDueDate.getFullYear() === currentDate.getFullYear() + 1 && tppDueDate.getMonth() === 0
+      })
+      .reduce((totalGaji, tppRow) => totalGaji + tppRow.gajiPcl, 0)
+
+    const gajiBulanDepan = gajiBulanDepanPCL + gajiBulanDepanPML
+
+    let jumlahKegiatan = 0
+
+    if (dataPCL.some(tes => tes.id == row.id)) {
+      jumlahKegiatan = row.TaskPeserta.length + 1
+    } else {
+      jumlahKegiatan = row.TaskPeserta.length
+    }
+
+    return {
+      mitra_id: row.id,
+      jumlahKegiatan,
+      gajiBulanIni,
+      gajiBulanSblm
+    }
+  })
+
+  const arrayMitra = mitraAll.map(item => [item.jumlahKegiatan, item.gajiBulanIni, item.gajiBulanSblm])
+  const arrayMitraId = mitraAll.map(item => item.mitra_id)
+
   // intinya disini pas mau add ke db, value-value
   const handleAddTask = async e => {
     e.preventDefault()
-    let dataPCL = []
-    rowsM.map(a => {
-      if (a.checked) {
-        dataPCL.push(a)
-      }
-    })
-
-    let pegawaiOrganik = []
-    rowsO.map(a => {
-      if (a.checked) {
-        pegawaiOrganik.push(a)
-      }
-    })
-
-    const userAll = dataOrganik.map(row => {
-      const gajiBulanIni = tpp
-        .filter(tppRow => tppRow.pmlId === row.id)
-        .filter(tppRow => {
-          const tppDueDate = new Date(tppRow.task.duedate)
-          const currentDate = new Date()
-          return (
-            tppDueDate.getFullYear() === currentDate.getFullYear() && tppDueDate.getMonth() === currentDate.getMonth()
-          )
-        })
-        .reduce((totalGaji, tppRow) => totalGaji + tppRow.gajiPml, 0)
-
-      const gajiBulanSblm = tpp
-        .filter(tppRow => tppRow.pmlId === row.id)
-        .filter(tppRow => {
-          const tppDueDate = new Date(tppRow.task.duedate)
-          const currentDate = new Date()
-          return currentDate.getMonth != 0
-            ? tppDueDate.getFullYear() === currentDate.getFullYear() &&
-                tppDueDate.getMonth() === currentDate.getMonth() - 1
-            : tppDueDate.getFullYear() === currentDate.getFullYear() - 1 && tppDueDate.getMonth() === 12
-        })
-        .reduce((totalGaji, tppRow) => totalGaji + tppRow.gajiPml, 0)
-
-      const gajiBulanDepan = tpp
-        .filter(tppRow => tppRow.pmlId === row.id)
-        .filter(tppRow => {
-          const tppDueDate = new Date(tppRow.task.duedate)
-          const currentDate = new Date()
-          return currentDate.getMonth != 11
-            ? tppDueDate.getFullYear() === currentDate.getFullYear() &&
-                tppDueDate.getMonth() === currentDate.getMonth() + 1
-            : tppDueDate.getFullYear() === currentDate.getFullYear() + 1 && tppDueDate.getMonth() === 0
-        })
-        .reduce((totalGaji, tppRow) => totalGaji + tppRow.gajiPml, 0)
-
-      const jumlahKegiatan = 0
-
-      pegawaiOrganik.map(tambah => {
-        if (tambah.id === row.id) {
-          return (jumlahKegiatan = row.TaskOrganik.length + 1)
-        } else {
-          return (jumlahKegiatan = row.TaskOrganik.length)
-        }
-      })
-
-      return {
-        pegawai_id: row.id,
-        jumlahKegiatan,
-        gajiBulanIni
-      }
-    })
-
-    const arrayUser = userAll.map(item => [item.jumlahKegiatan, item.gajiBulanIni])
-    const arrayUserId = userAll.map(item => item.pegawai_id)
-
-    const mitraAll = dataMitra.map(row => {
-      const gajiBulanIniPCL = tpp
-        .filter(tppRow => tppRow.pclId === row.id)
-        .filter(tppRow => {
-          const tppDueDate = new Date(tppRow.task.duedate)
-          const currentDate = new Date()
-          return (
-            tppDueDate.getFullYear() === currentDate.getFullYear() && tppDueDate.getMonth() === currentDate.getMonth()
-          )
-        })
-        .reduce((totalGaji, tppRow) => totalGaji + tppRow.gajiPcl, 0)
-
-      const gajiBulanIniPML = tpp
-        .filter(tppRow => tppRow.pmlId === row.id)
-        .filter(tppRow => {
-          const tppDueDate = new Date(tppRow.task.duedate)
-          const currentDate = new Date()
-          return (
-            tppDueDate.getFullYear() === currentDate.getFullYear() && tppDueDate.getMonth() === currentDate.getMonth()
-          )
-        })
-        .reduce((totalGaji, tppRow) => totalGaji + tppRow.gajiPml, 0)
-
-      // Gabungkan total gaji dari kedua kasus
-      const gajiBulanIni = gajiBulanIniPCL + gajiBulanIniPML
-
-      const gajiBulanSblmPCL = tpp
-        .filter(tppRow => tppRow.pclId === row.id)
-        .filter(tppRow => {
-          const tppDueDate = new Date(tppRow.task.duedate)
-          const currentDate = new Date()
-          return currentDate.getMonth != 0
-            ? tppDueDate.getFullYear() === currentDate.getFullYear() &&
-                tppDueDate.getMonth() === currentDate.getMonth() - 1
-            : tppDueDate.getFullYear() === currentDate.getFullYear() - 1 && tppDueDate.getMonth() === 12
-        })
-        .reduce((totalGaji, tppRow) => totalGaji + tppRow.gajiPcl, 0)
-
-      const gajiBulanSblmPML = tpp
-        .filter(tppRow => tppRow.pmlId === row.id)
-        .filter(tppRow => {
-          const tppDueDate = new Date(tppRow.task.duedate)
-          const currentDate = new Date()
-          return currentDate.getMonth != 0
-            ? tppDueDate.getFullYear() === currentDate.getFullYear() &&
-                tppDueDate.getMonth() === currentDate.getMonth() - 1
-            : tppDueDate.getFullYear() === currentDate.getFullYear() - 1 && tppDueDate.getMonth() === 12
-        })
-        .reduce((totalGaji, tppRow) => totalGaji + tppRow.gajiPcl, 0)
-      const gajiBulanSblm = gajiBulanSblmPML + gajiBulanSblmPCL
-
-      const gajiBulanDepanPCL = tpp
-        .filter(tppRow => tppRow.pclId === row.id)
-        .filter(tppRow => {
-          const tppDueDate = new Date(tppRow.task.duedate)
-          const currentDate = new Date()
-          return currentDate.getMonth != 11
-            ? tppDueDate.getFullYear() === currentDate.getFullYear() &&
-                tppDueDate.getMonth() === currentDate.getMonth() + 1
-            : tppDueDate.getFullYear() === currentDate.getFullYear() + 1 && tppDueDate.getMonth() === 0
-        })
-        .reduce((totalGaji, tppRow) => totalGaji + tppRow.gajiPcl, 0)
-
-      const gajiBulanDepanPML = tpp
-        .filter(tppRow => tppRow.pclId === row.id)
-        .filter(tppRow => {
-          const tppDueDate = new Date(tppRow.task.duedate)
-          const currentDate = new Date()
-          return currentDate.getMonth != 11
-            ? tppDueDate.getFullYear() === currentDate.getFullYear() &&
-                tppDueDate.getMonth() === currentDate.getMonth() + 1
-            : tppDueDate.getFullYear() === currentDate.getFullYear() + 1 && tppDueDate.getMonth() === 0
-        })
-        .reduce((totalGaji, tppRow) => totalGaji + tppRow.gajiPcl, 0)
-
-      const gajiBulanDepan = gajiBulanDepanPCL + gajiBulanDepanPML
-
-      let jumlahKegiatan = 0
-
-      if (dataPCL.some(tes => tes.id == row.id)) {
-        jumlahKegiatan = row.TaskPeserta.length + 1
-      } else {
-        jumlahKegiatan = row.TaskPeserta.length
-      }
-
-      return {
-        mitra_id: row.id,
-        jumlahKegiatan,
-        gajiBulanIni,
-        gajiBulanSblm
-      }
-    })
-
-    const arrayMitra = mitraAll.map(item => [item.jumlahKegiatan, item.gajiBulanIni, item.gajiBulanSblm])
-    const arrayMitraId = mitraAll.map(item => item.mitra_id)
 
     try {
       while (true) {
