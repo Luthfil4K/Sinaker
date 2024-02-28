@@ -58,7 +58,7 @@ const TaskManageAddViews = propss => {
   const session = useSession()
   const [project, setProject] = useState(propss.data)
   const [organikProject_member, setOrganikProject_member] = useState(propss.dataOrganikProject_member)
-  const [timkerja, setTimkerja] = useState(propss.dataTimKerja)
+  // const [timkerja, setTimkerja] = useState(propss.dataTimKerja)
   const [group, setGroup] = useState(propss.dataPerusahaan)
   const [bobotMitra, setBobotMitra] = useState(propss.dataBobotMitra)
   const [bobotPegawai, setBobotPegawai] = useState(propss.dataBobotPegawai)
@@ -103,13 +103,13 @@ const TaskManageAddViews = propss => {
     setParticipants(dataGroup)
   }, [values])
 
-  useEffect(() => {
-    let dataTimkerja = []
-    timkerja.map(dataG => {
-      dataG.id == values.subKegSampleTimKerja ? (dataTimkerja = dataG.timKerjaPegawai) : []
-    })
-    setParticipantsTimKerja(dataTimkerja)
-  }, [values])
+  // useEffect(() => {
+  //   let dataTimkerja = []
+  //   timkerja.map(dataG => {
+  //     dataG.id == values.subKegSampleTimKerja ? (dataTimkerja = dataG.timKerjaPegawai) : []
+  //   })
+  //   setParticipantsTimKerja(dataTimkerja)
+  // }, [values])
 
   const handleTemplateChange = event => {
     setValues(values => ({
@@ -329,15 +329,13 @@ const TaskManageAddViews = propss => {
 
       const gajiBulanDepan = gajiBulanDepanPCL + gajiBulanDepanPML
 
-      const jumlahKegiatan = 0
+      let jumlahKegiatan = 0
 
-      pegawaiOrganik.map(tambah => {
-        if (tambah.id === row.id) {
-          return (jumlahKegiatan = row.TaskPeserta.length + 1)
-        } else {
-          return (jumlahKegiatan = row.TaskPeserta.length)
-        }
-      })
+      if (dataPCL.some(tes => tes.id == row.id)) {
+        jumlahKegiatan = row.TaskPeserta.length + 1
+      } else {
+        jumlahKegiatan = row.TaskPeserta.length
+      }
 
       return {
         mitra_id: row.id,
@@ -651,6 +649,7 @@ const TaskManageAddViews = propss => {
       return {
         id: row.id,
         nik: row.nik.toString(),
+        kodeKecamatan: row.nik.substring(4, 6),
         name: row.name,
         jumlahKegiatanM: row.TaskPeserta.length,
         gajiBulanIni,
@@ -887,6 +886,16 @@ const TaskManageAddViews = propss => {
         <Typography sx={{ fontWeight: 900, fontSize: '0.875rem !important', textAlign: 'center' }}>NIK</Typography>
       ),
       headerName: 'NIK',
+      width: 200
+    },
+    {
+      field: 'kodeKecamatan',
+      renderHeader: () => (
+        <Typography sx={{ fontWeight: 900, fontSize: '0.875rem !important', textAlign: 'center' }}>
+          Kode Kecamatan
+        </Typography>
+      ),
+      headerName: 'Kode Kecamatan',
       width: 200
     },
     {
@@ -1460,6 +1469,48 @@ const TaskManageAddViews = propss => {
     }
   }
   // sampe sini import excel kelar
+
+  const [mitraKecArr, setMitraKecArr] = useState([])
+
+  // Mengambil kode kecamatan dari data mitra
+  const mitraKec = dataMitra.map(item => {
+    let nik = item.nik
+    let kodeKecamatan = 0
+    if (nik[4] === '0' && parseInt(nik[5]) >= 1 && parseInt(nik[5]) <= 9) {
+      kodeKecamatan = nik.substring(5, 6)
+    } else {
+      kodeKecamatan = nik.substring(4, 6)
+    }
+    return { ...item, kodeKecamatan: kodeKecamatan }
+  })
+
+  // Mengambil kode kecamatan dari data perusahaan
+  useEffect(() => {
+    const updatedRows = rowsM.map(row => {
+      const participantExists = mitraKecArr.some(mitra => mitra.id === row.id)
+      return { ...row, checked: participantExists }
+    })
+    setRowsM(updatedRows)
+  }, [mitraKecArr])
+
+  useEffect(() => {
+    if (data.length > 1) {
+      const kodeKecamatanDatas = data.map(item => item.kodeKecamatan)
+      const countMap = kodeKecamatanDatas.reduce((acc, curr) => {
+        acc[curr] = (acc[curr] || 0) + 1
+        return acc
+      }, {})
+      // const kodeKecamatanData = new Set(kodeKecamatanDatas)
+      // const dataMitraKec = mitraKec
+      //   .filter(item => kodeKecamatanData.has(Number(item.kodeKecamatan)))
+      //   .filter(item => item.beban_kerja_mitra[0].bebanKerja < 0.5)
+      const hasilSaring = mitraKec
+        .sort((a, b) => a.beban_kerja_mitra[0].bebanKerja - b.beban_kerja_mitra[0].bebanKerja)
+        .filter(item => countMap[Number(item.kodeKecamatan)] && countMap[Number(item.kodeKecamatan)]--)
+      setMitraKecArr(hasilSaring)
+    }
+  }, [data])
+
   return (
     <>
       <Card sx={{ padding: 4 }}>
@@ -1866,6 +1917,10 @@ const TaskManageAddViews = propss => {
                               sorting: {
                                 sortModel: [
                                   {
+                                    field: 'checked',
+                                    sort: 'desc'
+                                  },
+                                  {
                                     field: 'bebanKerjaM',
                                     sort: 'asc'
                                   }
@@ -1876,8 +1931,8 @@ const TaskManageAddViews = propss => {
                             columns={columnsM}
                             pprioritySize={5}
                             rowsPerPpriorityOptions={[5]}
-                            disableSelectionOnClick
-                            experimentalFeatures={{ newEditingApi: true }}
+                            // disableSelectionOnClick
+                            // experimentalFeatures={{ newEditingApi: true }}
                             sx={{
                               height: rowsM.length > 3 ? '70vh' : '45vh',
                               width: '100%'
@@ -1935,8 +1990,8 @@ const TaskManageAddViews = propss => {
                             columns={columnsO}
                             pprioritySize={5}
                             rowsPerPpriorityOptions={[5]}
-                            disableSelectionOnClick
-                            experimentalFeatures={{ newEditingApi: true }}
+                            // disableSelectionOnClick
+                            // experimentalFeatures={{ newEditingApi: true }}
                             sx={{
                               height: rowsO.length > 3 ? '70vh' : '45vh',
                               width: '100%'

@@ -16,7 +16,7 @@ const TaskManageAdd = ({ data }) => {
         dataMitra={project.mitras}
         dataTaskPerusahaan={project.perusahaanTask}
         dataOrganik={project.oraganik}
-        dataTimKerja={project.timkerja}
+        // dataTimKerja={project.timkerja}
         dataBobotMitra={project.kriteriaMitra}
         dataBobotPegawai={project.kriteriaPegawai}
         dataOrganikProject_member={project.oraganikProject_member}
@@ -73,21 +73,21 @@ export async function getServerSideProps(context) {
     }
   })
 
-  let timkerja
+  // let timkerja
 
-  timkerja = await prisma.TimKerja.findMany({
-    select: {
-      id: true,
-      timKerjaPegawai: {
-        select: {
-          id: true,
-          userId_fkey: true
-        }
-      },
-      nama: true,
-      fungsi: true
-    }
-  })
+  // timkerja = await prisma.TimKerja.findMany({
+  //   select: {
+  //     id: true,
+  //     timKerjaPegawai: {
+  //       select: {
+  //         id: true,
+  //         userId_fkey: true
+  //       }
+  //     },
+  //     nama: true,
+  //     fungsi: true
+  //   }
+  // })
 
   let perusahaans
 
@@ -187,7 +187,6 @@ export async function getServerSideProps(context) {
     mitras,
     perusahaanTask,
     oraganik,
-    timkerja,
     oraganikProject_member,
     kriteriaMitra,
     kriteriaPegawai
