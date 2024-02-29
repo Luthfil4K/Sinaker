@@ -1,14 +1,14 @@
 import { useState, useEffect } from 'react'
 import prisma from '../../services/db'
 import { getToken } from 'next-auth/jwt'
-import TimKerjaDetailViews from 'src/views/tim-kerja-views/TimKerjaDetailViews'
+import EditTimKerja from 'src/views/tim-kerja-views/EditTimKerja'
 
-const TimKerjaDetail = ({ data }) => {
+const TimKerjaEdit = ({ data }) => {
   const [timKerja, setTimKerja] = useState(JSON.parse(data))
   // console.log(TimKerja)
   return (
     <>
-      <TimKerjaDetailViews data={timKerja.timkerja} dataUser={timKerja.user} dataTpp={timKerja.perusahaanTask} />
+      <EditTimKerja data={timKerja.timkerja} dataUser={timKerja.user} dataTpp={timKerja.perusahaanTask} />
     </>
   )
 }
@@ -35,6 +35,7 @@ export async function getServerSideProps(context) {
       timKerjaPegawai: {
         select: {
           id: true,
+          userId: true,
           userId_fkey: {
             include: {
               UserProject: true,
@@ -53,6 +54,27 @@ export async function getServerSideProps(context) {
     }
   })
 
+  let user
+
+  user = await prisma.user.findMany({
+    where: {
+      id: {
+        not: 99
+      }
+    },
+    include: {
+      UserProject: true,
+      taskToDo: true,
+      TaskOrganik: true,
+      TimKerjaPegawai: true,
+      beban_kerja_pegawai: {
+        select: {
+          bebanKerja: true
+        }
+      }
+    }
+  })
+
   const perusahaanTask = await prisma.taskPerusahaanProduksi.findMany({
     include: {
       perusahaan: true,
@@ -62,6 +84,7 @@ export async function getServerSideProps(context) {
 
   const data = {
     perusahaanTask,
+    user,
     timkerja
   }
   return {
@@ -71,4 +94,4 @@ export async function getServerSideProps(context) {
   }
 }
 
-export default TimKerjaDetail
+export default TimKerjaEdit
