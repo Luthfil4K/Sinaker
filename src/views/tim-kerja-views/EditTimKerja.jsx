@@ -396,13 +396,20 @@ const CreateKegiatanPerusahaanViews = props => {
         })
 
         if (res.status === 201) {
+          // Swal.fire({
+          //   title: 'Ubah Tim Kerja Success',
+          //   text: 'Press OK to continue',
+          //   icon: 'success',
+          //   confirmButtonColor: '#68B92E',
+          //   confirmButtonText: 'OK'
+          // }).then(router.push(`/tim-kerja-detail/${values.idGroup}`))
           Swal.fire({
             title: 'Ubah Tim Kerja Success',
             text: 'Press OK to continue',
             icon: 'success',
             confirmButtonColor: '#68B92E',
             confirmButtonText: 'OK'
-          }).then(router.push(`/tim-kerja-detail/${values.idGroup}`))
+          }).then(router.push(`/tim-kerja-list`))
 
           setValues({
             kegNama: '',
