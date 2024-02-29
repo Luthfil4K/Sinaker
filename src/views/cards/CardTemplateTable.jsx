@@ -22,6 +22,8 @@ import AccountOutline from 'mdi-material-ui/AccountOutline'
 import LockOpenOutline from 'mdi-material-ui/LockOpenOutline'
 import ClipboardFileOutline from 'mdi-material-ui/ClipboardFileOutline'
 import LockOutline from 'mdi-material-ui/LockOutline'
+import AcUnitOutlinedIcon from '@mui/icons-material/AcUnitOutlined'
+import BackupTableTwoToneIcon from '@mui/icons-material/BackupTableTwoTone'
 
 const CardProjectDetails = props => {
   const [data, setData] = useState(props.dataTemplateTable)
@@ -32,7 +34,7 @@ const CardProjectDetails = props => {
     <Card>
       <CardContent key={id} sx={{ padding: theme => `${theme.spacing(0, 0, 0, 0)} !important` }}>
         <Grid container spacing={1}>
-          <Grid item xs={8}>
+          <Grid item xs={9}>
             <Box padding={4}>
               <Typography variant='body1' sx={{ marginBottom: 3.5, fontWeight: 600 }}>
                 {data.nama}
@@ -50,17 +52,18 @@ const CardProjectDetails = props => {
           <Grid
             sx={{ backgroundColor: 'action.hover' }}
             item
-            xs={4}
+            xs={3}
             display={'flex'}
             alignItems={'center'}
             justifyContent={'center'}
           >
-            {/* <Box alignItems={'center'}>
-              <Typography textAlign={'center'} variant='h5'>
+            <Box alignItems={'center'}>
+              <BackupTableTwoToneIcon fontSize='large'></BackupTableTwoToneIcon>
+              {/* <Typography textAlign={'center'} variant='h5'>
                 1
               </Typography>
-              <Typography variant='body2'>Orang</Typography>
-            </Box> */}
+              <Typography variant='body2'>Orang</Typography> */}
+            </Box>
           </Grid>
         </Grid>
       </CardContent>

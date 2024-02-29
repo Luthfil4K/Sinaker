@@ -38,8 +38,8 @@ const TemplateTableDetailViews = props => {
   const [values, setValues] = useState({
     namaTemplate: '',
     jenisSample: '',
-    kol1: 'test',
-    kol2: 'test2'
+    kol1: 'kolom1',
+    kol2: 'kol2'
   })
   const [sama, setSama] = useState(1)
 
@@ -59,7 +59,7 @@ const TemplateTableDetailViews = props => {
 
     if (newValues.kol1 === newValues.kol2) {
       console.log('Kedua inputan tidak boleh sama.')
-      setValues(newValues)
+
       setSama(0)
     } else {
       setSama(1)
@@ -130,7 +130,7 @@ const TemplateTableDetailViews = props => {
     for (const key in obj) {
       newObj[key] = obj[key]
     }
-    newObj[camelCase(values.kol1)] = 2
+    newObj[camelCase(values.kol1)] = 3
     newObj[camelCase(values.kol2)] = 2
     return newObj
   })

@@ -28,10 +28,12 @@ import Select, { SelectChangeEvent } from '@mui/material/Select'
 import InputLabel from '@mui/material/InputLabel'
 import FormControlLabel from '@mui/material/FormControlLabel'
 import Checkbox from '@mui/material/Checkbox'
-
+import { DataGrid } from '@mui/x-data-grid'
 import MenuItem from '@mui/material/MenuItem'
 
-import { DataGrid } from '@mui/x-data-grid'
+// export table
+import exportFromJSON from 'export-from-json'
+import xlsx from 'json-as-xlsx'
 
 const TemplateTableDetailViews = props => {
   const [data, setData] = useState(props.dataTemplate)
@@ -146,8 +148,6 @@ const TemplateTableDetailViews = props => {
   //   initialRowsT[camelCase(data.template_table_kolom[1].kolomTable)] = 2
 
   const [rowsT, setRowsT] = useState(newData)
-  console.log(rowsT)
-  console.log(initialRowsT)
 
   const columnsNew = [
     {
@@ -213,6 +213,42 @@ const TemplateTableDetailViews = props => {
     }
   ]
 
+  const handleDownloadTable = e => {
+    const dataKolom = columnsNew.map(kol => ({
+      label: kol.field,
+      value: kol.field
+    }))
+
+    dataKolom.unshift({ label: 'ID', value: 'id' })
+
+    let dataDownload = [
+      {
+        sheet: 'Adults',
+        columns: dataKolom,
+        // [
+        //   { label: 'User', value: 'user' }, // Top level data
+        //   { label: 'Age', value: row => row.age + ' years' }, // Custom format
+        //   { label: 'Phone', value: row => (row.more ? row.more.phone || '' : '') } // Run functions
+        // ],
+        content: rowsT
+        //  [
+        //   { user: 'Andrea', age: 20, more: { phone: '11111111' } },
+        //   { user: 'Luis', age: 21, more: { phone: '12345678' } }
+        // ]
+      }
+    ]
+
+    let settings = {
+      fileName: 'template_table_' + data.nama, // Name of the resulting spreadsheet
+      extraLength: 3, // A bigger number means that columns will be wider
+      writeMode: 'writeFile', // The available parameters are 'WriteFile' and 'write'. This setting is optional. Useful in such cases https://docs.sheetjs.com/docs/solutions/output#example-remote-file
+      writeOptions: {}, // Style options from https://docs.sheetjs.com/docs/api/write-options
+      RTL: false // Display the columns from right-to-left (the default value is false)
+    }
+
+    xlsx(dataDownload, settings)
+  }
+
   const router = useRouter()
   return (
     <Card>
@@ -226,8 +262,13 @@ const TemplateTableDetailViews = props => {
           <Grid item xs={12}>
             <Typography variant='body1'>{data.nama}</Typography>
           </Grid>
-          <Grid item xs={12}>
+          <Grid item xs={6}>
             <Typography variant='body2'>Jenis Sample : {jenisSample[data.jenisSample].sample}</Typography>
+          </Grid>
+          <Grid sx={{ display: 'flex', alignItems: 'end', justifyContent: 'end' }} item xs={6}>
+            <Button variant='contained' onClick={handleDownloadTable}>
+              Unduh Template
+            </Button>
           </Grid>
           <Grid item xs={12}>
             <Box sx={{ width: '100%' }}>
