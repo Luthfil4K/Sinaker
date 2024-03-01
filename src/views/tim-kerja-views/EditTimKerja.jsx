@@ -122,6 +122,7 @@ const CreateKegiatanPerusahaanViews = props => {
 
     const bebanKerja = row.beban_kerja_pegawai[0].bebanKerja
     const nilaiBebanKerja = number(bebanKerja).toFixed(2)
+    const jamKerja = row.pekerjaan_harian.reduce((total, item) => total + item.durasi, 0)
 
     return {
       id: row.id,
@@ -129,6 +130,7 @@ const CreateKegiatanPerusahaanViews = props => {
       fungsi: row.fungsi,
       jumlahKegiatan: row.TaskOrganik.length,
       jumlahTimKerja: row.TimKerjaPegawai.length,
+      jumlahJamKerja: jamKerja,
       // gajiBulanIni,
       // gajiBulanSblm,
       // gajiBulanDepan,
@@ -322,6 +324,16 @@ const CreateKegiatanPerusahaanViews = props => {
         </Typography>
       ),
 
+      minWidth: 150
+    },
+    {
+      field: 'jumlahJamKerja',
+      headerName: 'Jam Kerja',
+      renderHeader: () => (
+        <Typography sx={{ fontWeight: 900, fontSize: '0.875rem !important', textAlign: 'center' }}>
+          Jam Kerja
+        </Typography>
+      ),
       minWidth: 150
     },
     {

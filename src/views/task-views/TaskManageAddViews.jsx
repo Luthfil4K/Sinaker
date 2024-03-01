@@ -215,14 +215,16 @@ const TaskManageAddViews = propss => {
         }
       })
 
+      const jumlahJamKerja = row.pekerjaan_harian.reduce((total, item) => total + item.durasi, 0)
+
       return {
         pegawai_id: row.id,
         jumlahKegiatan,
-        gajiBulanIni
+        jumlahJamKerja
       }
     })
 
-    const arrayUser = userAll.map(item => [item.jumlahKegiatan, item.gajiBulanIni])
+    const arrayUser = userAll.map(item => [item.jumlahKegiatan, item.jumlahJamKerja])
     const arrayUserId = userAll.map(item => item.pegawai_id)
 
     const mitraAll = dataMitra.map(row => {
@@ -476,6 +478,7 @@ const TaskManageAddViews = propss => {
             task_organik: hasilFilter.TaskOrganik,
             password: hasilFilter.password,
             beban_kerja_pegawai: hasilFilter.beban_kerja_pegawai,
+            pekerjaan_harian: hasilFilter.pekerjaan_harian,
             checked: true
           }
         }
@@ -620,11 +623,14 @@ const TaskManageAddViews = propss => {
       const bebanKerja = row.beban_kerja_pegawai[0].bebanKerja
       const nilaiBebanKerja = number(bebanKerja).toFixed(2)
 
+      const jamKerja = row.pekerjaan_harian.reduce((total, item) => total + item.durasi, 0)
+
       return {
         id: row.id,
         nip: row.nip.toString(),
         name: row.name,
         jumlahKegiatan: row.task_organik.length,
+        jumlahJamKerja: jamKerja,
         bebanKerjaO: nilaiBebanKerja,
         over: row.task_organik.length
       }
@@ -994,6 +1000,16 @@ const TaskManageAddViews = propss => {
         </Typography>
       ),
 
+      minWidth: 150
+    },
+    {
+      field: 'jumlahJamKerja',
+      headerName: 'Jam Kerja',
+      renderHeader: () => (
+        <Typography sx={{ fontWeight: 900, fontSize: '0.875rem !important', textAlign: 'center' }}>
+          Jam Kerja
+        </Typography>
+      ),
       minWidth: 150
     },
     {

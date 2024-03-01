@@ -44,7 +44,8 @@ export async function getServerSideProps(context) {
                   bebanKerja: true
                 }
               },
-              TaskOrganik: true
+              TaskOrganik: true,
+              pekerjaan_harian: true
             }
           }
         }

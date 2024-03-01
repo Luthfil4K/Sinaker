@@ -51,7 +51,8 @@ export async function getServerSideProps(context) {
         select: {
           bebanKerja: true
         }
-      }
+      },
+      pekerjaan_harian: true
     }
   })
 
