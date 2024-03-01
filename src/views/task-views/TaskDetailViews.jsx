@@ -7,6 +7,15 @@ import Swal from 'sweetalert2'
 // MUI
 
 import Chip from '@mui/material/Chip'
+import List from '@mui/material/List'
+import ListItem from '@mui/material/ListItem'
+import ListItemAvatar from '@mui/material/ListItemAvatar'
+import ListItemIcon from '@mui/material/ListItemIcon'
+import ListItemText from '@mui/material/ListItemText'
+import Avatar from '@mui/material/Avatar'
+import FolderIcon from '@mui/icons-material/Folder'
+import DeleteIcon from '@mui/icons-material/Delete'
+
 import Button from '@mui/material/Button'
 import Typography from '@mui/material/Typography'
 import Box from '@mui/material/Box'
@@ -20,6 +29,7 @@ import IconButton from '@mui/material/IconButton'
 import TextField from '@mui/material/TextField'
 import SendIcon from 'mdi-material-ui/Send'
 import AccountIcon from 'mdi-material-ui/Account'
+import * as React from 'react'
 import { useSession } from 'next-auth/react'
 import { useEffect, useState } from 'react'
 
@@ -48,6 +58,8 @@ const TaskDetailViews = props => {
   }
   const [participants, setParticipants] = useState(props.dataPerusahaan)
   const [mitra, setMitra] = useState(props.dataMitra)
+  const [dataPekerjaanHarian, setDataPekerjaanHarian] = useState(props.dataPH)
+  const [dataPHreal, setDataPHrealn] = useState(1)
   const [pegawai, setPegawai] = useState(props.dataPML)
   const [dataTask, setDataTasl] = useState(props.data)
   const session = useSession()
@@ -61,14 +73,22 @@ const TaskDetailViews = props => {
     jenisSample: props.data.jenisSample
   })
 
-  console.log(props.dataPerusahaan)
+  const [valuesHarian, setValuesHarian] = useState({
+    namaKegiatan: '',
+    durasi: '',
+    userId: '',
+    taskId: props.data.id,
+    tanggalSubmit: new Date()
+  })
+
+  const [secondary, setSecondary] = useState(false)
 
   const [templateTable2, setTemplateTable2] = useState(Number(props.dataPerusahaan[0].templateTable))
   const [judulGrafik, setJudulGrafik] = useState('asd')
 
   useEffect(() => {
     let templateTable = Number(props.dataPerusahaan[0].templateTable)
-    console.log(templateTable)
+
     switch (templateTable) {
       case 3:
         return setJudulGrafik('NBS/NKS')
@@ -85,8 +105,6 @@ const TaskDetailViews = props => {
     }
   }, [values])
 
-  // console.log(judulGrafik)
-
   const [value, setValue] = useState('1')
   const handleChangeTab = (event, newValue) => {
     setValue(newValue)
@@ -99,6 +117,54 @@ const TaskDetailViews = props => {
 
   const handleChange = props => event => {
     setValues({ ...values, [props]: event.target.value })
+  }
+
+  const handleChangeHarian = props => event => {
+    setValuesHarian({ ...valuesHarian, [props]: event.target.value })
+  }
+
+  useEffect(() => {
+    const tmp = []
+    dataPekerjaanHarian.map(ph => {
+      ph.userId === session.data.uid ? tmp.unshift(ph) : ''
+    })
+    setDataPHrealn(tmp)
+  }, [valuesHarian])
+
+  function generate(element) {
+    return dataPHreal.map(value =>
+      React.cloneElement(element, {
+        key: value
+      })
+    )
+  }
+
+  const handleKegiatanHarian = e => {
+    const data = {
+      namaKegiatan: valuesHarian.namaKegiatan,
+      durasi: Number(valuesHarian.durasi),
+      userId: session.data.uid,
+      taskId: props.data.id,
+      tanggalSubmit: new Date()
+    }
+    axios
+      .post(`/kegiatan-harian`, data)
+      .then(res => {
+        Swal.fire({
+          title: 'Success!',
+          text: 'Berhasil disimpan',
+          icon: 'success',
+          confirmButtonText: 'Ok'
+        })
+      })
+      .catch(err => {
+        Swal.fire({
+          title: 'Error!',
+          text: 'Something went wrong',
+          icon: 'error',
+          confirmButtonText: 'Ok'
+        })
+      })
   }
 
   const handleSimpan = e => {
@@ -192,7 +258,10 @@ const TaskDetailViews = props => {
         : ''
     )
   })
-  // console.log(lineTarel)
+
+  useEffect(() => {
+    console.log(dataPHreal)
+  }, [valuesHarian])
 
   const dataLine = {
     labels: lineTarel.label,
@@ -250,26 +319,53 @@ const TaskDetailViews = props => {
                     </Typography>
                   </Grid>
 
-                  <Grid mt={2} item xs={12} md={12} height={335} overflow={'auto'}>
+                  <Grid mt={2} item xs={12} md={12} height={335} overflow={'none'}>
                     <Divider sx={{ marginTop: 3.5 }} />
 
                     <Typography variant={'body2'}>{props.data.description}</Typography>
                     <TabContext value={value}>
                       <TabList variant='fullWidth' onChange={handleChangeTab} aria-label='card navigation example'>
-                        <Tab value='1' label='Grafik' />
-                        <Tab value='2' label='Catatan' />
+                        <Tab value='1' label='Pekerjaan Harian' />
+                        <Tab value='2' label='Grafik' />
                       </TabList>
-                      <TabPanel value='1' sx={{ p: 0, height: 170 }}>
+                      <TabPanel value='2' sx={{ p: 0, height: 170 }}>
                         <Typography mt={4} textAlign={'center'} variant={'body1'}>
                           Target Realisasi per {judulGrafik}
                         </Typography>
                         <Grid item md={12} xs={12}>
-                          <Line
+                          <Bar
                             datasetIdKey='id'
                             data={dataLine}
                             width={500}
                             height={140}
                             options={{
+                              plugins: {
+                                title: {
+                                  display: true,
+                                  text: ''
+                                }
+                              },
+                              responsive: true,
+                              scales: {
+                                x: {
+                                  stacked: true
+                                },
+                                y: {
+                                  stacked: true
+                                }
+                              }
+                            }}
+                          />
+                          {/* <Line
+                            datasetIdKey='id'
+                            data={dataLine}
+                            width={500}
+                            height={140}
+                            options={{
+                              scaleOverride: true,
+                              scaleSteps: 114,
+                              scaleStepWidth: 25,
+                              scaleStartValue: 0,
                               responsive: true,
                               scales: {
                                 x: {
@@ -288,13 +384,72 @@ const TaskDetailViews = props => {
                                 }
                               }
                             }}
-                          />
+                          /> */}
                         </Grid>
                       </TabPanel>
-                      <TabPanel value='2' sx={{ p: 0, height: 170 }}>
-                        <Typography variant='h6' sx={{ marginBottom: 2 }}>
-                          {values.notesSubKeg}
-                        </Typography>
+                      <TabPanel value='1' sx={{ p: 0, height: 170 }}>
+                        <Grid container spacing={4}>
+                          <Grid xs={12} mt={5} item height={200} overflow={'auto'}>
+                            <List>
+                              {generate(
+                                <ListItem
+                                  secondaryAction={
+                                    <IconButton edge='end' aria-label='delete'>
+                                      <DeleteIcon />
+                                    </IconButton>
+                                  }
+                                >
+                                  <ListItemAvatar>
+                                    <Avatar>
+                                      <FolderIcon />
+                                    </Avatar>
+                                  </ListItemAvatar>
+                                  <ListItemText primary='Single-line item' />
+                                </ListItem>
+                              )}
+                            </List>
+                          </Grid>
+                          <Grid mt={2} item xs={12}>
+                            <Grid container spacing={4}>
+                              <Grid item xs={7}>
+                                <TextField
+                                  value={valuesHarian.namaKegiatan}
+                                  size='small'
+                                  fullWidth
+                                  multiline
+                                  type={'string'}
+                                  onChange={handleChangeHarian('namaKegiatan')}
+                                  placeholder='Nama Kegiatan'
+                                />
+                              </Grid>
+                              <Grid item xs={4}>
+                                {' '}
+                                <TextField
+                                  value={valuesHarian.durasi}
+                                  size='small'
+                                  fullWidth
+                                  multiline
+                                  type={'number'}
+                                  onChange={handleChangeHarian('durasi')}
+                                  placeholder='Durasi Pengerjaan '
+                                />
+                              </Grid>
+                              <Grid item mt={5} xs={1}>
+                                {' '}
+                                <InputAdornment position='end'>
+                                  <IconButton
+                                    onClick={handleKegiatanHarian}
+                                    size='medium'
+                                    type='submit'
+                                    aria-label='toggle password visibility'
+                                  >
+                                    <SendIcon></SendIcon>
+                                  </IconButton>
+                                </InputAdornment>
+                              </Grid>
+                            </Grid>
+                          </Grid>
+                        </Grid>
                       </TabPanel>
                     </TabContext>
                   </Grid>

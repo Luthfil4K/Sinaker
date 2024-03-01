@@ -73,7 +73,6 @@ const TableGroupPerusahaan = props => {
   const jenisSample = props.dataTaskSample
 
   const templateTable = participants[1].templateTable
-  // console.log(participants[1].templateTable)
 
   const [organikMitra, setOrganikMitra] = useState({
     value: '',
@@ -90,7 +89,6 @@ const TableGroupPerusahaan = props => {
   }))
 
   const combinedOptions = [...optionPCL, ...optionPML]
-  // console.log(combinedOptions)
   const apapa = props.dataProjectFungsi
   const initialRows = participants.map(row => ({
     id: row.id,
@@ -139,7 +137,6 @@ const TableGroupPerusahaan = props => {
     hasilPencacahan: row.hasilPencacahan,
     tanggalDob: new Date(row.duedate)
   }))
-  // console.log(initialRows)
 
   const [rows, setRows] = React.useState(initialRows)
   const [rowModesModel, setRowModesModel] = React.useState({})
@@ -165,12 +162,9 @@ const TableGroupPerusahaan = props => {
       68: { namaJenisSub: 'Evaluasi', color: 'warning' },
       69: { namaJenisSub: 'Diseminasi', color: 'warning' }
     }
-
-    // console.log(jenisSub)
   }
 
   // useEffect(() => {
-  //   // console.log('update persentase')
   // }, [rows])
 
   const handleDeleteClick = id => () => {
@@ -219,7 +213,6 @@ const TableGroupPerusahaan = props => {
   //   setRows(rows.map(row => (row.id === newRow.id ? updatedRow : row)))
   //   return updatedRow
   // }
-  // console.log(rows)
 
   const processRowUpdate = newRow => {
     const updatedRow = { ...newRow, isNew: false }
