@@ -434,13 +434,22 @@ const CreateKegiatanPerusahaanViews = props => {
   const handleKegiatanPerusahaan = async e => {
     e.preventDefault()
 
+    const ketuadanParticipants = participants.map(row => {
+      if (row.id === values.kegKetua) {
+        if (!row.checked) {
+          return { ...row, checked: true }
+        }
+      }
+      return { ...row }
+    })
+
     try {
       while (true) {
         const res = await axios.post('/tim-kerja', {
           nama: values.kegNama,
           ketuaTim: values.kegKetua,
           fungsi: values.kegFungsi,
-          participants: participants
+          participants: ketuadanParticipants
         })
 
         if (res.status === 201) {
