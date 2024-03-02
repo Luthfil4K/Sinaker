@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react'
 import prisma from '../../services/db'
 import { getToken } from 'next-auth/jwt'
+import { useSession } from 'next-auth/react'
 
 import TaskDetailViews from 'src/views/task-views/TaskDetailViews'
 
@@ -14,6 +15,7 @@ const TaskDetail = ({ data }) => {
         dataPerusahaan={task.perusahaanTask}
         dataMitra={task.mitraTask}
         dataPML={task.pegawai}
+        dataPH={task.pekerjaanHarian}
       ></TaskDetailViews>
     </>
   )
@@ -21,7 +23,6 @@ const TaskDetail = ({ data }) => {
 
 export async function getServerSideProps(context) {
   const token = await getToken({ req: context.req, secret: process.env.JWT_SECRET })
-
   if (!token) {
     return {
       redirect: {
@@ -48,10 +49,19 @@ export async function getServerSideProps(context) {
     }
   })
 
-  const perusahaanTask = await prisma.taskPerusahaanProduksi.findMany({
+  const pekerjaanHarian = await prisma.pekerjaan_harian.findMany({
     where: {
       taskId: parseInt(context.params.id)
     },
+    select: {
+      id: true,
+      namaKegiatan: true,
+      durasi: true,
+      userId: true
+    }
+  })
+
+  const perusahaanTask = await prisma.taskPerusahaanProduksi.findMany({
     include: {
       perusahaan: true
     }
@@ -79,7 +89,8 @@ export async function getServerSideProps(context) {
     task,
     perusahaanTask,
     mitraTask,
-    pegawai
+    pegawai,
+    pekerjaanHarian
   }
 
   return {

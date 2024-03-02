@@ -72,7 +72,7 @@ const TableGroupPerusahaan = props => {
   const jenisKeg = props.dataJenisKeg
   const jenisSample = props.dataTaskSample
 
-  const templateTable = participants[1].templateTable
+  const templateTable = participants.length > 0 ? participants[1].templateTable : 5
 
   const [organikMitra, setOrganikMitra] = useState({
     value: '',

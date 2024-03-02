@@ -44,6 +44,8 @@ import TablePerusahaanTaskDetails from 'src/views/tables/TablePerusahaanTaskDeta
 import CardTaskDetail from 'src/views/cards/CardTaskDetail'
 import CardTaskComment from 'src/views/cards/CardTaskComment'
 
+import { useRouter } from 'next/dist/client/router'
+
 // chartjs dan visualiasi lain
 import { Line, Bar, Doughnut } from 'react-chartjs-2'
 import { CategoryScale } from 'chart.js'
@@ -52,6 +54,7 @@ Chart.register(CategoryScale)
 import LinearProgress from '@mui/material/LinearProgress'
 
 const TaskDetailViews = props => {
+  const router = useRouter()
   const statusObj = {
     0: { color: 'warning', status: 'On Progress' },
     1: { color: 'success', status: 'Done' }
@@ -123,21 +126,47 @@ const TaskDetailViews = props => {
     setValuesHarian({ ...valuesHarian, [props]: event.target.value })
   }
 
+  const handleDeleteKegiatanHarian = async id => {
+    axios
+      .delete(`kegiatan-harian/${id}`)
+      .then(async res => {
+        await Swal.fire({
+          icon: 'success',
+          title: 'Success',
+          text: 'Kegiatan Harian Deleted'
+        })
+        router.reload()
+      })
+      .catch(err => {
+        Swal.fire({
+          icon: 'error',
+          title: 'Error',
+          text: 'Something went wrong'
+        })
+      })
+  }
+
   useEffect(() => {
     const tmp = []
-    dataPekerjaanHarian.map(ph => {
-      ph.userId === session.data.uid ? tmp.unshift(ph) : ''
-    })
+    session.status === 'authenticated'
+      ? dataPekerjaanHarian.map(ph => {
+          ph.userId === session.data.uid ? tmp.unshift(ph) : ''
+        })
+      : ''
     setDataPHrealn(tmp)
-  }, [valuesHarian])
+  }, [session])
 
-  function generate(element) {
-    return dataPHreal.map(value =>
-      React.cloneElement(element, {
-        key: value
-      })
-    )
-  }
+  // function generate(element) {
+  //   const forReturn = []
+  //   dataPHreal.length>0? (
+  //    dataPHreal.map(value =>
+  //       React.cloneElement(element, {
+  //         key: value
+  //       })
+  //     )
+  //   ):''
+  //   return
+  // }
 
   const handleKegiatanHarian = e => {
     const data = {
@@ -156,6 +185,7 @@ const TaskDetailViews = props => {
           icon: 'success',
           confirmButtonText: 'Ok'
         })
+        router.reload()
       })
       .catch(err => {
         Swal.fire({
@@ -390,24 +420,51 @@ const TaskDetailViews = props => {
                       <TabPanel value='1' sx={{ p: 0, height: 170 }}>
                         <Grid container spacing={4}>
                           <Grid xs={12} mt={5} item height={200} overflow={'auto'}>
-                            <List>
-                              {generate(
-                                <ListItem
-                                  secondaryAction={
-                                    <IconButton edge='end' aria-label='delete'>
-                                      <DeleteIcon />
-                                    </IconButton>
-                                  }
-                                >
-                                  <ListItemAvatar>
-                                    <Avatar>
-                                      <FolderIcon />
-                                    </Avatar>
-                                  </ListItemAvatar>
-                                  <ListItemText primary='Single-line item' />
-                                </ListItem>
-                              )}
-                            </List>
+                            {dataPHreal.length > 0 ? (
+                              dataPHreal.map(ph => (
+                                <>
+                                  {' '}
+                                  <List key={ph.id}>
+                                    <ListItem
+                                      secondaryAction={
+                                        <IconButton
+                                          onClick={() => {
+                                            Swal.fire({
+                                              title: 'Hapus Kegiatan Harian?',
+                                              text: '',
+                                              icon: 'warning',
+                                              showCancelButton: true,
+                                              confirmButtonColor: '#3085d6',
+                                              cancelButtonColor: '#d33',
+                                              confirmButtonText: 'Yes'
+                                            }).then(result => {
+                                              if (result.isConfirmed) {
+                                                handleDeleteKegiatanHarian(ph.id)
+                                              }
+                                            })
+                                          }}
+                                          edge='end'
+                                          aria-label='delete'
+                                        >
+                                          <DeleteIcon />
+                                        </IconButton>
+                                      }
+                                    >
+                                      <ListItemAvatar>
+                                        <Avatar>
+                                          <FolderIcon />
+                                        </Avatar>
+                                      </ListItemAvatar>
+                                      <ListItemText primary={ph.namaKegiatan} />
+                                    </ListItem>
+                                  </List>
+                                </>
+                              ))
+                            ) : (
+                              <>
+                                <Typography>Belum Ada Kegiatan Harian, Silahkan Input Dibawah</Typography>
+                              </>
+                            )}
                           </Grid>
                           <Grid mt={2} item xs={12}>
                             <Grid container spacing={4}>
