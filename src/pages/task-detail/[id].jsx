@@ -62,6 +62,9 @@ export async function getServerSideProps(context) {
   })
 
   const perusahaanTask = await prisma.taskPerusahaanProduksi.findMany({
+    where: {
+      taskId: parseInt(context.params.id)
+    },
     include: {
       perusahaan: true
     }
