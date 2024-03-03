@@ -81,34 +81,91 @@ export default async function handler(req, res) {
 
             console.log(participants)
             // ini misal sample perusahaam
+
             participants.map(async participant => {
-              const tpp = await prisma.TaskPerusahaanProduksi.create({
-                data: {
-                  taskId: task.id,
-                  perusahaanId: 9999999,
-                  nama:
-                    templateTable == 5 || templateTable == 6 || templateTable == 7 ? participant.namaPerusahaan : '',
-                  desa: participant.kodeDesa.toString(),
-                  namadesa: participant.namaDesa,
-                  kecamatan: participant.kodeKecamatan.toString(),
-                  namaKec: participant.namaKecamatan,
-                  alamat: templateTable == 5 ? participant.alamat : '',
-                  target: 0,
-                  realisasi: 0,
-                  hasilPencacahan: '',
-                  duedate: new Date(),
-                  pmlId: 0,
-                  pclId: 0,
-                  gajiPml: gaji,
-                  gajiPcl: gaji,
-                  idSls: '',
-                  nbs: '',
-                  nks: '',
-                  nus: templateTable == 6 ? participant.nus : '',
-                  idSbr: templateTable == 7 ? participant.idSbr : '',
-                  templateTable: templateTable.toString()
+              // insert ke table perusahaan
+              console.log(participant.namaPerusahaan)
+              const existingData = await prisma.perusahaan.findMany({
+                where: {
+                  nama: participant.namaPerusahaan // Ganti 'nama' dengan kolom unik yang relevan
                 }
               })
+
+              console.log(existingData)
+
+              existingData.length != 0 ? await createExistData() : await createNewData()
+
+              async function createExistData() {
+                const tpp = await prisma.TaskPerusahaanProduksi.create({
+                  data: {
+                    taskId: task.id,
+                    perusahaanId: existingData[0].id,
+                    nama:
+                      templateTable == 5 || templateTable == 6 || templateTable == 7 ? participant.namaPerusahaan : '',
+                    desa: participant.kodeDesa.toString(),
+                    namadesa: participant.namaDesa,
+                    kecamatan: participant.kodeKecamatan.toString(),
+                    namaKec: participant.namaKecamatan,
+                    alamat: templateTable == 5 ? participant.alamat : '',
+                    target: 0,
+                    realisasi: 0,
+                    hasilPencacahan: '',
+                    duedate: new Date(),
+                    pmlId: 0,
+                    pclId: 0,
+                    gajiPml: gaji,
+                    gajiPcl: gaji,
+                    idSls: '',
+                    nbs: '',
+                    nks: '',
+                    nus: templateTable == 6 ? participant.nus : '',
+                    idSbr: templateTable == 7 ? participant.idSbr : '',
+                    templateTable: templateTable.toString()
+                  }
+                })
+              }
+              async function createNewData() {
+                const company = await prisma.perusahaan.create({
+                  data: {
+                    kip: Number(1),
+                    nama: participant.namaPerusahaan,
+                    desa: participant.kodeDesa.toString(),
+                    kecamatan: participant.kodeKecamatan.toString(),
+                    namaDesa: participant.namaDesa,
+                    namaKec: participant.namaKecamatan,
+                    alamat: templateTable == 5 ? participant.alamat : '',
+                    kegiatan: ''
+                  }
+                })
+
+                const tpp = await prisma.TaskPerusahaanProduksi.create({
+                  data: {
+                    taskId: task.id,
+                    perusahaanId: company.id,
+                    nama:
+                      templateTable == 5 || templateTable == 6 || templateTable == 7 ? participant.namaPerusahaan : '',
+                    desa: participant.kodeDesa.toString(),
+                    namadesa: participant.namaDesa,
+                    kecamatan: participant.kodeKecamatan.toString(),
+                    namaKec: participant.namaKecamatan,
+                    alamat: templateTable == 5 ? participant.alamat : '',
+                    target: 0,
+                    realisasi: 0,
+                    hasilPencacahan: '',
+                    duedate: new Date(),
+                    pmlId: 0,
+                    pclId: 0,
+                    gajiPml: gaji,
+                    gajiPcl: gaji,
+                    idSls: '',
+                    nbs: '',
+                    nks: '',
+                    nus: templateTable == 6 ? participant.nus : '',
+                    idSbr: templateTable == 7 ? participant.idSbr : '',
+                    templateTable: templateTable.toString()
+                  }
+                })
+              }
             })
 
             // buat add peserta disini

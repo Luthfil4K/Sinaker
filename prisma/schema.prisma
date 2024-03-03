@@ -28,6 +28,9 @@ model User {
   UserProject_member        UserProject_member[]
   beban_kerja_pegawai       beban_kerja_pegawai[]
   beban_kerja_tim_pegawai   beban_kerja_tim_pegawai[]
+  user_meet                 user_meet[]
+  meet_created              meet[]
+  pekerjaan_harian          pekerjaan_harian[]
 }
 
 model Project {
@@ -86,15 +89,14 @@ model Task {
   TaskPerusahaanProduksi    TaskPerusahaanProduksi[]
   TaskPeserta               TaskPeserta[]
   TaskOrganik               TaskOrganik[]
-  // nbs_nks                   nbs_nks[]
-  // nbs_idsls                 nbs_idsls[]
-  // nus_dinas                 nus_dinas[]
+  pekerjaan_harian          pekerjaan_harian[]
+
 }
 
 model Perusahaan {
   id                        Int                         @id @default(autoincrement())
   kip                       Int                         @db.Integer
-  nama                      String                      @db.VarChar(128)
+  nama                      String                      @db.VarChar(128) 
   desa                      String                      @db.VarChar(128)
   namaDesa                  String                      @db.VarChar(128)
   kecamatan                 String                      @db.VarChar(128)
@@ -164,9 +166,7 @@ model TaskPerusahaanProduksi {
  nus                        String                      @db.VarChar(128)
  duedate                    DateTime                    @db.Date
  PesertaGaji                PesertaGaji[]
-//  nbs_nks                    nbs_nks[]
-//  nbs_idsls                  nbs_idsls[]
-//  nus_dinas                  nus_dinas[]
+
 }
 
 model Mitra {
@@ -218,10 +218,7 @@ model nbs_nks {
  namaKec                     String                     @db.VarChar(128)
  nbs                         Int                     
  nks                         Int                     
-//  task                        Task                       @relation(fields: [taskId], references: [id], onDelete: Cascade, onUpdate: Cascade)
-//  taskId                      Int
-//  taskPerusahaanProduksi      TaskPerusahaanProduksi     @relation(fields: [TaskPerusahaanProduksiId], references: [id], onDelete: Cascade, onUpdate: Cascade)
-//  TaskPerusahaanProduksiId    Int
+
 } 
 
 model nbs_idsls {
@@ -232,10 +229,7 @@ model nbs_idsls {
  namaKec                     String                     @db.VarChar(128)
  nbs                         Int                     
  id_sls                      Int                     
-//  task                        Task                       @relation(fields: [taskId], references: [id], onDelete: Cascade, onUpdate: Cascade)
-//  taskId                      Int
-//  taskPerusahaanProduksi      TaskPerusahaanProduksi     @relation(fields: [TaskPerusahaanProduksiId], references: [id], onDelete: Cascade, onUpdate: Cascade)
-//  TaskPerusahaanProduksiId    Int
+
 } 
 
 model nus_dinas {
@@ -246,10 +240,7 @@ model nus_dinas {
  namaKec                     String                     @db.VarChar(128)
  nus                         Int                    
  dinas                       String                     @db.VarChar(64)
-//  task                        Task                       @relation(fields: [taskId], references: [id], onDelete: Cascade, onUpdate: Cascade)
-//  taskId                      Int
-//  taskPerusahaanProduksi      TaskPerusahaanProduksi     @relation(fields: [TaskPerusahaanProduksiId], references: [id], onDelete: Cascade, onUpdate: Cascade)
-//  TaskPerusahaanProduksiId    Int
+
 } 
 
 model idsbr_perusahaan {
@@ -260,11 +251,54 @@ model idsbr_perusahaan {
  namaKec                     String                     @db.VarChar(128)
  idSbr                       String                     @db.VarChar(128)
  perusahaan                  String                     @db.VarChar(64)
-//  task                        Task                       @relation(fields: [taskId], references: [id], onDelete: Cascade, onUpdate: Cascade)
-//  taskId                      Int
-//  taskPerusahaanProduksi      TaskPerusahaanProduksi     @relation(fields: [TaskPerusahaanProduksiId], references: [id], onDelete: Cascade, onUpdate: Cascade)
-//  TaskPerusahaanProduksiId    Int
+
 } 
+
+model template_table {
+  id                        Int                         @id @default(autoincrement())
+  nama                      String                      @db.VarChar(128)
+  jenisSample               Int                         @db.Integer
+  template_table_kolom      template_table_kolom[]
+}
+model template_table_kolom {
+  id                        Int                         @id @default(autoincrement())
+  templateTableId           Int
+  kolomTable                String                      @db.VarChar(128)            
+  templateTableId_fkey      template_table              @relation(fields: [templateTableId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+}
+
+model meet {
+  id                        Int                         @id @default(autoincrement())
+  namaRapat                 String                      @db.VarChar(128)
+  startDate                 DateTime                    @db.Date
+  endDate                   DateTime                    @db.Date
+  duration                  Int                         @db.Integer
+  tempatRapat               String                      @db.Text
+  description               String                      @db.Text
+  createdBy                 User                        @relation(fields: [createdById], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  createdById               Int
+  user_meet                 user_meet[]
+}
+
+model user_meet {
+  id                        Int                         @id @default(autoincrement())
+  user                      User                        @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  userId                    Int
+  meet                      meet                        @relation(fields: [meetId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  meetId                    Int
+}
+
+model pekerjaan_harian {
+  id                        Int                         @id @default(autoincrement())
+  namaKegiatan              String                      @db.VarChar(128)
+  durasi                    Int
+  tanggalSubmit             DateTime                    @db.Date
+  task                      Task                        @relation(fields: [taskId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  taskId                    Int
+  user                      User                        @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  userId                    Int
+
+ }
 
 model beban_kerja_pegawai{
   id                        Int                         @id @default(autoincrement())
@@ -297,7 +331,6 @@ model kriteria_beban_kerja_mitra{
   id                        Int                         @id @default(autoincrement())
   kriteria1                 Decimal
   kriteria2                 Decimal
-  kriteria3                 Decimal
 }
 
 

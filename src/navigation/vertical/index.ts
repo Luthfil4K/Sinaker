@@ -66,11 +66,11 @@ const navigation = (): VerticalNavItemsType => {
       icon: CubeOutline,
       path: '/timeline'
     },
-    // {
-    //   title: 'Buat Rapat',
-    //   icon: Login,
-    //   path: '/rapat-create'
-    // },
+    {
+      title: 'Buat Rapat',
+      icon: Login,
+      path: '/rapat-create'
+    },
     {
       sectionTitle: 'Kegiatan'
     },
@@ -90,11 +90,11 @@ const navigation = (): VerticalNavItemsType => {
       icon: CubeOutline,
       path: '/task'
     },
-    // {
-    //   title: 'Table Kegiatan',
-    //   icon: Table,
-    //   path: '/template-table-list'
-    // },
+    {
+      title: 'Table Kegiatan',
+      icon: Table,
+      path: '/template-table-list'
+    },
 
     {
       sectionTitle: 'Tim Kerja'
