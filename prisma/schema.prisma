@@ -6,7 +6,7 @@ generator client {
 }
 
 datasource db {
-  provider = "postgresql"
+  provider = "mysql"
   url      = env("DATABASE_URL")
 }
 
@@ -17,7 +17,7 @@ model User {
   nip                       String                      @unique @db.Char(18)
   password                  String                      @db.VarChar(255)
   role                      String                      @default("employee") @db.VarChar(64)
-  fungsi                    Int                         @db.Integer
+  fungsi                    Int                         @db.Int
   UserProject               UserProject[]
   projectToLead             Project[]                   @relation("projectToLead")
   taskToDo                  Task[]                      @relation("taskToDo")
@@ -37,7 +37,7 @@ model Project {
   id                        Int                         @id @default(autoincrement())
   title                     String                      @db.VarChar(128)
   rentangWaktu              String                      @db.VarChar(128)
-  fungsi                    Int                         @db.Integer
+  fungsi                    Int                         @db.Int
   startdate                 DateTime                    @db.Date
   enddate                   DateTime                    @db.Date
   description               String?                     @db.Text
@@ -72,15 +72,15 @@ model UserProject_member {
 model Task {
   id                        Int                         @id @default(autoincrement())
   title                     String                      @db.VarChar(128)
-  jenisKeg                  Int                         @db.Integer
+  jenisKeg                  Int                         @db.Int
   duedate                   DateTime                    @db.Date
   description               String?                     @db.Text
   notes                     String?                     @db.Text
-  month                     Int                         @db.Integer
-  jenisSample               Int                         @db.Integer
-  year                      Int                         @db.Integer
-  target                    Int                         @db.Integer
-  realisasi                 Int                         @db.Integer
+  month                     Int                         @db.Int
+  jenisSample               Int                         @db.Int
+  year                      Int                         @db.Int
+  target                    Int                         @db.Int
+  realisasi                 Int                         @db.Int
   unitTarget                String                      @db.VarChar(128)
   project                   Project                     @relation(fields: [projectId], references: [id], onDelete: Cascade, onUpdate: Cascade)
   projectId                 Int
@@ -95,7 +95,7 @@ model Task {
 
 model Perusahaan {
   id                        Int                         @id @default(autoincrement())
-  kip                       Int                         @db.Integer
+  kip                       Int                         @db.Int
   nama                      String                      @db.VarChar(128) 
   desa                      String                      @db.VarChar(128)
   namaDesa                  String                      @db.VarChar(128)
@@ -112,7 +112,7 @@ model Perusahaan {
 model GroupPerusahaan {
   id                        Int                         @id @default(autoincrement())
   nama                      String                      @db.VarChar(128)
-  fungsi                    Int                         @db.Integer
+  fungsi                    Int                         @db.Int
   Perusahaangroup           PerusahaanGroup[]
 }
 model PerusahaanGroup {
@@ -126,9 +126,9 @@ model PerusahaanGroup {
 model TimKerja {
   id                        Int                         @id @default(autoincrement())
   nama                      String                      @db.VarChar(128)
-  fungsi                    Int                         @db.Integer @default(0)
+  fungsi                    Int                         @db.Int @default(0)
   userId_fkey               User                        @relation("leadBy", fields: [ketuaTim], references: [id], onDelete: Cascade, onUpdate: Cascade)
-  ketuaTim                  Int                         @db.Integer @default(0)
+  ketuaTim                  Int                         @db.Int @default(0)
   timKerjaPegawai           TimKerjaPegawai[]
 }
 model TimKerjaPegawai {
@@ -145,12 +145,12 @@ model TaskPerusahaanProduksi {
  taskId                     Int
  perusahaan                 Perusahaan                  @relation(fields: [perusahaanId], references: [id], onDelete: Cascade, onUpdate: Cascade)
  perusahaanId               Int
- target                     Int                         @db.Integer
- pmlId                      Int                         @db.Integer
- pclId                      Int                         @db.Integer
- gajiPml                    Int                         @db.Integer
- gajiPcl                    Int                         @db.Integer
- realisasi                  Int                         @db.Integer
+ target                     Int                         @db.Int
+ pmlId                      Int                         @db.Int
+ pclId                      Int                         @db.Int
+ gajiPml                    Int                         @db.Int
+ gajiPcl                    Int                         @db.Int
+ realisasi                  Int                         @db.Int
  desa                       String                      @db.VarChar(128)
  namadesa                   String                      @db.VarChar(128)
  kecamatan                  String                      @db.VarChar(128)
@@ -175,7 +175,7 @@ model Mitra {
   name                      String                      @db.VarChar(64)
   jenisKelamin              String                      @db.VarChar(64)
   tanggalLahir              DateTime                    @db.Date
-  umur                      Int                         @db.Integer
+  umur                      Int                         @db.Int
   pendidikan                String                      @db.VarChar(128)
   email                     String                      @db.VarChar(128)
   status                    String                      @default("internal") @db.VarChar(64)
@@ -257,7 +257,7 @@ model idsbr_perusahaan {
 model template_table {
   id                        Int                         @id @default(autoincrement())
   nama                      String                      @db.VarChar(128)
-  jenisSample               Int                         @db.Integer
+  jenisSample               Int                         @db.Int
   template_table_kolom      template_table_kolom[]
 }
 model template_table_kolom {
@@ -270,11 +270,11 @@ model template_table_kolom {
 model meet {
   id                        Int                         @id @default(autoincrement())
   namaRapat                 String                      @db.VarChar(128)
-  startDate                 DateTime                    @db.Date
-  endDate                   DateTime                    @db.Date
-  duration                  Int                         @db.Integer
-  tempatRapat               String                      @db.Text
-  description               String                      @db.Text
+  startDate                 DateTime                    @db.DateTime
+  endDate                   DateTime                    @db.DateTime
+  duration                  Int                         @db.Int
+  tempatRapat               String                      @db.LongText
+  description               String                      @db.LongText
   createdBy                 User                        @relation(fields: [createdById], references: [id], onDelete: Cascade, onUpdate: Cascade)
   createdById               Int
   user_meet                 user_meet[]
