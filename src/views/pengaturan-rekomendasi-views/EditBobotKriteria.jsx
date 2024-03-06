@@ -148,6 +148,8 @@ const CreateKegiatanPerusahaanViews = props => {
       eigenvalues[i] = sumRow / priorityWeights[i]
     }
 
+    console.log(pairwisePriority)
+
     // Hitung nilai maksimum eigenvalue (λmax)
     const maxEigenvalue = eigenvalues.reduce((a, b) => a + b, 0) / eigenvalues.length
     // console.log(maxEigenvalue)
@@ -196,8 +198,10 @@ const CreateKegiatanPerusahaanViews = props => {
     const normalizeM = normalizePairwiseMatrix(pairwiseM)
     const priorityWeightsM = calculatePriorityWeights(normalizeM)
     const consistencyM = calculateConsistency(priorityWeightsM, pairwiseM)
-    // console.log(priorityWeightsM)
-    // console.log(consistencyM)
+    console.log(pairwiseM)
+    console.log(normalizeM)
+    console.log(priorityWeightsM)
+    console.log(consistencyM)
     const currentValues = { ...values }
     currentValues.jumlahPekerjaan = priorityWeightsP[0]
     currentValues.gajiBlnIni = priorityWeightsP[1]

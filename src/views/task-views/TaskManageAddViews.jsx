@@ -727,8 +727,8 @@ const TaskManageAddViews = propss => {
       renderCell: params => (
         <>
           <Chip
-            label={statusObj[params.row.bebanKerjaM < 0.5 ? (params.row.gajiBulanIni < 3000000 ? 1 : 0) : 0].status}
-            color={statusObj[params.row.bebanKerjaM < 0.5 ? (params.row.gajiBulanIni < 3000000 ? 1 : 0) : 0].color}
+            label={statusObj[params.row.gajiBulanIni < 4200000 ? 1 : 0].status}
+            color={statusObj[params.row.gajiBulanIni < 4200000 ? 1 : 0].color}
             sx={{
               height: 24,
               fontSize: '0.75rem',
@@ -1193,7 +1193,7 @@ const TaskManageAddViews = propss => {
   const [mitraKecArr, setMitraKecArr] = useState([])
 
   // Mengambil kode kecamatan dari data mitra
-  const mitraKec = dataMitra.map(item => {
+  const mitraKec = rowsM.map(item => {
     let nik = item.nik
     let kodeKecamatan = 0
     if (nik[4] === '0' && parseInt(nik[5]) >= 1 && parseInt(nik[5]) <= 9) {
@@ -1205,29 +1205,30 @@ const TaskManageAddViews = propss => {
   })
 
   // Mengambil kode kecamatan dari data perusahaan
-  useEffect(() => {
-    const updatedRows = rowsM.map(row => {
-      const participantExists = mitraKecArr.some(mitra => mitra.id === row.id)
-      return { ...row, checked: participantExists }
-    })
-    setRowsM(updatedRows)
-  }, [mitraKecArr])
+  // useEffect(() => {
+  //   // const updatedRows = rowsM.map(row => {
+  //   //   const participantExists = mitraKecArr.some(mitra => mitra.id === row.id)
+  //   //   return { ...row, checked: participantExists }
+  //   // })
+  //   setRowsM(updatedRows)
+  // }, [mitraKecArr])
 
   useEffect(() => {
     if (data.length > 1) {
       const kodeKecamatanDatas = data.map(item => item.kodeKecamatan)
-      const countMap = kodeKecamatanDatas.reduce((acc, curr) => {
-        acc[curr] = (acc[curr] || 0) + 1
-        return acc
-      }, {})
-      // const kodeKecamatanData = new Set(kodeKecamatanDatas)
-      // const dataMitraKec = mitraKec
-      //   .filter(item => kodeKecamatanData.has(Number(item.kodeKecamatan)))
-      //   .filter(item => item.beban_kerja_mitra[0].bebanKerja < 0.5)
+      // const countMap = kodeKecamatanDatas.reduce((acc, curr) => {
+      //   acc[curr] = (acc[curr] || 0) + 1
+      //   return acc
+      // }, {})
+      const kodeKecamatanData = new Set(kodeKecamatanDatas)
       const hasilSaring = mitraKec
-        .sort((a, b) => a.beban_kerja_mitra[0].bebanKerja - b.beban_kerja_mitra[0].bebanKerja)
-        .filter(item => countMap[Number(item.kodeKecamatan)] && countMap[Number(item.kodeKecamatan)]--)
+        .filter(item => kodeKecamatanData.has(Number(item.kodeKecamatan)))
+        .sort((a, b) => a.bebanKerja - b.bebanKerja)
+      // const hasilSaring = mitraKec
+      //   .sort((a, b) => a.beban_kerja_mitra[0].bebanKerja - b.beban_kerja_mitra[0].bebanKerja)
+      //   .filter(item => countMap[Number(item.kodeKecamatan)] && countMap[Number(item.kodeKecamatan)]--)
       setMitraKecArr(hasilSaring)
+      setRowsM(hasilSaring)
     }
   }, [data])
 

@@ -5,6 +5,7 @@ import CubeOutline from 'mdi-material-ui/CubeOutline'
 import FilterSettings from 'mdi-material-ui/FilterSettings'
 import HomeOutline from 'mdi-material-ui/HomeOutline'
 import Account from 'mdi-material-ui/Account'
+import Elevator from 'mdi-material-ui/Elevator'
 import FormatLetterCase from 'mdi-material-ui/FormatLetterCase'
 import AccountCogOutline from 'mdi-material-ui/AccountCogOutline'
 import CreditCardOutline from 'mdi-material-ui/CreditCardOutline'
@@ -126,6 +127,11 @@ const navigation = (): VerticalNavItemsType => {
 
     {
       sectionTitle: 'Pustaka'
+    },
+    {
+      title: 'Beban Kerja',
+      icon: Elevator,
+      path: '/beban-kerja'
     },
     {
       title: 'Daftar Pegawai',
