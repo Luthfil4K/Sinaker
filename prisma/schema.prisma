@@ -278,6 +278,7 @@ model meet {
   createdBy                 User                        @relation(fields: [createdById], references: [id], onDelete: Cascade, onUpdate: Cascade)
   createdById               Int
   user_meet                 user_meet[]
+  status                    String                      @db.VarChar(128)
 }
 
 model user_meet {

@@ -211,10 +211,17 @@ const TimelineViews = props => {
                         ? 0
                         : Math.ceil(100 * (task.realisasi / task.target)) == 0
                         ? 0
-                        : `${Math.ceil(100 * (task.realisasi / task.target))}%`
+                        : Math.ceil(100 * (task.realisasi / task.target))
                     }
                     variant='determinate'
                     sx={{ marginBottom: 1 }}
+                    color={
+                      Math.ceil(100 * (task.realisasi / task.target)) == 100
+                        ? 'success'
+                        : Math.ceil(100 * (task.realisasi / task.target)) < 50
+                        ? 'error'
+                        : 'warning'
+                    }
                   />
                 </Grid>
               </Grid>

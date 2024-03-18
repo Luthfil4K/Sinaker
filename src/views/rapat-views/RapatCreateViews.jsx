@@ -213,7 +213,7 @@ const RapatCreateViews = props => {
     <Card>
       <Grid container spacing={5} sx={{ padding: '32px' }}>
         <Grid item xs={12}>
-          <Typography variant='h5'>Buat Rapat</Typography>
+          <Typography variant='h5'>Ajukan Rapat</Typography>
         </Grid>
 
         <Grid item xs={12} md={12}>
