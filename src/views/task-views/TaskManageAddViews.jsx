@@ -40,7 +40,7 @@ import { Autocomplete } from '@mui/lab'
 import DatePicker from 'react-datepicker'
 import 'react-datepicker/dist/react-datepicker.css'
 import DatePickerWrapper from 'src/@core/styles/libs/react-datepicker'
-import { DataGrid } from '@mui/x-data-grid'
+import { DataGrid, GridToolbar } from '@mui/x-data-grid'
 import { number } from 'mathjs'
 
 import TableAddParticipant from 'src/views/tables/TableAddParticipant'
@@ -1240,19 +1240,9 @@ const TaskManageAddViews = propss => {
             Tambah Sub Kegiatan
           </Typography>
         </Box>
-        <form noValidate autoComplete='off' onSubmit={e => e.preventDefault()}>
-          <TextField
-            required
-            name='namaSubKeg'
-            value={values.subKegNama}
-            onChange={handleChange('subKegNama')}
-            fullWidth
-            id='namaKegiatan'
-            label='Nama Sub Kegiatan'
-            sx={{ marginBottom: 4 }}
-          />
 
-          <Grid container spacing={4}>
+        <form noValidate autoComplete='off' onSubmit={e => e.preventDefault()}>
+          <Grid container mb={4}>
             <Grid item md={12} xs={12}>
               <FormControl fullWidth>
                 <InputLabel id='demo-simple-select-helper-label'>Jenis Kegiatan</InputLabel>
@@ -1274,6 +1264,20 @@ const TaskManageAddViews = propss => {
                   ))}
                 </Select>
               </FormControl>
+            </Grid>
+          </Grid>
+
+          <Grid container spacing={4}>
+            <Grid item md={12} xs={12}>
+              <TextField
+                required
+                name='namaSubKeg'
+                value={values.subKegNama}
+                onChange={handleChange('subKegNama')}
+                fullWidth
+                id='namaKegiatan'
+                label='Nama Sub Kegiatan'
+              />
             </Grid>
             <Grid item md={values.subKegJenis === 65 || values.subKegJenis === 67 ? 6 : 12} xs={12}>
               <DatePickerWrapper>
@@ -1614,6 +1618,12 @@ const TaskManageAddViews = propss => {
                               overflowY: 'disabled',
                               width: '100%'
                             }}
+                            slots={{
+                              toolbar: GridToolbar
+                            }}
+                            slotProps={{
+                              toolbar: { showQuickFilter: true }
+                            }}
                           />
                         </Box>
                       </Grid>
@@ -1657,6 +1667,12 @@ const TaskManageAddViews = propss => {
                             sx={{
                               height: rowsM.length > 3 ? '70vh' : '45vh',
                               width: '100%'
+                            }}
+                            slots={{
+                              toolbar: GridToolbar
+                            }}
+                            slotProps={{
+                              toolbar: { showQuickFilter: true }
                             }}
                           />
                         </Box>
@@ -1716,6 +1732,12 @@ const TaskManageAddViews = propss => {
                             sx={{
                               height: rowsO.length > 3 ? '70vh' : '45vh',
                               width: '100%'
+                            }}
+                            slots={{
+                              toolbar: GridToolbar
+                            }}
+                            slotProps={{
+                              toolbar: { showQuickFilter: true }
                             }}
                           />
                         </Box>

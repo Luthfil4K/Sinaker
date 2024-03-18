@@ -63,7 +63,7 @@ const jenisSub = {
   63: { namaJenisSub: 'Pelatihan', color: 'warning' },
   64: { namaJenisSub: 'Persiapan', color: 'warning' },
   66: { namaJenisSub: 'Pelaksanaan', color: 'warning' },
-  65: { namaJenisSub: 'Lapangan', color: 'warning' },
+  65: { namaJenisSub: 'Pencacahan', color: 'warning' },
   67: { namaJenisSub: 'Pengolahan-Entri', color: 'warning' },
   68: { namaJenisSub: 'Evaluasi', color: 'warning' },
   69: { namaJenisSub: 'Diseminasi', color: 'warning' },
@@ -144,6 +144,20 @@ const TableProjectDetailTask = props => {
       width: 120,
       headerName: 'Status',
       type: 'string'
+    },
+    {
+      field: 'persentase',
+      headerName: 'Persentase progres',
+      renderCell: params => (
+        <Typography sx={{ fontWeight: 500, fontSize: '0.875rem !important' }}>
+          {params.row.target === 0 || params.row.realisasi === 0
+            ? 0
+            : Math.round(100 * (Number(params.row.realisasi) / Number(params.row.target)))}
+          %
+        </Typography>
+      ),
+      type: 'string',
+      width: 180
     },
     { field: 'deadline', headerName: 'Deadline', width: 140, type: 'string' }
   ]

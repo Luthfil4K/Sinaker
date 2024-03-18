@@ -291,21 +291,21 @@ const CreateKegiatanPerusahaanViews = props => {
     //     </>
     //   )
     // },
-    {
-      field: 'fungsi',
-      headerName: 'Fungsi',
-      renderHeader: () => (
-        <Typography sx={{ fontWeight: 900, fontSize: '0.875rem !important', textAlign: 'center' }}>Fungsi</Typography>
-      ),
+    // {
+    //   field: 'fungsi',
+    //   headerName: 'Fungsi',
+    //   renderHeader: () => (
+    //     <Typography sx={{ fontWeight: 900, fontSize: '0.875rem !important', textAlign: 'center' }}>Fungsi</Typography>
+    //   ),
 
-      minWidth: 170,
-      renderCell: params => (
-        <Typography sx={{ fontWeight: 500, fontSize: '0.875rem !important' }}>
-          {' '}
-          {jenisFungsi[parseInt(params.row.fungsi)].bagFungsi}
-        </Typography>
-      )
-    },
+    //   minWidth: 170,
+    //   renderCell: params => (
+    //     <Typography sx={{ fontWeight: 500, fontSize: '0.875rem !important' }}>
+    //       {' '}
+    //       {jenisFungsi[parseInt(params.row.fungsi)].bagFungsi}
+    //     </Typography>
+    //   )
+    // },
     // {
     //   field: 'totalGaji',
     //   headerName: 'Total Gaji',
@@ -548,7 +548,7 @@ const CreateKegiatanPerusahaanViews = props => {
                 rows={rows}
                 columns={columns}
                 sx={{
-                  height: rows.length > 3 ? '80vh' : '45vh',
+                  height: rows.length > 3 ? '55vh' : '45vh',
                   // overflowY: 'auto',
                   width: '100%'
                 }}

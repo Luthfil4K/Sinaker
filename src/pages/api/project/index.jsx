@@ -47,7 +47,7 @@ export default async function handler(req, res) {
       bulanKegiatan.map(async bulan => {
         const project = await prisma.project.create({
           data: {
-            title: title + ' ' + rentang[rentangWaktu].waktu + ' ' + rent,
+            title: title + ' ' + rentang[rentangWaktu].waktu,
             startdate: bulan.firstDate,
             enddate: bulan.lastDate,
             description,

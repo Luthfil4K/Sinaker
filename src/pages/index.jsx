@@ -58,7 +58,6 @@ const Dashboard = ({ dataTask }) => {
   const [targetBulanIni, setTargetBulanIni] = useState(0)
   const [realisasiBulanIni, setRealisasiBulanIni] = useState(0)
 
-  // console.log(task)
   const dataawal = [12, 19, 3, 5, 2, 3, 8, 10, 6, 7, 14, 12]
   const realisasiAwal = Array.from({ length: 12 }, () => Math.floor(Math.random() * 100))
 
@@ -114,9 +113,6 @@ const Dashboard = ({ dataTask }) => {
           targetAccumulator += monthlyTarget
           realisasiAccumulator += monthlyRealisasi
 
-          // // console.log('Akumulasi Target:', targetAccumulator)
-          // // console.log('Akumulasi Realisasi:', realisasiAccumulator)
-
           untukTarget.push(targetAccumulator)
           untukRealisasi.push(realisasiAccumulator)
 
@@ -132,7 +128,6 @@ const Dashboard = ({ dataTask }) => {
       }
     }
 
-    // console.log(event.target.value)
     setvalueDropBar(event.target.value)
   }
 
@@ -141,7 +136,6 @@ const Dashboard = ({ dataTask }) => {
   }
 
   const handleChangeLine = event => {
-    // console.log(event.target.value)
     setvalueDropLine(event.target.value)
   }
 
@@ -166,9 +160,6 @@ const Dashboard = ({ dataTask }) => {
 
       targetAccumulator += monthlyTarget
       realisasiAccumulator += monthlyRealisasi
-
-      // // console.log('Akumulasi Target:', targetAccumulator)
-      // // console.log('Akumulasi Realisasi:', realisasiAccumulator)
 
       untukTarget.push(targetAccumulator)
       untukRealisasi.push(realisasiAccumulator)
@@ -198,7 +189,6 @@ const Dashboard = ({ dataTask }) => {
       [0, 0, 0, 0, 0, 0, 0]
     )
     setDoughnut(hasil)
-    // console.log(hasil)
   }, [])
 
   useEffect(() => {
@@ -213,7 +203,6 @@ const Dashboard = ({ dataTask }) => {
       [0]
     )
     setTargetBulanIni(hasil)
-    // console.log(hasil)
   }, [])
 
   useEffect(() => {
@@ -228,12 +217,7 @@ const Dashboard = ({ dataTask }) => {
       [0]
     )
     setRealisasiBulanIni(hasil)
-    // console.log(hasil)
   }, [])
-
-  // console.log(targetBulanIni + '+' + realisasiBulanIni)
-  // console.log(new Date().getFullYear())
-  // console.log(BulanSekarang)
 
   // update data saat dropdown bulan line diganti
   useEffect(() => {
@@ -250,7 +234,6 @@ const Dashboard = ({ dataTask }) => {
     setTargetLine(untukTargetLine)
     setRealisasiLine(untukRealisasiLine)
     setLabelsLine(untukLabelsLine)
-    // // console.log(bulan + 'ini pas ganti bulan' + valueDropLine)
   }, [bulan])
 
   // update data saat dropdown fungsi line diganti
@@ -269,7 +252,7 @@ const Dashboard = ({ dataTask }) => {
   //   setTargetLine(untukTargetLine)
   //   setRealisasiLine(untukRealisasiLine)
   //   setLabelsLine(untukLabelsLine)
-  //   // console.log(bulan + 'ini pas ganti valuedropline' + valueDropLine)
+
   // }, [valueDropLine])
 
   useEffect(() => {
@@ -284,13 +267,7 @@ const Dashboard = ({ dataTask }) => {
       if (task.jenisSample === 1) {
         targetLinear += task.target
         realisasiLinear += task.realisasi
-        // console.log(
-        //   task.id + 'masuk ke jenis sample 1 dengan realisasi :' + task.realisasi + 'dan target : ' + task.target
-        // )
       } else if (task.jenisSample == 0) {
-        // console.log(
-        //   task.id + 'masuk ke jenis sample 0 dengan realisasi :' + task.realisasi + 'dan target : ' + task.target
-        // )
         targetLinearP += task.target
         realisasiLinearP += task.realisasi
       }
@@ -305,8 +282,6 @@ const Dashboard = ({ dataTask }) => {
     setLinearProgressP(untukLinearProgressP)
     setTotalRealisasiP(realisasiLinearP)
     setTotalTargetP(targetLinearP)
-
-    // console.log(bulan + 'ini pas ganti valuedropline' + valueDropLine)
   }, [task])
 
   // data buat chartnya
@@ -342,13 +317,10 @@ const Dashboard = ({ dataTask }) => {
     ]
   }
 
-  console.log(labelsLine)
-  console.log(targetLine)
-  console.log(realisasiLine)
   const dataDoughnut = {
     datasets: [
       {
-        data: [targetBulanIni, realisasiBulanIni],
+        data: [targetBulanIni - realisasiBulanIni, realisasiBulanIni],
         backgroundColor: [
           // 'rgba(49, 10, 49,1)',
           // 'rgba(115, 93, 120,1)'
@@ -360,7 +332,7 @@ const Dashboard = ({ dataTask }) => {
     ],
 
     // labels: ['Sosial', 'Produksi', 'IPDS', 'Distribusi', 'Nerwilis']
-    labels: ['Target', 'Realisasi']
+    labels: ['Total Target yang Belum Terealisasi', 'Total Realisasi ']
   }
 
   return (
@@ -462,6 +434,7 @@ const Dashboard = ({ dataTask }) => {
                   height={100}
                   options={{
                     responsive: true,
+
                     plugins: {
                       legend: {
                         position: 'bottom'
@@ -469,6 +442,25 @@ const Dashboard = ({ dataTask }) => {
                       title: {
                         display: true,
                         text: ` `
+                      },
+                      tooltip: {
+                        callbacks: {
+                          label: function (context) {
+                            let label = context.dataset.label || ''
+
+                            if (label) {
+                              label += ': '
+                            }
+                            if (context.parsed.y !== null) {
+                              label =
+                                `${Math.round(100 * (Number(realisasiBulanIni) / Number(targetBulanIni)))}%` +
+                                // (100 * (targetBulanIni - realisasiBulanIni)) / realisasiBulanIni +
+                                ' dari total realisasi : ' +
+                                realisasiBulanIni
+                            }
+                            return label
+                          }
+                        }
                       }
                     }
                   }}
