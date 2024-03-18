@@ -115,7 +115,7 @@ const TaskDetailViews = props => {
 
   // ganti tarel di your task sesuai dengan tabel dibawah
   const handleTaskUpdate = (realisasi, trgt) => {
-    // setValues({ ...values, target: trgt, realisasi })
+    setValues({ ...values, target: trgt, realisasi })
   }
 
   const handleChange = props => event => {
@@ -519,7 +519,7 @@ const TaskDetailViews = props => {
                   <Grid container p={4}>
                     <Grid item xs={12} md={12}>
                       <Typography color={'primary.dark'} variant={'h5'}>
-                        Pekerjaan Anda
+                        Progres Sub Kegiatan
                       </Typography>
                     </Grid>
                     <Grid item xs={12} md={12} mt={2} display={'flex'} alignItems={'start'}>
