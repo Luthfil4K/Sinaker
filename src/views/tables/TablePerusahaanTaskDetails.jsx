@@ -27,6 +27,7 @@ import {
   GridToolbarFilterButton,
   GridToolbarExport,
   GridToolbarDensitySelector,
+  GridToolbarQuickFilter,
   GridActionsCellItem,
   GridRowEditStopReasons
 } from '@mui/x-data-grid'
@@ -59,6 +60,7 @@ function EditToolbar(props) {
       <GridToolbarFilterButton />
       <GridToolbarDensitySelector />
       <GridToolbarExport />
+      <GridToolbarQuickFilter />
     </GridToolbarContainer>
   )
 }
@@ -651,8 +653,8 @@ const TableGroupPerusahaan = props => {
       renderHeader: () => (
         <Typography sx={{ fontWeight: 900, fontSize: '0.875rem !important', textAlign: 'center' }}>
           {jenisKeg === 65 //Produksi or Distribusi
-            ? 'Gaji PML'
-            : 'Gaji Operator'}
+            ? 'Honor PML'
+            : 'Honor Operator'}
         </Typography>
       ),
       width: 120,
@@ -675,7 +677,7 @@ const TableGroupPerusahaan = props => {
     },
     {
       field: 'gajiPcl',
-      headerName: 'Gaji PCL',
+      headerName: 'Honor PCL',
       renderHeader: () => (
         <Typography sx={{ fontWeight: 900, fontSize: '0.875rem !important', textAlign: 'center' }}>Gaji PCL</Typography>
       ),
@@ -688,16 +690,14 @@ const TableGroupPerusahaan = props => {
       headerName: 'Proses',
       renderHeader: () => (
         <Typography sx={{ fontWeight: 900, fontSize: '0.875rem !important', textAlign: 'center' }}>
-          {fungsi === 4 || fungsi === 5 || fungsi === 3 //Produksi or Distribusi
-            ? 'Hasil Pencacahan'
-            : 'Proses'}
+          {jenisSample === 1 ? 'Proses' : 'Proses'}
         </Typography>
       ),
       type: 'singleSelect',
       valueOptions:
-        fungsi === 4 || fungsi === 5 || fungsi === 3
+        jenisSample === 1
           ? ['Masuk', 'Menunggu Masuk', 'Tutup', 'Tidak Aktif', 'Tidak Ditemukan', 'Non Respon']
-          : ['Proses'],
+          : ['Proses', 'Selesai'],
       width: 180,
       editable: true
     },
@@ -837,7 +837,7 @@ const TableGroupPerusahaan = props => {
                 toolbar: EditToolbar
               }}
               slotProps={{
-                toolbar: { setRows, setRowModesModel }
+                toolbar: { setRows, setRowModesModel, showQuickFilter: true }
               }}
             />
           </Box>

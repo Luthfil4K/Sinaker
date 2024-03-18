@@ -11,7 +11,7 @@ import Button from '@mui/material/Button'
 import Grid from '@mui/material/Grid'
 import Chip from '@mui/material/Chip'
 // other
-import { DataGrid } from '@mui/x-data-grid'
+import { DataGrid, GridToolbar } from '@mui/x-data-grid'
 import { useRouter } from 'next/dist/client/router'
 import Swal from 'sweetalert2'
 import Link from '@mui/material/Link'
@@ -448,6 +448,12 @@ const TableMitra = props => {
             }}
             columnVisibilityModel={{
               action: session.status === 'authenticated' && session.data.uid === 1099999 ? true : false
+            }}
+            slots={{
+              toolbar: GridToolbar
+            }}
+            slotProps={{
+              toolbar: { showQuickFilter: true }
             }}
           />
         </Box>

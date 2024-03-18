@@ -13,7 +13,7 @@ import MenuItem from '@mui/material/MenuItem'
 import Link from '@mui/material/Link'
 
 // other, swall
-import { DataGrid } from '@mui/x-data-grid'
+import { DataGrid, GridToolbar } from '@mui/x-data-grid'
 import Swal from 'sweetalert2'
 import { useRouter } from 'next/dist/client/router'
 import { useSession } from 'next-auth/react'
@@ -402,6 +402,12 @@ const TablePeople = props => {
           }}
           columnVisibilityModel={{
             action: session.status === 'authenticated' && session.data.uid === 1099999 ? true : false
+          }}
+          slots={{
+            toolbar: GridToolbar
+          }}
+          slotProps={{
+            toolbar: { showQuickFilter: true }
           }}
         />
       </Card>
