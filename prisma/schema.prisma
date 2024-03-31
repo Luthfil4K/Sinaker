@@ -18,14 +18,14 @@ model User {
   password                  String                      @db.VarChar(255)
   role                      String                      @default("employee") @db.VarChar(64)
   fungsi                    Int                         @db.Int
-  UserProject               UserProject[]
-  projectToLead             Project[]                   @relation("projectToLead")
-  taskToDo                  Task[]                      @relation("taskToDo")
-  ProjectCreated            Project[]
-  TaskOrganik               TaskOrganik[]
+  UserProject              kegiatan_user_leader[]
+  projectToLead            kegiatan[]                   @relation("projectToLead")
+  taskToDo                  sub_kegiatan[]                      @relation("taskToDo")
+  ProjectCreated           kegiatan[]
+  TaskOrganik               sub_kegiatan_user []
   TimKerjaPegawai           TimKerjaPegawai[]
   TimKerja                  TimKerja[]                  @relation("leadBy")
-  UserProject_member        UserProject_member[]
+  UserProject_member        kegiatan_user_member[]
   beban_kerja_pegawai       beban_kerja_pegawai[]
   beban_kerja_tim_pegawai   beban_kerja_tim_pegawai[]
   user_meet                 user_meet[]
@@ -33,7 +33,7 @@ model User {
   pekerjaan_harian          pekerjaan_harian[]
 }
 
-model Project {
+model kegiatan{
   id                        Int                         @id @default(autoincrement())
   title                     String                      @db.VarChar(128)
   rentangWaktu              String                      @db.VarChar(128)
@@ -44,36 +44,37 @@ model Project {
   isArchived                Int                         @db.SmallInt
   projectLeader             User                        @relation("projectToLead", fields: [projectLeaderId], references: [id], onDelete: Cascade, onUpdate: Cascade)
   projectLeaderId           Int
-  UserProject               UserProject[]
-  UserProject_member        UserProject_member[]
-  Task                      Task[]
+  UserProject              kegiatan_user_leader[]
+  UserProject_member        kegiatan_user_member[]
+  Task                     sub_kegiatan[]
   createdBy                 User                        @relation(fields: [createdById], references: [id], onDelete: Cascade, onUpdate: Cascade)
   createdById               Int
 }
 
-model UserProject {
+model kegiatan_user_leader {
   id                        Int                         @id @default(autoincrement())
   user                      User                        @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: Cascade)
   userId                    Int
-  project                   Project                     @relation(fields: [projectId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  project                  kegiatan                    @relation(fields: [projectId], references: [id], onDelete: Cascade, onUpdate: Cascade)
   projectId                 Int
   isLeader                  Int
 }
 
-model UserProject_member {
+model kegiatan_user_member {
   id                        Int                         @id @default(autoincrement())
   user                      User                        @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: Cascade)
   userId                    Int
-  project                   Project                     @relation(fields: [projectId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  project                  kegiatan                    @relation(fields: [projectId], references: [id], onDelete: Cascade, onUpdate: Cascade)
   projectId                 Int
   isLeader                  Int
 }
 
-model Task {
+model sub_kegiatan {
   id                        Int                         @id @default(autoincrement())
   title                     String                      @db.VarChar(128)
   jenisKeg                  Int                         @db.Int
   duedate                   DateTime                    @db.Date
+  startDate                 DateTime                    @db.Date
   description               String?                     @db.Text
   notes                     String?                     @db.Text
   month                     Int                         @db.Int
@@ -82,13 +83,14 @@ model Task {
   target                    Int                         @db.Int
   realisasi                 Int                         @db.Int
   unitTarget                String                      @db.VarChar(128)
-  project                   Project                     @relation(fields: [projectId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  project                  kegiatan                    @relation(fields: [projectId], references: [id], onDelete: Cascade, onUpdate: Cascade)
   projectId                 Int
   user                      User                        @relation("taskToDo", fields: [userId], references: [id], onDelete: Cascade, onUpdate: Cascade)
   userId                    Int
   TaskPerusahaanProduksi    TaskPerusahaanProduksi[]
-  TaskPeserta               TaskPeserta[]
-  TaskOrganik               TaskOrganik[]
+  data_pencatatan_ss        data_pencatatan_ss[]
+  TaskPeserta               sub_kegiatan_mitra[]
+  TaskOrganik               sub_kegiatan_user []
   pekerjaan_harian          pekerjaan_harian[]
 
 }
@@ -105,7 +107,7 @@ model Perusahaan {
   kegiatan                  String                      @db.VarChar(128)
   TaskPerusahaanProduksi    TaskPerusahaanProduksi[]
   Perusahaangroup           PerusahaanGroup[]
-  
+
 
 }
 
@@ -141,7 +143,7 @@ model TimKerjaPegawai {
 
 model TaskPerusahaanProduksi {
  id                         Int                         @id @default(autoincrement())
- task                       Task                        @relation(fields: [taskId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+ task                       sub_kegiatan                       @relation(fields: [taskId], references: [id], onDelete: Cascade, onUpdate: Cascade)
  taskId                     Int
  perusahaan                 Perusahaan                  @relation(fields: [perusahaanId], references: [id], onDelete: Cascade, onUpdate: Cascade)
  perusahaanId               Int
@@ -169,6 +171,28 @@ model TaskPerusahaanProduksi {
 
 }
 
+model data_pencatatan_ss {
+ id                         Int                         @id @default(autoincrement())
+ task                       sub_kegiatan                @relation(fields: [taskId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+ taskId                     Int
+ template_table             template_table              @relation(fields: [template_tableId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+ template_tableId           Int
+ pmlId                      Int                         @db.Int
+ pclId                      Int                         @db.Int
+ gajiPml                    Int                         @db.Int
+ gajiPcl                    Int                         @db.Int
+ target                     Int                         @db.Int
+ realisasi                  Int                         @db.Int
+ desa                       String                      @db.VarChar(128)
+ namadesa                   String                      @db.VarChar(128)
+ kecamatan                  String                      @db.VarChar(128)
+ blokSample                 String                      @db.VarChar(128)
+ namaKec                    String                      @db.VarChar(128)
+ nama                       String                      @db.VarChar(128)
+ hasilPencacahan            String                      @db.VarChar(128)
+ duedate                    DateTime                    @db.Date
+}
+
 model Mitra {
   id                        Int                         @id @default(autoincrement())
   nik                       String                      @db.VarChar(128)
@@ -179,22 +203,22 @@ model Mitra {
   pendidikan                String                      @db.VarChar(128)
   email                     String                      @db.VarChar(128)
   status                    String                      @default("internal") @db.VarChar(64)
-  TaskPeserta               TaskPeserta[]
+  TaskPeserta               sub_kegiatan_mitra[]
   PesertaGaji               PesertaGaji[]
   beban_kerja_mitra         beban_kerja_mitra[]
 }
 
-model TaskPeserta {
+model sub_kegiatan_mitra  {
  id                         Int                         @id @default(autoincrement())
- task                       Task                        @relation(fields: [taskId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+ task                       sub_kegiatan                       @relation(fields: [taskId], references: [id], onDelete: Cascade, onUpdate: Cascade)
  taskId                     Int
  mitra                      Mitra                       @relation(fields: [mitraId], references: [id], onDelete: Cascade, onUpdate: Cascade)
  mitraId                    Int
 }
 
-model TaskOrganik {
+model sub_kegiatan_user  {
  id                         Int                         @id @default(autoincrement())
- task                       Task                        @relation(fields: [taskId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+ task                       sub_kegiatan                       @relation(fields: [taskId], references: [id], onDelete: Cascade, onUpdate: Cascade)
  taskId                     Int
  organik                    User                        @relation(fields: [organikId], references: [id], onDelete: Cascade, onUpdate: Cascade)
  organikId                  Int
@@ -259,6 +283,7 @@ model template_table {
   nama                      String                      @db.VarChar(128)
   jenisSample               Int                         @db.Int
   template_table_kolom      template_table_kolom[]
+  data_pencatatan_ss        data_pencatatan_ss[]
 }
 model template_table_kolom {
   id                        Int                         @id @default(autoincrement())
@@ -270,6 +295,10 @@ model template_table_kolom {
 model meet {
   id                        Int                         @id @default(autoincrement())
   namaRapat                 String                      @db.VarChar(128)
+  nomor                     String                      @db.VarChar(128)
+  lampiran                  String                      @db.VarChar(128)
+  perihal                   String                      @db.VarChar(128)
+  ditujukan                 String                      @db.VarChar(128)
   startDate                 DateTime                    @db.DateTime
   endDate                   DateTime                    @db.DateTime
   duration                  Int                         @db.Int
@@ -278,6 +307,7 @@ model meet {
   createdBy                 User                        @relation(fields: [createdById], references: [id], onDelete: Cascade, onUpdate: Cascade)
   createdById               Int
   user_meet                 user_meet[]
+  notulensi_meet            notulensi_meet[]
   status                    String                      @db.VarChar(128)
 }
 
@@ -289,12 +319,19 @@ model user_meet {
   meetId                    Int
 }
 
+model notulensi_meet {
+  id                        Int                         @id @default(autoincrement())
+  taskfile                  String?                     @db.VarChar(255)
+  meet                      meet                        @relation(fields: [meetId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  meetId                    Int
+}
+
 model pekerjaan_harian {
   id                        Int                         @id @default(autoincrement())
   namaKegiatan              String                      @db.VarChar(128)
   durasi                    Int
   tanggalSubmit             DateTime                    @db.Date
-  task                      Task                        @relation(fields: [taskId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  task                      sub_kegiatan                       @relation(fields: [taskId], references: [id], onDelete: Cascade, onUpdate: Cascade)
   taskId                    Int
   user                      User                        @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: Cascade)
   userId                    Int
