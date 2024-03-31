@@ -44,6 +44,8 @@ const CreateKegiatanPerusahaanViews = props => {
     gajiBlnSebelumMitra: 0
   })
 
+  console.log(mitra)
+
   const rowsOBefore = [
     { id: 1, kriteria: 'Jumlah Pekerjaan', prioritas: (pegawai.kriteria1 * 100).toFixed(2) },
     { id: 2, kriteria: 'Jumlah Jam Kerja', prioritas: (pegawai.kriteria2 * 100).toFixed(2) }

@@ -87,6 +87,8 @@ const CreateKegiatanPerusahaanViews = props => {
       }
     }
 
+    console.log(pairwiseMatrix)
+
     return pairwiseMatrix
   }
 
@@ -110,6 +112,8 @@ const CreateKegiatanPerusahaanViews = props => {
       }
     }
 
+    console.log(normalizedMatrix)
+
     return normalizedMatrix
   }
 
@@ -125,17 +129,13 @@ const CreateKegiatanPerusahaanViews = props => {
       priorityWeights[i] = sumRow / n
     }
 
+    console.log(priorityWeights)
+
     return priorityWeights
   }
 
   function calculateConsistency(priorityWeights, pairwiseMatrix) {
     const n = priorityWeights.length
-
-    // Hitung eigenvalue (λ) dari matriks berpasangan
-    // const eigenvalues = numeric.eig(pairwiseMatrix).lambda.x
-    // const eigenvalue = math.eigs(pairwiseMatrix, { number })
-    // const eigenvalues = eigenvalue.values
-    // console.log(eigenvalues)
     const pairwisePriority = new Array(n).fill(null).map(() => new Array(n).fill(1))
     const eigenvalues = new Array(n).fill(0)
 
@@ -152,10 +152,11 @@ const CreateKegiatanPerusahaanViews = props => {
 
     // Hitung nilai maksimum eigenvalue (λmax)
     const maxEigenvalue = eigenvalues.reduce((a, b) => a + b, 0) / eigenvalues.length
-    // console.log(maxEigenvalue)
+    console.log(maxEigenvalue)
 
     // Hitung Consistency Index (CI)
     const CI = (maxEigenvalue - n) / (n - 1)
+    console.log(CI)
 
     const RI_Table = {
       1: 0.0,
@@ -180,6 +181,7 @@ const CreateKegiatanPerusahaanViews = props => {
     } else {
       CR = 0
     }
+    console.log(CR)
 
     return CR
   }
@@ -198,10 +200,6 @@ const CreateKegiatanPerusahaanViews = props => {
     const normalizeM = normalizePairwiseMatrix(pairwiseM)
     const priorityWeightsM = calculatePriorityWeights(normalizeM)
     const consistencyM = calculateConsistency(priorityWeightsM, pairwiseM)
-    console.log(pairwiseM)
-    console.log(normalizeM)
-    console.log(priorityWeightsM)
-    console.log(consistencyM)
     const currentValues = { ...values }
     currentValues.jumlahPekerjaan = priorityWeightsP[0]
     currentValues.gajiBlnIni = priorityWeightsP[1]
