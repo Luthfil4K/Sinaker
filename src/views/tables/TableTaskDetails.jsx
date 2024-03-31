@@ -302,7 +302,7 @@ const TableGroupPerusahaan = props => {
       width: 180,
       editable: true
     },
-    { field: 'gajiPcl', headerName: 'Gaji PCL', type: 'number', width: 120, editable: true },
+    { field: 'gajiPcl', headerName: 'Honor PCL', type: 'number', width: 120, editable: true },
     {
       field: 'tanggalDob',
       headerName: 'Tanggal Terima Dok Dikab',

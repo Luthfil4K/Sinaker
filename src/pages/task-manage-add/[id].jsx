@@ -34,7 +34,7 @@ export async function getServerSideProps(context) {
     }
   }
 
-  const project = await prisma.project.findUnique({
+  const project = await prisma.kegiatan.findUnique({
     where: {
       id: parseInt(context.params.id)
     },
@@ -145,7 +145,7 @@ export async function getServerSideProps(context) {
   })
 
   let oraganikProject_member
-  oraganikProject_member = await prisma.userProject_member.findMany({
+  oraganikProject_member = await prisma.kegiatan_user_member.findMany({
     where: {
       projectId: parseInt(context.params.id)
     }

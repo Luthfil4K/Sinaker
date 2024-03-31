@@ -5,7 +5,6 @@ import RapatDetailViews from 'src/views/rapat-views/RapatDetailViews'
 
 const RapatDetail = ({ data }) => {
   const [dataR, setDataR] = useState(JSON.parse(data))
-  console.log(dataR)
   return (
     <>
       <RapatDetailViews dataPesertaRapat={dataR.userRapat} dataRapat={dataR.rapat} />

@@ -46,8 +46,11 @@ import { number } from 'mathjs'
 import TableAddParticipant from 'src/views/tables/TableAddParticipant'
 
 const TaskManageAddViews = propss => {
-  const CustomInputStart = forwardRef((props, ref) => {
+  const CustomInputEnd = forwardRef((props, ref) => {
     return <TextField fullWidth {...props} inputRef={ref} label='Tanggal Berakhir' autoComplete='on' />
+  })
+  const CustomInputStart = forwardRef((props, ref) => {
+    return <TextField fullWidth {...props} inputRef={ref} label='Tanggal Mulai' autoComplete='on' />
   })
 
   const statusObj = {
@@ -67,6 +70,7 @@ const TaskManageAddViews = propss => {
   const [tpp, setTpp] = useState(propss.dataTaskPerusahaan)
   const [fungsi, setFungsi] = useState(project.fungsi)
   const [selectedDateE, setSelectedDateE] = useState(null)
+  const [selectedDateS, setSelectedDateS] = useState(null)
   const [values, setValues] = useState({
     subKegNama: '',
     subKegJenis: '',
@@ -75,6 +79,7 @@ const TaskManageAddViews = propss => {
     subKegJenisSample: '',
     subKegSamplePerusahaan: '',
     subKegSampleTimKerja: '',
+    subKegStart: '',
     subKegDl: '',
     subKegDesk: '',
     subKegProjectId: project.id,
@@ -108,13 +113,23 @@ const TaskManageAddViews = propss => {
 
   const handleDateChangeE = date => {
     const dates = new Date(date) // Ganti tanggal dengan tanggal yang sesuai
-    const localizedDateString = date.toLocaleDateString('id')
+
     setSelectedDateE(date)
     setValues(values => ({
       ...values, // Pertahankan nilai properti lainnya
       subKegMonth: dates.getMonth() + 1,
       subKegYear: dates.getFullYear(),
       subKegDl: date // Perbarui nilai kegRentang
+    }))
+  }
+
+  const handleDateChangeS = date => {
+    const dates = new Date(date) // Ganti tanggal dengan tanggal yang sesuai
+
+    setSelectedDateS(date)
+    setValues(values => ({
+      ...values, // Pertahankan nilai properti lainnya
+      subKegStart: date // Perbarui nilai kegRentang
     }))
   }
 
@@ -323,15 +338,21 @@ const TaskManageAddViews = propss => {
     const arrayMitra = mitraAll.map(item => [item.jumlahKegiatan, item.gajiBulanIni, item.gajiBulanSblm])
     const arrayMitraId = mitraAll.map(item => item.mitra_id)
 
+    const startDate = new Date(selectedDateS)
+    const deadLaneAwal = new Date(selectedDateE)
+    console.log('ini tanggal mulai' + startDate)
+    console.log('initanngaal berakhir: ' + deadLaneAwal)
+
     try {
       while (true) {
         const res = await axios.post('/task', {
           title: values.subKegNama,
           jenisKeg: values.subKegJenis,
           targetTotal: parseInt(values.subKegTarget),
-          deadLaneAwal: values.subKegDl > project.enddate ? values.subKegDl : project.enddate,
+          startDate: new Date(selectedDateS),
+          deadLaneAwal: new Date(selectedDateE),
           unitTarget: values.subKegUnitTarget,
-          duedate: values.subKegDl,
+          duedate: new Date(values.subKegDl),
           bulan: new Date(values.subKegDl).getMonth(),
           jenisSample: values.subKegJenis == 65 || values.subKegJenis == 67 ? values.subKegJenisSample : 0,
           participants: data,
@@ -348,7 +369,7 @@ const TaskManageAddViews = propss => {
           realisasi: 0,
           month: parseInt(values.subKegMonth),
           year: parseInt(values.subKegYear),
-          projectId: values.subKegProjectId,
+          projectId: project.id,
           userId: values.subKegUserId,
           notes: '-',
           gaji: values.subKegJenisSample == 1 ? parseInt(values.subKegGajiPerPerusahaan) : 0,
@@ -414,10 +435,10 @@ const TaskManageAddViews = propss => {
   ]
 
   const jenisSubKegiatan = [
-    {
-      id: 63,
-      nama: 'Pelatihan'
-    },
+    // {
+    //   id: 63,
+    //   nama: 'Pelatihan'
+    // },
     // {
     //   id: 64,
     //   nama: 'Persiapan'
@@ -645,6 +666,18 @@ const TaskManageAddViews = propss => {
     })
     setRowsO(updatedRowsO)
   }, [participantsTimKerja])
+  const [error, setError] = useState('')
+
+  useEffect(() => {
+    if (selectedDateS && selectedDateE && selectedDateS > selectedDateE) {
+      setError('Tanggal Mulai tidak boleh setelah Tanggal Berakhir')
+    } else {
+      setError('')
+    }
+  }, [selectedDateS, selectedDateE])
+
+  console.log('mulai' + values.subKegDl)
+  console.log('selesai :' + values.subKegStart)
 
   const columnsM = [
     {
@@ -1282,6 +1315,22 @@ const TaskManageAddViews = propss => {
             <Grid item md={values.subKegJenis === 65 || values.subKegJenis === 67 ? 6 : 12} xs={12}>
               <DatePickerWrapper>
                 <DatePicker
+                  selected={selectedDateS}
+                  sx={{ width: 1000 }}
+                  showYearDropdown
+                  showMonthDropdown
+                  placeholderText='Tanggal Mulai'
+                  value={selectedDateS}
+                  onChange={handleDateChangeS}
+                  customInput={<CustomInputStart />}
+                  dateFormat='dd/MM/yyyy'
+                  className='custom-datepicker'
+                />
+              </DatePickerWrapper>
+            </Grid>
+            <Grid item md={values.subKegJenis === 65 || values.subKegJenis === 67 ? 6 : 12} xs={12}>
+              <DatePickerWrapper>
+                <DatePicker
                   selected={selectedDateE}
                   sx={{ width: 1000 }}
                   showYearDropdown
@@ -1289,11 +1338,14 @@ const TaskManageAddViews = propss => {
                   placeholderText='Tanggal Berakhir'
                   value={selectedDateE}
                   onChange={handleDateChangeE}
-                  customInput={<CustomInputStart />}
+                  customInput={<CustomInputEnd />}
                   dateFormat='dd/MM/yyyy'
                   className='custom-datepicker'
                 />
               </DatePickerWrapper>
+            </Grid>
+            <Grid item xs={12}>
+              {error && <div style={{ color: 'red' }}>{error}</div>}
             </Grid>
 
             {session.status === 'authenticated' &&
@@ -1372,19 +1424,19 @@ const TaskManageAddViews = propss => {
                       </Select>
                     </FormControl>
                   </Grid>
-                  <Grid item xs={12} md={6}>
+                  <Grid item xs={12} md={12}>
                     <FormControl fullWidth>
                       {session.status === 'authenticated' && values.subKegJenisSample === 0 && (
                         <>
-                          <InputLabel id='demo-simple-select-helper-label'>Template Table</InputLabel>
+                          <InputLabel id='demo-simple-select-helper-label'>Level Pencatatan</InputLabel>
                           <Select
                             fullWidth
                             labelId='demo-simple-select-helper-label'
                             onChange={handleTemplateChange}
                             value={values.templateTable}
                             id='demo-simple-select-helper'
-                            label='Template Table'
-                            name='Template Table'
+                            label='Level Pencatatan'
+                            name='Level Pencatatan'
                             size='medium'
                           >
                             <MenuItem value={3}>NBS-NKS</MenuItem>
@@ -1394,15 +1446,15 @@ const TaskManageAddViews = propss => {
                       )}
                       {session.status === 'authenticated' && values.subKegJenisSample === 1 && (
                         <>
-                          <InputLabel id='demo-simple-select-helper-label'>Template Table</InputLabel>
+                          <InputLabel id='demo-simple-select-helper-label'>Level Pencatatan</InputLabel>
                           <Select
                             fullWidth
                             labelId='demo-simple-select-helper-label'
                             onChange={handleTemplateChange}
                             value={values.templateTable}
                             id='demo-simple-select-helper'
-                            label='Template Table'
-                            name='Template Table'
+                            label='Level Pencatatan'
+                            name='Level Pencatatan'
                             size='medium'
                           >
                             <MenuItem value={5}>Alamat-Nama Perusahaan</MenuItem>
@@ -1540,7 +1592,7 @@ const TaskManageAddViews = propss => {
                           target='_blank'
                           href='https://docs.google.com/spreadsheets/d/1r7-45vtZHeJc8NIHt-_37nSNvv6b_sdyL-k_RRJY1CA/edit?usp=sharing'
                         >
-                          Template Table
+                          Unduh Template
                         </Button>
                       </>
                     )}
@@ -1553,7 +1605,7 @@ const TaskManageAddViews = propss => {
                           target='_blank'
                           href='https://docs.google.com/spreadsheets/d/1SMEoofTuCwTbz0S8wWv50c0NdQR7YdTZMkD-MheQ05w/edit?usp=sharing'
                         >
-                          Template Table
+                          Unduh Template
                         </Button>
                       </>
                     )}
@@ -1565,9 +1617,9 @@ const TaskManageAddViews = propss => {
                           style={{ marginLeft: 30 }}
                           variant='contained'
                           target='_blank'
-                          href='https://docs.google.com/spreadsheets/d/1drqslfn5KY6GhR5N2Bc_ZbyMJWg4IF5SDVo6umsBlho/edit?usp=sharing'
+                          href='https://docs.google.com/spreadsheets/d/1__AgNaZCv18rLrdAcza8hNKAs2xZIZszATfeRL5zipI/edit?usp=sharing'
                         >
-                          Template Table
+                          Unduh Template
                         </Button>
                       </>
                     )}
@@ -1581,7 +1633,7 @@ const TaskManageAddViews = propss => {
                           target='_blank'
                           href='https://docs.google.com/spreadsheets/d/1nWR6_tsLBXa1qLdTry5fsx1Hgmvfj---oNsiCQO3ods/edit?usp=sharing'
                         >
-                          Template Table
+                          Unduh Template
                         </Button>
                       </>
                     )}
@@ -1595,7 +1647,7 @@ const TaskManageAddViews = propss => {
                           target='_blank'
                           href='https://docs.google.com/spreadsheets/d/1s9k74pPMlJc8wotQRV1jpBxPAYFqh-BD1sH8BhEFb4Q/edit?usp=sharing'
                         >
-                          Template Table
+                          Unduh Template
                         </Button>
                       </>
                     )}

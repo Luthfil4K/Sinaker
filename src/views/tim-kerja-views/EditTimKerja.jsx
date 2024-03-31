@@ -460,7 +460,7 @@ const CreateKegiatanPerusahaanViews = props => {
               name='namaKegiatan'
             />
           </Grid>
-          <Grid item xs={12} md={12}>
+          {/* <Grid item xs={12} md={12}>
             <Typography variant='h6' sx={{ py: '5px' }}></Typography>
 
             <FormControl fullWidth>
@@ -481,7 +481,7 @@ const CreateKegiatanPerusahaanViews = props => {
                 ))}
               </Select>
             </FormControl>
-          </Grid>
+          </Grid> */}
           <Divider></Divider>
           <Grid item xs={12}>
             <Box sx={{ width: '100%' }}>

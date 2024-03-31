@@ -5,7 +5,7 @@ export default async function handler(req, res) {
   const { method } = req
 
   if (method === 'GET') {
-    const projects = await prisma.project.findMany()
+    const projects = await prisma.kegiatan.findMany()
     if (!projects) {
       return res.status(400).json({ success: false })
     }
@@ -45,7 +45,7 @@ export default async function handler(req, res) {
     try {
       let rent = 1
       bulanKegiatan.map(async bulan => {
-        const project = await prisma.project.create({
+        const project = await prisma.kegiatan.create({
           data: {
             title: title + ' ' + rentang[rentangWaktu].waktu,
             startdate: bulan.firstDate,
@@ -61,7 +61,7 @@ export default async function handler(req, res) {
         rent = rent + 1
         // console.log('woi masalah gini doang : ' + rent)
 
-        const isLeader_leader = await prisma.userProject.create({
+        const isLeader_leader = await prisma.kegiatan_user_leader.create({
           data: {
             isLeader: 1,
             userId: projectLeaderId,
@@ -69,7 +69,7 @@ export default async function handler(req, res) {
           }
         })
 
-        // const isLeader_member = await prisma.userProject_member.create({
+        // const isLeader_member = await prisma.kegiatan_user_member.create({
         //   data: {
         //     isLeader: 1,
         //     userId: projectLeaderId,
@@ -78,7 +78,7 @@ export default async function handler(req, res) {
         // })
 
         anggotaTimId.map(async anggota => {
-          const usP = await prisma.userProject_member.create({
+          const usP = await prisma.kegiatan_user_member.create({
             data: {
               userId: anggota,
               projectId: project.id,
@@ -89,7 +89,7 @@ export default async function handler(req, res) {
 
         return project
       })
-      // const project = await prisma.project.create({
+      // const project = await prisma.kegiatan.create({
       //   data: {
       //     title,
       //     startdate,
@@ -103,7 +103,7 @@ export default async function handler(req, res) {
       //   }
       // })
 
-      // const userProject = await prisma.userProject.create({
+      // const userProject = await prisma.kegiatan_user_leader.create({
 
       //   data: {
       //     userId: projectLeaderId,

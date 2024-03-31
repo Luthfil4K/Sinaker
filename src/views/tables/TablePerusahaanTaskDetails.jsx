@@ -648,7 +648,7 @@ const TableGroupPerusahaan = props => {
     },
     {
       field: 'gajiPml',
-      headerName: 'Gaji PML',
+      headerName: 'Honor PML',
       type: 'number',
       renderHeader: () => (
         <Typography sx={{ fontWeight: 900, fontSize: '0.875rem !important', textAlign: 'center' }}>
@@ -664,7 +664,12 @@ const TableGroupPerusahaan = props => {
       field: 'pclId',
       headerName: 'PCL',
       renderHeader: () => (
-        <Typography sx={{ fontWeight: 900, fontSize: '0.875rem !important', textAlign: 'center' }}>PCL</Typography>
+        <Typography sx={{ fontWeight: 900, fontSize: '0.875rem !important', textAlign: 'center' }}>
+          {' '}
+          {jenisKeg === 65 //Produksi or Distribusi
+            ? 'PCL'
+            : 'Operator'}
+        </Typography>
       ),
       type: 'singleSelect',
       valueOptions: optionPCL.sort((a, b) => a.label.localeCompare(b.label)),
@@ -679,7 +684,11 @@ const TableGroupPerusahaan = props => {
       field: 'gajiPcl',
       headerName: 'Honor PCL',
       renderHeader: () => (
-        <Typography sx={{ fontWeight: 900, fontSize: '0.875rem !important', textAlign: 'center' }}>Gaji PCL</Typography>
+        <Typography sx={{ fontWeight: 900, fontSize: '0.875rem !important', textAlign: 'center' }}>
+          {jenisKeg === 65 //Produksi or Distribusi
+            ? 'Honor PCL'
+            : 'Honor Operator'}
+        </Typography>
       ),
       type: 'number',
       width: 120,
@@ -696,7 +705,9 @@ const TableGroupPerusahaan = props => {
       type: 'singleSelect',
       valueOptions:
         jenisSample === 1
-          ? ['Masuk', 'Menunggu Masuk', 'Tutup', 'Tidak Aktif', 'Tidak Ditemukan', 'Non Respon']
+          ? jenisKeg === 65 //Produksi or Distribusi
+            ? ['Masuk', 'Menunggu Masuk', 'Tutup', 'Tidak Aktif', 'Tidak Ditemukan', 'Non Respon']
+            : ['Proses', 'Selesai']
           : ['Proses', 'Selesai'],
       width: 180,
       editable: true
@@ -706,7 +717,7 @@ const TableGroupPerusahaan = props => {
       headerName: jenisSample === 0 ? 'Tanggal Terima Dok Dikab' : 'Tanggal Selesai Pengerjaan',
       renderHeader: () => (
         <Typography sx={{ fontWeight: 900, fontSize: '0.875rem !important', textAlign: 'center' }}>
-          {jenisSample === 1 ? 'Tanggal Terima Dok Dikab' : 'Tanggal Selesai Pengerjaan'}
+          {jenisSample === 1 ? 'Tanggal Selesai Pengerjaan' : 'Tanggal Selesai Pengerjaan'}
         </Typography>
       ),
       type: 'date',
@@ -794,11 +805,11 @@ const TableGroupPerusahaan = props => {
                 <Typography variant='caption'>{summary.totalPcl} orang</Typography>
               </Grid>
               <Grid item md={2} xs={6}>
-                <Typography variant='body1'>Total Gaji Pml</Typography>
+                <Typography variant='body1'>Total Honor Pml</Typography>
                 <Typography variant='caption'>Rp{summary.totalGajiPml.toLocaleString('id-ID')} </Typography>
               </Grid>
               <Grid item md={2} xs={6}>
-                <Typography variant='body1'>Total Gaji PCL</Typography>
+                <Typography variant='body1'>Total Honor PCL</Typography>
                 <Typography variant='caption'>Rp{summary.totalGajiPcl.toLocaleString('id-ID')}</Typography>
               </Grid>
             </Grid>

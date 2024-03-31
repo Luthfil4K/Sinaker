@@ -40,7 +40,7 @@ export async function getServerSideProps(context) {
     }
   })
 
-  // projects = await prisma.project.findMany({
+  // projects = await prisma.kegiatan.findMany({
   //   select: {
   //     id: true,
   //     title: true,

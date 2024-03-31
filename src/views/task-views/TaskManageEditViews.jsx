@@ -145,7 +145,7 @@ const TaskManageEditViews = props => {
 
           <Grid container spacing={4}>
             <Grid item md={12} xs={12}>
-              <FormControl fullWidth>
+              {/* <FormControl fullWidth>
                 <InputLabel id='demo-simple-select-helper-label'>Jenis Kegiatan</InputLabel>
                 <Select
                   name='jenisSubKeg'
@@ -162,7 +162,7 @@ const TaskManageEditViews = props => {
                     </MenuItem>
                   ))}
                 </Select>
-              </FormControl>
+              </FormControl> */}
             </Grid>
             <Grid item md={6} xs={12}>
               <TextField
@@ -175,7 +175,7 @@ const TaskManageEditViews = props => {
                 label='Target'
               />
             </Grid>
-            <Grid item md={6} xs={12}>
+            {/* <Grid item md={6} xs={12}>
               <TextField
                 name='unitTargetSubKeg'
                 value={values.subKegUnitTarget}
@@ -185,7 +185,7 @@ const TaskManageEditViews = props => {
                 id='unitTarget'
                 label='Unit Target'
               />
-            </Grid>
+            </Grid> */}
             <Grid item md={6} xs={12}>
               <DatePickerWrapper>
                 <DatePicker

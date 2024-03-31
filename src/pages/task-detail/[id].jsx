@@ -31,7 +31,7 @@ export async function getServerSideProps(context) {
       }
     }
   }
-  const task = await prisma.task.findUnique({
+  const task = await prisma.sub_kegiatan.findUnique({
     where: {
       id: parseInt(context.params.id)
     },
@@ -70,7 +70,7 @@ export async function getServerSideProps(context) {
     }
   })
 
-  const mitraTask = await prisma.taskPeserta.findMany({
+  const mitraTask = await prisma.sub_kegiatan_mitra.findMany({
     where: {
       taskId: parseInt(context.params.id)
     },
@@ -79,7 +79,7 @@ export async function getServerSideProps(context) {
     }
   })
 
-  const pegawai = await prisma.TaskOrganik.findMany({
+  const pegawai = await prisma.sub_kegiatan_user.findMany({
     where: {
       taskId: parseInt(context.params.id)
     },

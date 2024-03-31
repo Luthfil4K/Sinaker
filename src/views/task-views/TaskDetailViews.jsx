@@ -86,11 +86,13 @@ const TaskDetailViews = props => {
 
   const [secondary, setSecondary] = useState(false)
 
-  const [templateTable2, setTemplateTable2] = useState(Number(props.dataPerusahaan[0].templateTable))
+  const [templateTable2, setTemplateTable2] = useState(
+    Number(props.dataPerusahaan.length > 0 ? props.dataPerusahaan[0].templateTable : 5)
+  )
   const [judulGrafik, setJudulGrafik] = useState('asd')
 
   useEffect(() => {
-    let templateTable = Number(props.dataPerusahaan[0].templateTable)
+    let templateTable = Number(props.dataPerusahaan.length > 0 ? props.dataPerusahaan[0].templateTable : 5)
 
     switch (templateTable) {
       case 3:

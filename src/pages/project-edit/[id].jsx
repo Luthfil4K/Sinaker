@@ -25,7 +25,7 @@ export async function getServerSideProps(context) {
       }
     }
   }
-  const project = await prisma.project.findUnique({
+  const project = await prisma.kegiatan.findUnique({
     where: {
       id: Number(context.params.id)
     },

@@ -33,7 +33,7 @@ import MenuItem from '@mui/material/MenuItem'
 import Chip from '@mui/material/Chip'
 import Link from '@mui/material/Link'
 
-import { DataGrid } from '@mui/x-data-grid'
+import { DataGrid, GridToolbar } from '@mui/x-data-grid'
 import TableAddParticipant from 'src/views/tables/TableAddParticipant'
 import { number } from 'mathjs'
 
@@ -366,18 +366,18 @@ const CreateKegiatanPerusahaanViews = props => {
       ),
 
       minWidth: 150
-    },
-    {
-      field: 'bebanKerja',
-      headerName: 'Beban Kerja',
-      renderHeader: () => (
-        <Typography sx={{ fontWeight: 900, fontSize: '0.875rem !important', textAlign: 'center' }}>
-          Beban Kerja
-        </Typography>
-      ),
-
-      minWidth: 150
     }
+    // {
+    //   field: 'bebanKerja',
+    //   headerName: 'Beban Kerja',
+    //   renderHeader: () => (
+    //     <Typography sx={{ fontWeight: 900, fontSize: '0.875rem !important', textAlign: 'center' }}>
+    //       Beban Kerja
+    //     </Typography>
+    //   ),
+
+    //   minWidth: 150
+    // }
 
     // {
     //   field: 'role',
@@ -548,9 +548,12 @@ const CreateKegiatanPerusahaanViews = props => {
                 rows={rows}
                 columns={columns}
                 sx={{
-                  height: rows.length > 3 ? '55vh' : '45vh',
+                  height: rows.length > 3 ? '70vh' : '45vh',
                   // overflowY: 'auto',
                   width: '100%'
+                }}
+                slots={{
+                  toolbar: GridToolbar
                 }}
               />
             </Box>

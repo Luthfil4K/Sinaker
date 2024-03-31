@@ -208,8 +208,8 @@ const TableMitra = props => {
       renderCell: params => (
         <>
           <Chip
-            label={statusObj[params.row.bebanKerja < 0.5 ? (params.row.gajiBulanIni < 3000000 ? 1 : 0) : 0].status}
-            color={statusObj[params.row.bebanKerja < 0.5 ? (params.row.gajiBulanIni < 3000000 ? 1 : 0) : 0].color}
+            label={statusObj[params.row.gajiBulanIni < 4000000 ? 1 : 0].status}
+            color={statusObj[params.row.gajiBulanIni < 4000000 ? 1 : 0].color}
             sx={{
               height: 24,
               fontSize: '0.75rem',

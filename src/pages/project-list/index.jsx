@@ -34,7 +34,7 @@ export async function getServerSideProps(context) {
   }
   let projects
 
-  projects = await prisma.userProject.findMany({
+  projects = await prisma.kegiatan_user_leader.findMany({
     select: {
       project: {
         select: {
@@ -56,7 +56,7 @@ export async function getServerSideProps(context) {
     }
   })
 
-  // projects = await prisma.project.findMany({
+  // projects = await prisma.kegiatan.findMany({
   //   select: {
   //     id: true,
   //     title: true,

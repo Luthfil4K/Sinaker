@@ -26,7 +26,7 @@ export async function getServerSideProps(context) {
   }
   let tasks
 
-  tasks = await prisma.task.findMany({
+  tasks = await prisma.sub_kegiatan.findMany({
     include: {
       project: true
     }

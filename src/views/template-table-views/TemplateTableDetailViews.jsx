@@ -223,7 +223,7 @@ const TemplateTableDetailViews = props => {
 
     let dataDownload = [
       {
-        sheet: 'Adults',
+        sheet: 'sheetone',
         columns: dataKolom,
         // [
         //   { label: 'User', value: 'user' }, // Top level data

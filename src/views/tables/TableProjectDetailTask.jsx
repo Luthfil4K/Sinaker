@@ -159,7 +159,15 @@ const TableProjectDetailTask = props => {
       type: 'string',
       width: 180
     },
-    { field: 'deadline', headerName: 'Deadline', width: 140, type: 'string' }
+    {
+      field: 'deadline',
+      headerName: 'Tanggal Berakhir',
+      width: 140,
+      type: 'string',
+      renderCell: params => (
+        <Typography sx={{ fontWeight: 500, fontSize: '0.875rem !important' }}>{params.row.deadline}</Typography>
+      )
+    }
   ]
 
   return (

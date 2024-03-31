@@ -128,7 +128,7 @@ const TablePeople = props => {
   //   gajiTriwulanan: 10000,
   //   gajiSemesteran: 10000,
   //   gajiTahunan: 10000,
-  //   jumlahKegiatan: row.UserProject.length
+  //   jumlahKegiatan: row.kegiatan_user_leader.length
   //   // jumlahSubkegiatan: row.jumlahSubkegiatan,
   // }))
 

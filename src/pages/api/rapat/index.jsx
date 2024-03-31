@@ -14,7 +14,20 @@ export default async function handler(req, res) {
   }
 
   if (method === 'POST') {
-    const { namaRapat, startDate, endDate, duration, tempatRapat, description, pesertaRapatId, createdById } = req.body
+    const {
+      namaRapat,
+      startDate,
+      endDate,
+      duration,
+      tempatRapat,
+      description,
+      pesertaRapatId,
+      createdById,
+      nomor,
+      lampiran,
+      perihal,
+      ditujukan
+    } = req.body
 
     try {
       const rapat = await prisma.meet.create({
@@ -26,6 +39,10 @@ export default async function handler(req, res) {
           tempatRapat,
           status: 'diajukan',
           description,
+          nomor,
+          lampiran,
+          perihal,
+          ditujukan,
           createdById
         }
       })

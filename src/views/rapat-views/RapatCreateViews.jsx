@@ -44,6 +44,10 @@ const RapatCreateViews = props => {
   const [dataUser, setDataUser] = useState(props.data)
   const [values, setValues] = useState({
     namaRapat: '',
+    nomor: '',
+    perihal: '',
+    lampiran: '',
+    ditujukan: '',
     tempatRapat: '',
     deskRapat: '-',
     pesertaRapat: 7,
@@ -52,6 +56,13 @@ const RapatCreateViews = props => {
     kegAnggota: [dataUser[3].name, dataUser[1].name],
     kegKetuaId: ''
   })
+
+  const handleTempatRapat = e => {
+    setValues(values => ({
+      ...values,
+      tempatRapat: e.target.value
+    }))
+  }
 
   const handlePJ = event => {
     setValues(values => ({
@@ -134,7 +145,11 @@ const RapatCreateViews = props => {
           tempatRapat: values.tempatRapat,
           description: values.deskRapat,
           createdById: session.data.uid,
-          pesertaRapatId: values.kegAnggotaId
+          pesertaRapatId: values.kegAnggotaId,
+          nomor: values.nomor,
+          lampiran: values.lampiran,
+          perihal: values.perihal,
+          ditujukan: values.ditujukan
         })
 
         if (res.status === 201) {
@@ -226,6 +241,46 @@ const RapatCreateViews = props => {
             placeholder='Meeting Name'
           />
         </Grid>
+        <Grid item xs={12} md={12}>
+          <TextField
+            value={values.nomor}
+            onChange={handleChange('nomor')}
+            fullWidth
+            multiline
+            label='Nomor Surat'
+            placeholder='Nomor Surat'
+          />
+        </Grid>
+        <Grid item xs={12} md={12}>
+          <TextField
+            value={values.lampiran}
+            onChange={handleChange('lampiran')}
+            fullWidth
+            multiline
+            label='Lampiran'
+            placeholder='Lampiran'
+          />
+        </Grid>
+        <Grid item xs={12} md={12}>
+          <TextField
+            value={values.perihal}
+            onChange={handleChange('perihal')}
+            fullWidth
+            multiline
+            label='Perihal'
+            placeholder='Perihal'
+          />
+        </Grid>
+        <Grid item xs={12} md={12}>
+          <TextField
+            value={values.ditujukan}
+            onChange={handleChange('ditujukan')}
+            fullWidth
+            multiline
+            label='Ditujukan kepada'
+            placeholder='Kepada'
+          />
+        </Grid>
 
         <Grid item xs={12} sm={12} lg={6}>
           <DatePickerWrapper>
@@ -265,14 +320,14 @@ const RapatCreateViews = props => {
         </Grid>
 
         <Grid item xs={12}>
-          <TextField
+          {/* <TextField
             value={values.tempatRapat}
             onChange={handleChange('tempatRapat')}
             fullWidth
             multiline
             label='Meeting Place'
             placeholder='Meeting Place'
-          />
+          /> */}
           {/* <FormControl fullWidth>
             <InputLabel id='link'>Meeting Place</InputLabel>
             <Select labelId='Link' id='demo-simple-select' label='Meeting Place'>
@@ -281,6 +336,23 @@ const RapatCreateViews = props => {
               <MenuItem value={30}>Link 3</MenuItem>
             </Select>
           </FormControl> */}
+          <FormControl fullWidth>
+            <InputLabel id='demo-simple-select-helper-label'>Meeting Place</InputLabel>
+            <Select
+              fullWidth
+              labelId='demo-simple-select-helper-label'
+              id='demo-simple-select-helper'
+              label='Meeting Place'
+              onChange={handleTempatRapat}
+              value={values.tempatRapat}
+            >
+              <MenuItem key={''} value={''}>
+                {''}
+              </MenuItem>
+              <MenuItem value={'Ruang Kepala'}>Ruang Kepala</MenuItem>
+              <MenuItem value={'Aula BPS Kabupaten Bogor'}>Aula BPS Kabupaten Bogor</MenuItem>
+            </Select>
+          </FormControl>
         </Grid>
         <Grid item xs={12}>
           <TextField
@@ -289,8 +361,8 @@ const RapatCreateViews = props => {
             onChange={handleChange('deskRapat')}
             multiline
             minRows={3}
-            label='Deskripsi Rapat'
-            placeholder='Description'
+            label='Isi surat'
+            placeholder='Isi surat'
           />
         </Grid>
         <Grid item xs={12} md={12}>
