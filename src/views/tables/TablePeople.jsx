@@ -14,12 +14,16 @@ import Link from '@mui/material/Link'
 
 // other, swall
 import { DataGrid, GridToolbar } from '@mui/x-data-grid'
-import Swal from 'sweetalert2'
 import { useRouter } from 'next/dist/client/router'
 import { useSession } from 'next-auth/react'
 
-// icon
+// axios
+import axios from 'src/pages/api/axios'
 
+// swall
+import Swal from 'sweetalert2'
+
+// icon
 import PencilOutline from 'mdi-material-ui/PencilOutline'
 import DeleteOutline from 'mdi-material-ui/DeleteOutline'
 import router from 'next/router'
@@ -33,33 +37,6 @@ const jenisFungsi = {
   7: { bagFungsi: 'Integrasi Pengolahan dan Diseminasi Statistik', color: 'warning' }
 }
 
-const data = [
-  {
-    id: 1,
-    nama: 'Pegawai1',
-    fungsi: 'Nerwilis',
-    totalGaji: 3000000,
-    gajiBulanan: 10000,
-    gajiTriwulanan: 110000,
-    gajiSemesteran: 150000,
-    gajiTahunan: 210000,
-    jumlahKegiatan: 10,
-    jumlahSubkegiatan: 10
-  },
-  {
-    id: 2,
-    nama: 'Pegawai2',
-    fungsi: 'IPDS',
-    totalGaji: 140000,
-    gajiBulanan: 310000,
-    gajiTriwulanan: 550000,
-    gajiSemesteran: 230000,
-    gajiTahunan: 23000,
-    jumlahKegiatan: 5
-    // jumlahSubkegiatan: 14
-  }
-]
-
 const TablePeople = props => {
   const session = useSession()
   const statusObj = {
@@ -69,6 +46,36 @@ const TablePeople = props => {
   const [tpp, setTpp] = useState(props.dataTpp)
   const { dataUser } = props
   // console.log(tpp)
+
+  const handleChangeRole = async (e, id, role) => {
+    e.preventDefault()
+    try {
+      const response = await axios.put(`/user/${id}`, {
+        role: role
+      })
+
+      if (response.status === 201) {
+        Swal.fire({
+          title: 'Berhasil Mengubah Peran Pegawai',
+          text: 'Tekan OK untuk melanjutkan',
+          icon: 'success',
+          confirmButtonColor: '#68B92E',
+          confirmButtonText: 'OK'
+        }).then(() => {
+          router.push(`/pegawai`)
+        })
+      }
+    } catch (error) {
+      Swal.fire({
+        title: 'Gagal Mengubah Peran Pegawai',
+        text: 'Coba lagi nanti',
+        icon: 'error',
+        confirmButtonColor: '#d33',
+        confirmButtonText: 'OK'
+      })
+    }
+  }
+
   const rows = dataUser.map(row => {
     // const gajiBulanIni = tpp
     //   .filter(tppRow => tppRow.pmlId === row.id)
@@ -105,19 +112,20 @@ const TablePeople = props => {
     //   })
     //   .reduce((totalGaji, tppRow) => totalGaji + tppRow.gajiPml, 0)
 
-    const bebanKerja = row.beban_kerja_pegawai[0].bebanKerja
-    const nilaiBebanKerja = Number(bebanKerja).toFixed(2)
+    // const bebanKerja = row.beban_kerja_pegawai[0].bebanKerja
+    // const nilaiBebanKerja = Number(bebanKerja).toFixed(2)
 
     return {
       id: row.id,
       nama: row.name,
       fungsi: row.fungsi,
       jumlahKegiatan: row.TaskOrganik.length,
-      bebanKerja: nilaiBebanKerja,
+      role: row.role
+      // bebanKerja: nilaiBebanKerja,
       // gajiBulanIni,
       // gajiBulanSblm,
       // gajiBulanDepan,
-      over: nilaiBebanKerja
+      // over: nilaiBebanKerja
     }
   })
   //   id: row.id,
@@ -140,7 +148,7 @@ const TablePeople = props => {
         <Typography sx={{ fontWeight: 900, fontSize: '0.875rem !important', textAlign: 'center' }}>Nama</Typography>
       ),
       headerName: 'Nama',
-      width: 200,
+      width: 270,
       renderCell: params => (
         <Link
           onClick={async e => {
@@ -154,31 +162,33 @@ const TablePeople = props => {
         </Link>
       )
     },
-    {
-      field: 'over',
-      renderCell: params => (
-        <>
-          <Chip
-            label={statusObj[params.row.bebanKerja < 0.5 ? (params.row.jumlahKegiatan < 15 ? 1 : 0) : 0].status}
-            color={statusObj[params.row.bebanKerja < 0.5 ? (params.row.jumlahKegiatan < 15 ? 1 : 0) : 0].color}
-            sx={{
-              height: 24,
-              fontSize: '0.75rem',
-              width: 100,
-              textTransform: 'capitalize',
-              '& .MuiChip-label': { fontWeight: 500 }
-            }}
-          />
-        </>
-      ),
-      renderHeader: () => (
-        <Typography sx={{ fontWeight: 900, fontSize: '0.875rem !important', textAlign: 'center' }}>
-          Status Bulan Ini
-        </Typography>
-      ),
-      type: 'string',
-      width: 140
-    },
+    // {
+    //   field: 'over',
+    //   renderCell: params => (
+    //     <>
+    //       <Chip
+    //         // label={statusObj[params.row.bebanKerja < 0.5 ? (params.row.jumlahKegiatan < 15 ? 1 : 0) : 0].status}
+    //         // color={statusObj[params.row.bebanKerja < 0.5 ? (params.row.jumlahKegiatan < 15 ? 1 : 0) : 0].color}
+    //         label={statusObj[params.row.jumlahKegiatan < 15 ? 1 : 0].status}
+    //         color={statusObj[params.row.jumlahKegiatan < 15 ? 1 : 0].color}
+    //         sx={{
+    //           height: 24,
+    //           fontSize: '0.75rem',
+    //           width: 100,
+    //           textTransform: 'capitalize',
+    //           '& .MuiChip-label': { fontWeight: 500 }
+    //         }}
+    //       />
+    //     </>
+    //   ),
+    //   renderHeader: () => (
+    //     <Typography sx={{ fontWeight: 900, fontSize: '0.875rem !important', textAlign: 'center' }}>
+    //       Status Bulan Ini
+    //     </Typography>
+    //   ),
+    //   type: 'string',
+    //   width: 140
+    // },
 
     // {
     //   field: 'gajiBulanIni',
@@ -297,42 +307,60 @@ const TablePeople = props => {
         </Typography>
       ),
 
-      minWidth: 150
+      minWidth: 170
     },
-    {
-      field: 'bebanKerja',
-      headerName: 'Beban Kerja',
-      renderHeader: () => (
-        <Typography sx={{ fontWeight: 900, fontSize: '0.875rem !important', textAlign: 'center' }}>
-          Beban Kerja
-        </Typography>
-      ),
-
-      minWidth: 150
-    },
-
     // {
-    //   field: 'role',
-    //   renderHeader: () => <Typography sx={{ fontSize: '0.875rem !important', textAlign: 'center' }}>Role</Typography>,
-    //   minWidth: 160,
-    //   flex: 1,
-    //   renderCell: () => (
-    //     <form>
-    //       <FormControl fullWidth>
-    //         <InputLabel id='form-layouts-separator-select-label'>role</InputLabel>
-    //         <Select
-    //           sx={{ height: 50 }}
-    //           label='role'
-    //           id='form-layouts-separator-role'
-    //           labelId='form-layouts-separator-role-label'
-    //         >
-    //           <MenuItem value='1'>Ketua Tim</MenuItem>
-    //           <MenuItem value='2'>Staff</MenuItem>
-    //         </Select>
-    //       </FormControl>
-    //     </form>
-    //   )
+    //   field: 'bebanKerja',
+    //   headerName: 'Beban Kerja',
+    //   renderHeader: () => (
+    //     <Typography sx={{ fontWeight: 900, fontSize: '0.875rem !important', textAlign: 'center' }}>
+    //       Beban Kerja
+    //     </Typography>
+    //   ),
+
+    //   minWidth: 150
     // },
+
+    {
+      field: 'role',
+      renderHeader: () => <Typography sx={{ fontSize: '0.875rem !important', textAlign: 'center' }}>Role</Typography>,
+      minWidth: 160,
+      flex: 1,
+      renderCell: params => (
+        <form>
+          <FormControl fullWidth>
+            <InputLabel id='form-layouts-separator-select-label'>role</InputLabel>
+            {params.row.role == 'superAdmin' ? (
+              <Select
+                sx={{ height: 50 }}
+                value={params.row.role}
+                label='role'
+                id='form-layouts-separator-role'
+                labelId='form-layouts-separator-role-label'
+              >
+                <MenuItem value='superAdmin'>Kepala BPS</MenuItem>
+              </Select>
+            ) : (
+              <Select
+                sx={{ height: 50 }}
+                value={params.row.role}
+                label='role'
+                id='form-layouts-separator-role'
+                labelId='form-layouts-separator-role-label'
+                onChange={e => handleChangeRole(e, params.row.id, e.target.value)}
+              >
+                <MenuItem value='superAdmin'>Kepala BPS</MenuItem>
+                <MenuItem value='pjk'>PJK</MenuItem>
+                <MenuItem value='employee'>Pegawai</MenuItem>
+                <MenuItem value='verifikator'>Verifikator</MenuItem>
+                <MenuItem value='ppspm'>PPSPM</MenuItem>
+                <MenuItem value='bendahara'>Bendahara</MenuItem>
+              </Select>
+            )}
+          </FormControl>
+        </form>
+      )
+    },
 
     {
       field: 'action',
