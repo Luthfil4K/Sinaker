@@ -18,7 +18,7 @@ export default async function handler(req, res) {
     try {
       const pencairan = await prisma.pencairan.create({
         data: {
-          taskId,
+          sub_kegiatanId: taskId,
           tahapanId,
           status,
           tanggalMulai,

@@ -22,15 +22,23 @@ import TablePencairan from 'src/views/tables/TablePencairan'
 import GridViewIcon from '@mui/icons-material/GridView'
 import IconButton from '@mui/material/IconButton'
 import FormatListBulletedIcon from '@mui/icons-material/FormatListBulleted'
+import { useSession } from 'next-auth/react'
+import { e } from 'mathjs'
 
 const ListProject = props => {
   const [gaji, setGaji] = useState(0)
+  const session = useSession()
   const cardPRef = useRef([{ id: 1 }])
   const [valueDropDown, setValueDropDown] = useState({
     tahun: new Date().getFullYear(),
     bulan: new Date().getMonth() + 1,
-    fungsi: 10
+    kategori: 1
   })
+
+  // const [valueDropDownK, setValueDropDownK] = useState({
+  //   kategori: 0
+  // })
+
   const [viewData, setViewData] = useState(0)
 
   const handleViewDataGrid = params => {
@@ -53,12 +61,20 @@ const ListProject = props => {
     }))
   }
 
-  const handleDropDownFungsi = params => {
+  const handleDropDownKategori = params => {
     setValueDropDown(valueDropDown => ({
       ...valueDropDown,
-      fungsi: params.target.value
+      kategori: params.target.value
     }))
   }
+
+  const [cardP0, setCardP0] = useState(
+    props.data.map(data => {
+      return {
+        ...data
+      }
+    })
+  )
 
   const [cardP, setCardP] = useState(
     props.data.map(data => {
@@ -68,28 +84,103 @@ const ListProject = props => {
     })
   )
 
+  useEffect(() => {
+    if (session?.data?.role == 'pjk' && valueDropDown.kategori === 1) {
+      const updatedRowPJK = cardP0.filter(task => {
+        const pencairan = task.pencairan && task.pencairan[0]
+        const status = pencairan ? pencairan.status : 0
+        const tahapan = pencairan ? pencairan.tahapanId : 99
+        return (status === 0 || tahapan === 0) && task.project.projectLeaderId == session.data.uid
+      })
+      setCardP(updatedRowPJK)
+    } else if (session?.data?.role == 'verifikator' && valueDropDown.kategori === 1) {
+      const updatedRowVerif = cardP0.filter(task => {
+        const pencairan = task.pencairan && task.pencairan[0]
+        const tahapan = pencairan ? pencairan.tahapanId : 99
+        return tahapan === 1
+      })
+      setCardP(updatedRowVerif)
+    } else if (session?.data?.role == 'ppspm' && valueDropDown.kategori === 1) {
+      const updatedRowPPSPM = cardP0.filter(task => {
+        const pencairan = task.pencairan && task.pencairan[0]
+        const tahapan = pencairan ? pencairan.tahapanId : 99
+        return tahapan === 2
+      })
+      setCardP(updatedRowPPSPM)
+    } else if (session?.data?.role == 'bendahara' && valueDropDown.kategori === 1) {
+      const updatedRowBendahara = cardP0.filter(task => {
+        const pencairan = task.pencairan && task.pencairan[0]
+        const tahapan = pencairan ? pencairan.tahapanId : 99
+        return tahapan === 3
+      })
+      setCardP(updatedRowBendahara)
+    }
+  }, [])
+
   const [cardP2, setCardP2] = useState(0)
 
   useEffect(() => {
     let tmp = []
-    cardP.map(data => {
-      // console.log(valueDropDown.bulan == new Date(data.project.startdate).getMonth() + 1)
-      // console.log(data.project.fungsi)
-
-      data.month + 1 == valueDropDown.bulan || new Date(data.duedate).getMonth() + 1 == valueDropDown.bulan
-        ? data.year == valueDropDown.tahun // && data.fungsi == valueDropDown.fungsi
-          ? tmp.push(data)
-          : 0
-        : valueDropDown.bulan == 13
-        ? data.year == valueDropDown.tahun // && data.fungsi == valueDropDown.fungsi
-          ? tmp.push(data)
-          : 0
-        : 0
+    if (session?.data?.role == 'pjk' && valueDropDown.kategori === 1) {
+      tmp = cardP0.filter(task => {
+        const pencairan = task.pencairan && task.pencairan[0]
+        const status = pencairan ? pencairan.status : 0
+        const tahapan = pencairan ? pencairan.tahapanId : 99
+        return (status === 0 || tahapan === 0) && task.project.projectLeaderId == session.data.uid
+      })
+    } else if (session?.data?.role == 'verifikator' && valueDropDown.kategori === 1) {
+      tmp = cardP0.filter(task => {
+        const pencairan = task.pencairan && task.pencairan[0]
+        const tahapan = pencairan ? pencairan.tahapanId : 99
+        return tahapan === 1
+      })
+    } else if (session?.data?.role == 'ppspm' && valueDropDown.kategori === 1) {
+      tmp = cardP0.filter(task => {
+        const pencairan = task.pencairan && task.pencairan[0]
+        const tahapan = pencairan ? pencairan.tahapanId : 99
+        return tahapan === 2
+      })
+    } else if (session?.data?.role == 'bendahara' && valueDropDown.kategori === 1) {
+      tmp = cardP0.filter(task => {
+        const pencairan = task.pencairan && task.pencairan[0]
+        const tahapan = pencairan ? pencairan.tahapanId : 99
+        return tahapan === 3
+      })
+    } else if (session?.data?.role == 'pjk' && valueDropDown.kategori === 0) {
+      tmp = cardP0.filter(task => {
+        const pencairan = task.pencairan && task.pencairan[0]
+        const status = pencairan ? pencairan.status : 0
+        const tahapan = pencairan ? pencairan.tahapanId : 99
+        return (status >= 0 || tahapan >= 0) && task.project.projectLeaderId == session.data.uid
+      })
+    } else if (session?.data?.role == 'verifikator' && valueDropDown.kategori === 0) {
+      tmp = cardP0.filter(task => {
+        const pencairan = task.pencairan && task.pencairan[0]
+        const tahapan = pencairan ? pencairan.tahapanId : 99
+        return tahapan >= 1 && tahapan != 99
+      })
+    } else if (session?.data?.role == 'ppspm' && valueDropDown.kategori === 0) {
+      tmp = cardP0.filter(task => {
+        const pencairan = task.pencairan && task.pencairan[0]
+        const tahapan = pencairan ? pencairan.tahapanId : 99
+        return tahapan >= 2 && tahapan != 99
+      })
+    } else if (session?.data?.role == 'bendahara' && valueDropDown.kategori === 0) {
+      tmp = cardP0.filter(task => {
+        const pencairan = task.pencairan && task.pencairan[0]
+        const tahapan = pencairan ? pencairan.tahapanId : 99
+        return tahapan >= 3 && tahapan != 99
+      })
+    }
+    // Filter berdasarkan bulan
+    tmp = tmp.filter(data => {
+      return valueDropDown.bulan == 13
+        ? data.year === valueDropDown.tahun
+        : (data.month + 1 === valueDropDown.bulan || new Date(data.duedate).getMonth() + 1 === valueDropDown.bulan) &&
+            data.year === valueDropDown.tahun
     })
     setCardP2(tmp)
   }, [valueDropDown])
-
-  console.log(cardP)
 
   // useEffect(() => {
   //   let tmp = []
@@ -106,10 +197,6 @@ const ListProject = props => {
   const handleTandaRef = id => {
     cardPRef.current = [...cardPRef.current, { id }]
   }
-
-  // console.log(valueDropDown.tahun)
-  // console.log(valueDropDown.bulan)
-  // console.log(valueDropDown.fungsi)
 
   return (
     <>
@@ -139,6 +226,20 @@ const ListProject = props => {
           ></Button>
         </Grid>
         <Grid item md={6} display={'flex'} justifyContent={'end'}>
+          <FormControl sx={{ m: 1, minWidth: 120 }}>
+            <InputLabel id='demo-simple-select-helper-label'>Jenis</InputLabel>
+            <Select
+              labelId='demo-simple-select-helper-label'
+              id='demo-simple-select-helper'
+              value={valueDropDown.kategori}
+              label='Jenis'
+              size={'small'}
+              onChange={handleDropDownKategori}
+            >
+              <MenuItem value={0}>Semua</MenuItem>
+              <MenuItem value={1}>Perlu Diselesaikan</MenuItem>
+            </Select>
+          </FormControl>
           <FormControl sx={{ m: 1, minWidth: 120 }}>
             <InputLabel id='demo-simple-select-helper-label'>Tahun</InputLabel>
             <Select
@@ -233,7 +334,7 @@ const ListProject = props => {
               )
             ) : cardP2.length > 0 ? (
               <>
-                <TablePencairan data={props.data}></TablePencairan>
+                <TablePencairan data={props.data} kategori={valueDropDown.kategori}></TablePencairan>
               </>
             ) : (
               <>
@@ -242,31 +343,6 @@ const ListProject = props => {
                 </Grid>
               </>
             )}
-            {/* {cardP2.length > 0 ? (
-              cardP2.map(kegiatan => (
-                <>
-                  <Grid key={kegiatan.id} item md={6} xs={12}>
-                    <CardPencairan
-                      id={kegiatan.project.id}
-                      namaKegiatan={kegiatan.project.title}
-                      intervalWaktu={kegiatan.project.rentangWaktu}
-                      tanggalDimulai={kegiatan.project.startdate}
-                      tanggalBerakhir={kegiatan.project.enddate}
-                      jumlahParicipant={kegiatan.project.projectLeader.name}
-                      totalSubKegiatan={kegiatan.project.Task}
-                      totalGaji={kegiatan.totalGaji}
-                      penanggungJawab={kegiatan.project.title}
-                    ></CardPencairan>
-                  </Grid>
-                </>
-              ))
-            ) : (
-              <>
-                <Grid item md={12} xs={12}>
-                  <Typography>Tidak Ada Pencairan Kegiatan Bulan Ini </Typography>
-                </Grid>
-              </>
-            )} */}
           </Grid>
         </Grid>
       </Grid>

@@ -70,7 +70,7 @@ export async function getServerSideProps(context) {
   //   }
   // })
 
-  const mitraTask = await prisma.taskPeserta.findMany({
+  const mitraTask = await prisma.sub_kegiatan_mitra.findMany({
     where: {
       taskId: parseInt(context.params.id)
     },

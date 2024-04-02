@@ -9,6 +9,7 @@ import { useRouter } from 'next/dist/client/router'
 import Typography from '@mui/material/Typography'
 import { DataGrid } from '@mui/x-data-grid'
 import { useState, useEffect, useRef } from 'react'
+import { useSession } from 'next-auth/react'
 
 // axios
 import axios from 'src/pages/api/axios'
@@ -22,18 +23,29 @@ const statusObj = {
   2: { color: 'success', status: 'Selesai' }
 }
 
-const array_aksi = {
-  0: { Aksi: 'Upload Dokumen' },
-  1: { Aksi: 'Review' },
-  2: { Aksi: 'Upload SPM' },
-  3: { Aksi: 'Selengkapnya' },
-  4: { Aksi: 'Selengkapnya' },
-  99: { Aksi: 'Mulai Pencairan' }
-}
+// const array_aksi = {
+//   0: { Aksi: 'Selengkapnya' },
+//   1: { Aksi: 'Selengkapnya' },
+//   2: { Aksi: 'Selengkapnya' },
+//   3: { Aksi: 'Selengkapnya' },
+//   4: { Aksi: 'Selengkapnya' },
+//   99: { Aksi: 'Mulai Pencairan' }
+// }
+
+// const array_aksi_role = {
+//   0: { Aksi: 'Upload Dokumen' },
+//   1: { Aksi: 'Review' },
+//   2: { Aksi: 'Upload SPM' },
+//   3: { Aksi: 'Selengkapnya' },
+//   4: { Aksi: 'Selengkapnya' },
+//   99: { Aksi: 'Mulai Pencairan' }
+// }
 
 const TableTask = props => {
   const router = useRouter()
-  const [task, setTask] = useState(props.data)
+  const session = useSession()
+  const [data, setData] = useState(props.data)
+  const [kategori, setKategori] = useState(props.kategori)
 
   const handleClickPencairan = async (e, id) => {
     e.preventDefault()
@@ -103,7 +115,7 @@ const TableTask = props => {
           </Typography>
         </Link>
       ),
-      width: 200
+      width: 250
     },
     {
       field: 'taskName',
@@ -125,7 +137,20 @@ const TableTask = props => {
         </Typography>
       ),
       headerName: 'Sub Kegiatan',
-      width: 200
+      width: 220
+    },
+    {
+      field: 'tanggal',
+      headerName: 'Tanggal',
+      renderHeader: () => (
+        <Typography sx={{ fontWeight: 900, fontSize: '0.875rem !important', textAlign: 'center' }}>Tanggal</Typography>
+      ),
+      renderCell: params => (
+        <Typography textAlign={'center'} sx={{ fontWeight: 500, fontSize: '0.875rem !important' }}>
+          {params.row.tanggal}
+        </Typography>
+      ),
+      width: 180
     },
     {
       field: 'tahap',
@@ -138,7 +163,7 @@ const TableTask = props => {
           {params.row.tahap}
         </Typography>
       ),
-      width: 100
+      width: 150
     },
     {
       field: 'keterangan',
@@ -153,7 +178,7 @@ const TableTask = props => {
           {params.row.keterangan}
         </Typography>
       ),
-      width: 200
+      width: 250
     },
 
     // {
@@ -194,7 +219,34 @@ const TableTask = props => {
               : handleSeePencairan(e, params.row.taskId)
           }
         >
-          <Button variant='outlined'>{array_aksi[params.row.aksi].Aksi}</Button>
+          <Button
+            variant='outlined'
+            color={
+              params.row.aksi === 99 && session?.data?.role == 'pjk'
+                ? 'info'
+                : params.row.aksi === 0 && session?.data?.role == 'pjk'
+                ? 'primary'
+                : params.row.aksi === 1 && session?.data?.role == 'verifikator'
+                ? 'primary'
+                : params.row.aksi === 2 && session?.data?.role == 'ppspm'
+                ? 'primary'
+                : params.row.aksi === 3 && session?.data?.role == 'bendahara'
+                ? 'primary'
+                : 'success'
+            }
+          >
+            {params.row.aksi === 99 && session?.data?.role == 'pjk'
+              ? 'Mulai Pencairan'
+              : params.row.aksi === 0 && session?.data?.role == 'pjk'
+              ? 'Upload Dokumen'
+              : params.row.aksi === 1 && session?.data?.role == 'verifikator'
+              ? 'Review'
+              : params.row.aksi === 2 && session?.data?.role == 'ppspm'
+              ? 'Upload SPM'
+              : params.row.aksi === 3 && session?.data?.role == 'bendahara'
+              ? 'Lakukan Pencairan'
+              : 'Selengkapnya'}
+          </Button>
         </Link>
       ),
       type: 'string',
@@ -202,10 +254,12 @@ const TableTask = props => {
     }
   ]
 
-  const data = []
+  useEffect(() => {
+    setKategori(props.kategori)
+  }, [props.kategori])
 
   let nobaris = 1
-  const rows = task.map(task => ({
+  const rows = data.map(task => ({
     id: nobaris++,
     taskName: task.title,
     taskId: task.id,
@@ -219,23 +273,261 @@ const TableTask = props => {
       : 'Belum Dimulai',
     status: task.pencairan ? (task.pencairan[0] ? task.pencairan[0].status : 0) : 0,
     aksi: task.pencairan ? (task.pencairan[0] ? task.pencairan[0].tahapanId : 99) : 99,
-    userId: task.userId
+    userId: task.userId,
+    tanggal:
+      new Date(task.project.startdate).toLocaleDateString('id') + '-' + new Date(task.duedate).toLocaleDateString('id')
   }))
+
+  // const [rowsPJK, setRowsPJK] = useState(
+  //   task
+  //     .map(task => ({
+  //       id: nobaris++,
+  //       taskName: task.title,
+  //       taskId: task.id,
+  //       kegiatanName: task.project.title,
+  //       kegiatanNameid: task.project.id,
+  //       kegiatanLeader: task.project.projectLeaderId,
+  //       tahap: task.pencairan
+  //         ? task.pencairan[0]
+  //           ? task.pencairan[0].tahapan.nama
+  //           : 'Belum Dimulai'
+  //         : 'Belum Dimulai',
+  //       keterangan: task.pencairan
+  //         ? task.pencairan[0]
+  //           ? task.pencairan[0].tahapan.deskripsi
+  //           : 'Belum Dimulai'
+  //         : 'Belum Dimulai',
+  //       status: task.pencairan ? (task.pencairan[0] ? task.pencairan[0].status : 0) : 0,
+  //       aksi: task.pencairan ? (task.pencairan[0] ? task.pencairan[0].tahapanId : 99) : 99,
+  //       userId: task.userId
+  //     }))
+  //     .filter(row =>
+  //       kategori === 1
+  //         ? (row.status === 0 || row.aksi === 0) && row.kegiatanLeader == session.data.uid
+  //         : (row.status >= 0 || row.aksi >= 0) && row.kegiatanLeader == session.data.uid
+  //     )
+  // )
+
+  const [rowsPJK, setRowsPJK] = useState([])
+  const [rowsVerifikator, setRowsVerifikator] = useState([])
+  const [rowsPPSPM, setRowsPPSPM] = useState([])
+  const [rowsBendahara, setRowsBendahara] = useState([])
+
+  useEffect(() => {
+    const updatedRowsPJK = data
+      .map(task => ({
+        id: nobaris++,
+        taskName: task.title,
+        taskId: task.id,
+        kegiatanName: task.project.title,
+        kegiatanNameid: task.project.id,
+        kegiatanLeader: task.project.projectLeaderId,
+        tahap: task.pencairan
+          ? task.pencairan[0]
+            ? task.pencairan[0].tahapan.nama
+            : 'Belum Dimulai'
+          : 'Belum Dimulai',
+        keterangan: task.pencairan
+          ? task.pencairan[0]
+            ? task.pencairan[0].tahapan.deskripsi
+            : 'Belum Dimulai'
+          : 'Belum Dimulai',
+        status: task.pencairan ? (task.pencairan[0] ? task.pencairan[0].status : 0) : 0,
+        aksi: task.pencairan ? (task.pencairan[0] ? task.pencairan[0].tahapanId : 99) : 99,
+        userId: task.userId,
+        tanggal:
+          new Date(task.project.startdate).toLocaleDateString('id') +
+          '-' +
+          new Date(task.duedate).toLocaleDateString('id')
+      }))
+      .filter(row =>
+        kategori === 1
+          ? (row.status === 0 || row.aksi === 0) && row.kegiatanLeader == session.data.uid
+          : (row.status >= 0 || row.aksi >= 0) && row.kegiatanLeader == session.data.uid
+      )
+
+    setRowsPJK(updatedRowsPJK)
+    // verifikator
+    const updatedRowsVerifikator = data
+      .map(task => ({
+        id: nobaris++,
+        taskName: task.title,
+        taskId: task.id,
+        kegiatanName: task.project.title,
+        kegiatanNameid: task.project.id,
+        kegiatanLeader: task.project.projectLeaderId,
+        tahap: task.pencairan
+          ? task.pencairan[0]
+            ? task.pencairan[0].tahapan.nama
+            : 'Belum Dimulai'
+          : 'Belum Dimulai',
+        keterangan: task.pencairan
+          ? task.pencairan[0]
+            ? task.pencairan[0].tahapan.deskripsi
+            : 'Belum Dimulai'
+          : 'Belum Dimulai',
+        status: task.pencairan ? (task.pencairan[0] ? task.pencairan[0].status : 0) : 0,
+        aksi: task.pencairan ? (task.pencairan[0] ? task.pencairan[0].tahapanId : 99) : 99,
+        userId: task.userId,
+        tanggal:
+          new Date(task.project.startdate).toLocaleDateString('id') +
+          '-' +
+          new Date(task.duedate).toLocaleDateString('id')
+      }))
+      .filter(row => (kategori === 1 ? row.aksi === 1 : row.aksi >= 1 && row.aksi !== 99))
+
+    setRowsVerifikator(updatedRowsVerifikator)
+
+    // ppspm
+    const updatedRowsPPSPM = data
+      .map(task => ({
+        id: nobaris++,
+        taskName: task.title,
+        taskId: task.id,
+        kegiatanName: task.project.title,
+        kegiatanNameid: task.project.id,
+        kegiatanLeader: task.project.projectLeaderId,
+        tahap: task.pencairan
+          ? task.pencairan[0]
+            ? task.pencairan[0].tahapan.nama
+            : 'Belum Dimulai'
+          : 'Belum Dimulai',
+        keterangan: task.pencairan
+          ? task.pencairan[0]
+            ? task.pencairan[0].tahapan.deskripsi
+            : 'Belum Dimulai'
+          : 'Belum Dimulai',
+        status: task.pencairan ? (task.pencairan[0] ? task.pencairan[0].status : 0) : 0,
+        aksi: task.pencairan ? (task.pencairan[0] ? task.pencairan[0].tahapanId : 99) : 99,
+        userId: task.userId,
+        tanggal:
+          new Date(task.project.startdate).toLocaleDateString('id') +
+          '-' +
+          new Date(task.duedate).toLocaleDateString('id')
+      }))
+      .filter(row => (kategori === 1 ? row.aksi === 2 : row.aksi >= 2 && row.aksi !== 99))
+
+    setRowsPPSPM(updatedRowsPPSPM)
+
+    // Bendahara
+    const updatedRowsBendahara = data
+      .map(task => ({
+        id: nobaris++,
+        taskName: task.title,
+        taskId: task.id,
+        kegiatanName: task.project.title,
+        kegiatanNameid: task.project.id,
+        kegiatanLeader: task.project.projectLeaderId,
+        tahap: task.pencairan
+          ? task.pencairan[0]
+            ? task.pencairan[0].tahapan.nama
+            : 'Belum Dimulai'
+          : 'Belum Dimulai',
+        keterangan: task.pencairan
+          ? task.pencairan[0]
+            ? task.pencairan[0].tahapan.deskripsi
+            : 'Belum Dimulai'
+          : 'Belum Dimulai',
+        status: task.pencairan ? (task.pencairan[0] ? task.pencairan[0].status : 0) : 0,
+        aksi: task.pencairan ? (task.pencairan[0] ? task.pencairan[0].tahapanId : 99) : 99,
+        userId: task.userId,
+        tanggal:
+          new Date(task.project.startdate).toLocaleDateString('id') +
+          '-' +
+          new Date(task.duedate).toLocaleDateString('id')
+      }))
+      .filter(row => (kategori === 1 ? row.aksi === 3 : row.aksi >= 3 && row.aksi !== 99))
+
+    setRowsBendahara(updatedRowsBendahara)
+  }, [data, kategori, session.data.uid])
+
+  // const rowsVerifikator = task
+  //   .map(task => ({
+  //     id: nobaris++,
+  //     taskName: task.title,
+  //     taskId: task.id,
+  //     kegiatanName: task.project.title,
+  //     kegiatanNameid: task.project.id,
+  //     tahap: task.pencairan ? (task.pencairan[0] ? task.pencairan[0].tahapan.nama : 'Belum Dimulai') : 'Belum Dimulai',
+  //     keterangan: task.pencairan
+  //       ? task.pencairan[0]
+  //         ? task.pencairan[0].tahapan.deskripsi
+  //         : 'Belum Dimulai'
+  //       : 'Belum Dimulai',
+  //     status: task.pencairan ? (task.pencairan[0] ? task.pencairan[0].status : 0) : 0,
+  //     aksi: task.pencairan ? (task.pencairan[0] ? task.pencairan[0].tahapanId : 99) : 99,
+  //     userId: task.userId
+  //   }))
+  //   .filter(row => row.aksi === 1)
+
+  // const rowsPPSPM = task
+  //   .map(task => ({
+  //     id: nobaris++,
+  //     taskName: task.title,
+  //     taskId: task.id,
+  //     kegiatanName: task.project.title,
+  //     kegiatanNameid: task.project.id,
+  //     tahap: task.pencairan ? (task.pencairan[0] ? task.pencairan[0].tahapan.nama : 'Belum Dimulai') : 'Belum Dimulai',
+  //     keterangan: task.pencairan
+  //       ? task.pencairan[0]
+  //         ? task.pencairan[0].tahapan.deskripsi
+  //         : 'Belum Dimulai'
+  //       : 'Belum Dimulai',
+  //     status: task.pencairan ? (task.pencairan[0] ? task.pencairan[0].status : 0) : 0,
+  //     aksi: task.pencairan ? (task.pencairan[0] ? task.pencairan[0].tahapanId : 99) : 99,
+  //     userId: task.userId
+  //   }))
+  //   .filter(row => row.aksi === 2)
+
+  // const rowsBendahara = task
+  //   .map(task => ({
+  //     id: nobaris++,
+  //     taskName: task.title,
+  //     taskId: task.id,
+  //     kegiatanName: task.project.title,
+  //     kegiatanNameid: task.project.id,
+  //     tahap: task.pencairan ? (task.pencairan[0] ? task.pencairan[0].tahapan.nama : 'Belum Dimulai') : 'Belum Dimulai',
+  //     keterangan: task.pencairan
+  //       ? task.pencairan[0]
+  //         ? task.pencairan[0].tahapan.deskripsi
+  //         : 'Belum Dimulai'
+  //       : 'Belum Dimulai',
+  //     status: task.pencairan ? (task.pencairan[0] ? task.pencairan[0].status : 0) : 0,
+  //     aksi: task.pencairan ? (task.pencairan[0] ? task.pencairan[0].tahapanId : 99) : 99,
+  //     userId: task.userId
+  //   }))
+  //   .filter(row => row.aksi === 3)
+
+  console.log(rowsVerifikator)
+
   return (
     <>
       <Grid item md={12}>
         <Card height={300}>
           <DataGrid
             height={300}
-            // initialState={{
-            //   sorting: {
-            //     sortModel: [{ field: 'deadline', sort: 'asc' }]
-            //   }
-            // }}
-            rows={rows}
+            initialState={{
+              sorting: {
+                sortModel: [
+                  { field: 'aksi', sort: 'desc' },
+                  { field: 'tanggal', sort: 'desc' }
+                ]
+              }
+            }}
+            rows={
+              session?.data?.role == 'pjk'
+                ? rowsPJK
+                : session?.data?.role == 'verifikator'
+                ? rowsVerifikator
+                : session?.data?.role == 'ppspm'
+                ? rowsPPSPM
+                : session?.data?.role == 'bendahara'
+                ? rowsBendahara
+                : rows
+            }
             columns={columns}
             sx={{
-              height: rows.length > 3 ? '81vh' : '45vh',
+              height: '70vh',
               width: '100%'
             }}
           />
