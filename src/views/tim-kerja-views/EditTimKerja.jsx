@@ -120,8 +120,8 @@ const CreateKegiatanPerusahaanViews = props => {
       })
       .reduce((totalGaji, tppRow) => totalGaji + tppRow.gajiPml, 0)
 
-    const bebanKerja = row.beban_kerja_pegawai[0].bebanKerja
-    const nilaiBebanKerja = number(bebanKerja).toFixed(2)
+    // const bebanKerja = row.beban_kerja_pegawai[0].bebanKerja
+    // const nilaiBebanKerja = number(bebanKerja).toFixed(2)
     const jamKerja = row.pekerjaan_harian.reduce((total, item) => total + item.durasi, 0)
 
     return {
@@ -134,7 +134,7 @@ const CreateKegiatanPerusahaanViews = props => {
       // gajiBulanIni,
       // gajiBulanSblm,
       // gajiBulanDepan,
-      bebanKerja: nilaiBebanKerja,
+      // bebanKerja: nilaiBebanKerja,
       // over: gajiBulanIni,
       checked: row.checked
     }
@@ -346,18 +346,18 @@ const CreateKegiatanPerusahaanViews = props => {
       ),
 
       minWidth: 150
-    },
-    {
-      field: 'bebanKerja',
-      headerName: 'Beban Kerja',
-      renderHeader: () => (
-        <Typography sx={{ fontWeight: 900, fontSize: '0.875rem !important', textAlign: 'center' }}>
-          Beban Kerja
-        </Typography>
-      ),
-
-      minWidth: 150
     }
+    // {
+    //   field: 'bebanKerja',
+    //   headerName: 'Beban Kerja',
+    //   renderHeader: () => (
+    //     <Typography sx={{ fontWeight: 900, fontSize: '0.875rem !important', textAlign: 'center' }}>
+    //       Beban Kerja
+    //     </Typography>
+    //   ),
+
+    //   minWidth: 150
+    // }
   ]
 
   const handleChange = props => event => {

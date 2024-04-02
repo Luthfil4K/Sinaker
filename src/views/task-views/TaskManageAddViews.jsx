@@ -586,8 +586,8 @@ const TaskManageAddViews = propss => {
 
       const gajiBulanDepan = gajiBulanDepanPCL + gajiBulanDepanPML
 
-      const bebanKerjaM = row.beban_kerja_mitra[0].bebanKerja
-      const nilaiBebanKerjaM = number(bebanKerjaM).toFixed(2)
+      // const bebanKerjaM = row.beban_kerja_mitra[0].bebanKerja
+      // const nilaiBebanKerjaM = number(bebanKerjaM).toFixed(2)
 
       return {
         id: row.id,
@@ -598,7 +598,7 @@ const TaskManageAddViews = propss => {
         gajiBulanIni,
         gajiBulanSblm,
         gajiBulanDepan,
-        bebanKerjaM: nilaiBebanKerjaM,
+        // bebanKerjaM: nilaiBebanKerjaM,
         over: gajiBulanIni
       }
     })
@@ -641,8 +641,8 @@ const TaskManageAddViews = propss => {
         })
         .reduce((totalGaji, tppRow) => totalGaji + tppRow.gajiPml, 0)
 
-      const bebanKerja = row.beban_kerja_pegawai[0].bebanKerja
-      const nilaiBebanKerja = number(bebanKerja).toFixed(2)
+      // const bebanKerja = row.beban_kerja_pegawai[0].bebanKerja
+      // const nilaiBebanKerja = number(bebanKerja).toFixed(2)
 
       const jamKerja = row.pekerjaan_harian.reduce((total, item) => total + item.durasi, 0)
 
@@ -652,7 +652,7 @@ const TaskManageAddViews = propss => {
         name: row.name,
         jumlahKegiatan: row.task_organik.length,
         jumlahJamKerja: jamKerja,
-        bebanKerjaO: nilaiBebanKerja,
+        // bebanKerjaO: nilaiBebanKerja,
         over: row.task_organik.length
       }
     })
