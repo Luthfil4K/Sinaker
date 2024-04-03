@@ -42,7 +42,6 @@ import { Null } from 'mdi-material-ui'
 import { typeOf } from 'mathjs'
 
 const ProjectDetailsViews = props => {
-  console.log(props.data)
   const statusPencairan = props.data.pencairan[0].status
   const tanggalMulai = props.data.project.startdate
   const tanggalBerakhir = props.data.duedate
@@ -174,8 +173,6 @@ const ProjectDetailsViews = props => {
 
   const [editPJK, setEditPJK] = useState(0)
   const [editPPSPM, setEditPPSPM] = useState(0)
-
-  console.log(editPJK)
 
   const handleChange = props => event => {
     setValues({ ...values, [props]: event.target.value })
@@ -619,7 +616,7 @@ const ProjectDetailsViews = props => {
             <Box sx={{ width: '100%' }}>
               <Stepper nonLinear activeStep={activeStep}>
                 {steps.map((label, index) => (
-                  <Step key={label} completed={completed[index]} onClick={handleStep(index)}>
+                  <Step key={label} completed={completed[index]}>
                     <StepButton color='inherit'>{label}</StepButton>
                   </Step>
                 ))}
@@ -633,14 +630,20 @@ const ProjectDetailsViews = props => {
                             <Alert
                               severity='error'
                               action={
-                                <IconButton
-                                  aria-label='close'
-                                  color='inherit'
-                                  size='small'
-                                  onClick={() => handleResolvePesan(pesan.pencairanId, pesan.tahapanId, pesan.id)}
-                                >
-                                  <DoneIcon fontSize='inherit' />
-                                </IconButton>
+                                session.data.uid === props.data.project.projectLeaderId ? (
+                                  <IconButton
+                                    aria-label='close'
+                                    color='inherit'
+                                    size='small'
+                                    onClick={() => handleResolvePesan(pesan.pencairanId, pesan.tahapanId, pesan.id)}
+                                  >
+                                    <DoneIcon fontSize='inherit' />
+                                  </IconButton>
+                                ) : (
+                                  <IconButton aria-label='close' color='inherit' size='small'>
+                                    <DoneIcon fontSize='inherit' />
+                                  </IconButton>
+                                )
                               }
                               sx={{ mb: 2 }}
                             >
@@ -650,68 +653,93 @@ const ProjectDetailsViews = props => {
                         ) : null
                       )
                     : ''}
-                  {props.data.pencairan[0].tahapanId != 5 ? (
-                    <from action='post' onSubmit={e => e.preventDefault()}>
-                      <TextField
-                        sx={{ mb: 2, mt: 4 }}
-                        required
-                        fullWidth
-                        value={values.suratTugas}
-                        onChange={handleChange('suratTugas')}
-                        multiline
-                        label='Link Surat Tugas'
-                        name='suratTugas'
-                      />
-                      <TextField
-                        sx={{ my: 2 }}
-                        required
-                        fullWidth
-                        value={values.SK}
-                        onChange={handleChange('SK')}
-                        multiline
-                        label='Link SK'
-                        name='SK'
-                      />
-                      <TextField
-                        sx={{ my: 2 }}
-                        required
-                        fullWidth
-                        value={values.KAK}
-                        onChange={handleChange('KAK')}
-                        multiline
-                        label='Link KAK'
-                        name='KAK'
-                      />
-                      <TextField
-                        sx={{ my: 2 }}
-                        required
-                        fullWidth
-                        value={values.SPJ}
-                        onChange={handleChange('SPJ')}
-                        multiline
-                        label='Link SPJ'
-                        name='SPJ'
-                      />
-                      <TextField
-                        sx={{ my: 2 }}
-                        required
-                        fullWidth
-                        value={values.formPermintaan}
-                        onChange={handleChange('formPermintaan')}
-                        multiline
-                        label='Link Form Permintaan Pencairan'
-                        name='formPermintaan'
-                      />
+                  <from action='post' onSubmit={e => e.preventDefault()}>
+                    <TextField
+                      sx={{ mb: 2, mt: 4 }}
+                      required
+                      fullWidth
+                      value={values.suratTugas}
+                      onChange={handleChange('suratTugas')}
+                      multiline
+                      label='Link Surat Tugas'
+                      name='suratTugas'
+                      disabled={
+                        session?.data?.role === 'pjk' && session.data.uid === props.data.project.projectLeaderId
+                          ? false
+                          : true
+                      }
+                    />
+                    <TextField
+                      sx={{ my: 2 }}
+                      required
+                      fullWidth
+                      value={values.SK}
+                      onChange={handleChange('SK')}
+                      multiline
+                      label='Link SK'
+                      name='SK'
+                      disabled={
+                        session?.data?.role === 'pjk' && session.data.uid === props.data.project.projectLeaderId
+                          ? false
+                          : true
+                      }
+                    />
+                    <TextField
+                      sx={{ my: 2 }}
+                      required
+                      fullWidth
+                      value={values.KAK}
+                      onChange={handleChange('KAK')}
+                      multiline
+                      label='Link KAK'
+                      name='KAK'
+                      disabled={
+                        session?.data?.role === 'pjk' && session.data.uid === props.data.project.projectLeaderId
+                          ? false
+                          : true
+                      }
+                    />
+                    <TextField
+                      sx={{ my: 2 }}
+                      required
+                      fullWidth
+                      value={values.SPJ}
+                      onChange={handleChange('SPJ')}
+                      multiline
+                      label='Link SPJ'
+                      name='SPJ'
+                      disabled={
+                        session?.data?.role === 'pjk' && session.data.uid === props.data.project.projectLeaderId
+                          ? false
+                          : true
+                      }
+                    />
+                    <TextField
+                      sx={{ my: 2 }}
+                      required
+                      fullWidth
+                      value={values.formPermintaan}
+                      onChange={handleChange('formPermintaan')}
+                      multiline
+                      label='Link Form Permintaan Pencairan'
+                      name='formPermintaan'
+                      disabled={
+                        session?.data?.role === 'pjk' && session.data.uid === props.data.project.projectLeaderId
+                          ? false
+                          : true
+                      }
+                    />
+                    {session?.data?.role === 'pjk' && session.data.uid === props.data.project.projectLeaderId ? (
                       <Box sx={{ display: 'flex', flexDirection: 'row', pt: 2 }}>
                         <Box sx={{ flex: '1 1 auto' }} />
                         <Button onClick={editPJK === 1 ? handleEditPJK : handlePJK}>
                           {editPJK === 1 ? 'Ubah Dokumen Pencairan' : 'Kirim ke Verifikator'}
                         </Button>
                       </Box>
-                    </from>
-                  ) : (
-                    ''
-                  )}
+                    ) : (
+                      ''
+                    )}
+                  </from>
                 </React.Fragment>
               ) : activeStep == 1 ? (
                 <React.Fragment>
@@ -750,13 +778,17 @@ const ProjectDetailsViews = props => {
                     href='#basic-chip'
                     clickable
                   />
-                  <Box sx={{ display: 'flex', flexDirection: 'row', pt: 2 }}>
-                    <Box sx={{ flex: '1 1 auto' }} />
-                    <Button onClick={() => openModal(1)}>Review Kembali</Button>
-                    <Button color='success' onClick={handleSesuai}>
-                      Sesuai
-                    </Button>
-                  </Box>
+                  {session?.data?.role === 'verifikator' ? (
+                    <Box sx={{ display: 'flex', flexDirection: 'row', pt: 2 }}>
+                      <Box sx={{ flex: '1 1 auto' }} />
+                      <Button onClick={() => openModal(1)}>Review Kembali</Button>
+                      <Button color='success' onClick={handleSesuai}>
+                        Sesuai
+                      </Button>
+                    </Box>
+                  ) : (
+                    ''
+                  )}
                 </React.Fragment>
               ) : activeStep == 2 ? (
                 <React.Fragment>
@@ -770,13 +802,18 @@ const ProjectDetailsViews = props => {
                       multiline
                       label='Link SPM'
                       name='SPM'
+                      disabled={session?.data?.role === 'ppspm' ? false : true}
                     />
-                    <Box sx={{ display: 'flex', flexDirection: 'row', pt: 2 }}>
-                      <Box sx={{ flex: '1 1 auto' }} />
-                      <Button onClick={editPPSPM == 1 ? handleEditPPSPM : handlePPSPM}>
-                        {editPPSPM == 1 ? 'Ubah SPM' : 'Kirim ke Bendahara'}
-                      </Button>
-                    </Box>
+                    {session?.data?.role === 'ppspm' ? (
+                      <Box sx={{ display: 'flex', flexDirection: 'row', pt: 2 }}>
+                        <Box sx={{ flex: '1 1 auto' }} />
+                        <Button onClick={editPPSPM == 1 ? handleEditPPSPM : handlePPSPM}>
+                          {editPPSPM == 1 ? 'Ubah SPM' : 'Kirim ke Bendahara'}
+                        </Button>
+                      </Box>
+                    ) : (
+                      ''
+                    )}
                   </from>
                 </React.Fragment>
               ) : (
@@ -823,7 +860,8 @@ const ProjectDetailsViews = props => {
                     href='#basic-chip'
                     clickable
                   />
-                  {Math.ceil((tanggalNow - tanggalMulai) / (1000 * 60 * 60 * 24)) > 3 ? (
+                  {Math.ceil((tanggalNow - tanggalMulai) / (1000 * 60 * 60 * 24)) > 3 &&
+                  session?.data?.role === 'bendahara' ? (
                     <Collapse sx={{ mt: 5 }} in={openBendahara}>
                       <Alert
                         severity='error'
@@ -838,12 +876,16 @@ const ProjectDetailsViews = props => {
                       </Alert>
                     </Collapse>
                   ) : null}
-                  <Box sx={{ display: 'flex', flexDirection: 'row', pt: 2 }}>
-                    <Box sx={{ flex: '1 1 auto' }} />
-                    <Button onClick={handleBendahara}>
-                      {completedSteps() === totalSteps() - 1 ? 'Pencairan Selesai' : null}
-                    </Button>
-                  </Box>
+                  {session?.data?.role === 'bendahara' ? (
+                    <Box sx={{ display: 'flex', flexDirection: 'row', pt: 2 }}>
+                      <Box sx={{ flex: '1 1 auto' }} />
+                      <Button onClick={handleBendahara}>
+                        {completedSteps() === totalSteps() - 1 ? 'Pencairan Selesai' : null}
+                      </Button>
+                    </Box>
+                  ) : (
+                    ''
+                  )}
                 </React.Fragment>
               )}
             </Box>

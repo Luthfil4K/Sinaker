@@ -15,7 +15,7 @@ export default async function handler(req, res) {
           },
           where: {
             id: Number(id),
-            taskId: Number(taskId)
+            sub_kegiatanId: Number(taskId)
           }
         })
       }
@@ -27,7 +27,7 @@ export default async function handler(req, res) {
           },
           where: {
             id: Number(id),
-            taskId: Number(taskId)
+            sub_kegiatanId: Number(taskId)
           }
         })
       }
@@ -39,7 +39,7 @@ export default async function handler(req, res) {
           },
           where: {
             id: Number(id),
-            taskId: Number(taskId)
+            sub_kegiatanId: Number(taskId)
           }
         })
       }

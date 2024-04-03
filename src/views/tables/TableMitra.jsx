@@ -131,7 +131,7 @@ const TableMitra = props => {
 
     const gajiBulanDepan = gajiBulanDepanPCL + gajiBulanDepanPML
 
-    const bebanKerja = row.beban_kerja_mitra.length == mitra.length ? row.beban_kerja_mitra[0].bebanKerja : 0
+    const bebanKerja = row.beban_kerja_mitra[0].bebanKerja
     const nilaiBebanKerja = Number(bebanKerja).toFixed(2)
 
     return {
@@ -143,7 +143,7 @@ const TableMitra = props => {
       umur: new Date().getFullYear() - new Date(row.tanggalLahir).getFullYear(),
       pendidikan: row.pendidikan,
       jumlahKegiatan: row.TaskPeserta.length,
-      bebanKerja: nilaiBebanKerja,
+      // bebanKerja: nilaiBebanKerja,
       email: row.email,
       status: row.status,
       gajiBulanIni,
@@ -302,16 +302,16 @@ const TableMitra = props => {
         </>
       )
     },
-    {
-      field: 'bebanKerja',
-      renderHeader: () => (
-        <Typography sx={{ fontWeight: 900, fontSize: '0.875rem !important', textAlign: 'center' }}>
-          Beban Kerja
-        </Typography>
-      ),
-      headerName: 'Beban Kerja',
-      width: 150
-    },
+    // {
+    //   field: 'bebanKerja',
+    //   renderHeader: () => (
+    //     <Typography sx={{ fontWeight: 900, fontSize: '0.875rem !important', textAlign: 'center' }}>
+    //       Beban Kerja
+    //     </Typography>
+    //   ),
+    //   headerName: 'Beban Kerja',
+    //   width: 150
+    // },
     {
       field: 'jenisKelamin',
       renderHeader: () => (

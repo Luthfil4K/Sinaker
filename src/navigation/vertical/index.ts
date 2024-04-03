@@ -1,6 +1,7 @@
 // ** Icon imports
 import Login from 'mdi-material-ui/Login'
 import Table from 'mdi-material-ui/Table'
+import Cash from 'mdi-material-ui/HandCoin'
 import CubeOutline from 'mdi-material-ui/CubeOutline'
 import FilterSettings from 'mdi-material-ui/FilterSettings'
 import HomeOutline from 'mdi-material-ui/HomeOutline'
@@ -98,6 +99,15 @@ const navigation = (): VerticalNavItemsType => {
     },
 
     {
+      sectionTitle: 'Pencairan'
+    },
+    {
+      title: 'Pencairan',
+      icon: Cash,
+      path: '/pencairan'
+    },
+
+    {
       sectionTitle: 'Tim Kerja'
     },
     {
@@ -128,11 +138,11 @@ const navigation = (): VerticalNavItemsType => {
     {
       sectionTitle: 'Pustaka'
     },
-    {
-      title: 'Beban Kerja',
-      icon: Elevator,
-      path: '/beban-kerja'
-    },
+    // {
+    //   title: 'Beban Kerja',
+    //   icon: Elevator,
+    //   path: '/beban-kerja'
+    // },
     {
       title: 'Daftar Pegawai',
       icon: Account,

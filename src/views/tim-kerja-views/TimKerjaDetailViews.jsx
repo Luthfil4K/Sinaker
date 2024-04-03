@@ -100,8 +100,17 @@ const CreateKegiatanPerusahaanViews = props => {
       })
       .reduce((totalGaji, tppRow) => totalGaji + tppRow.gajiPml, 0)
 
-    const bebanKerja = row.userId_fkey.beban_kerja_pegawai[0].bebanKerja
-    const nilaiBebanKerja = number(bebanKerja).toFixed(2)
+    const jumlahKerjaanTpp = tpp
+      .filter(tppRow => tppRow.pmlId === row.id)
+      .filter(tppRow => {
+        const tppDueDate = new Date(tppRow.task.duedate)
+        const currentDate = new Date()
+        return tppDueDate.getFullYear() === currentDate.getFullYear()
+      })
+      .reduce((count, item) => count + 1, 0)
+
+    // const bebanKerja = row.userId_fkey.beban_kerja_pegawai[0].bebanKerja
+    // const nilaiBebanKerja = number(bebanKerja).toFixed(2)
 
     const jamKerja = row.userId_fkey.pekerjaan_harian.reduce((total, item) => total + item.durasi, 0)
 
@@ -109,12 +118,12 @@ const CreateKegiatanPerusahaanViews = props => {
       id: row.userId_fkey.id,
       nama: row.userId_fkey.name,
       fungsi: row.userId_fkey.fungsi,
-      jumlahKegiatan: row.userId_fkey.TaskOrganik.length,
+      jumlahKegiatan: jumlahKerjaanTpp,
       jumlahJamKerja: jamKerja,
       // gajiBulanIni,
       // gajiBulanSblm,
       // gajiBulanDepan,
-      bebanKerjaO: nilaiBebanKerja,
+      // bebanKerjaO: nilaiBebanKerja,
       over: bebanKerja
       // checked: row.checked
     }
@@ -191,31 +200,31 @@ const CreateKegiatanPerusahaanViews = props => {
         </Link>
       )
     },
-    {
-      field: 'over',
-      renderCell: params => (
-        <>
-          <Chip
-            label={statusObj[params.row.bebanKerjaO < 0.5 ? (params.row.jumlahKegiatan < 15 ? 1 : 0) : 0].status}
-            color={statusObj[params.row.bebanKerjaO < 0.5 ? (params.row.jumlahKegiatan < 15 ? 1 : 0) : 0].color}
-            sx={{
-              height: 24,
-              fontSize: '0.75rem',
-              width: 100,
-              textTransform: 'capitalize',
-              '& .MuiChip-label': { fontWeight: 500 }
-            }}
-          />
-        </>
-      ),
-      renderHeader: () => (
-        <Typography sx={{ fontWeight: 900, fontSize: '0.875rem !important', textAlign: 'center' }}>
-          Status Bulan Ini
-        </Typography>
-      ),
-      type: 'string',
-      width: 140
-    },
+    // {
+    //   field: 'over',
+    //   renderCell: params => (
+    //     <>
+    //       <Chip
+    //         label={statusObj[params.row.bebanKerjaO < 0.5 ? (params.row.jumlahKegiatan < 15 ? 1 : 0) : 0].status}
+    //         color={statusObj[params.row.bebanKerjaO < 0.5 ? (params.row.jumlahKegiatan < 15 ? 1 : 0) : 0].color}
+    //         sx={{
+    //           height: 24,
+    //           fontSize: '0.75rem',
+    //           width: 100,
+    //           textTransform: 'capitalize',
+    //           '& .MuiChip-label': { fontWeight: 500 }
+    //         }}
+    //       />
+    //     </>
+    //   ),
+    //   renderHeader: () => (
+    //     <Typography sx={{ fontWeight: 900, fontSize: '0.875rem !important', textAlign: 'center' }}>
+    //       Status Bulan Ini
+    //     </Typography>
+    //   ),
+    //   type: 'string',
+    //   width: 140
+    // },
 
     // {
     //   field: 'gajiBulanIni',
@@ -280,21 +289,21 @@ const CreateKegiatanPerusahaanViews = props => {
     //     </>
     //   )
     // },
-    {
-      field: 'fungsi',
-      headerName: 'Fungsi',
-      renderHeader: () => (
-        <Typography sx={{ fontWeight: 900, fontSize: '0.875rem !important', textAlign: 'center' }}>Fungsi</Typography>
-      ),
+    // {
+    //   field: 'fungsi',
+    //   headerName: 'Fungsi',
+    //   renderHeader: () => (
+    //     <Typography sx={{ fontWeight: 900, fontSize: '0.875rem !important', textAlign: 'center' }}>Fungsi</Typography>
+    //   ),
 
-      minWidth: 170,
-      renderCell: params => (
-        <Typography sx={{ fontWeight: 500, fontSize: '0.875rem !important' }}>
-          {' '}
-          {jenisFungsi[parseInt(params.row.fungsi)].bagFungsi}
-        </Typography>
-      )
-    },
+    //   minWidth: 170,
+    //   renderCell: params => (
+    //     <Typography sx={{ fontWeight: 500, fontSize: '0.875rem !important' }}>
+    //       {' '}
+    //       {jenisFungsi[parseInt(params.row.fungsi)].bagFungsi}
+    //     </Typography>
+    //   )
+    // },
     // {
     //   field: 'totalGaji',
     //   headerName: 'Total Gaji',
@@ -345,18 +354,18 @@ const CreateKegiatanPerusahaanViews = props => {
         </Typography>
       ),
       minWidth: 150
-    },
-    {
-      field: 'bebanKerjaO',
-      headerName: 'Beban Kerja',
-      renderHeader: () => (
-        <Typography sx={{ fontWeight: 900, fontSize: '0.875rem !important', textAlign: 'center' }}>
-          Beban Kerja
-        </Typography>
-      ),
-
-      minWidth: 150
     }
+    // {
+    //   field: 'bebanKerjaO',
+    //   headerName: 'Beban Kerja',
+    //   renderHeader: () => (
+    //     <Typography sx={{ fontWeight: 900, fontSize: '0.875rem !important', textAlign: 'center' }}>
+    //       Beban Kerja
+    //     </Typography>
+    //   ),
+
+    //   minWidth: 150
+    // }
 
     // {
     //   field: 'role',
