@@ -586,7 +586,7 @@ const TaskManageAddViews = propss => {
 
       const gajiBulanDepan = gajiBulanDepanPCL + gajiBulanDepanPML
 
-      const bebanKerjaM = row.beban_kerja_mitra[0].bebanKerja
+      const bebanKerjaM = row.beban_kerja_mitra.length == dataMitra.length ? row.beban_kerja_mitra[0].bebanKerja : 0
       const nilaiBebanKerjaM = number(bebanKerjaM).toFixed(2)
 
       return {

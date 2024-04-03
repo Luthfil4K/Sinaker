@@ -49,11 +49,14 @@ const CardProjectDetailProgress = props => {
       imgPath: 'https://images.unsplash.com/photo-1512341689857-198e7e2f3ca8?auto=format&fit=crop&w=400&h=250&q=60'
     }
   ]
-  const untukChart = props.data.map(subkeg => ({
-    label: subkeg.title,
-    target: subkeg.target,
-    realisasi: subkeg.realisasi
-  }))
+  const untukChart =
+    props.data.length > 0
+      ? props.data.map(subkeg => ({
+          label: subkeg.title,
+          target: subkeg.target,
+          realisasi: subkeg.realisasi
+        }))
+      : [{ label: 'Belum ada sub kegiatan', target: 0, realisasi: 0 }]
   console.log(untukChart)
 
   const dataDoughnut = {

@@ -409,7 +409,7 @@ const TableTask = props => {
     const hariBerjalan =
       tanggalSekarang >= startDateObj
         ? tanggalSekarang <= duedateObj
-          ? tanggalSekarang.getDate() - startDateObj.getDate() + 1
+          ? Math.round(Math.abs(tanggalSekarang.getTime() - startDateObj.getTime()) / (1000 * 3600 * 24)) + 1
           : 'Kegiatan telah selesai'
         : 'Kegiatan belum dimulai'
     const targetHarian = Math.round(task.target / differenceInDays)

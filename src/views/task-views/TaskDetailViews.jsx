@@ -291,9 +291,7 @@ const TaskDetailViews = props => {
     )
   })
 
-  useEffect(() => {
-    console.log(dataPHreal)
-  }, [valuesHarian])
+  useEffect(() => {}, [valuesHarian])
 
   const dataLine = {
     labels: lineTarel.label,
@@ -612,6 +610,7 @@ const TaskDetailViews = props => {
               dataTaskSample={values.jenisSample}
               dataJenisKeg={values.jenisKeg}
               dataUpdateTarget={handleTaskUpdate}
+              dataMitraLimitHonor={props.dataMitraLimit}
             ></TablePerusahaanTaskDetails>
             // <Button type='submit' variant={'contained'} onClick={handleSimpan} fullWidth>
             //   Simpan

@@ -131,7 +131,7 @@ const TableMitra = props => {
 
     const gajiBulanDepan = gajiBulanDepanPCL + gajiBulanDepanPML
 
-    const bebanKerja = row.beban_kerja_mitra[0].bebanKerja
+    const bebanKerja = row.beban_kerja_mitra.length == mitra.length ? row.beban_kerja_mitra[0].bebanKerja : 0
     const nilaiBebanKerja = Number(bebanKerja).toFixed(2)
 
     return {

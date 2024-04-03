@@ -76,14 +76,38 @@ const TableGroupPerusahaan = props => {
 
   const templateTable = participants.length > 0 ? participants[1].templateTable : 5
 
+  // console.log(props.dataMitraLimitHonor)
+  const hitungTotalGaji = dataMitraLimitHonor => {
+    const totalGajiPerMitra = {}
+
+    dataMitraLimitHonor.forEach(mitra => {
+      const { pmlId, pclId, gajiPml, gajiPcl } = mitra
+
+      totalGajiPerMitra[pmlId] = (totalGajiPerMitra[pmlId] || 0) + gajiPml
+      totalGajiPerMitra[pclId] = (totalGajiPerMitra[pclId] || 0) + gajiPcl
+    })
+
+    const totalGajiArray = Object.entries(totalGajiPerMitra).map(([id, total]) => ({
+      id: parseInt(id),
+      totalGaji: total
+    }))
+
+    return totalGajiArray
+  }
+
+  const totalGajiMitra = hitungTotalGaji(props.dataMitraLimitHonor)
+  console.log(totalGajiMitra)
+
   const [organikMitra, setOrganikMitra] = useState({
     value: '',
     label: ''
   })
-
   const optionPCL = mitra.map(mi => ({
     value: mi.mitra.id,
-    label: mi.mitra.name
+    label:
+      mi.mitra.name +
+      ', total Gaji :  Rp' +
+      ((totalGajiMitra.find(totalGaji => totalGaji.id === mi.mitra.id)?.totalGaji || 0).toLocaleString('id-ID') || '0')
   }))
   const optionPML = pml.map(pml => ({
     value: pml.organik.id,
@@ -171,13 +195,13 @@ const TableGroupPerusahaan = props => {
 
   const handleDeleteClick = id => () => {
     Swal.fire({
-      title: 'Delete Perusahaan?',
-      text: 'Press "Delete Perusahaan"',
+      title: 'Delete Baris?',
+      text: 'Press "Delete Baris"',
       icon: 'warning',
       showCancelButton: true,
       confirmButtonColor: '#68B92E',
       cancelButtonColor: '#d33',
-      confirmButtonText: 'Ya, Delete Perusahaan',
+      confirmButtonText: 'Ya, Delete Baris',
       cancelButtonText: 'No, Cancel',
       reverseButtons: true
     }).then(result => {
@@ -219,6 +243,22 @@ const TableGroupPerusahaan = props => {
   const processRowUpdate = newRow => {
     const updatedRow = { ...newRow, isNew: false }
 
+    // Cari data mitra yang sesuai dengan pmlId dari updatedRow
+    const mitraToUpdatePml = totalGajiMitra.find(mitra => mitra.id === updatedRow.pmlId)
+
+    // Hitung total gaji setelah update untuk pmlId
+    const newTotalGajiPml = mitraToUpdatePml.totalGaji + (updatedRow.gajiPml || 0) // gajiPml dari updatedRow atau 0 jika tidak ada
+
+    // Cari data mitra yang sesuai dengan pclId dari updatedRow
+    const mitraToUpdatePcl = totalGajiMitra.find(mitra => mitra.id === updatedRow.pclId)
+
+    // Hitung total gaji setelah update untuk pclId
+    const newTotalGajiPcl = mitraToUpdatePcl.totalGaji + (updatedRow.gajiPcl || 0) // gajiPcl dari updatedRow atau 0 jika tidak ada
+
+    // Validasi total gaji untuk pmlId dan pclId
+    const isPmlValid = newTotalGajiPml <= 4000000
+    const isPclValid = newTotalGajiPcl <= 4000000
+
     // Lakukan pengecekan dan pengiriman permintaan AJAX di sini
     const data = {
       target: updatedRow.target ? updatedRow.target : 0,
@@ -247,26 +287,35 @@ const TableGroupPerusahaan = props => {
 
     if (updatedRow.id < 100000) {
       if (data.realisasi <= data.target) {
-        axios
-          .put(`/perusahaan/${updatedRow.id}`, data)
-          .then(res => {
-            Swal.fire({
-              position: 'bottom-end',
-              icon: 'success',
-              title: 'Berhasil Disimpan',
-              showConfirmButton: false,
-              timer: 1000,
-              width: 300
+        if (isPmlValid && isPclValid) {
+          axios
+            .put(`/perusahaan/${updatedRow.id}`, data)
+            .then(res => {
+              Swal.fire({
+                position: 'bottom-end',
+                icon: 'success',
+                title: 'Berhasil Disimpan',
+                showConfirmButton: false,
+                timer: 1000,
+                width: 300
+              })
             })
-          })
-          .catch(err => {
-            Swal.fire({
-              title: 'Error!',
-              text: 'Something went wrong',
-              icon: 'error',
-              confirmButtonText: 'Ok'
+            .catch(err => {
+              Swal.fire({
+                title: 'Error!',
+                text: 'Something went wrong',
+                icon: 'error',
+                confirmButtonText: 'Ok'
+              })
             })
+        } else {
+          Swal.fire({
+            title: 'Error!',
+            text: 'Honor yang anda input melebihi akumulai bulanan mitra ',
+            icon: 'error',
+            confirmButtonText: 'Ok'
           })
+        }
       } else {
         Swal.fire({
           title: 'Error!',

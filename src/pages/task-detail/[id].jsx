@@ -7,7 +7,9 @@ import TaskDetailViews from 'src/views/task-views/TaskDetailViews'
 
 const TaskDetail = ({ data }) => {
   const [task, setTask] = useState(JSON.parse(data))
-  // console.log(task.mitraTask)
+  const arrayOfIds = task.mitraTask.map(task => task.mitra.id)
+  // console.log(arrayOfIds)
+  // console.log(task.mitraLimitHonor)
   return (
     <>
       <TaskDetailViews
@@ -16,6 +18,7 @@ const TaskDetail = ({ data }) => {
         dataMitra={task.mitraTask}
         dataPML={task.pegawai}
         dataPH={task.pekerjaanHarian}
+        dataMitraLimit={task.mitraLimitHonor}
       ></TaskDetailViews>
     </>
   )
@@ -88,12 +91,28 @@ export async function getServerSideProps(context) {
     }
   })
 
+  const arrayOfIds = mitraTask.map(task => task.mitra.id) // Mengakses ID dari setiap objek dalam mitraTask
+
+  const mitraLimitHonor = await prisma.taskPerusahaanProduksi.findMany({
+    where: {
+      OR: arrayOfIds.flatMap(id => [{ pmlId: parseInt(id) }, { pclId: parseInt(id) }])
+    },
+    select: {
+      id: true,
+      pmlId: true,
+      pclId: true,
+      gajiPml: true,
+      gajiPcl: true
+    }
+  })
+
   const data = {
     task,
     perusahaanTask,
     mitraTask,
     pegawai,
-    pekerjaanHarian
+    pekerjaanHarian,
+    mitraLimitHonor
   }
 
   return {
