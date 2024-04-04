@@ -215,6 +215,8 @@ const CardProjectDetail = props => {
   const [userProject, setUserProject] = useState(props.data.UserProject)
   const [arrId, setArrId] = useState(props.dataArrayIdProjectMember)
   const session = useSession()
+
+  console.log(session)
   const valueProgressBar =
     Math.ceil((new Date(project.enddate) - new Date()) / (1000 * 3600 * 24)) >= 0
       ? parseInt(
@@ -414,7 +416,8 @@ const CardProjectDetail = props => {
               </>
             </TabPanel>
             <Divider sx={{ marginTop: 3.5 }} />
-            {session.status === 'authenticated' && (arrId.includes(session.data.uid) || session.data.uid === 1099999) && (
+            {/* {session.status === 'authenticated' && (arrId.includes(session.data.uid) || session.data.uid === 1099999) && ( */}
+            {session.status === 'authenticated' && session.data.role == 'teamleader' && (
               <>
                 <Grid container sx={{ mt: 3 }} spacing={4}>
                   <Grid item>

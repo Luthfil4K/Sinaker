@@ -93,18 +93,54 @@ export async function getServerSideProps(context) {
 
   const arrayOfIds = mitraTask.map(task => task.mitra.id) // Mengakses ID dari setiap objek dalam mitraTask
 
-  const mitraLimitHonor = await prisma.taskPerusahaanProduksi.findMany({
-    where: {
-      OR: arrayOfIds.flatMap(id => [{ pmlId: parseInt(id) }, { pclId: parseInt(id) }])
-    },
-    select: {
-      id: true,
-      pmlId: true,
-      pclId: true,
-      gajiPml: true,
-      gajiPcl: true
+  const mitraLimitHonor = []
+
+  for (const id of arrayOfIds) {
+    const result = await prisma.taskPerusahaanProduksi.findFirst({
+      where: {
+        OR: [{ pmlId: parseInt(id) }, { pclId: parseInt(id) }]
+      },
+      select: {
+        id: true,
+        pmlId: true,
+        pclId: true,
+        gajiPml: true,
+        gajiPcl: true,
+        task: true
+      }
+    })
+
+    if (result) {
+      // Cek apakah id sudah ada di mitraLimitHonor
+      const existingEntry = mitraLimitHonor.find(entry => entry.id === result.id)
+      if (!existingEntry) {
+        mitraLimitHonor.push(result)
+      }
+    } else {
+      // Jika tidak ada hasil, tambahkan entri dengan nilai default
+      mitraLimitHonor.push({
+        id: null,
+        pmlId: parseInt(id),
+        pclId: parseInt(id),
+        gajiPml: 0,
+        gajiPcl: 0
+      })
     }
-  })
+  }
+
+  // const mitraLimitHonor = await prisma.taskPerusahaanProduksi.findMany({
+  //   where: {
+  //     OR: arrayOfIds.flatMap(id => [{ pmlId: parseInt(id) }, { pclId: parseInt(id) }])
+  //   },
+  //   select: {
+  //     id: true,
+  //     pmlId: true,
+  //     pclId: true,
+  //     gajiPml: true,
+  //     gajiPcl: true,
+  //     task: true
+  //   }
+  // })
 
   const data = {
     task,

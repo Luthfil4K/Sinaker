@@ -37,6 +37,8 @@ import { DataGrid } from '@mui/x-data-grid'
 import TableGroupPerusahaan from 'src/views/tables/TableGroupPerusahaan'
 import { number } from 'mathjs'
 
+import { useSession } from 'next-auth/react'
+
 const statusObj = {
   0: { color: 'error', status: 'Overload' },
   1: { color: 'success', status: 'Available' }
@@ -54,7 +56,7 @@ const CreateKegiatanPerusahaanViews = props => {
   const [timMember, setTimMember] = useState(props.data.timKerjaPegawai)
 
   const [tpp, setTpp] = useState(props.dataTpp)
-
+  const session = useSession()
   const [values, setValues] = useState({
     idGroup: props.data.id,
     kegFungsi: props.data.fungsi,
@@ -119,12 +121,12 @@ const CreateKegiatanPerusahaanViews = props => {
       nama: row.userId_fkey.name,
       fungsi: row.userId_fkey.fungsi,
       jumlahKegiatan: jumlahKerjaanTpp,
-      jumlahJamKerja: jamKerja,
+      jumlahJamKerja: jamKerja
       // gajiBulanIni,
       // gajiBulanSblm,
       // gajiBulanDepan,
       // bebanKerjaO: nilaiBebanKerja,
-      over: bebanKerja
+      // over: bebanKerja
       // checked: row.checked
     }
   })
@@ -544,14 +546,26 @@ const CreateKegiatanPerusahaanViews = props => {
           >
             Edit Tim Kerja
           </Button> */}
-          <Link onClick={e => router.push(`/tim-kerja-edit/${values.idGroup}`)}>
-            <Button sx={{ m: 2 }} variant='contained' size={'medium'} color={'warning'}>
-              Ubah Tim Kerja
-            </Button>
-          </Link>
-          <Button color={'error'} sx={{ m: 2 }} size='medium' type='submit' variant='contained' onClick={handleDelete}>
-            Hapus Tim Kerja
-          </Button>
+
+          {session.status === 'authenticated' && session.data.role == 'teamleader' && (
+            <>
+              <Link onClick={e => router.push(`/tim-kerja-edit/${values.idGroup}`)}>
+                <Button sx={{ m: 2 }} variant='contained' size={'medium'} color={'warning'}>
+                  Ubah Tim Kerja
+                </Button>
+              </Link>
+              <Button
+                color={'error'}
+                sx={{ m: 2 }}
+                size='medium'
+                type='submit'
+                variant='contained'
+                onClick={handleDelete}
+              >
+                Hapus Tim Kerja
+              </Button>
+            </>
+          )}
         </Grid>
       </form>
     </Card>

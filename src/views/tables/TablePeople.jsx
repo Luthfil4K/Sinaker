@@ -140,7 +140,7 @@ const TablePeople = props => {
   //   // jumlahSubkegiatan: row.jumlahSubkegiatan,
   // }))
 
-  const columns = [
+  const columnsAdmin = [
     // { field: 'id', headerName: 'No', type: 'string', minWidth: 40 },
     {
       field: 'nama',
@@ -328,36 +328,38 @@ const TablePeople = props => {
       flex: 1,
       renderCell: params => (
         <form>
-          <FormControl fullWidth>
-            <InputLabel id='form-layouts-separator-select-label'>role</InputLabel>
-            {params.row.role == 'superAdmin' ? (
-              <Select
-                sx={{ height: 50 }}
-                value={params.row.role}
-                label='role'
-                id='form-layouts-separator-role'
-                labelId='form-layouts-separator-role-label'
-              >
-                <MenuItem value='superAdmin'>Kepala BPS</MenuItem>
-              </Select>
-            ) : (
-              <Select
-                sx={{ height: 50 }}
-                value={params.row.role}
-                label='role'
-                id='form-layouts-separator-role'
-                labelId='form-layouts-separator-role-label'
-                onChange={e => handleChangeRole(e, params.row.id, e.target.value)}
-              >
-                <MenuItem value='superAdmin'>Kepala BPS</MenuItem>
-                <MenuItem value='pjk'>PJK</MenuItem>
-                <MenuItem value='employee'>Pegawai</MenuItem>
-                <MenuItem value='verifikator'>Verifikator</MenuItem>
-                <MenuItem value='ppspm'>PPSPM</MenuItem>
-                <MenuItem value='bendahara'>Bendahara</MenuItem>
-              </Select>
-            )}
-          </FormControl>
+          <>
+            <FormControl fullWidth>
+              <InputLabel id='form-layouts-separator-select-label'>role</InputLabel>
+              {params.row.role == 'superAdmin' ? (
+                <Select
+                  sx={{ height: 50 }}
+                  value={params.row.role}
+                  label='role'
+                  id='form-layouts-separator-role'
+                  labelId='form-layouts-separator-role-label'
+                >
+                  <MenuItem value='superAdmin'>Kepala BPS</MenuItem>
+                </Select>
+              ) : (
+                <Select
+                  sx={{ height: 50 }}
+                  value={params.row.role}
+                  label='role'
+                  id='form-layouts-separator-role'
+                  labelId='form-layouts-separator-role-label'
+                  onChange={e => handleChangeRole(e, params.row.id, e.target.value)}
+                >
+                  <MenuItem value='superAdmin'>Kepala BPS</MenuItem>
+                  <MenuItem value='pjk'>PJK</MenuItem>
+                  <MenuItem value='employee'>Pegawai</MenuItem>
+                  <MenuItem value='verifikator'>Verifikator</MenuItem>
+                  <MenuItem value='ppspm'>PPSPM</MenuItem>
+                  <MenuItem value='bendahara'>Bendahara</MenuItem>
+                </Select>
+              )}
+            </FormControl>
+          </>
         </form>
       )
     },
@@ -393,6 +395,217 @@ const TablePeople = props => {
     }
   ]
 
+  const columns = [
+    // { field: 'id', headerName: 'No', type: 'string', minWidth: 40 },
+    {
+      field: 'nama',
+      renderHeader: () => (
+        <Typography sx={{ fontWeight: 900, fontSize: '0.875rem !important', textAlign: 'center' }}>Nama</Typography>
+      ),
+      headerName: 'Nama',
+      width: 270,
+      renderCell: params => (
+        <Link
+          onClick={async e => {
+            router.push(`/pegawai-detail-gaji/${params.row.id}`)
+          }}
+          sx={{ cursor: 'pointer' }}
+        >
+          <Typography sx={{ fontWeight: 500, textDecoration: 'underline', fontSize: '0.875rem !important' }}>
+            {params.row.nama}
+          </Typography>
+        </Link>
+      )
+    },
+    // {
+    //   field: 'over',
+    //   renderCell: params => (
+    //     <>
+    //       <Chip
+    //         // label={statusObj[params.row.bebanKerja < 0.5 ? (params.row.jumlahKegiatan < 15 ? 1 : 0) : 0].status}
+    //         // color={statusObj[params.row.bebanKerja < 0.5 ? (params.row.jumlahKegiatan < 15 ? 1 : 0) : 0].color}
+    //         label={statusObj[params.row.jumlahKegiatan < 15 ? 1 : 0].status}
+    //         color={statusObj[params.row.jumlahKegiatan < 15 ? 1 : 0].color}
+    //         sx={{
+    //           height: 24,
+    //           fontSize: '0.75rem',
+    //           width: 100,
+    //           textTransform: 'capitalize',
+    //           '& .MuiChip-label': { fontWeight: 500 }
+    //         }}
+    //       />
+    //     </>
+    //   ),
+    //   renderHeader: () => (
+    //     <Typography sx={{ fontWeight: 900, fontSize: '0.875rem !important', textAlign: 'center' }}>
+    //       Status Bulan Ini
+    //     </Typography>
+    //   ),
+    //   type: 'string',
+    //   width: 140
+    // },
+
+    // {
+    //   field: 'gajiBulanIni',
+    //   renderHeader: () => (
+    //     <Typography sx={{ fontWeight: 900, fontSize: '0.875rem !important', textAlign: 'center' }}>
+    //       Gaji Bulan Ini
+    //     </Typography>
+    //   ),
+    //   headerName: 'Gaji Bulan Ini ',
+    //   type: 'string',
+    //   width: 140,
+    //   renderCell: params => (
+    //     <>
+    //       <Typography
+    //         color={params.row.gajiBulanIni < 3000000 ? 'secondary.main' : 'error.main'}
+    //         sx={{ fontWeight: 500, fontSize: '0.875rem !important', textAlign: 'center' }}
+    //       >
+    //         {`Rp ${params.row.gajiBulanIni.toLocaleString('id-ID')}`}
+    //       </Typography>
+    //     </>
+    //   )
+    // },
+    // {
+    //   field: 'gajiBulanSblm',
+    //   renderHeader: () => (
+    //     <Typography sx={{ fontWeight: 900, fontSize: '0.875rem !important', textAlign: 'center' }}>
+    //       Gaji Bulan Sebelumnya
+    //     </Typography>
+    //   ),
+    //   headerName: 'Gaji Bulan Sebelumnya ',
+    //   type: 'string',
+    //   width: 140,
+    //   renderCell: params => (
+    //     <>
+    //       <Typography
+    //         color={params.row.gajiBulanSblm < 3000000 ? 'secondary.main' : 'error.main'}
+    //         sx={{ fontWeight: 500, fontSize: '0.875rem !important', textAlign: 'center' }}
+    //       >
+    //         {`Rp ${params.row.gajiBulanSblm.toLocaleString('id-ID')}`}
+    //       </Typography>
+    //     </>
+    //   )
+    // },
+    // {
+    //   field: 'gajiBulanDepan',
+    //   renderHeader: () => (
+    //     <Typography sx={{ fontWeight: 900, fontSize: '0.875rem !important', textAlign: 'center' }}>
+    //       Gaji Bulan Depan
+    //     </Typography>
+    //   ),
+    //   headerName: 'Gaji Bulan Depan ',
+    //   type: 'string',
+    //   width: 140,
+    //   renderCell: params => (
+    //     <>
+    //       <Typography
+    //         color={params.row.gajiBulanDepan < 3000000 ? 'secondary.main' : 'error.main'}
+    //         sx={{ fontWeight: 500, fontSize: '0.875rem !important', textAlign: 'center' }}
+    //       >
+    //         {`Rp ${params.row.gajiBulanDepan.toLocaleString('id-ID')}`}
+    //       </Typography>
+    //     </>
+    //   )
+    // },
+    // {
+    //   field: 'fungsi',
+    //   headerName: 'Fungsi',
+    //   renderHeader: () => (
+    //     <Typography sx={{ fontWeight: 900, fontSize: '0.875rem !important', textAlign: 'center' }}>Fungsi</Typography>
+    //   ),
+
+    //   minWidth: 170,
+    //   renderCell: params => (
+    //     <Typography sx={{ fontWeight: 500, fontSize: '0.875rem !important' }}>
+    //       {' '}
+    //       {jenisFungsi[parseInt(params.row.fungsi)].bagFungsi}
+    //     </Typography>
+    //   )
+    // },
+    // {
+    //   field: 'totalGaji',
+    //   headerName: 'Total Gaji',
+
+    //   minWidth: 170
+    // },
+    // {
+    //   field: 'gajiBulanan',
+    //   headerName: 'Gaji Bulanan',
+
+    //   width: 150
+    // },
+    // {
+    //   field: 'gajiTriwulanan',
+    //   headerName: 'Gaji Triwulanan',
+
+    //   width: 150
+    // },
+    // {
+    //   field: 'gajiSemesteran',
+    //   headerName: 'Gaji Semesteran',
+
+    //   width: 150
+    // },
+    // {
+    //   field: 'gajiTahunan',
+    //   headerName: 'Gaji Tahunan',
+
+    //   width: 150
+    // },
+    {
+      field: 'jumlahKegiatan',
+      headerName: 'Jumlah Kegiatan',
+      renderHeader: () => (
+        <Typography sx={{ fontWeight: 900, fontSize: '0.875rem !important', textAlign: 'center' }}>
+          Jumlah Kegiatan
+        </Typography>
+      ),
+
+      minWidth: 170
+    },
+    // {
+    //   field: 'bebanKerja',
+    //   headerName: 'Beban Kerja',
+    //   renderHeader: () => (
+    //     <Typography sx={{ fontWeight: 900, fontSize: '0.875rem !important', textAlign: 'center' }}>
+    //       Beban Kerja
+    //     </Typography>
+    //   ),
+
+    //   minWidth: 150
+    // },
+
+    {
+      field: 'action',
+      renderHeader: () => (
+        <Typography sx={{ fontWeight: 900, fontSize: '0.875rem !important', textAlign: 'center' }}>Action</Typography>
+      ),
+
+      minWidth: 250,
+      flex: 1,
+      renderCell: params => (
+        <>
+          <Button
+            onClick={e => {
+              router.push(`/people-edit/${params.row.id}`)
+            }}
+            type='submit'
+            sx={{ mr: 1 }}
+            color='info'
+            variant='text'
+          >
+            <PencilOutline />
+          </Button>
+
+          {/* <Button onClick={handleDelete} type='submit' sx={{ mr: 1 }} color='error' variant='text'>
+            <DeleteOutline />
+          </Button> */}
+        </>
+      ),
+      hide: true
+    }
+  ]
   const handleDelete = () => {
     Swal.fire({
       title: 'Apa Anda Yakin?',
@@ -422,7 +635,7 @@ const TablePeople = props => {
             }
           }}
           rows={rows}
-          columns={columns}
+          columns={session.status === 'authenticated' && session.data.uid === 1099999 ? columnsAdmin : columns}
           sx={{
             height: rows.length > 3 ? '80vh' : '45vh',
             // overflowY: 'auto',

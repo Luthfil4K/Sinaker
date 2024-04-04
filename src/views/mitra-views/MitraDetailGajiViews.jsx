@@ -433,7 +433,7 @@ const MitraDetailGajiViews = props => {
     .filter(tppRow => tppRow.pclId === values.id || tppRow.pmlId === values.id)
     .filter(tppRow => {
       const tppDueDate = new Date(tppRow.task.duedate)
-      let sekarang = new Date() // Mendapatkan tanggal dan waktu saat ini
+      let sekarang = new Date() // tanggal sekarang
       sekarang.setFullYear(selectedYear)
       return tppDueDate.getMonth() === sekarang.getMonth() && tppDueDate.getFullYear() === selectedYear
     })

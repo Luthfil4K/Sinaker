@@ -76,15 +76,25 @@ const TableGroupPerusahaan = props => {
 
   const templateTable = participants.length > 0 ? participants[1].templateTable : 5
 
-  // console.log(props.dataMitraLimitHonor)
+  console.log(props.dataMitraLimitHonor)
+  console.log(mitra)
+
   const hitungTotalGaji = dataMitraLimitHonor => {
     const totalGajiPerMitra = {}
+    const bulanSekarang = new Date().getMonth()
 
     dataMitraLimitHonor.forEach(mitra => {
-      const { pmlId, pclId, gajiPml, gajiPcl } = mitra
+      const { pmlId, pclId, gajiPml, gajiPcl, task } = mitra
 
-      totalGajiPerMitra[pmlId] = (totalGajiPerMitra[pmlId] || 0) + gajiPml
-      totalGajiPerMitra[pclId] = (totalGajiPerMitra[pclId] || 0) + gajiPcl
+      // Periksa apakah bulan duedate dari task sama dengan bulan sekarang
+      const taskBulan = task?.dueDate ? new Date(task.dueDate).getMonth() : new Date().getMonth()
+
+      if (taskBulan === bulanSekarang) {
+        console.log('ini bulan sekarang : ' + new Date().getMonth())
+        console.log('ini bulan dl subkeg: ' + new Date(taskBulan).getMonth())
+        totalGajiPerMitra[pmlId] = (totalGajiPerMitra[pmlId] || 0) + gajiPml
+        totalGajiPerMitra[pclId] = (totalGajiPerMitra[pclId] || 0) + gajiPcl
+      }
     })
 
     const totalGajiArray = Object.entries(totalGajiPerMitra).map(([id, total]) => ({
@@ -96,7 +106,6 @@ const TableGroupPerusahaan = props => {
   }
 
   const totalGajiMitra = hitungTotalGaji(props.dataMitraLimitHonor)
-  console.log(totalGajiMitra)
 
   const [organikMitra, setOrganikMitra] = useState({
     value: '',
@@ -315,6 +324,12 @@ const TableGroupPerusahaan = props => {
             icon: 'error',
             confirmButtonText: 'Ok'
           })
+          setRows(rows.map(row => (row.id === updatedRow.id ? { ...row, gajipml: 0 } : row)))
+
+          setValues(values => ({
+            ...values, // Pertahankan nilai properti lainnya
+            templateTable: event.target.value // Perbarui nilai kegRentang
+          }))
         }
       } else {
         Swal.fire({

@@ -600,7 +600,8 @@ const TaskDetailViews = props => {
         {}
 
         {session.status === 'authenticated' &&
-          (session.data.uid === 99 || values.jenisKeg === 65 || values.jenisKeg === 67) && (
+          session.data.role == 'teamleader' &&
+          (values.jenisKeg === 65 || values.jenisKeg === 67) && (
             <TablePerusahaanTaskDetails
               data={participants}
               dataProjectFungsi={props.data.project.fungsi}

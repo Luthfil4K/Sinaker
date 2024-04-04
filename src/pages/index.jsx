@@ -667,44 +667,9 @@ const Dashboard = ({ dataTask }) => {
   }, [session])
   const [task, setTask] = useState(JSON.parse(dataTask))
 
-  console.log(task)
   const columns = [
     // { field: 'id', headerName: 'No', type: 'string', width: 70 },
-    {
-      field: 'taskName',
-      renderCell: params => (
-        <Link
-          onClick={async e => {
-            router.push(`/task-detail/${params.row.taskId}`)
-          }}
-          sx={{ cursor: 'pointer' }}
-        >
-          <Typography
-            color={
-              params.row.durationOff != 'Kegiatan belum dimulai'
-                ? params.row.durationOff != 'Kegiatan belum dimulai'
-                  ? params.row.realisasi <= params.row.akumulasiTargetHariIni
-                    ? params.row.realisasi <= params.row.yellowAkumulasiTargetHariIni
-                      ? 'error.main'
-                      : 'warning.main'
-                    : 'success.main'
-                  : 'secondary.dark'
-                : 'secondary.dark'
-            }
-            sx={{ fontWeight: 500, textDecoration: 'underline', fontSize: '0.875rem !important' }}
-          >
-            {params.row.taskName}
-          </Typography>
-        </Link>
-      ),
-      renderHeader: () => (
-        <Typography sx={{ fontWeight: 900, fontSize: '0.875rem !important', textAlign: 'center' }}>
-          Sub Kegiatan
-        </Typography>
-      ),
-      headerName: 'Sub Kegiatan',
-      width: 250
-    },
+
     {
       field: 'kegiatanName',
       headerName: 'Kegiatan',
@@ -724,13 +689,15 @@ const Dashboard = ({ dataTask }) => {
           <Typography
             color={
               params.row.durationOff != 'Kegiatan belum dimulai'
-                ? params.row.durationOff != 'Kegiatan belum dimulai'
-                  ? params.row.realisasi <= params.row.akumulasiTargetHariIni
+                ? params.row.durationOff != 'Kegiatan telah selesai'
+                  ? params.row.realisasi < params.row.akumulasiTargetHariIni
                     ? params.row.realisasi <= params.row.yellowAkumulasiTargetHariIni
                       ? 'error.main'
                       : 'warning.main'
                     : 'success.main'
-                  : 'secondary.dark'
+                  : params.row.durationOff == 'Kegiatan telah selesai' && params.row.realisasi >= params.row.target
+                  ? 'secondary.dark'
+                  : 'error.main'
                 : 'secondary.dark'
             }
             sx={{ textDecoration: 'underline', fontWeight: 500, fontSize: '0.875rem !important' }}
@@ -740,6 +707,43 @@ const Dashboard = ({ dataTask }) => {
         </Link>
       ),
       width: 200
+    },
+    {
+      field: 'taskName',
+      renderCell: params => (
+        <Link
+          onClick={async e => {
+            router.push(`/task-detail/${params.row.taskId}`)
+          }}
+          sx={{ cursor: 'pointer' }}
+        >
+          <Typography
+            color={
+              params.row.durationOff != 'Kegiatan belum dimulai'
+                ? params.row.durationOff != 'Kegiatan telah selesai'
+                  ? params.row.realisasi < params.row.akumulasiTargetHariIni
+                    ? params.row.realisasi <= params.row.yellowAkumulasiTargetHariIni
+                      ? 'error.main'
+                      : 'warning.main'
+                    : 'success.main'
+                  : params.row.durationOff == 'Kegiatan telah selesai' && params.row.realisasi >= params.row.target
+                  ? 'secondary.dark'
+                  : 'error.main'
+                : 'secondary.dark'
+            }
+            sx={{ fontWeight: 500, textDecoration: 'underline', fontSize: '0.875rem !important' }}
+          >
+            {params.row.taskName}
+          </Typography>
+        </Link>
+      ),
+      renderHeader: () => (
+        <Typography sx={{ fontWeight: 900, fontSize: '0.875rem !important', textAlign: 'center' }}>
+          Sub Kegiatan
+        </Typography>
+      ),
+      headerName: 'Sub Kegiatan',
+      width: 250
     },
     {
       field: 'realisasi',
@@ -754,13 +758,15 @@ const Dashboard = ({ dataTask }) => {
           textAlign={'center'}
           color={
             params.row.durationOff != 'Kegiatan belum dimulai'
-              ? params.row.durationOff != 'Kegiatan belum dimulai'
-                ? params.row.realisasi <= params.row.akumulasiTargetHariIni
+              ? params.row.durationOff != 'Kegiatan telah selesai'
+                ? params.row.realisasi < params.row.akumulasiTargetHariIni
                   ? params.row.realisasi <= params.row.yellowAkumulasiTargetHariIni
                     ? 'error.main'
                     : 'warning.main'
                   : 'success.main'
-                : 'secondary.dark'
+                : params.row.durationOff == 'Kegiatan telah selesai' && params.row.realisasi >= params.row.target
+                ? 'secondary.dark'
+                : 'error.main'
               : 'secondary.dark'
           }
           sx={{ fontWeight: 500, fontSize: '0.875rem !important' }}
@@ -781,13 +787,15 @@ const Dashboard = ({ dataTask }) => {
           textAlign={'center'}
           color={
             params.row.durationOff != 'Kegiatan belum dimulai'
-              ? params.row.durationOff != 'Kegiatan belum dimulai'
-                ? params.row.realisasi <= params.row.akumulasiTargetHariIni
+              ? params.row.durationOff != 'Kegiatan telah selesai'
+                ? params.row.realisasi < params.row.akumulasiTargetHariIni
                   ? params.row.realisasi <= params.row.yellowAkumulasiTargetHariIni
                     ? 'error.main'
                     : 'warning.main'
                   : 'success.main'
-                : 'secondary.dark'
+                : params.row.durationOff == 'Kegiatan telah selesai' && params.row.realisasi >= params.row.target
+                ? 'secondary.dark'
+                : 'error.main'
               : 'secondary.dark'
           }
           sx={{ fontWeight: 500, fontSize: '0.875rem !important' }}
@@ -806,8 +814,32 @@ const Dashboard = ({ dataTask }) => {
       renderCell: params => (
         <>
           <Chip
-            label={statusObj[params.row.status === 'Done' ? 1 : 0].status}
-            color={statusObj[params.row.status === 'Done' ? 1 : 0].color}
+            label={
+              params.row.durationOff != 'Kegiatan belum dimulai'
+                ? params.row.durationOff != 'Kegiatan telah selesai'
+                  ? params.row.realisasi < params.row.akumulasiTargetHariIni
+                    ? params.row.realisasi <= params.row.yellowAkumulasiTargetHariIni
+                      ? 'Tertinggal Target'
+                      : 'Diutamakan'
+                    : 'Memenuhi Target'
+                  : params.row.durationOff == 'Kegiatan telah selesai' && params.row.realisasi >= params.row.target
+                  ? 'Memenuhi Target'
+                  : 'Terlewat Batas Waktu'
+                : 'Belum Dimulai'
+            }
+            color={
+              params.row.durationOff != 'Kegiatan belum dimulai'
+                ? params.row.durationOff != 'Kegiatan telah selesai'
+                  ? params.row.realisasi < params.row.akumulasiTargetHariIni
+                    ? params.row.realisasi <= params.row.yellowAkumulasiTargetHariIni
+                      ? 'error'
+                      : 'warning'
+                    : 'success'
+                  : params.row.durationOff == 'Kegiatan telah selesai' && params.row.realisasi >= params.row.target
+                  ? 'secondary'
+                  : 'error'
+                : 'secondary'
+            }
             sx={{
               height: 24,
               fontSize: '0.75rem',
@@ -834,13 +866,15 @@ const Dashboard = ({ dataTask }) => {
         <Typography
           color={
             params.row.durationOff != 'Kegiatan belum dimulai'
-              ? params.row.durationOff != 'Kegiatan belum dimulai'
-                ? params.row.realisasi <= params.row.akumulasiTargetHariIni
+              ? params.row.durationOff != 'Kegiatan telah selesai'
+                ? params.row.realisasi < params.row.akumulasiTargetHariIni
                   ? params.row.realisasi <= params.row.yellowAkumulasiTargetHariIni
                     ? 'error.main'
                     : 'warning.main'
                   : 'success.main'
-                : 'secondary.dark'
+                : params.row.durationOff == 'Kegiatan telah selesai' && params.row.realisasi >= params.row.target
+                ? 'secondary.dark'
+                : 'error.main'
               : 'secondary.dark'
           }
           sx={{ fontWeight: 500, fontSize: '0.875rem !important' }}
@@ -864,13 +898,15 @@ const Dashboard = ({ dataTask }) => {
         <Typography
           color={
             params.row.durationOff != 'Kegiatan belum dimulai'
-              ? params.row.durationOff != 'Kegiatan belum dimulai'
-                ? params.row.realisasi <= params.row.akumulasiTargetHariIni
+              ? params.row.durationOff != 'Kegiatan telah selesai'
+                ? params.row.realisasi < params.row.akumulasiTargetHariIni
                   ? params.row.realisasi <= params.row.yellowAkumulasiTargetHariIni
                     ? 'error.main'
                     : 'warning.main'
                   : 'success.main'
-                : 'secondary.dark'
+                : params.row.durationOff == 'Kegiatan telah selesai' && params.row.realisasi >= params.row.target
+                ? 'secondary.dark'
+                : 'error.main'
               : 'secondary.dark'
           }
           sx={{ fontWeight: 500, fontSize: '0.875rem !important' }}
@@ -894,13 +930,15 @@ const Dashboard = ({ dataTask }) => {
         <Typography
           color={
             params.row.durationOff != 'Kegiatan belum dimulai'
-              ? params.row.durationOff != 'Kegiatan belum dimulai'
-                ? params.row.realisasi <= params.row.akumulasiTargetHariIni
+              ? params.row.durationOff != 'Kegiatan telah selesai'
+                ? params.row.realisasi < params.row.akumulasiTargetHariIni
                   ? params.row.realisasi <= params.row.yellowAkumulasiTargetHariIni
                     ? 'error.main'
                     : 'warning.main'
                   : 'success.main'
-                : 'secondary.dark'
+                : params.row.durationOff == 'Kegiatan telah selesai' && params.row.realisasi >= params.row.target
+                ? 'secondary.dark'
+                : 'error.main'
               : 'secondary.dark'
           }
           sx={{ fontWeight: 500, fontSize: '0.875rem !important' }}
@@ -923,13 +961,15 @@ const Dashboard = ({ dataTask }) => {
           textAlign={'center'}
           color={
             params.row.durationOff != 'Kegiatan belum dimulai'
-              ? params.row.durationOff != 'Kegiatan belum dimulai'
-                ? params.row.realisasi <= params.row.akumulasiTargetHariIni
+              ? params.row.durationOff != 'Kegiatan telah selesai'
+                ? params.row.realisasi < params.row.akumulasiTargetHariIni
                   ? params.row.realisasi <= params.row.yellowAkumulasiTargetHariIni
                     ? 'error.main'
                     : 'warning.main'
                   : 'success.main'
-                : 'secondary.dark'
+                : params.row.durationOff == 'Kegiatan telah selesai' && params.row.realisasi >= params.row.target
+                ? 'secondary.dark'
+                : 'error.main'
               : 'secondary.dark'
           }
           sx={{ fontWeight: 500, fontSize: '0.875rem !important' }}
@@ -953,13 +993,15 @@ const Dashboard = ({ dataTask }) => {
           textAlign={'center'}
           color={
             params.row.durationOff != 'Kegiatan belum dimulai'
-              ? params.row.durationOff != 'Kegiatan belum dimulai'
-                ? params.row.realisasi <= params.row.akumulasiTargetHariIni
+              ? params.row.durationOff != 'Kegiatan telah selesai'
+                ? params.row.realisasi < params.row.akumulasiTargetHariIni
                   ? params.row.realisasi <= params.row.yellowAkumulasiTargetHariIni
                     ? 'error.main'
                     : 'warning.main'
                   : 'success.main'
-                : 'secondary.dark'
+                : params.row.durationOff == 'Kegiatan telah selesai' && params.row.realisasi >= params.row.target
+                ? 'secondary.dark'
+                : 'error.main'
               : 'secondary.dark'
           }
           sx={{ fontWeight: 500, fontSize: '0.875rem !important' }}
@@ -983,13 +1025,15 @@ const Dashboard = ({ dataTask }) => {
           textAlign={'center'}
           color={
             params.row.durationOff != 'Kegiatan belum dimulai'
-              ? params.row.durationOff != 'Kegiatan belum dimulai'
-                ? params.row.realisasi <= params.row.akumulasiTargetHariIni
+              ? params.row.durationOff != 'Kegiatan telah selesai'
+                ? params.row.realisasi < params.row.akumulasiTargetHariIni
                   ? params.row.realisasi <= params.row.yellowAkumulasiTargetHariIni
                     ? 'error.main'
                     : 'warning.main'
                   : 'success.main'
-                : 'secondary.dark'
+                : params.row.durationOff == 'Kegiatan telah selesai' && params.row.realisasi >= params.row.target
+                ? 'secondary.dark'
+                : 'error.main'
               : 'secondary.dark'
           }
           sx={{ fontWeight: 500, fontSize: '0.875rem !important' }}
@@ -1012,13 +1056,15 @@ const Dashboard = ({ dataTask }) => {
         <Typography
           color={
             params.row.durationOff != 'Kegiatan belum dimulai'
-              ? params.row.durationOff != 'Kegiatan belum dimulai'
-                ? params.row.realisasi <= params.row.akumulasiTargetHariIni
+              ? params.row.durationOff != 'Kegiatan telah selesai'
+                ? params.row.realisasi < params.row.akumulasiTargetHariIni
                   ? params.row.realisasi <= params.row.yellowAkumulasiTargetHariIni
                     ? 'error.main'
                     : 'warning.main'
                   : 'success.main'
-                : 'secondary.dark'
+                : params.row.durationOff == 'Kegiatan telah selesai' && params.row.realisasi >= params.row.target
+                ? 'secondary.dark'
+                : 'error.main'
               : 'secondary.dark'
           }
           sx={{ fontWeight: 500, fontSize: '0.875rem !important' }}
@@ -1046,7 +1092,7 @@ const Dashboard = ({ dataTask }) => {
     const hariBerjalan =
       tanggalSekarang >= startDateObj
         ? tanggalSekarang <= duedateObj
-          ? tanggalSekarang.getDate() - startDateObj.getDate() + 1
+          ? Math.round(Math.abs(tanggalSekarang.getTime() - startDateObj.getTime()) / (1000 * 3600 * 24)) + 1
           : 'Kegiatan telah selesai'
         : 'Kegiatan belum dimulai'
     const targetHarian = Math.round(task.target / differenceInDays)
