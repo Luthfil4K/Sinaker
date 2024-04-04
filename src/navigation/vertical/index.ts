@@ -5,6 +5,7 @@ import Login from 'mdi-material-ui/Login'
 import Table from 'mdi-material-ui/Table'
 import Cash from 'mdi-material-ui/HandCoin'
 import CubeOutline from 'mdi-material-ui/CubeOutline'
+import TimeLine from '@mui/icons-material/CalendarMonth'
 import FilterSettings from 'mdi-material-ui/FilterSettings'
 import HomeOutline from 'mdi-material-ui/HomeOutline'
 import Account from 'mdi-material-ui/Account'
@@ -15,6 +16,7 @@ import CreditCardOutline from 'mdi-material-ui/CreditCardOutline'
 import AccountPlusOutline from 'mdi-material-ui/AccountPlusOutline'
 import AlertCircleOutline from 'mdi-material-ui/AlertCircleOutline'
 import GoogleCirclesExtended from 'mdi-material-ui/GoogleCirclesExtended'
+import Mitra from '@mui/icons-material/Diversity3'
 
 // ** Type import
 import { VerticalNavItemsType } from 'src/@core/layouts/types'
@@ -34,9 +36,6 @@ const navigation = () => {
       getUserRole()
     }
   }, [session])
-
-  console.log(userRole)
-  console.log(userRole)
 
   if (userRole === 'teamleader') {
     return [
@@ -85,7 +84,7 @@ const navigation = () => {
       // },
       {
         title: 'Timeline',
-        icon: CubeOutline,
+        icon: TimeLine,
         path: '/timeline'
       },
       // {
@@ -178,7 +177,7 @@ const navigation = () => {
       // },
       {
         title: 'Daftar Mitra',
-        icon: FormatLetterCase,
+        icon: Mitra,
         path: '/mitra'
       }
       // {
@@ -214,7 +213,7 @@ const navigation = () => {
       // },
       // {
       //   title: 'Typography',
-      //   icon: FormatLetterCase,
+      //   icon: Mitra,
       //   path: '/typography'
       // },
       // {
@@ -243,7 +242,19 @@ const navigation = () => {
       //   path: '/iccon'
       // }
     ]
-  } else if (userRole == 'employee') {
+  } else if (userRole == 'employee' || userRole == 'bendahara' || userRole == 'verifikator' || userRole == 'ppspm') {
+    // if (userRole == 'bendahara' || userRole == 'verifikator' || userRole == 'ppspm') {
+    //   return [
+    //     {
+    //       sectionTitle: 'Pencairan'
+    //     },
+    //     {
+    //       title: 'Pencairan',
+    //       icon: Cash,
+    //       path: '/pencairan'
+    //     }
+    //   ]
+    // }
     return [
       {
         title: 'Dashboard',
@@ -253,15 +264,15 @@ const navigation = () => {
 
       {
         title: 'Timeline',
-        icon: CubeOutline,
+        icon: TimeLine,
         path: '/timeline'
       },
 
-      {
-        title: 'Daftar Rapat',
-        icon: Login,
-        path: '/rapat-ajuan-list'
-      },
+      // {
+      //   title: 'Daftar Rapat',
+      //   icon: Login,
+      //   path: '/rapat-ajuan-list'
+      // },
       {
         sectionTitle: 'Kegiatan'
       },
@@ -298,7 +309,7 @@ const navigation = () => {
 
       {
         title: 'Daftar Mitra',
-        icon: FormatLetterCase,
+        icon: Mitra,
         path: '/mitra'
       }
     ]
