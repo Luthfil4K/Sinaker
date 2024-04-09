@@ -351,7 +351,7 @@ const TablePeople = props => {
                   onChange={e => handleChangeRole(e, params.row.id, e.target.value)}
                 >
                   <MenuItem value='superAdmin'>Kepala BPS</MenuItem>
-                  <MenuItem value='pjk'>PJK</MenuItem>
+                  <MenuItem value='teamleader'>PJK</MenuItem>
                   <MenuItem value='employee'>Pegawai</MenuItem>
                   <MenuItem value='verifikator'>Verifikator</MenuItem>
                   <MenuItem value='ppspm'>PPSPM</MenuItem>
