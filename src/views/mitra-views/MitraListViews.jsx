@@ -26,7 +26,7 @@ const MitraListViews = props => {
         </Grid>
         <Grid item md={6} xs={6} display={'flex'} justifyContent={'end'}>
           {session.status === 'authenticated' && session.data.uid === 1099999 && (
-            <Link onClick={e => router.push(`/mitra-add`)}>
+            <Link onClick={e => router.push(`/mitra-import`)}>
               <Button variant={'contained'}> Tambah Mitra</Button>
             </Link>
           )}
