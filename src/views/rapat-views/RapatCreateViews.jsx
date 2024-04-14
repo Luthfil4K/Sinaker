@@ -37,7 +37,8 @@ import DatePickerWrapper from 'src/@core/styles/libs/react-datepicker'
 
 const RapatCreateViews = props => {
   const [selectedDate, setSelectedDate] = useState(new Date())
-  const [selectedDateE, setSelectedDateE] = useState(new Date())
+  const [selectedTimeS, setSelectedTimeS] = useState(new Date())
+  const [selectedTimeE, setSelectedTimeE] = useState(new Date())
   const session = useSession()
   console.log(session)
   const [timKerja, setTimKerja] = useState(props.dataTim)
@@ -78,8 +79,11 @@ const RapatCreateViews = props => {
   const handleDateChange = date => {
     setSelectedDate(date)
   }
-  const handleDateChangeE = date => {
-    setSelectedDateE(date)
+  const handleTimeChangeS = date => {
+    setSelectedTimeS(date)
+  }
+  const handleTimeChangeE = date => {
+    setSelectedTimeE(date)
   }
 
   // buat nyimpen di [values] dari input pilih tim kerja sama anggota tim (intinya handle tim dan anggotanya)
@@ -128,9 +132,10 @@ const RapatCreateViews = props => {
     setValues({ ...values, kegAnggotaId: tmpId })
   }, [values.kegAnggota])
   const router = useRouter()
-
+  console.log(selectedTimeE)
+  console.log(selectedTimeS)
   useEffect(() => {
-    console.log(selectedDateE - selectedDate)
+    console.log(selectedTimeE - selectedTimeS)
   }, [values])
   const handleCreateRapat = async e => {
     e.preventDefault()
@@ -139,9 +144,10 @@ const RapatCreateViews = props => {
       while (true) {
         const res = await axios.post('/rapat', {
           namaRapat: values.namaRapat,
-          startDate: selectedDate,
-          endDate: selectedDateE,
-          duration: selectedDateE - selectedDate,
+          meetDate: selectedDate,
+          startTime: selectedTimeS,
+          endTime: selectedTimeE,
+          duration: selectedTimeE - selectedTimeS,
           tempatRapat: values.tempatRapat,
           description: values.deskRapat,
           createdById: session.data.uid,
@@ -174,7 +180,8 @@ const RapatCreateViews = props => {
           })
 
           setSelectedDate(new Date())
-          setSelectedDateE(new Date())
+          setSelectedTimeS(new Date())
+          setSelectedTimeE(new Date())
         }
 
         break
@@ -205,12 +212,16 @@ const RapatCreateViews = props => {
       }
     })
   }
-  const CustomInputStart = forwardRef((props, ref) => {
-    return <TextField fullWidth {...props} inputRef={ref} label='DD-MM-YYYY, HH:MM' autoComplete='on' />
+  const CustomInputDateStart = forwardRef((props, ref) => {
+    return <TextField fullWidth {...props} inputRef={ref} label='Hari/Tanggal Rapat' autoComplete='on' />
   })
 
-  const CustomInputEnd = forwardRef((props, ref) => {
-    return <TextField fullWidth {...props} inputRef={ref} label='DD-MM-YYYY, HH:MM' autoComplete='off' />
+  const CustomInputTimeStart = forwardRef((props, ref) => {
+    return <TextField fullWidth {...props} inputRef={ref} label='Waktu Mulai' autoComplete='off' />
+  })
+
+  const CustomInputTimeEnd = forwardRef((props, ref) => {
+    return <TextField fullWidth {...props} inputRef={ref} label='Waktu Selesai' autoComplete='off' />
   })
 
   const projectRutin = [
@@ -237,8 +248,8 @@ const RapatCreateViews = props => {
             onChange={handleChange('namaRapat')}
             fullWidth
             multiline
-            label='Meeting Name'
-            placeholder='Meeting Name'
+            label='Tema Rapat'
+            placeholder='Tema Rapat'
           />
         </Grid>
         <Grid item xs={12} md={12}>
@@ -282,38 +293,56 @@ const RapatCreateViews = props => {
           />
         </Grid>
 
-        <Grid item xs={12} sm={12} lg={6}>
+        <Grid item xs={12} sm={12} lg={4}>
           <DatePickerWrapper>
             <DatePicker
               sx={{ width: 1000 }}
               selected={selectedDate}
               showYearDropdown
               showMonthDropdown
-              showTimeSelect
-              placeholderText='DD-MM-YYYY, HH:MM'
+              placeholderText='Hari/Tanggal Rapat'
               value={selectedDate}
               onChange={handleDateChange}
-              dateFormat='Pp'
+              dateFormat='dd/MM/yyyy'
               className='custom-datepicker'
-              customInput={<CustomInputStart />}
+              customInput={<CustomInputDateStart />}
               name='tanggalMulai'
             />
           </DatePickerWrapper>
         </Grid>
-        <Grid item xs={12} sm={12} lg={6}>
+        <Grid item xs={12} sm={12} lg={4}>
           <DatePickerWrapper>
             <DatePicker
-              selected={selectedDateE}
+              selected={selectedTimeS}
               sx={{ width: 1000 }}
-              showYearDropdown
-              showMonthDropdown
               showTimeSelect
-              placeholderText='DD-MM-YYYY, HH:MMr'
-              value={selectedDateE}
-              onChange={handleDateChangeE}
-              dateFormat='Pp'
+              showTimeSelectOnly
+              timeFormat='HH:mm'
+              timeIntervals={15}
+              dateFormat='HH:mm'
+              value={selectedTimeS}
+              onChange={handleTimeChangeS}
               className='custom-datepicker'
-              customInput={<CustomInputEnd />}
+              customInput={<CustomInputTimeStart />}
+              name='tanggalBerakhir'
+            />
+          </DatePickerWrapper>
+        </Grid>
+        <Grid item xs={12} sm={12} lg={4}>
+          <DatePickerWrapper>
+            <DatePicker
+              selected={selectedTimeE}
+              sx={{ width: 1000 }}
+              showTimeSelect
+              showTimeSelectOnly
+              timeFormat='HH:mm'
+              timeIntervals={15}
+              dateFormat='HH:mm'
+              placeholderText='Waktu Selesai'
+              value={selectedTimeE}
+              onChange={handleTimeChangeE}
+              className='custom-datepicker'
+              customInput={<CustomInputTimeEnd />}
               name='tanggalBerakhir'
             />
           </DatePickerWrapper>

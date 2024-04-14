@@ -100,14 +100,13 @@ const RapatDetailViews = props => {
                             : {props.dataRapat.lampiran}
                           </Typography>
                           <Typography color={'black'} variant={'body2'}>
-                            {/* : Undangan {props.dataRapat.namaRapat} */}
-                            {props.dataRapat.perihal}
+                            {/* : Undangan {props.dataRapat.namaRapat} */}: {props.dataRapat.perihal}
                           </Typography>
                         </Grid>
                         <Grid display={'flex'} justifyContent={'end'} item xs={2}>
                           <Typography color={'black'} variant={'body2'}>
                             {/* Bogor, 16 Maret 2024 */}
-                            Bogor,{' '}
+                            Cibinong,{' '}
                             {new Date().toLocaleDateString('id-ID', {
                               year: 'numeric',
                               month: 'long',
@@ -124,30 +123,26 @@ const RapatDetailViews = props => {
                         <Grid item xs={1}></Grid>
                         <Grid item xs={11}>
                           <Typography color={'black'} variant={'body2'}>
-                            Kepada yang Terhormat:
+                            Yth.
                           </Typography>
                           <Typography color={'black'} variant={'body2'}>
-                            Seluruh Pegawai BPS Kabupaten Bogor
+                            {props.dataRapat.ditujukan}
                           </Typography>
                           <Typography color={'black'} variant={'body2'}>
-                            di
+                            Di
                           </Typography>
                         </Grid>
                         <Grid item xs={1}></Grid>
                         <Grid item xs={11}>
-                          <Typography sx={{ marginLeft: 10 }} color={'black'} variant={'body2'}>
-                            Tempat
+                          <Typography sx={{ marginLeft: 5 }} color={'black'} variant={'body2'}>
+                            Cibinong
                           </Typography>
                         </Grid>
                         <Grid item xs={12} height={20}></Grid>
                         <Grid item xs={1}></Grid>
                         <Grid item xs={10}>
-                          <Typography color={'black'} variant={'body2'}>
-                            Kegiatan Jumat Smart BPS Kabupaten Bogor akan diisi dengan knowledge sharing dari hasil
-                            tesis yang akan disampaikan oleh Inda Dwi Setiawati, dengan materi "Peran dan Permintaan
-                            Pariwisata pada Ekonomi Regional Indonesia". Terkait dengan kegiatan tersebut, seluruh
-                            pegawai diundang untuk hadir pada:
-                            {props.dataRapat.description}
+                          <Typography sx={{ marginLeft: 10 }} color={'black'} variant={'body2'}>
+                            Dalam rangka {props.dataRapat.description} saudara diundang untuk menghadiri rapat pada:
                           </Typography>
                         </Grid>
                         <Grid item xs={1}></Grid>
@@ -158,17 +153,15 @@ const RapatDetailViews = props => {
                           <Grid container>
                             <Grid item xs={3}>
                               <Typography color={'black'} variant={'body2'}>
-                                Hari/Tanggal
+                                Hari
                               </Typography>
                               <Typography color={'black'} variant={'body2'}>
-                                Pukul
+                                Tanggal
                               </Typography>
                               <Typography color={'black'} variant={'body2'}>
-                                Agenda Rapat
+                                Waktu
                               </Typography>
-                              <Typography color={'black'} variant={'body2'}>
-                                Narasumber
-                              </Typography>
+
                               <Typography color={'black'} variant={'body2'}>
                                 Tempat
                               </Typography>
@@ -177,7 +170,12 @@ const RapatDetailViews = props => {
                               <Typography color={'black'} variant={'body2'}>
                                 :{' '}
                                 {new Date().toLocaleDateString('id-ID', {
-                                  weekday: 'long',
+                                  weekday: 'long'
+                                })}
+                              </Typography>
+                              <Typography color={'black'} variant={'body2'}>
+                                :{' '}
+                                {new Date(props.dataRapat.meetDate).toLocaleDateString('id-ID', {
                                   year: 'numeric',
                                   month: 'long',
                                   day: 'numeric'
@@ -185,23 +183,18 @@ const RapatDetailViews = props => {
                               </Typography>
                               <Typography color={'black'} variant={'body2'}>
                                 :{' '}
-                                {new Date(props.dataRapat.startDate).toLocaleTimeString('id-ID', {
+                                {new Date(props.dataRapat.startTime).toLocaleTimeString('id-ID', {
                                   hour: '2-digit',
                                   minute: '2-digit'
                                 })}{' '}
                                 -
-                                {new Date(props.dataRapat.endDate).toLocaleTimeString('id-ID', {
+                                {new Date(props.dataRapat.endTime).toLocaleTimeString('id-ID', {
                                   hour: '2-digit',
                                   minute: '2-digit'
                                 })}{' '}
                                 WIB
                               </Typography>
-                              <Typography color={'black'} variant={'body2'}>
-                                : Knowledge sharing
-                              </Typography>
-                              <Typography color={'black'} variant={'body2'}>
-                                : kesekian
-                              </Typography>
+
                               <Typography color={'black'} variant={'body2'}>
                                 : {props.dataRapat.tempatRapat}
                               </Typography>
@@ -213,8 +206,8 @@ const RapatDetailViews = props => {
                         <Grid item xs={12} height={20}></Grid>
                         <Grid item xs={1}></Grid>
                         <Grid item xs={10}>
-                          <Typography color={'black'} variant={'body2'}>
-                            Demikian surat ini disampaikan, atas perhatiannya terima kasih.
+                          <Typography sx={{ marginLeft: 10 }} color={'black'} variant={'body2'}>
+                            Demikian atas perhatian dan kerja samanya, diucapkan terima kasih.
                           </Typography>
                         </Grid>
                         <Grid item xs={1}></Grid>
@@ -243,7 +236,7 @@ const RapatDetailViews = props => {
                               </Grid>
                             </Grid>
                             <Typography mt={5} textAlign={'center'} color={'black'} variant={'body2'}>
-                              Kepala BPS Kabupaten Bogor
+                              Dr. Daryanto, S.ST, M.M
                             </Typography>
                           </Grid>
                           <Grid item xs={1}></Grid>
@@ -482,7 +475,7 @@ const RapatDetailViews = props => {
                 </CardActions>
               )}
             </TabPanel>
-            <TabPanel value='2' sx={{ p: 0, height: 335 }}>
+            <TabPanel value='2' sx={{ p: 0, height: 1935 }}>
               <Grid mt={4} container spacing={4}>
                 <Grid display={'flex'} justifyContent={'center'} item xs={5} height={330}>
                   <Card sx={{ width: 300, height: 300 }}>

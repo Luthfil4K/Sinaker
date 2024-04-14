@@ -35,15 +35,16 @@ const RapatApproveList = props => {
     props.dataRapat.map(rapat => ({
       id: rapat.id,
       namaRapat: rapat.namaRapat,
-      startDate: rapat.startDate,
-      endDate: rapat.endDate,
+      meetDate: rapat.meetDate,
+      startTime: rapat.startTime,
+      endTime: rapat.endTime,
       tempatRapat: rapat.tempatRapat,
       createdBy: rapat.createdBy,
       description: rapat.description,
       status: rapat.status
     }))
   )
-
+  console.log(dataAjuan)
   const handleSetujui = id => () => {
     const aidi = id
     Swal.fire({
@@ -294,16 +295,17 @@ const RapatApproveList = props => {
       id: row.id,
       namaRapat: row.namaRapat,
       waktu:
-        new Date(row.endDate).toLocaleDateString('id') +
+        new Date(row.meetDate).toLocaleDateString('id') +
         ' (' +
-        new Date(row.startDate).getHours() +
+        new Date(row.startTime).getHours() +
         ':' +
-        new Date(row.startDate).getMinutes() +
+        new Date(row.startTime).getMinutes() +
         '-' +
-        new Date(row.endDate).getHours() +
+        new Date(row.endTime).getHours() +
         ':' +
-        new Date(row.endDate).getMinutes() +
+        new Date(row.endTime).getMinutes() +
         ')',
+
       tempatRapat: row.tempatRapat,
       createdBy: row.createdBy.name,
       description: row.description,
