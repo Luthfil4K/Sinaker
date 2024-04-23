@@ -34,10 +34,13 @@ import FormGroup from '@mui/material/FormGroup'
 import FormControlLabel from '@mui/material/FormControlLabel'
 import Chip from '@mui/material/Chip'
 import Stack from '@mui/material/Stack'
+import CardContent from '@mui/material/CardContent'
+import CardActions from '@mui/material/CardActions'
 
 import { DataGrid } from '@mui/x-data-grid'
 
 import TableAddParticipant from 'src/views/tables/TableAddParticipant'
+import TimelineKegiatan from 'src/views/form-layouts/TimelineKegiatan'
 
 const CustomInputStart = forwardRef((props, ref) => {
   return <TextField fullWidth {...props} inputRef={ref} label='Tanggal Mulai' autoComplete='on' />
@@ -420,6 +423,19 @@ const CreateProjectViews = props => {
     }
   }
 
+  let button
+  button = (
+    <>
+      {/* <input accept='image/*' style={{ display: 'none' }} id='raised-button-file' multiple type='file' />
+      <label htmlFor='raised-button-file'>
+        <Button onClick={handleSubmitFile} size='medium' sx={{ mr: 2 }} variant='contained' component='span'>
+          Browse
+        </Button>
+      </label> */}
+      <TimelineKegiatan dataMeet={props.dataRapat}></TimelineKegiatan>
+    </>
+  )
+
   const router = useRouter()
   return (
     <Card>
@@ -674,6 +690,27 @@ const CreateProjectViews = props => {
                 <TextField {...params} variant='outlined' label='Anggota Tim' placeholder='Tambah Anggota Tim' />
               )}
             />
+          </Grid>
+
+          <Grid item xs={12} height={220}>
+            <Card sx={{ backgroundColor: '#F4F4F4', borderSpacing: 50, border: '4px dashed #E7E7E7' }}>
+              <CardContent sx={{ height: 210, textAlign: 'center', display: 'flex', justifyContent: 'center' }}>
+                {/* <Grid container display={'flex'} justifyContent={'center'}>
+                        <Grid display={'flex'} justifyContent={'center'} item xs={12}>
+                          <IconButton>
+                            <CloudUploadRoundedIcon sx={{ fontSize: 100 }} size={'large'}></CloudUploadRoundedIcon>
+                          </IconButton>
+                        </Grid>
+                        <Grid display={'flex'} justifyContent={'center'} item xs={12}>
+                          <Typography>Upload your files here!</Typography>
+                        </Grid>
+                      </Grid> */}
+                <Grid display={'flex'} justifyContent={'center'} item xs={12}>
+                  {button}
+                </Grid>
+              </CardContent>
+              <CardActions className='card-action-dense'></CardActions>
+            </Card>
           </Grid>
         </Grid>
         {/* <TableAddParticipant></TableAddParticipant> */}

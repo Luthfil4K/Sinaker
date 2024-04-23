@@ -843,7 +843,7 @@ const Dashboard = ({ dataTask }) => {
             sx={{
               height: 24,
               fontSize: '0.75rem',
-              width: 100,
+              width: 170,
               textTransform: 'capitalize',
               '& .MuiChip-label': { fontWeight: 500 }
             }}
@@ -852,7 +852,7 @@ const Dashboard = ({ dataTask }) => {
       ),
       headerName: 'Status',
       type: 'string',
-      width: 140
+      width: 180
     },
     {
       field: 'jenisKegiatan',

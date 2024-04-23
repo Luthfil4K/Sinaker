@@ -262,7 +262,6 @@ export default async function handler(req, res) {
             })
 
             peserta.map(async peserta => {
-              // console.log(peserta.id)
               const tp = await prisma.sub_kegiatan_mitra.create({
                 data: {
                   taskId: task.id,
@@ -272,7 +271,6 @@ export default async function handler(req, res) {
             })
 
             persertaOrganik.map(async peserta => {
-              // console.log(peserta.id)
               const to = await prisma.sub_kegiatan_user.create({
                 data: {
                   taskId: task.id,

@@ -299,8 +299,9 @@ model meet {
   lampiran                  String                      @db.VarChar(128)
   perihal                   String                      @db.VarChar(128)
   ditujukan                 String                      @db.VarChar(128)
-  startDate                 DateTime                    @db.DateTime
-  endDate                   DateTime                    @db.DateTime
+  meetDate                  DateTime                    @db.Date
+  startTime                 DateTime                    @db.Time
+  endTime                   DateTime                    @db.Time
   duration                  Int                         @db.Int
   tempatRapat               String                      @db.LongText
   description               String                      @db.LongText

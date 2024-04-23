@@ -58,6 +58,19 @@ const RapatCreateViews = props => {
     kegKetuaId: ''
   })
 
+  let button
+  button = (
+    <>
+      {/* <input accept='image/*' style={{ display: 'none' }} id='raised-button-file' multiple type='file' />
+      <label htmlFor='raised-button-file'>
+        <Button onClick={handleSubmitFile} size='medium' sx={{ mr: 2 }} variant='contained' component='span'>
+          Browse
+        </Button>
+      </label> */}
+      <DragAndDrop dataMeet={props.dataRapat}></DragAndDrop>
+    </>
+  )
+
   const handleTempatRapat = e => {
     setValues(values => ({
       ...values,
@@ -289,7 +302,7 @@ const RapatCreateViews = props => {
             fullWidth
             multiline
             label='Ditujukan kepada'
-            placeholder='Kepada'
+            placeholder='Seluruh Pegawai BPS Kabupaten Bogor'
           />
         </Grid>
 
@@ -394,10 +407,10 @@ const RapatCreateViews = props => {
             placeholder='Isi surat'
           />
         </Grid>
-        <Grid item xs={12} md={12}>
+        {/* <Grid item xs={12} md={12}>
           {/* <Typography variant='h6' sx={{ py: '5px' }}>
               Penanggung Jawab Kegiatan
-            </Typography> */}
+            </Typography> 
 
           <FormControl fullWidth>
             <InputLabel id='demo-simple-select-helper-label'>Peserta Rapat</InputLabel>
@@ -417,7 +430,7 @@ const RapatCreateViews = props => {
               ))}
             </Select>
           </FormControl>
-        </Grid>
+        </Grid> */}
         <Grid item xs={12} md={12} lg={12}>
           <Autocomplete
             multiple

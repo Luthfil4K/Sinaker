@@ -224,8 +224,8 @@ const RapatDetailViews = props => {
                             <Typography textAlign={'center'} color={'black'} variant={'body2'}>
                               Kabupaten Bogor
                             </Typography>
-                            <Grid mt={5} container>
-                              <Grid item xs={12} display={'flex'} justifyContent={'center'}>
+                            <Grid mt={5} height={50} container>
+                              {/* <Grid item xs={12} display={'flex'} justifyContent={'center'}>
                                 {props.dataRapat.status === 'disetujui' ? (
                                   <>
                                     <img alt='Stumptown Roasters' src='/images/logos/e-ttd.png' />
@@ -233,7 +233,7 @@ const RapatDetailViews = props => {
                                 ) : (
                                   ''
                                 )}
-                              </Grid>
+                              </Grid> */}
                             </Grid>
                             <Typography mt={5} textAlign={'center'} color={'black'} variant={'body2'}>
                               Dr. Daryanto, S.ST, M.M
