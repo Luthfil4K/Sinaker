@@ -37,7 +37,6 @@ const DragAndDrop = props => {
   const [isFile, setIsFile] = useState(true)
 
   const router = useRouter()
-  console.log(props.dataMeet)
 
   let inputRef
 
@@ -63,45 +62,65 @@ const DragAndDrop = props => {
     setFile(null)
   }
 
-  const handleSubmitFile = async e => {
-    e.preventDefault()
+  // const handleSubmitFile = async e => {
+  //   e.preventDefault()
 
-    console.log(file)
+  //   const formData = new FormData()
+  //   formData.append('file', file)
+
+  //   try {
+  //     const res = await axios.post(`rapat-notulensi/${props.dataMeet.id}`, formData, {
+  //       headers: {
+  //         'Content-Type': 'multipart/form-data'
+  //       }
+  //     })
+  //     if (res.status === 201) {
+  //       Swal.fire({
+  //         title: 'z Project Success',
+  //         text: 'Press OK to continue',
+  //         icon: 'success',
+  //         confirmButtonColor: '#68B92E',
+  //         confirmButtonText: 'OK'
+  //       }).then(res => {
+  //         Swal.fire({
+  //           icon: 'success',
+  //           title: 'Success',
+  //           text: 'Task has been submitted'
+  //         })
+  //         router.push(`/rapat-detail/${props.dataMeet.id}`, undefined)
+  //       })
+  //     }
+  //   } catch (error) {
+  //     Swal.fire({
+  //       title: 'Upload Notulensi Failed',
+  //       text: error,
+  //       icon: 'error',
+  //       confirmButtonColor: '#d33',
+  //       confirmButtonText: 'OK'
+  //     })
+  //   }
+  // }
+
+  const handleSubmitFile = e => {
+    e.preventDefault()
 
     const formData = new FormData()
     formData.append('file', file)
 
-    try {
-      const res = await axios.post(`rapat-notulensi/${props.dataMeet.id}`, formData, {
+    axios
+      .post(`/rapat-notulensi/${props.dataMeet.id}`, formData, {
         headers: {
           'Content-Type': 'multipart/form-data'
         }
       })
-      if (res.status === 201) {
+      .then(res => {
         Swal.fire({
-          title: 'Create Project Success',
-          text: 'Press OK to continue',
           icon: 'success',
-          confirmButtonColor: '#68B92E',
-          confirmButtonText: 'OK'
-        }).then(res => {
-          Swal.fire({
-            icon: 'success',
-            title: 'Success',
-            text: 'Task has been submitted'
-          })
-          router.push(`/rapat-detail/${props.dataMeet.id}`, undefined)
+          title: 'Success',
+          text: 'FIles has been uploaded'
         })
-      }
-    } catch (error) {
-      Swal.fire({
-        title: 'Upload Notulensi Failed',
-        text: error,
-        icon: 'error',
-        confirmButtonColor: '#d33',
-        confirmButtonText: 'OK'
+        router.push(`/rapat-detail/${props.dataMeet.id}`, undefined)
       })
-    }
   }
 
   return (
