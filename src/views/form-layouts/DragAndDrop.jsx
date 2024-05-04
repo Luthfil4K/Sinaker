@@ -101,26 +101,40 @@ const DragAndDrop = props => {
   //   }
   // }
 
-  const handleSubmitFile = e => {
+  const handleSubmitFile = async e => {
     e.preventDefault()
-
-    const formData = new FormData()
-    formData.append('file', file)
-
-    axios
-      .post(`/rapat-notulensi/${props.dataMeet.id}`, formData, {
-        headers: {
-          'Content-Type': 'multipart/form-data'
-        }
-      })
-      .then(res => {
-        Swal.fire({
-          icon: 'success',
-          title: 'Success',
-          text: 'FIles has been uploaded'
+    try {
+      while (true) {
+        const formData = new FormData()
+        formData.append('file', file)
+        const res = await axios.post(`/rapat-notulensi/${props.dataMeet.id}`, formData, {
+          headers: {
+            'Content-Type': 'multipart/form-data'
+          }
         })
-        router.push(`/rapat-detail/${props.dataMeet.id}`, undefined)
+        console.log(res)
+
+        if (res.status === 201) {
+          Swal.fire({
+            title: 'Upload Notulensi Success',
+            text: 'Press OK to continue',
+            icon: 'success',
+            confirmButtonColor: '#68B92E',
+            confirmButtonText: 'OK'
+          }).then(router.push(`/rapat-detail/${props.dataMeet.id}`, undefined))
+        }
+
+        break
+      }
+    } catch (error) {
+      Swal.fire({
+        title: 'Upload Notulensi Failed',
+        text: error,
+        icon: 'error',
+        confirmButtonColor: '#d33',
+        confirmButtonText: 'OK'
       })
+    }
   }
 
   return (
