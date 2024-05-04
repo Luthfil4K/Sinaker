@@ -28,49 +28,45 @@ import Chip from '@mui/material/Chip'
 import { useRouter } from 'next/dist/client/router'
 import { Autocomplete } from '@mui/lab'
 
-import TableAddParticipant from 'src/views/tables/TableAddParticipant'
-import DragAndDrop from 'src/views/form-layouts/DragAndDrop'
-
 // datepicker
 import DatePicker from 'react-datepicker'
 import 'react-datepicker/dist/react-datepicker.css'
 import DatePickerWrapper from 'src/@core/styles/libs/react-datepicker'
 
 const RapatCreateViews = props => {
-  const [selectedDate, setSelectedDate] = useState(new Date())
-  const [selectedTimeS, setSelectedTimeS] = useState(new Date())
-  const [selectedTimeE, setSelectedTimeE] = useState(new Date())
+  const [selectedDate, setSelectedDate] = useState(new Date(props.dataRapatEdit.meetDate))
+  const [selectedTimeS, setSelectedTimeS] = useState(new Date(props.dataRapatEdit.startTime))
+  const [selectedTimeE, setSelectedTimeE] = useState(new Date(props.dataRapatEdit.endTime))
   const session = useSession()
-  console.log(session)
-  const [timKerja, setTimKerja] = useState(props.dataTim)
-  const [dataUser, setDataUser] = useState(props.data)
+
+  const [dataUser, setDataUser] = useState(props.dataUser)
+
+  console.log(props.dataRapatEdit)
+
+  const aaa = props.dataPesertaRapat.map(a => {
+    return a.user.name
+  })
+
   const [values, setValues] = useState({
-    namaRapat: '',
-    nomor: '',
-    perihal: '',
-    lampiran: '',
-    ditujukan: '',
-    tempatRapat: '',
-    deskRapat: '-',
+    rapatId: props.dataRapatEdit.id,
+    namaRapat: props.dataRapatEdit.namaRapat,
+    nomor: props.dataRapatEdit.nomor,
+    perihal: props.dataRapatEdit.perihal,
+    lampiran: props.dataRapatEdit.lampiran,
+    ditujukan: props.dataRapatEdit.ditujukan,
+    tempatRapat: props.dataRapatEdit.tempatRapat,
+    deskRapat: props.dataRapatEdit.description,
     pesertaRapat: 7,
     kegTim: '',
     kegAnggotaId: '',
-    kegAnggota: [dataUser[3].name, dataUser[1].name],
+    kegAnggota: aaa,
     kegKetuaId: ''
   })
 
+  console.log(values.kegAnggotaId)
+
   let button
-  button = (
-    <>
-      {/* <input accept='image/*' style={{ display: 'none' }} id='raised-button-file' multiple type='file' />
-      <label htmlFor='raised-button-file'>
-        <Button onClick={handleSubmitFile} size='medium' sx={{ mr: 2 }} variant='contained' component='span'>
-          Browse
-        </Button>
-      </label> */}
-      {/* <DragAndDrop dataMeet={props.dataRapat}></DragAndDrop> */}
-    </>
-  )
+  button = <></>
 
   const handleTempatRapat = e => {
     setValues(values => ({
@@ -101,35 +97,6 @@ const RapatCreateViews = props => {
   }
 
   // buat nyimpen di [values] dari input pilih tim kerja sama anggota tim (intinya handle tim dan anggotanya)
-  useEffect(() => {
-    const dataAnggota = {}
-    const dataAnggotaId = []
-    const ketuaTimId = 0
-
-    timKerja.map(data => {
-      data.id === values.kegTim ? (dataAnggota = data.timKerjaPegawai) : 0
-    })
-
-    timKerja.map(data => {
-      data.id === values.kegTim ? (ketuaTimId = data.ketuaTim) : 0
-    })
-
-    if (Object.keys(dataAnggota).length > 0) {
-      dataAnggota.map(member => {
-        dataAnggotaId.push(member.userId)
-      })
-    }
-
-    const userNames = dataUser
-      .map(pengguna => (dataAnggotaId.includes(parseInt(pengguna.id)) ? pengguna.name : null))
-      .filter(id => id !== null)
-
-    // const userIds = dataUser
-    //   .map(pengguna => (dataAnggotaId.includes(parseInt(pengguna.id)) ? pengguna.id : null))
-    //   .filter(id => id !== null)
-
-    setValues({ ...values, kegAnggota: userNames, kegKetuaId: ketuaTimId })
-  }, [values.kegTim])
 
   // masih nyambung sama atas, input autocomplete cuma handle berdasar dropdown tim kerja,
   // disini diatur lagi kalo misal ada inputan pegawai lain di luar anggota tim
@@ -146,17 +113,16 @@ const RapatCreateViews = props => {
     setValues({ ...values, kegAnggotaId: tmpId })
   }, [values.kegAnggota])
   const router = useRouter()
-  console.log(selectedTimeE)
-  console.log(selectedTimeS)
+
   useEffect(() => {
-    console.log(selectedTimeE - selectedTimeS)
+    console.log('')
   }, [values])
-  const handleCreateRapat = async e => {
+  const handleEditRapat = async e => {
     e.preventDefault()
 
     try {
       while (true) {
-        const res = await axios.post('/rapat', {
+        const res = await axios.put(`/rapat-edit/${values.rapatId}`, {
           namaRapat: values.namaRapat,
           meetDate: selectedDate,
           startTime: selectedTimeS,
@@ -172,15 +138,15 @@ const RapatCreateViews = props => {
           ditujukan: values.ditujukan
         })
 
-        if (res.status === 201) {
+        if (res.status === 200) {
           Swal.fire({
             position: 'center',
             icon: 'success',
-            title: 'Rapat Berhasil Dibuat',
+            title: 'Perubahan Berhasil Disimpan',
             showConfirmButton: false,
             timer: 1000,
             width: 300
-          }).then(router.push('/rapat-create'))
+          }).then(router.push(`/rapat-detail/${props.dataRapatEdit.id}`))
 
           setValues({
             namaRapat: '',
@@ -202,7 +168,7 @@ const RapatCreateViews = props => {
       }
     } catch (error) {
       Swal.fire({
-        title: 'Create Rapat Failed',
+        title: 'Gagal Disimpan',
         text: error,
         icon: 'error',
         confirmButtonColor: '#d33',
@@ -212,7 +178,7 @@ const RapatCreateViews = props => {
   }
   const handleCreate = e => {
     Swal.fire({
-      text: 'Buat Rapat?',
+      text: 'Edit Rapat?',
       icon: 'warning',
       showCancelButton: true,
       confirmButtonColor: '#3085d6',
@@ -363,22 +329,6 @@ const RapatCreateViews = props => {
         </Grid>
 
         <Grid item xs={12}>
-          {/* <TextField
-            value={values.tempatRapat}
-            onChange={handleChange('tempatRapat')}
-            fullWidth
-            multiline
-            label='Meeting Place'
-            placeholder='Meeting Place'
-          /> */}
-          {/* <FormControl fullWidth>
-            <InputLabel id='link'>Meeting Place</InputLabel>
-            <Select labelId='Link' id='demo-simple-select' label='Meeting Place'>
-              <MenuItem value={10}>Link 1</MenuItem>
-              <MenuItem value={20}>Link 2</MenuItem>
-              <MenuItem value={30}>Link 3</MenuItem>
-            </Select>
-          </FormControl> */}
           <FormControl fullWidth>
             <InputLabel id='demo-simple-select-helper-label'>Meeting Place</InputLabel>
             <Select
@@ -408,30 +358,7 @@ const RapatCreateViews = props => {
             placeholder='Isi surat'
           />
         </Grid>
-        {/* <Grid item xs={12} md={12}>
-          {/* <Typography variant='h6' sx={{ py: '5px' }}>
-              Penanggung Jawab Kegiatan
-            </Typography> 
 
-          <FormControl fullWidth>
-            <InputLabel id='demo-simple-select-helper-label'>Peserta Rapat</InputLabel>
-            <Select
-              fullWidth
-              labelId='demo-simple-select-helper-label'
-              id='demo-simple-select-helper'
-              value={values.kegTim}
-              onChange={handlePJ}
-              label='Peserta Rapat'
-              name='pesertaRapat'
-            >
-              {timKerja.map(item => (
-                <MenuItem key={item.id} value={item.id}>
-                  {item.nama}
-                </MenuItem>
-              ))}
-            </Select>
-          </FormControl>
-        </Grid> */}
         <Grid item xs={12} md={12} lg={12}>
           <Autocomplete
             multiple
@@ -455,8 +382,8 @@ const RapatCreateViews = props => {
         {/* <TableAddParticipant></TableAddParticipant> */}
         <Divider sx={{ margin: 0 }} />
         <Grid item xs={12} md={3} lg={3}>
-          <Button onClick={handleCreateRapat} size='medium' type='submit' variant='contained'>
-            Buat Rapat
+          <Button onClick={handleEditRapat} size='medium' type='submit' variant='contained'>
+            Simpan
           </Button>
         </Grid>
       </Grid>

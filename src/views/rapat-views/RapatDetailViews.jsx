@@ -416,18 +416,19 @@ const RapatDetailViews = props => {
                 <Grid item xs={12} sm={7} md={8} lg={9}>
                   <Box sx={{ mb: 6.75, display: 'flex', alignItems: 'center' }}>
                     <Typography variant='body2'>
-                      {new Date(props.dataRapat.startDate).toLocaleDateString('id')} :{' '}
-                      {new Date(props.dataRapat.startDate).getHours() +
-                        ':' +
-                        new Date(props.dataRapat.startDate).getMinutes()}
+                      {new Date(props.dataRapat.startTime).toLocaleTimeString('id-ID', {
+                        hour: '2-digit',
+                        minute: '2-digit'
+                      })}{' '}
                     </Typography>
                   </Box>
                   <Box sx={{ mb: 6.75, display: 'flex', alignItems: 'center' }}>
                     <Typography variant='body2'>
-                      {new Date(props.dataRapat.endDate).toLocaleDateString('id')}{' '}
-                      {new Date(props.dataRapat.endDate).getHours() +
-                        ':' +
-                        new Date(props.dataRapat.endDate).getMinutes()}
+                      {new Date(props.dataRapat.endTime).toLocaleTimeString('id-ID', {
+                        hour: '2-digit',
+                        minute: '2-digit'
+                      })}{' '}
+                      WIB
                     </Typography>
                   </Box>
                   <Box sx={{ mb: 6.75, display: 'flex', alignItems: 'center' }}>
