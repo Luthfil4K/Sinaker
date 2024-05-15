@@ -54,6 +54,8 @@ const RapatDetailViews = props => {
   const [tampil, setTampil] = useState('flex')
   const pdfRef = useRef()
   const [value, setValue] = useState('1')
+  const [dokumenRapat, setDokumenRapat] = useState(props.dataDokumen)
+
   const handleChangeTab = (event, newValue) => {
     setValue(newValue)
   }
@@ -280,7 +282,7 @@ const RapatDetailViews = props => {
             Swal.fire({
               icon: 'error',
               title: 'Error',
-              text: 'Something went wrong'
+              text: err
             })
           })
       }
@@ -344,6 +346,37 @@ const RapatDetailViews = props => {
     </>
   )
 
+  const handleDeleteDokumen = async id => {
+    axios
+      .delete(`rapat-notulensi-delete/${id}`)
+      .then(async res => {
+        await Swal.fire({
+          icon: 'success',
+          title: 'Success',
+          text: 'Dokumen Deleted'
+        })
+        router.reload()
+      })
+      .catch(err => {
+        console.log(err)
+        Swal.fire({
+          icon: 'error',
+          title: 'Error',
+          text: err
+        })
+      })
+  }
+
+  const handleDownloadDokumen = fileName => {
+    if (typeof window !== 'undefined' && typeof document !== 'undefined') {
+      const link = document.createElement('a')
+      link.href = `${process.env.BASE_URL}/public/uploads/${fileName}`
+      link.setAttribute('download', fileName) // Nama file untuk diunduh
+      document.body.appendChild(link)
+      link.click()
+      document.body.removeChild(link)
+    }
+  }
   return (
     <>
       <Grid container spacing={5}>
@@ -525,82 +558,69 @@ const RapatDetailViews = props => {
                           <Typography>Upload your files here!</Typography>
                         </Grid>
                       </Grid> */}
-                      <Grid display={'flex'} justifyContent={'center'} item xs={12}>
+                      <Grid display={'flex'} justifyContent={'center'} item xs={12} sx={{ overflowX: 'scroll' }}>
                         {button}
                       </Grid>
                     </CardContent>
                     <CardActions className='card-action-dense'></CardActions>
                   </Card>
                 </Grid>
-                <Grid item xs={6} height={330}>
+                <Grid item xs={6} height={330} sx={{ overflowX: 'scroll' }}>
                   <>
-                    {' '}
-                    <List key={1}>
-                      <ListItem
-                        secondaryAction={
-                          <IconButton
-                            onClick={() => {
-                              Swal.fire({
-                                title: 'Hapus File?',
-                                text: '',
-                                icon: 'warning',
-                                showCancelButton: true,
-                                confirmButtonColor: '#3085d6',
-                                cancelButtonColor: '#d33',
-                                confirmButtonText: 'Yes'
-                              }).then(result => {
-                                if (result.isConfirmed) {
-                                }
-                              })
-                            }}
-                            edge='end'
-                            aria-label='delete'
-                          >
-                            <DeleteIcon />
-                          </IconButton>
-                        }
-                      >
-                        <ListItemAvatar>
-                          <Avatar>
-                            <FolderIcon />
-                          </Avatar>
-                        </ListItemAvatar>
-                        <ListItemText primary={'Notulensi rapat a'} />
-                      </ListItem>
-                    </List>
-                    <List key={2}>
-                      <ListItem
-                        secondaryAction={
-                          <IconButton
-                            onClick={() => {
-                              Swal.fire({
-                                title: 'Hapus Kegiatan Harian?',
-                                text: '',
-                                icon: 'warning',
-                                showCancelButton: true,
-                                confirmButtonColor: '#3085d6',
-                                cancelButtonColor: '#d33',
-                                confirmButtonText: 'Yes'
-                              }).then(result => {
-                                if (result.isConfirmed) {
-                                }
-                              })
-                            }}
-                            edge='end'
-                            aria-label='delete'
-                          >
-                            <DeleteIcon />
-                          </IconButton>
-                        }
-                      >
-                        <ListItemAvatar>
-                          <Avatar>
-                            <FolderIcon />
-                          </Avatar>
-                        </ListItemAvatar>
-                        <ListItemText primary={'Dokumentasi rapat a'} />
-                      </ListItem>
-                    </List>
+                    {dokumenRapat.length > 0 ? (
+                      dokumenRapat.map(dok => (
+                        <>
+                          <List key={dok.id}>
+                            <ListItem
+                              secondaryAction={
+                                <IconButton
+                                  onClick={() => {
+                                    Swal.fire({
+                                      title: 'Hapus Dokumen?',
+                                      text: '',
+                                      icon: 'warning',
+                                      showCancelButton: true,
+                                      confirmButtonColor: '#3085d6',
+                                      cancelButtonColor: '#d33',
+                                      confirmButtonText: 'Ya'
+                                    }).then(result => {
+                                      if (result.isConfirmed) {
+                                        handleDeleteDokumen(dok.id)
+                                      }
+                                    })
+                                  }}
+                                  edge='end'
+                                  aria-label='delete'
+                                >
+                                  <DeleteIcon />
+                                </IconButton>
+                              }
+                            >
+                              <ListItemAvatar>
+                                <Avatar>
+                                  <FolderIcon />
+                                </Avatar>
+                              </ListItemAvatar>
+                              <Link href={`http://localhost:3000/uploads/${dok.taskfile}`} target='_blank'>
+                                {/* <Link
+                                href={`http://localhost:3000/public/uploads/1715757780583-xe9nj6-bab III (2).pdf`}
+                                target='_blank'
+                              > */}
+
+                                <ListItemText sx={{ textDecoration: 'underline' }} primary={dok.taskfile} />
+                              </Link>
+                              {/* <Button onClick={handleDownloadDokumen('1715757780583-xe9nj6-bab III (2).pdf')}>
+                                download {dok.filename}
+                              </Button> */}
+                            </ListItem>
+                          </List>
+                        </>
+                      ))
+                    ) : (
+                      <>
+                        <Typography>Tidak Ada Dokumen yang Diupload </Typography>
+                      </>
+                    )}
                   </>
                 </Grid>
               </Grid>

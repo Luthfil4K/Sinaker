@@ -5,11 +5,12 @@ import { NextApiRequest, NextApiResponse } from 'next'
 import nextConnect from 'next-connect'
 import prisma from '../../../services/db'
 
+let b = `${new Date().getTime()}-${Math.random().toString(36).substring(7)}-`
 const upload = multer({
   storage: multer.diskStorage({
     destination: './public/uploads',
     filename: (req, file, cb) => {
-      cb(null, `${new Date().getTime()}-${Math.random().toString(36).substring(7)}-${file.originalname}`)
+      cb(null, `${b}${file.originalname}`)
     }
   })
 })
@@ -38,7 +39,7 @@ export default async function handler(req, res) {
       // Simpan informasi file ke database menggunakan Prisma
       const file = await prisma.notulensi_meet.create({
         data: {
-          taskfile: fileName,
+          taskfile: `${b}${fileName}`,
           meetId: Number(id)
         }
       })
@@ -51,4 +52,18 @@ export default async function handler(req, res) {
       return res.status(400).json({ error: error.message || 'Something went wrong' })
     }
   })
+
+  if (req.method === 'DELETE') {
+    try {
+      const dokumen = await prisma.notulensi_meet.delete({
+        where: {
+          id: Number(id)
+        }
+      })
+
+      return res.status(200).json({ success: true, message: 'notulensi_meet deleted' })
+    } catch (error) {
+      return res.status(400).json({ success: false, message: 'notulensi_meet not found' })
+    }
+  }
 }

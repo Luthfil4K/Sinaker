@@ -7,7 +7,7 @@ const RapatDetail = ({ data }) => {
   const [dataR, setDataR] = useState(JSON.parse(data))
   return (
     <>
-      <RapatDetailViews dataPesertaRapat={dataR.userRapat} dataRapat={dataR.rapat} />
+      <RapatDetailViews dataPesertaRapat={dataR.userRapat} dataRapat={dataR.rapat} dataDokumen={dataR.dokumen} />
     </>
   )
 }
@@ -37,7 +37,13 @@ export async function getServerSideProps(context) {
     }
   })
 
-  const data = { rapat, userRapat }
+  const dokumen = await prisma.notulensi_meet.findMany({
+    where: {
+      meetId: parseInt(context.params.id)
+    }
+  })
+
+  const data = { rapat, userRapat, dokumen }
 
   return {
     props: {
