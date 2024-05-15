@@ -54,8 +54,9 @@ const RapatDetailViews = props => {
   const [tampil, setTampil] = useState('flex')
   const pdfRef = useRef()
   const [value, setValue] = useState('1')
+  const [fileTambahan, setFileTambahan] = useState([])
   const [dokumenRapat, setDokumenRapat] = useState(props.dataDokumen)
-
+  console.log(dokumenRapat)
   const handleChangeTab = (event, newValue) => {
     setValue(newValue)
   }
@@ -333,6 +334,18 @@ const RapatDetailViews = props => {
       })
   }
 
+  const handleUploadUpdate = abc => {
+    setFileTambahan(abc)
+  }
+
+  useEffect(() => {
+    console.log(fileTambahan)
+    console.log('fileTambahan')
+    console.log('fileTambahan')
+  }, [fileTambahan])
+  useEffect(() => {
+    fileTambahan.length > 0 ? setDokumenRapat(prevValues => [...prevValues, ...fileTambahan]) : 0
+  }, [fileTambahan])
   let button
   button = (
     <>
@@ -342,7 +355,7 @@ const RapatDetailViews = props => {
           Browse
         </Button>
       </label> */}
-      <DragAndDrop dataMeet={props.dataRapat}></DragAndDrop>
+      <DragAndDrop dataMeet={props.dataRapat} dataUpdateUpload={handleUploadUpdate}></DragAndDrop>
     </>
   )
 
@@ -354,8 +367,11 @@ const RapatDetailViews = props => {
           icon: 'success',
           title: 'Success',
           text: 'Dokumen Deleted'
+        }).then(() => {
+          const updatedDokumen = dokumenRapat.filter(item => item.id !== id)
+          // Perbarui state dengan array baru
+          setDokumenRapat(updatedDokumen)
         })
-        router.reload()
       })
       .catch(err => {
         console.log(err)
@@ -618,7 +634,9 @@ const RapatDetailViews = props => {
                       ))
                     ) : (
                       <>
-                        <Typography>Tidak Ada Dokumen yang Diupload </Typography>
+                        <Grid item xs={12} padding={6}>
+                          <Typography>Tidak Ada Dokumen yang Diupload </Typography>
+                        </Grid>
                       </>
                     )}
                   </>

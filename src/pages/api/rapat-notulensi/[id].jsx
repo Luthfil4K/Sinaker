@@ -43,9 +43,10 @@ export default async function handler(req, res) {
           meetId: Number(id)
         }
       })
+      const fileSucc = { taskfile: `${b}${fileName}`, meetId: req.query.id, id: file.id }
 
       // Kirim respons berhasil
-      return res.status(201).json({ message: 'File uploaded successfully' })
+      return res.status(201).json({ message: fileSucc })
     } catch (error) {
       // Tangani kesalahan yang mungkin terjadi dalam proses upload atau penyimpanan
       console.error('Error during file upload:', error)

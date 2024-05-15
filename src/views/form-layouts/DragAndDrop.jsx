@@ -34,6 +34,8 @@ const DragAndDrop = props => {
 
   const [showButton, setShowButton] = useState(false)
 
+  const [namaDiDB, setNamaDiDB] = useState(false)
+
   const [isFile, setIsFile] = useState(true)
 
   const router = useRouter()
@@ -50,7 +52,7 @@ const DragAndDrop = props => {
     for (let i = 0; i < file.length; i++) {
       setFiles(files => [...files, file[i]])
     }
-    setFile(e.target.files[0])
+    setFile(e.target.files)
   }
 
   const removeImage = i => {
@@ -59,6 +61,15 @@ const DragAndDrop = props => {
     setShowButton(false)
     setFiles(files.filter(x => x.name !== i))
     inputRef.value = null
+    setFile(null)
+  }
+
+  const refreshImage = () => {
+    setIsFile(true)
+    setShowUpload(true)
+    setShowButton(false)
+    setFiles([])
+    inputRef = null
     setFile(null)
   }
 
@@ -102,30 +113,33 @@ const DragAndDrop = props => {
   // }
 
   const handleSubmitFile = async e => {
+    let fileArray = []
     e.preventDefault()
     try {
-      while (true) {
+      for (const iniFile of file) {
         const formData = new FormData()
-        formData.append('file', file)
+        formData.append('file', iniFile)
         const res = await axios.post(`/rapat-notulensi/${props.dataMeet.id}`, formData, {
           headers: {
             'Content-Type': 'multipart/form-data'
           }
         })
-        console.log(res)
 
         if (res.status === 201) {
+          fileArray.push(res.data.message)
           Swal.fire({
-            title: 'Upload Notulensi Success',
+            title: 'Dokumen Berhasil Terupload',
             text: 'Press OK to continue',
             icon: 'success',
             confirmButtonColor: '#68B92E',
             confirmButtonText: 'OK'
-          }).then(router.push(`/rapat-detail/${props.dataMeet.id}`, undefined))
+          }).then(() => {
+            // Panggil dataUpdateUpload setelah SweetAlert
+          })
+          // .then(router.push(`/rapat-detail/${props.dataMeet.id}`, undefined))
         }
-
-        break
       }
+      props.dataUpdateUpload(fileArray)
     } catch (error) {
       Swal.fire({
         title: 'Upload Notulensi Failed',
@@ -133,8 +147,18 @@ const DragAndDrop = props => {
         icon: 'error',
         confirmButtonColor: '#d33',
         confirmButtonText: 'OK'
+      }).then(() => {
+        // Panggil dataUpdateUpload setelah SweetAlert
+        props.dataUpdateUpload(files)
       })
     }
+    setIsFile(true)
+    setShowUpload(true)
+    setShowButton(false)
+    setFiles([])
+
+    setFile(null)
+    console.log('ai haibara')
   }
 
   return (
@@ -222,18 +246,17 @@ const DragAndDrop = props => {
             <Typography variant='body2' sx={{ marginBottom: 6.75 }} style={{ display: isFile ? 'block' : 'none' }}>
               No submitted file.
             </Typography>
+            <Button
+              type='submit'
+              variant='contained'
+              sx={{ padding: theme => theme.spacing(1.75, 5.5) }}
+              style={{ display: showButton ? 'block' : 'none' }}
+              onClick={handleSubmitFile}
+            >
+              Submit
+            </Button>
             <Divider sx={{ marginTop: 0, marginBottom: 6.75 }} />
-            <Grid item xs={12}>
-              <Button
-                type='submit'
-                variant='contained'
-                sx={{ padding: theme => theme.spacing(1.75, 5.5) }}
-                style={{ display: showButton ? 'block' : 'none' }}
-                onClick={handleSubmitFile}
-              >
-                Submit
-              </Button>
-            </Grid>
+            <Grid item xs={12}></Grid>
           </div>
         </Grid>
       </form>
