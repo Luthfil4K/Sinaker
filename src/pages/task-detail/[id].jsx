@@ -7,9 +7,9 @@ import TaskDetailViews from 'src/views/task-views/TaskDetailViews'
 
 const TaskDetail = ({ data }) => {
   const [task, setTask] = useState(JSON.parse(data))
-  const arrayOfIds = task.mitraTask.map(task => task.mitra.id)
-  // console.log(arrayOfIds)
-  // console.log(task.mitraLimitHonor)
+  const arrayOfIds = task.mitraTask.map(task => task.id)
+  // //console.log(arrayOfIds)
+  //console.log(task.mitraLimitHonor)
   return (
     <>
       <TaskDetailViews
@@ -81,6 +81,21 @@ export async function getServerSideProps(context) {
       mitra: true
     }
   })
+  // const mitraTask = await prisma.mitra.findMany({
+  //   where: {
+  //     id: {
+  //       not: 0
+  //     }
+  //   }
+  // })
+
+  // mitra = await prisma.mitra.findMany({
+  //   where: {
+  //     id: {
+  //       not: 0
+  //     }
+  //   }
+  // })
 
   const pegawai = await prisma.sub_kegiatan_user.findMany({
     where: {
@@ -91,12 +106,12 @@ export async function getServerSideProps(context) {
     }
   })
 
-  const arrayOfIds = mitraTask.map(task => task.mitra.id) // Mengakses ID dari setiap objek dalam mitraTask
+  const arrayOfIds = mitraTask.map(task => task.mitraId) // Mengakses ID dari setiap objek dalam mitraTask
 
   const mitraLimitHonor = []
 
   for (const id of arrayOfIds) {
-    const result = await prisma.taskPerusahaanProduksi.findFirst({
+    const result = await prisma.taskPerusahaanProduksi.findMany({
       where: {
         OR: [{ pmlId: parseInt(id) }, { pclId: parseInt(id) }]
       },
@@ -109,17 +124,35 @@ export async function getServerSideProps(context) {
         task: true
       }
     })
+    //console.log(result)
 
-    if (result) {
+    //console.log('result')
+
+    if (result.length > 0) {
       // Cek apakah id sudah ada di mitraLimitHonor
-      const existingEntry = mitraLimitHonor.find(entry => entry.id === result.id)
-      if (!existingEntry) {
-        mitraLimitHonor.push(result)
+      //console.log('masuk ke if result')
+
+      for (const res of result) {
+        //console.log('masuk ke for result')
+        const existingEntry = mitraLimitHonor.find(entry => entry.id === res.id)
+
+        if (!existingEntry) {
+          mitraLimitHonor.push(res)
+        } else {
+          // Jika tidak ada hasil, tambahkan entri dengan nilai default
+          mitraLimitHonor.push({
+            id,
+            pmlId: parseInt(id),
+            pclId: parseInt(id),
+            gajiPml: 0,
+            gajiPcl: 0
+          })
+        }
       }
     } else {
-      // Jika tidak ada hasil, tambahkan entri dengan nilai default
+      //console.log('masuk ke else result')
       mitraLimitHonor.push({
-        id: null,
+        id,
         pmlId: parseInt(id),
         pclId: parseInt(id),
         gajiPml: 0,

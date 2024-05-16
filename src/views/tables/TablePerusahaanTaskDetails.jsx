@@ -76,8 +76,8 @@ const TableGroupPerusahaan = props => {
 
   const templateTable = participants.length > 0 ? participants[1].templateTable : 5
 
-  console.log(props.dataMitraLimitHonor)
-  console.log(mitra)
+  // console.log(props.dataMitraLimitHonor)
+  // console.log(mitra)
 
   const hitungTotalGaji = dataMitraLimitHonor => {
     const totalGajiPerMitra = {}
@@ -90,8 +90,8 @@ const TableGroupPerusahaan = props => {
       const taskBulan = task?.dueDate ? new Date(task.dueDate).getMonth() : new Date().getMonth()
 
       if (taskBulan === bulanSekarang) {
-        console.log('ini bulan sekarang : ' + new Date().getMonth())
-        console.log('ini bulan dl subkeg: ' + new Date(taskBulan).getMonth())
+        // console.log('ini bulan sekarang : ' + new Date().getMonth())
+        // console.log('ini bulan dl subkeg: ' + new Date(taskBulan).getMonth())
         totalGajiPerMitra[pmlId] = (totalGajiPerMitra[pmlId] || 0) + gajiPml
         totalGajiPerMitra[pclId] = (totalGajiPerMitra[pclId] || 0) + gajiPcl
       }
@@ -106,6 +106,8 @@ const TableGroupPerusahaan = props => {
   }
 
   const totalGajiMitra = hitungTotalGaji(props.dataMitraLimitHonor)
+  // console.log(totalGajiMitra)
+  // console.log(props.dataMitraLimitHonor)
 
   const [organikMitra, setOrganikMitra] = useState({
     value: '',
@@ -184,10 +186,12 @@ const TableGroupPerusahaan = props => {
   }
 
   const handleEditClick = id => () => {
+    console.log('edit')
     setRowModesModel({ ...rowModesModel, [id]: { mode: GridRowModes.Edit } })
   }
 
   const handleSaveClick = id => () => {
+    console.log('handlesaveclick')
     setRowModesModel({ ...rowModesModel, [id]: { mode: GridRowModes.View } })
     const jenisSub = {
       64: { namaJenisSub: 'Persiapan', color: 'warning' },
@@ -249,23 +253,38 @@ const TableGroupPerusahaan = props => {
   //   return updatedRow
   // }
 
+  const [snackbar, setSnackbar] = React.useState(null)
+
+  const handleCloseSnackbar = () => setSnackbar(null)
+  const handleProcessRowUpdateError = React.useCallback(error => {
+    setSnackbar({ children: error.message, severity: 'error' })
+  }, [])
+
   const processRowUpdate = newRow => {
     const updatedRow = { ...newRow, isNew: false }
+    console.log('ini update row')
+    console.log(updatedRow)
 
     // Cari data mitra yang sesuai dengan pmlId dari updatedRow
     const mitraToUpdatePml = totalGajiMitra.find(mitra => mitra.id === updatedRow.pmlId)
-
+    console.log('ini mitra to update pml')
+    console.log(mitraToUpdatePml)
     // Hitung total gaji setelah update untuk pmlId
-    const newTotalGajiPml = mitraToUpdatePml.totalGaji + (updatedRow.gajiPml || 0) // gajiPml dari updatedRow atau 0 jika tidak ada
-
+    const newTotalGajiPml = mitraToUpdatePml
+      ? mitraToUpdatePml.totalGaji + (updatedRow.gajiPml || 0)
+      : updatedRow.gajiPml // gajiPml dari updatedRow atau 0 jika tidak ada
+    console.log('ini gaji total pml')
+    console.log(newTotalGajiPml)
     // Cari data mitra yang sesuai dengan pclId dari updatedRow
-    const mitraToUpdatePcl = totalGajiMitra.find(mitra => mitra.id === updatedRow.pclId)
+    const mitraToUpdatePcl = updatedRow.pclId ? totalGajiMitra.find(mitra => mitra.id === updatedRow.pclId) : undefined
+    console.log('mitra to update pcl')
+    console.log(mitraToUpdatePcl)
 
     // Hitung total gaji setelah update untuk pclId
-    const newTotalGajiPcl = mitraToUpdatePcl.totalGaji + (updatedRow.gajiPcl || 0) // gajiPcl dari updatedRow atau 0 jika tidak ada
+    const newTotalGajiPcl = mitraToUpdatePcl ? mitraToUpdatePcl.totalGaji + (updatedRow.gajiPcl || 0) : 0 // gajiPcl dari updatedRow atau 0 jika tidak ada
 
     // Validasi total gaji untuk pmlId dan pclId
-    const isPmlValid = newTotalGajiPml <= 4000000
+    const isPmlValid = newTotalGajiPml ? newTotalGajiPml <= 4000000 : true
     const isPclValid = newTotalGajiPcl <= 4000000
 
     // Lakukan pengecekan dan pengiriman permintaan AJAX di sini
@@ -294,12 +313,15 @@ const TableGroupPerusahaan = props => {
       nus: updatedRow.nus ? updatedRow.nus : ''
     }
 
+    console.log(data)
+
     if (updatedRow.id < 100000) {
       if (data.realisasi <= data.target) {
         if (isPmlValid && isPclValid) {
           axios
             .put(`/perusahaan/${updatedRow.id}`, data)
             .then(res => {
+              console.log(res.message)
               Swal.fire({
                 position: 'bottom-end',
                 icon: 'success',
@@ -310,9 +332,10 @@ const TableGroupPerusahaan = props => {
               })
             })
             .catch(err => {
+              console.log(err)
               Swal.fire({
                 title: 'Error!',
-                text: 'Something went wrong',
+                text: err,
                 icon: 'error',
                 confirmButtonText: 'Ok'
               })
@@ -908,6 +931,7 @@ const TableGroupPerusahaan = props => {
               onRowModesModelChange={handleRowModesModelChange}
               onRowEditStop={handleRowEditStop}
               processRowUpdate={processRowUpdate}
+              onProcessRowUpdateError={handleProcessRowUpdateError}
               slots={{
                 toolbar: EditToolbar
               }}

@@ -41,6 +41,7 @@ import TabContext from '@mui/lab/TabContext'
 import CardContent from '@mui/material/CardContent'
 
 import TablePerusahaanTaskDetails from 'src/views/tables/TablePerusahaanTaskDetails'
+import TableTaskDetailsHands from 'src/views/tables/TableTaskDetailsHands'
 import CardTaskDetail from 'src/views/cards/CardTaskDetail'
 import CardTaskComment from 'src/views/cards/CardTaskComment'
 
@@ -319,7 +320,7 @@ const TaskDetailViews = props => {
                 <Grid container p={4} height={450}>
                   <Grid item xs={8} md={10}>
                     <Typography color={'primary.dark'} variant={'h4'}>
-                      {props.data.title}
+                      {props.data.title} hands on table
                     </Typography>
                   </Grid>
                   <Grid item xs={4} md={2} display={'flex'} justifyContent={'end'}>
@@ -600,7 +601,7 @@ const TaskDetailViews = props => {
         {}
 
         {session.status === 'authenticated' &&
-          session.data.role == 'teamleader' &&
+          (session.data.role == 'teamleader' || session.data.role == 'admin') &&
           (values.jenisKeg === 65 || values.jenisKeg === 67) && (
             <TablePerusahaanTaskDetails
               data={participants}
