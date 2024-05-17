@@ -23,7 +23,7 @@ import CancelIcon from '@mui/icons-material/Close'
 import { HotTable } from '@handsontable/react'
 import { registerAllModules } from 'handsontable/registry'
 
-import 'handsontable/dist/handsontable.full.min.css'
+// import 'handsontable/dist/handsontable.full.min.css'
 
 // register Handsontable's modules
 registerAllModules()
