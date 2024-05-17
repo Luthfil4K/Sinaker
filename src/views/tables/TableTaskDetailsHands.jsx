@@ -19,9 +19,9 @@ import SaveIcon from '@mui/icons-material/Save'
 import Typography from '@mui/material/Typography'
 import CancelIcon from '@mui/icons-material/Close'
 
-// hands on table
-import { HotTable } from '@handsontable/react'
-import { registerAllModules } from 'handsontable/registry'
+// // hands on table
+// import { HotTable } from '@handsontable/react'
+// import { registerAllModules } from 'handsontable/registry'
 
 // import 'handsontable/dist/handsontable.full.min.css'
 
@@ -1123,7 +1123,7 @@ const TableGroupPerusahaan = props => {
         </Card>
       </Grid>
       <Grid item md={12} xs={12}>
-        <HotTable
+        {/* <HotTable
           data={dataHotAsu}
           startRows={5}
           startCols={5}
@@ -1145,7 +1145,7 @@ const TableGroupPerusahaan = props => {
           autoWrapCol={true}
           licenseKey='non-commercial-and-evaluation'
         />
-        {autoauto}
+        {autoauto} */}
       </Grid>{' '}
     </>
   )
