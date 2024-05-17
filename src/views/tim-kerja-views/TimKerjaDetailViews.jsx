@@ -536,18 +536,21 @@ const CreateKegiatanPerusahaanViews = props => {
         {/* <TableAddParticipant></TableAddParticipant> */}
         <Divider sx={{ margin: 0 }} />
         <Grid item m={4} display={'flex'} justifyContent={'end'}>
-          {/* <Button
-            color={'primary'}
-            sx={{ m: 2 }}
-            size='medium'
-            type='submit'
-            variant='contained'
-            onClick={e => router.push(`/tim-kerja-edit/${id}`)}
-          >
-            Edit Tim Kerja
-          </Button> */}
-
-          {session.status === 'authenticated' && session.data.role == 'teamleader' && (
+          {/* {session.status === 'authenticated' && (session.data.role == 'teamleader' || session.data.role == 'admin') && (
+            <>
+              <Button
+                color={'primary'}
+                sx={{ m: 2 }}
+                size='medium'
+                type='submit'
+                variant='contained'
+                onClick={e => router.push(`/tim-kerja-edit/${id}`)}
+              >
+                Edit Tim Kerja
+              </Button>
+            </>
+          )} */}
+          {session.status === 'authenticated' && (session.data.role == 'teamleader' || session.data.role == 'admin') && (
             <>
               <Link onClick={e => router.push(`/tim-kerja-edit/${values.idGroup}`)}>
                 <Button sx={{ m: 2 }} variant='contained' size={'medium'} color={'warning'}>
