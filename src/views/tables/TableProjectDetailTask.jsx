@@ -1,4 +1,6 @@
 // ** MUI Imports
+// axios
+import axios from 'src/pages/api/axios'
 
 import Card from '@mui/material/Card'
 import Chip from '@mui/material/Chip'
@@ -6,10 +8,16 @@ import Grid from '@mui/material/Grid'
 import Link from '@mui/material/Link'
 import Typography from '@mui/material/Typography'
 import { useRouter } from 'next/dist/client/router'
+import Button from '@mui/material/Button'
 
 import * as React from 'react'
 import { DataGrid } from '@mui/x-data-grid'
 import { useState } from 'react'
+import Swal from 'sweetalert2'
+
+// icon
+import PencilOutline from 'mdi-material-ui/PencilOutline'
+import DeleteOutline from 'mdi-material-ui/DeleteOutline'
 
 const data = [
   {
@@ -86,6 +94,26 @@ const TableProjectDetailTask = props => {
     status: row.status,
     deadline: new Date(row.duedate).toLocaleDateString('id')
   }))
+
+  const handleDelete = async id => {
+    axios
+      .delete(`task/${id}`)
+      .then(async res => {
+        await Swal.fire({
+          icon: 'success',
+          title: 'Success',
+          text: 'Task Deleted'
+        })
+        router.reload()
+      })
+      .catch(err => {
+        Swal.fire({
+          icon: 'error',
+          title: 'Error',
+          text: 'Something went wrong'
+        })
+      })
+  }
 
   const columns = [
     // { field: 'id', headerName: 'No', type: 'string', width: 70 },
@@ -167,9 +195,59 @@ const TableProjectDetailTask = props => {
       renderCell: params => (
         <Typography sx={{ fontWeight: 500, fontSize: '0.875rem !important' }}>{params.row.deadline}</Typography>
       )
+    },
+     {
+      field: 'action',
+      width: 150,
+      renderHeader: () => (
+        <Typography sx={{ fontWeight: 900, fontSize: '0.875rem !important', textAlign: 'center' }}>Action</Typography>
+      ),
+
+      renderCell: params => (
+        <>
+          <Link>
+            <Button
+              onClick={e => {
+                router.push(`/task-manage-edit/ ${params.row.id}`)
+              }}
+              type='submit'
+              sx={{ mr: 1 }}
+              color='info'
+              variant='text'
+            >
+              <PencilOutline />
+            </Button>
+          </Link>
+
+          <Button
+            onClick={() => {
+              Swal.fire({
+                title: 'Hapus Tugas?',
+                text: '',
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Ya, Hapus Tugas'
+              }).then(result => {
+                if (result.isConfirmed) {
+                  handleDelete(params.row.id)
+                }
+              })
+            }}
+            type='submit'
+            sx={{ mr: 1 }}
+            color='error'
+            variant='text'
+          >
+            <DeleteOutline />
+          </Button>
+        </>
+      )
     }
   ]
 
+   
   return (
     <>
       <Card>
