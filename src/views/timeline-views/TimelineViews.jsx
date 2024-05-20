@@ -214,7 +214,7 @@ const TimelineViews = props => {
                       ? 0
                       : task.realisasi ==0 
                       ? 0 
-                      : Math.ceil(100 * (task.realisasi / task.target))`
+                      : Math.ceil(100 * (task.realisasi / task.target))
                     }
                     variant='determinate'
                     sx={{ marginBottom: 1 }}
