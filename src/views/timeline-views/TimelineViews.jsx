@@ -210,13 +210,13 @@ const TimelineViews = props => {
                   <CircularProgress
                     size={60}
                     value=
-                      { task.realisasi && task.target === 0
+                       task.realisasi && task.target === 0
                         ? 0
                         : task.realisasi ==0 
                         ? 0 
                         : `${Math.ceil(100 * (task.realisasi / task.target))}%`
                       
-                    }
+                    
 {/*                       task.realisasi && task.target === 0
                         ? 0
                         : Math.ceil(100 * (task.realisasi / task.target)) == 0
