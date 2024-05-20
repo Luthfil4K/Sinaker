@@ -118,6 +118,14 @@ const ProjectDetailsViews = props => {
           <CardProjectDetailProgress data={project.Task}></CardProjectDetailProgress>
         </Grid>
         <Grid item xs={12} md={12}>
+          <Button
+              onClick={e => {
+                router.push(`/task-manage-add/${project.id}`)
+              }}
+              variant={'contained'}
+            >
+              Tambah Sub Kegiatan
+            </Button>
           <TableProjectDetailTask data={project.Task}></TableProjectDetailTask>
         </Grid>
       </Grid>
