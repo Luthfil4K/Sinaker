@@ -200,7 +200,8 @@ const TimelineViews = props => {
                       zIndex: 1
                     }}
                   >
-                    {Math.ceil(100 * (task.realisasi / task.target)) == 0
+{/*                     {Math.ceil(100 * (task.realisasi / task.target)) == 0 */}
+                    { task.realisasi && task.target === 0
                       ? 0
                       : `${Math.ceil(100 * (task.realisasi / task.target))}%`}
                   </Typography>
