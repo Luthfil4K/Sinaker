@@ -75,7 +75,8 @@ const jenisSub = {
   67: { namaJenisSub: 'Pengolahan-Entri', color: 'warning' },
   68: { namaJenisSub: 'Evaluasi', color: 'warning' },
   69: { namaJenisSub: 'Diseminasi', color: 'warning' },
-  70: { namaJenisSub: 'Pengolahan-Validasi', color: 'warning' }
+  70: { namaJenisSub: 'Pengolahan-Validasi', color: 'warning' },
+  71: { namaJenisSub: 'Listing', color: 'warning' }
 }
 const statusObj = {
   0: { color: 'warning', status: 'On Progress' },
@@ -196,7 +197,7 @@ const TableProjectDetailTask = props => {
         <Typography sx={{ fontWeight: 500, fontSize: '0.875rem !important' }}>{params.row.deadline}</Typography>
       )
     },
-     {
+    {
       field: 'action',
       width: 150,
       renderHeader: () => (
@@ -247,7 +248,6 @@ const TableProjectDetailTask = props => {
     }
   ]
 
-   
   return (
     <>
       <Card>

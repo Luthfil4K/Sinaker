@@ -56,7 +56,7 @@ const ProjectEditViews = props => {
     kegKetua: props.data.project.projectLeaderId,
     kegArsip: props.data.project.isArchived
   })
-
+  console.log(props.data.project)
   const handleDateChange = date => {
     setSelectedDate(date)
     console.log(date)

@@ -25,7 +25,9 @@ export default async function handler(req, res) {
       rentangWaktu,
       anggotaTimId,
       bulanKegiatan,
-      jumlahKegiatan
+      jumlahKegiatan,
+      jumlahSubKeg,
+      subKeg
     } = req.body
 
     const rentang = {
@@ -38,10 +40,6 @@ export default async function handler(req, res) {
       321: { waktu: 'Belum Ditentukan', color: 'warning' }
     }
 
-    console.log('asdwadad')
-    console.log(bulanKegiatan)
-    console.log('asdwadad')
-    console.log(jumlahKegiatan)
     try {
       let rent = 1
       bulanKegiatan.map(async bulan => {
@@ -87,8 +85,50 @@ export default async function handler(req, res) {
           })
         })
 
+        subKeg.map(async task => {
+          console.log('aswaswasw')
+          console.log(task)
+          const dataTask = await prisma.sub_kegiatan.create({
+            data: {
+              title: task + ' ' + title,
+              jenisKeg:
+                task === 'pelatihan'
+                  ? 63
+                  : task === 'persiapan'
+                  ? 64
+                  : task === 'listing'
+                  ? 71
+                  : task === 'pencacahan'
+                  ? 65
+                  : task === 'pengolahanEntri'
+                  ? 67
+                  : task === 'pengolahanValidasi'
+                  ? 70
+                  : task === 'diseminasi'
+                  ? 68
+                  : task === 'evaluasi'
+                  ? 69
+                  : 0,
+              target: 1,
+              unitTarget: '-',
+              duedate: new Date(bulan.lastDate),
+              startDate: new Date(bulan.firstDate),
+              description: ' ',
+              realisasi: 0,
+              jenisSample: 0,
+              month: new Date(bulan.firstDate).getMonth(),
+              year: new Date(bulan.firstDate).getFullYear(),
+              notes: ' ',
+              projectId: Number(project.id),
+              userId: 99,
+              importStatus: 0
+            }
+          })
+        })
+
         return project
       })
+
       // const project = await prisma.kegiatan.create({
       //   data: {
       //     title,

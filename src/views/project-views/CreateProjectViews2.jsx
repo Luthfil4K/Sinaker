@@ -88,8 +88,7 @@ const CreateProjectViews = props => {
     kegAnggota: [dataUser[3].name, dataUser[1].name],
     kegKetuaId: '',
     kegJumlah: 0,
-    kegBulan: 0,
-    jumlahSubKeg: 0
+    kegBulan: 0
   })
   const [bulan, setBulan] = useState({
     jan: false,
@@ -105,18 +104,6 @@ const CreateProjectViews = props => {
     nov: false,
     dec: false
   })
-
-  const [subKeg, setSubKeg] = useState({
-    pelatihan: false,
-    persiapan: false,
-    listing: false,
-    pencacahan: false,
-    pengolahanEntri: false,
-    pengolahanValidasi: false,
-    diseminasi: false,
-    evaluasi: false
-  })
-  const [namaSubKeg, setNamaSubKeg] = useState([])
 
   // transform bulan bulan ke array date, nyaring mana aja yang true
   useEffect(() => {
@@ -165,7 +152,7 @@ const CreateProjectViews = props => {
       })
       .filter(date => date !== null)
 
-    // console.log('Tanggal pertama dan terakhir bulan yang memiliki nilai true:', bulanTrue)
+    console.log('Tanggal pertama dan terakhir bulan yang memiliki nilai true:', bulanTrue)
     setValues({ ...values, kegJumlah: jumlahTrue, kegBulan: bulanTrue })
   }, [bulan])
 
@@ -377,45 +364,6 @@ const CreateProjectViews = props => {
     }))
   }
   // handle submit disini
-
-  let button
-  button = (
-    <>
-      {/* <input accept='image/*' style={{ display: 'none' }} id='raised-button-file' multiple type='file' />
-      <label htmlFor='raised-button-file'>
-        <Button onClick={handleSubmitFile} size='medium' sx={{ mr: 2 }} variant='contained' component='span'>
-          Browse
-        </Button>
-      </label> */}
-      <TimelineKegiatan dataMeet={props.dataRapat}></TimelineKegiatan>
-    </>
-  )
-
-  const handleChangeSubKeg = event => {
-    setSubKeg({
-      ...subKeg,
-      [event.target.name]: event.target.checked
-    })
-  }
-
-  useEffect(() => {
-    const subKegValues = Object.values(subKeg)
-    const subKegTrueValues = subKegValues.filter(value => value === true)
-    const jumlahSubKegTrue = subKegTrueValues.length
-    setValues({ ...values, jumlahSubKeg: jumlahSubKegTrue })
-  }, [subKeg])
-
-  useEffect(() => {
-    const entries = Object.entries(subKeg)
-
-    const trueEntries = entries.filter(([key, value]) => value === true)
-
-    const trueKeys = trueEntries.map(([key]) => key)
-
-    setNamaSubKeg(trueKeys)
-  }, [subKeg])
-
-  console.log(namaSubKeg)
   const handleProject = async e => {
     e.preventDefault()
 
@@ -433,9 +381,7 @@ const CreateProjectViews = props => {
           anggotaTimId: values.kegAnggotaId,
           createdById: 99,
           jumlahKegiatan: values.kegJumlah,
-          bulanKegiatan: values.kegBulan,
-          subKeg: namaSubKeg,
-          jumlahSubKeg: values.jumlahSubKeg
+          bulanKegiatan: values.kegBulan
         })
 
         if (res.status === 201) {
@@ -476,6 +422,20 @@ const CreateProjectViews = props => {
       })
     }
   }
+
+  let button
+  button = (
+    <>
+      {/* <input accept='image/*' style={{ display: 'none' }} id='raised-button-file' multiple type='file' />
+      <label htmlFor='raised-button-file'>
+        <Button onClick={handleSubmitFile} size='medium' sx={{ mr: 2 }} variant='contained' component='span'>
+          Browse
+        </Button>
+      </label> */}
+      <TimelineKegiatan dataMeet={props.dataRapat}></TimelineKegiatan>
+    </>
+  )
+
   const router = useRouter()
   return (
     <Card>
@@ -614,74 +574,6 @@ const CreateProjectViews = props => {
                 label='Dec'
                 labelPlacement='top'
               />
-            </FormGroup>
-          </Grid>
-          <Grid item xs={12}>
-            <FormGroup column>
-              <FormControlLabel
-                name='pelatihan'
-                onChange={handleChangeSubKeg}
-                labelPlacement='right'
-                value='63'
-                control={<Checkbox />}
-                label='Pelatihan'
-              />
-              <FormControlLabel
-                name='persiapan'
-                onChange={handleChangeSubKeg}
-                labelPlacement='right'
-                value='64'
-                control={<Checkbox />}
-                label='Persiapan'
-              />
-              <FormControlLabel
-                name='listing'
-                onChange={handleChangeSubKeg}
-                labelPlacement='right'
-                value='66'
-                control={<Checkbox />}
-                label='Listing'
-              />
-              <FormControlLabel
-                name='pencacahan'
-                onChange={handleChangeSubKeg}
-                labelPlacement='right'
-                value='65'
-                control={<Checkbox />}
-                label='Pencacahan'
-              />
-              <FormControlLabel
-                name='pengolahanEntri'
-                onChange={handleChangeSubKeg}
-                labelPlacement='right'
-                value='67'
-                control={<Checkbox />}
-                label='Pengolahan-Entri'
-              />
-              <FormControlLabel
-                labelPlacement='70'
-                value='pengolahanValidasi'
-                control={<Checkbox />}
-                label='Pengolahan-Validasi'
-              />
-              <FormControlLabel
-                name='diseminasi'
-                onChange={handleChangeSubKeg}
-                labelPlacement='right'
-                value='69'
-                control={<Checkbox />}
-                label='Diseminasi'
-              />
-              <FormControlLabel
-                name='evaluasi'
-                onChange={handleChangeSubKeg}
-                labelPlacement='right'
-                value='68'
-                control={<Checkbox />}
-                label='Evaluasi'
-              />
-              {/* <FormControlLabel required control={<Checkbox />} label='Required' />
-              <FormControlLabel disabled control={<Checkbox />} label='Disabled' /> */}
             </FormGroup>
           </Grid>
 
