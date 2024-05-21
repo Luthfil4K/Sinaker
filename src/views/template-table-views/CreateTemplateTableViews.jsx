@@ -39,7 +39,8 @@ const TemplateTableDetailViews = props => {
     namaTemplate: '',
     jenisSample: '',
     kol1: 'kolom1',
-    kol2: 'kol2'
+    kol2: 'kol2',
+    target: 0
   })
   const [sama, setSama] = useState(1)
 
@@ -114,15 +115,17 @@ const TemplateTableDetailViews = props => {
       id: 1,
       kodeDesa: '3',
       kodeKecamatan: 4,
-      namaDesa: 4,
-      namaKecamatan: 4
+      namaDesa: 'Cilebut timur',
+      namaKecamatan: 'Bojonggede',
+      target: 0
     },
     {
       id: 2,
       kodeDesa: '3',
       kodeKecamatan: 4,
-      namaDesa: 4,
-      namaKecamatan: 4
+      namaDesa: 'Cilebut timur',
+      namaKecamatan: 'Bojonggede',
+      target: 0
     }
   ]
   const newData = initialRowsT.map(obj => {
@@ -198,6 +201,14 @@ const TemplateTableDetailViews = props => {
         <Typography sx={{ fontWeight: 900, fontSize: '0.875rem !important', textAlign: 'center' }}>
           {values.kol2}
         </Typography>
+      ),
+      minWidth: 200,
+      flex: 1
+    },
+    {
+      field: camelCase('target'),
+      renderHeader: () => (
+        <Typography sx={{ fontWeight: 900, fontSize: '0.875rem !important', textAlign: 'center' }}>Target</Typography>
       ),
       minWidth: 200,
       flex: 1

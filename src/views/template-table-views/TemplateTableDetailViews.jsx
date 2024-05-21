@@ -123,15 +123,17 @@ const TemplateTableDetailViews = props => {
       id: 1,
       kodeDesa: '3',
       kodeKecamatan: 4,
-      namaDesa: 4,
-      namaKecamatan: 4
+      namaDesa: 'Cilebut timur',
+      namaKecamatan: 'Bojonggede',
+      target: 0
     },
     {
       id: 2,
       kodeDesa: '3',
       kodeKecamatan: 4,
-      namaDesa: 4,
-      namaKecamatan: 4
+      namaDesa: 'Cilebut timur',
+      namaKecamatan: 'Bojonggede',
+      target: 0
     }
   ]
   const newData = initialRowsT.map(obj => {
@@ -210,6 +212,14 @@ const TemplateTableDetailViews = props => {
       ),
       minWidth: 200,
       flex: 1
+    },
+    {
+      field: camelCase('target'),
+      renderHeader: () => (
+        <Typography sx={{ fontWeight: 900, fontSize: '0.875rem !important', textAlign: 'center' }}>Target</Typography>
+      ),
+      minWidth: 200,
+      flex: 1
     }
   ]
 
@@ -219,7 +229,7 @@ const TemplateTableDetailViews = props => {
       value: kol.field
     }))
 
-    dataKolom.unshift({ label: 'ID', value: 'id' })
+    dataKolom.unshift({ label: 'id', value: 'id' })
 
     let dataDownload = [
       {
