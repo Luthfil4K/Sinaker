@@ -83,10 +83,12 @@ model sub_kegiatan {
   target                    Int                         @db.Int
   realisasi                 Int                         @db.Int
   unitTarget                String                      @db.VarChar(128)
-  project                  kegiatan                    @relation(fields: [projectId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  project                   kegiatan                    @relation(fields: [projectId], references: [id], onDelete: Cascade, onUpdate: Cascade)
   projectId                 Int
   user                      User                        @relation("taskToDo", fields: [userId], references: [id], onDelete: Cascade, onUpdate: Cascade)
   userId                    Int
+  importStatus              Int
+  data_target_realisasi     data_target_realisasi []
   TaskPerusahaanProduksi    TaskPerusahaanProduksi[]
   data_pencatatan_ss        data_pencatatan_ss[]
   TaskPeserta               sub_kegiatan_mitra[]
@@ -168,7 +170,29 @@ model TaskPerusahaanProduksi {
  nus                        String                      @db.VarChar(128)
  duedate                    DateTime                    @db.Date
  PesertaGaji                PesertaGaji[]
+}
 
+
+
+model data_target_realisasi {
+ id                         Int                         @id @default(autoincrement())
+ task                       sub_kegiatan                @relation(fields: [taskId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+ taskId                     Int
+ target                     Int                         @db.Int
+ pmlId                      Int                         @db.Int
+ pclId                      Int                         @db.Int
+ gajiPml                    Int                         @db.Int
+ gajiPcl                    Int                         @db.Int
+ realisasi                  Int                         @db.Int
+ desa                       String                      @db.VarChar(128)
+ namadesa                   String                      @db.VarChar(128)
+ namaKec                   String                      @db.VarChar(128)
+ kecamatan                  String                      @db.VarChar(128)
+ hasilPencacahan            String                      @db.VarChar(128)
+ kol1                       String                      @db.VarChar(128)
+ kol2                       String                      @db.VarChar(128)
+ templateTable              String                      @db.VarChar(128)
+ duedate                    DateTime                    @db.Date
 }
 
 model data_pencatatan_ss {
