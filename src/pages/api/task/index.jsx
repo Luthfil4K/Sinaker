@@ -283,23 +283,6 @@ export default async function handler(req, res) {
           console.log('nothing return or connect')
         }
       } else if (jenisKeg == 63) {
-        console.log('ini tanggal berakhir : ' + new Date(duedate))
-        console.log('ini tanggal mulai : ' + new Date(startDate))
-
-        console.log('ini tanggal berakhir : ' + new Date(duedate))
-        console.log('ini tanggal mulai : ' + new Date(startDate))
-
-        console.log('ini tanggal berakhir : ' + new Date(duedate))
-        console.log('ini tanggal mulai : ' + new Date(startDate))
-
-        console.log('ini tanggal berakhir : ' + new Date(duedate))
-        console.log('ini tanggal mulai : ' + new Date(startDate))
-
-        console.log('ini tanggal berakhir : ' + new Date(duedate))
-        console.log('ini tanggal mulai : ' + new Date(startDate))
-
-        console.log('ini tanggal berakhir : ' + new Date(duedate))
-        console.log('ini tanggal mulai : ' + new Date(startDate))
         const task = await prisma.sub_kegiatan.create({
           data: {
             title,
