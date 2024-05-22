@@ -17,6 +17,7 @@ import DeleteIcon from '@mui/icons-material/DeleteOutlined'
 import SaveIcon from '@mui/icons-material/Save'
 import Typography from '@mui/material/Typography'
 import CancelIcon from '@mui/icons-material/Close'
+import TextField from '@mui/material/TextField'
 
 import {
   GridRowModes,
@@ -75,13 +76,24 @@ const TableGroupPerusahaan = props => {
   const jenisSample = props.dataTaskSample
 
   const templateTable = participants.length > 0 ? participants[1].templateTable : 5
+  const [kolomLP, setKolomLP] = useState({
+    kol1: 'nbs',
+    kol2: 'nks'
+  })
+  useEffect(() => {
+    const findKolomLV = props.dataTemplateKolom.filter(item => item.templateTableId == templateTable)
 
-  // console.log(props.dataMitraLimitHonor)
-  // console.log(mitra)
+    setKolomLP(kolomLP => ({
+      ...kolomLP,
+      kol1: findKolomLV[0].kolomTable, //kol1
+      kol2: findKolomLV[1].kolomTable // kol2
+    }))
+  }, [])
 
   const hitungTotalGaji = dataMitraLimitHonor => {
     const totalGajiPerMitra = {}
     const bulanSekarang = new Date().getMonth()
+    const [pclAc, setPclAc] = useState()
 
     dataMitraLimitHonor.forEach(mitra => {
       const { pmlId, pclId, gajiPml, gajiPcl, task } = mitra
@@ -114,60 +126,32 @@ const TableGroupPerusahaan = props => {
     label: ''
   })
   const optionPCL = mitra.map(mi => ({
-    value: mi.mitra.id,
+    value: mi.id,
     label:
-      mi.mitra.name +
+      mi.name +
       ', total Gaji :  Rp' +
-      ((totalGajiMitra.find(totalGaji => totalGaji.id === mi.mitra.id)?.totalGaji || 0).toLocaleString('id-ID') || '0')
+      ((totalGajiMitra.find(totalGaji => totalGaji.id === mi.id)?.totalGaji || 0).toLocaleString('id-ID') || '0')
   }))
   const optionPML = pml.map(pml => ({
-    value: pml.organik.id,
-    label: pml.organik.name + ' - Organik'
+    value: pml.id,
+    label: pml.name + ' - Organik'
   }))
 
   const combinedOptions = [...optionPCL, ...optionPML]
   const apapa = props.dataProjectFungsi
   const initialRows = participants.map(row => ({
     id: row.id,
-    kip: row.perusahaan.kip,
-    nama: row.nama,
-    // fungsi === 4 || fungsi === 5 //produksi distribusi
-    //   ? row.nama
-    //   : (fungsi === 6 && jenisSample === 1) || (fungsi === 7 && jenisSample === 1) //nerwilis ipds responden
-    //   ? row.nama
-    //   : fungsi === 6 && jenisSample === 0 // Nerwilis Dok
-    //   ? row.nbs
-    //   : fungsi === 3 //Sosial
-    //   ? row.nks
-    //   : fungsi === 7 && jenisSample === 0 //IPDS Dok
-    //   ? row.idSls
-    //   : '',
     desa: row.desa,
     namadesa: row.namadesa,
     kecamatan: row.kecamatan,
     namaKec: row.namaKec,
-    alamat: row.alamat,
-    // fungsi === 4 || fungsi === 5
-    //   ? row.alamat
-    //   : fungsi === 3 || (fungsi === 7 && jenisSample === 0) //Sosial or IPDS dokumen
-    //   ? row.nbs
-    //   : fungsi === 6 && jenisSample === 0 // Nerwilis Dok
-    //   ? row.idSls
-    //   : fungsi === 7 && jenisSample === 1 // IPDS Responden
-    //   ? row.idSbr
-    //   : fungsi === 6 && jenisSample === 1 //Nerwilis responden
-    //   ? row.nus
-    //   : '',
-    nbs: row.nbs,
-    idSls: row.idSls,
-    idSbr: row.idSbr,
-    nks: row.nks,
-    nus: row.nus,
     target: row.target,
     pmlId: row.pmlId,
-    gajiPml: row.gajiPml,
     pclId: row.pclId,
+    gajiPml: row.gajiPml,
     gajiPcl: row.gajiPcl,
+    kol1: row.kol1,
+    kol2: row.kol2,
     realisasi: row.realisasi,
     persentase:
       row.target > 0 || row.target > 0 ? `${Math.round(100 * (Number(row.realisasi) / Number(row.target)))}%` : 0,
@@ -282,10 +266,15 @@ const TableGroupPerusahaan = props => {
 
     // Hitung total gaji setelah update untuk pclId
     const newTotalGajiPcl = mitraToUpdatePcl ? mitraToUpdatePcl.totalGaji + (updatedRow.gajiPcl || 0) : 0 // gajiPcl dari updatedRow atau 0 jika tidak ada
-
+    console.log('newTotalGajiPcl')
+    console.log(newTotalGajiPcl)
     // Validasi total gaji untuk pmlId dan pclId
     const isPmlValid = newTotalGajiPml ? newTotalGajiPml <= 4000000 : true
     const isPclValid = newTotalGajiPcl <= 4000000
+    console.log('isPmlValid')
+    console.log(isPmlValid)
+    console.log('isPclValid')
+    console.log(isPclValid)
 
     // Lakukan pengecekan dan pengiriman permintaan AJAX di sini
     const data = {
@@ -293,33 +282,37 @@ const TableGroupPerusahaan = props => {
       realisasi: updatedRow.realisasi ? updatedRow.realisasi : 0,
       hasilPencacahan: updatedRow.hasilPencacahan ? updatedRow.hasilPencacahan : '',
       duedate: updatedRow.tanggalDob ? updatedRow.tanggalDob : new Date(),
-      taskId: props.dataId,
-      perusahaanId: props.dataId,
-      kip: updatedRow.kip ? updatedRow.kip : '',
-      nama: updatedRow.nama ? updatedRow.nama : '',
+      taskId: props.dataSubKegId,
+
       desa: updatedRow.desa ? updatedRow.desa : '',
       namadesa: updatedRow.namadesa ? updatedRow.namadesa : '',
       kecamatan: updatedRow.kecamatan ? updatedRow.kecamatan : '',
       namaKec: updatedRow.namaKec ? updatedRow.namaKec : '',
-      alamat: updatedRow.alamat ? updatedRow.alamat : '',
+      templateTable: templateTable,
       pmlId: updatedRow.pmlId ? updatedRow.pmlId : 0,
       gajiPml: updatedRow.gajiPml ? updatedRow.gajiPml : 0,
       pclId: updatedRow.pclId ? updatedRow.pclId : 0,
       gajiPcl: updatedRow.gajiPcl ? updatedRow.gajiPcl : 0,
-      nbs: updatedRow.nbs ? updatedRow.nbs : '',
-      idSls: updatedRow.idSls ? updatedRow.idSls : '',
-      idSbr: updatedRow.idSbr ? updatedRow.idSbr : '',
-      nks: updatedRow.nks ? updatedRow.nks : '',
-      nus: updatedRow.nus ? updatedRow.nus : ''
+      kol1: updatedRow.kol1 ? updatedRow.kol1 : 0,
+      kol2: updatedRow.kol2 ? updatedRow.kol2 : 0
     }
 
+    console.log('ini data')
+    console.log('ini data')
+    console.log('ini data')
+    console.log('ini data')
+    console.log('ini data')
+    console.log('ini data')
+    console.log('ini data')
+    console.log('ini data')
+    console.log('ini data')
     console.log(data)
 
     if (updatedRow.id < 100000) {
       if (data.realisasi <= data.target) {
         if (isPmlValid && isPclValid) {
           axios
-            .put(`/perusahaan/${updatedRow.id}`, data)
+            .put(`/task/task-tarel-progress/${updatedRow.id}`, data)
             .then(res => {
               console.log(res.message)
               Swal.fire({
@@ -365,7 +358,7 @@ const TableGroupPerusahaan = props => {
     } else {
       if (jenisSample === 1) {
         axios
-          .post(`/task-perusahaan/addWoDB`, data)
+          .post(`/task/task-tarel-progress`, data)
           .then(res => {
             Swal.fire({
               position: 'bottom-end',
@@ -386,7 +379,7 @@ const TableGroupPerusahaan = props => {
           })
       } else if (jenisSample === 0) {
         axios
-          .post(`/task-perusahaan`, data)
+          .post(`/task/task-tarel-progress`, data)
           .then(res => {
             Swal.fire({
               position: 'bottom-end',
@@ -514,163 +507,28 @@ const TableGroupPerusahaan = props => {
       editable: true
     },
     {
-      field:
-        templateTable == 5 //Produksi or Distribusi
-          ? 'alamat'
-          : templateTable == 4 || templateTable == 3 //Sosial or IPDS dokumen
-          ? 'nbs'
-          : templateTable == 7 // IPDS Responden
-          ? 'idSbr'
-          : templateTable == 6 //Nerwilis responden
-          ? 'nus'
-          : '',
+      field: 'kol1',
       renderHeader: () => (
         <Typography sx={{ fontWeight: 900, fontSize: '0.875rem !important', textAlign: 'center' }}>
-          {templateTable == 5 //Produksi or Distribusi
-            ? 'Alamat'
-            : templateTable == 4 || templateTable == 3 //Sosial or IPDS dokumen
-            ? 'NBS'
-            : templateTable == 7 // IPDS Responden
-            ? 'ID SBR'
-            : templateTable == 6 //Nerwilis responden
-            ? 'NUS'
-            : ''}
+          {kolomLP.kol1}
         </Typography>
       ),
       minWidth: 200,
-      flex: 1
+      flex: 1,
+      editable: true
     },
 
     {
-      field:
-        templateTable == 5 || templateTable == 6 //NerwilisResponden or IPDS Responden
-          ? 'nama'
-          : templateTable == 4 // Nerwilis Dok
-          ? 'idSls'
-          : templateTable == 3 //Sosial
-          ? 'nks'
-          : templateTable == 7 //IPDS Dok
-          ? 'nama'
-          : '',
+      field: 'kol2',
       renderHeader: () => (
         <Typography sx={{ fontWeight: 900, fontSize: '0.875rem !important', textAlign: 'center' }}>
-          {templateTable == 5 || templateTable == 6 //Nerwilis Responden or IPDS Responden
-            ? 'Nama Perusahaan'
-            : templateTable == 4 // Nerwilis Dok
-            ? 'ID SLS'
-            : templateTable == 3 //Sosial
-            ? 'NKS'
-            : templateTable == 7 //IPDS Dok
-            ? 'Nama Perusahaan'
-            : ''}
+          {kolomLP.kol2}
         </Typography>
       ),
       minWidth: 200,
-      flex: 1
+      flex: 1,
+      editable: true
     },
-
-    // <>{
-    //   field:
-    //     fungsi === 4 || fungsi === 5 //Produksi or Distribusi
-    //       ? 'alamat'
-    //       : fungsi === 3 || (fungsi === 7 && jenisSample === 0) //Sosial or IPDS dokumen
-    //       ? 'nbs'
-    //       : fungsi === 6 && jenisSample === 0 // Nerwilis Dok
-    //       ? 'idSls'
-    //       : fungsi === 7 && jenisSample === 1 // IPDS Responden
-    //       ? 'idSbr'
-    //       : fungsi === 6 && jenisSample === 1 //Nerwilis responden
-    //       ? 'nus'
-    //       : '',
-    //   headerName:
-    //     fungsi === 4 || fungsi === 5 //Produksi or Distribusi
-    //       ? 'Alamat'
-    //       : fungsi === 3 || (fungsi === 7 && jenisSample === 0) //Sosial or IPDS dokumen
-    //       ? 'NBS'
-    //       : fungsi === 6 && jenisSample === 0 // Nerwilis Dok
-    //       ? 'ID SLS'
-    //       : fungsi === 7 && jenisSample === 1 // IPDS Responden
-    //       ? 'ID SBR'
-    //       : fungsi === 6 && jenisSample === 1 //Nerwilis responden
-    //       ? 'NUS'
-    //       : '',
-    //   renderHeader: () => (
-    //     <Typography sx={{ fontWeight: 900, fontSize: '0.875rem !important', textAlign: 'center' }}>
-    //       {fungsi === 4 || fungsi === 5 //Produksi or Distribusi
-    //         ? 'Alamat'
-    //         : fungsi === 3 || (fungsi === 7 && jenisSample === 0) //Sosial or IPDS dokumen
-    //         ? 'NBS'
-    //         : fungsi === 6 && jenisSample === 0 // Nerwilis Dok
-    //         ? 'ID SLS'
-    //         : fungsi === 7 && jenisSample === 1 // IPDS Responden
-    //         ? 'ID SBR'
-    //         : fungsi === 6 && jenisSample === 1 //Nerwilis responden
-    //         ? 'NUS'
-    //         : ''}
-    //     </Typography>
-    //   ),
-    //   width: 200,
-    //   renderHeader: () => (
-    //     <Typography sx={{ fontWeight: 900, fontSize: '0.875rem !important', textAlign: 'center' }}>
-    //       {fungsi === 4 || fungsi === 5 //Produksi or Distribusi
-    //         ? 'Alamat'
-    //         : fungsi === 3 || (fungsi === 7 && jenisSample === 0) //Sosial or IPDS dokumen
-    //         ? 'NBS'
-    //         : fungsi === 6 && jenisSample === 0 // Nerwilis Dok
-    //         ? 'ID SLS'
-    //         : fungsi === 7 && jenisSample === 1 // IPDS Responden
-    //         ? 'ID SBR'
-    //         : fungsi === 6 && jenisSample === 1 //Nerwilis responden
-    //         ? 'NUS'
-    //         : ''}
-    //     </Typography>
-    //   ),
-    //   editable: true
-    // },
-    // {
-    //   field:
-    //     fungsi === 4 || fungsi === 5 //Produksi or Distribusi
-    //       ? 'nama'
-    //       : (fungsi === 6 && jenisSample === 1) || (fungsi === 7 && jenisSample === 1) //NerwilisResponden or IPDS Responden
-    //       ? 'nama'
-    //       : fungsi === 6 && jenisSample === 0 // Nerwilis Dok
-    //       ? 'nbs'
-    //       : fungsi === 3 //Sosial
-    //       ? 'nks'
-    //       : fungsi === 7 && jenisSample === 0 //IPDS Dok
-    //       ? 'idSls'
-    //       : '',
-    //   headerName:
-    //     fungsi === 4 || fungsi === 5 //Produksi or Distribusi
-    //       ? 'Nama Perusahaan'
-    //       : (fungsi === 6 && jenisSample === 1) || (fungsi === 7 && jenisSample === 1) //NerwilisResponden or IPDS Responden
-    //       ? 'Nama Perusahaan'
-    //       : fungsi === 6 && jenisSample === 0 // Nerwilis Dok
-    //       ? 'NBS'
-    //       : fungsi === 3 //Sosial
-    //       ? 'NKS'
-    //       : fungsi === 7 && jenisSample === 0 //IPDS Dok
-    //       ? 'ID SLS'
-    //       : '',
-    //   renderHeader: () => (
-    //     <Typography sx={{ fontWeight: 900, fontSize: '0.875rem !important', textAlign: 'center' }}>
-    //       {fungsi === 4 || fungsi === 5 //Produksi or Distribusi
-    //         ? 'Nama Perusahaan'
-    //         : (fungsi === 6 && jenisSample === 1) || (fungsi === 7 && jenisSample === 1) //NerwilisResponden or IPDS Responden
-    //         ? 'Nama Perusahaan'
-    //         : fungsi === 6 && jenisSample === 0 // Nerwilis Dok
-    //         ? 'NBS'
-    //         : fungsi === 3 //Sosial
-    //         ? 'NKS'
-    //         : fungsi === 7 && jenisSample === 0 //IPDS Dok
-    //         ? 'ID SLS'
-    //         : ''}
-    //     </Typography>
-    //   ),
-    //   width: 280,
-    //   editable: true
-    // }</>,
-
     {
       field: 'realisasi',
       headerName: 'Realisasi',
@@ -761,9 +619,25 @@ const TableGroupPerusahaan = props => {
       type: 'singleSelect',
       valueOptions: optionPCL.sort((a, b) => a.label.localeCompare(b.label)),
 
-      // renderCell: params => (
-      //   <Autocomplete {...params} options={optionPCL} freeSolo={false} multiple={false} disableClearable />
-      // ),
+      // renderEditCell: params => {
+      //   return (
+      //     // <Autocomplete
+      //     //   // options={optionPCL}
+      //     //   autoComplete
+      //     //   options={optionPCL.sort((a, b) => a.label.localeCompare(b.label))}
+      //     //   sx={{ width: 3003 }}
+      //     //   renderInput={params => <TextField {...params} sx={{ width: 450 }} />}
+      //     // />
+      //     <Autocomplete
+      //       disablePortal
+      //       id='combo-box-demo'
+      //       // options={optionPCL}
+      //       options={optionPCL.sort((a, b) => a.label.localeCompare(b.label))}
+      //       sx={{ width: 300 }}
+      //       renderInput={params => <TextField {...params} sx={500} />}
+      //     />
+      //   )
+      // },
       width: 180,
       editable: true
     },
@@ -796,8 +670,42 @@ const TableGroupPerusahaan = props => {
             ? ['Masuk', 'Menunggu Masuk', 'Tutup', 'Tidak Aktif', 'Tidak Ditemukan', 'Non Respon']
             : ['Proses', 'Selesai']
           : ['Proses', 'Selesai'],
+
       width: 180,
       editable: true
+      // renderCell: params => {
+      //   return (
+      //     <Autocomplete
+      //       value={'asd'}
+      //       disablePortal
+      //       id='combo-box-demo'
+      //       // options={optionPCL}
+      //       options={optionPCL.sort((a, b) => a.label.localeCompare(b.label))}
+      //       sx={{ width: 300 }}
+      //       renderInput={params => <TextField {...params} sx={500} />}
+      //     />
+      //   )
+      // },
+      //   renderEditCell: params => {
+      //     return (
+      //       // <Autocomplete
+      //       //   // options={optionPCL}
+      //       //   autoComplete
+      //       //   options={optionPCL.sort((a, b) => a.label.localeCompare(b.label))}
+      //       //   sx={{ width: 3003 }}
+      //       //   renderInput={params => <TextField {...params} sx={{ width: 450 }} />}
+      //       // />
+      //       <Autocomplete
+      //         value={'asd'}
+      //         disablePortal
+      //         id='combo-box-demo'
+      //         // options={optionPCL}
+      //         options={optionPCL.sort((a, b) => a.label.localeCompare(b.label))}
+      //         sx={{ width: 300 }}
+      //         renderInput={params => <TextField {...params} sx={500} />}
+      //       />
+      //     )
+      //   }
     },
     {
       field: 'tanggalDob',
@@ -861,7 +769,7 @@ const TableGroupPerusahaan = props => {
   return (
     <>
       {' '}
-      <Grid item md={12} xs={12}>
+      <Grid mt={4} item md={12} xs={12}>
         <Card>
           {' '}
           <Box
@@ -903,12 +811,12 @@ const TableGroupPerusahaan = props => {
           </Box>
         </Card>
       </Grid>
-      <Grid item md={12} xs={12}>
+      <Grid mt={4} item md={12} xs={12}>
         <Card>
           <Box
             sx={{
               overflowX: 'auto',
-              height: 500,
+              height: 700,
               width: '100%',
               '& .actions': {
                 color: 'text.secondary'

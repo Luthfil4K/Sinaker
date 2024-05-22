@@ -41,7 +41,7 @@ import TabContext from '@mui/lab/TabContext'
 import CardContent from '@mui/material/CardContent'
 
 import TablePerusahaanTaskDetails from 'src/views/tables/TablePerusahaanTaskDetails'
-// import TableTaskDetailsHands from 'src/views/tables/TableTaskDetailsHands'
+import TableTaskDetailsHands from 'src/views/tables/TableTaskDetailsHands'
 import CardTaskDetail from 'src/views/cards/CardTaskDetail'
 import CardTaskComment from 'src/views/cards/CardTaskComment'
 
@@ -62,9 +62,9 @@ const TaskDetailViews = props => {
   }
   const [participants, setParticipants] = useState(props.dataPerusahaan)
   const [mitra, setMitra] = useState(props.dataMitra)
+  const [pegawai, setPegawai] = useState(props.dataPML)
   const [dataPekerjaanHarian, setDataPekerjaanHarian] = useState(props.dataPH)
   const [dataPHreal, setDataPHrealn] = useState(1)
-  const [pegawai, setPegawai] = useState(props.dataPML)
   const [dataTask, setDataTasl] = useState(props.data)
   const session = useSession()
   const [values, setValues] = useState({
@@ -603,7 +603,7 @@ const TaskDetailViews = props => {
         {session.status === 'authenticated' &&
           (session.data.role == 'teamleader' || session.data.role == 'admin') &&
           (values.jenisKeg === 65 || values.jenisKeg === 67) && (
-            <TablePerusahaanTaskDetails
+            <TableTaskDetailsHands
               data={participants}
               dataProjectFungsi={props.data.project.fungsi}
               dataId={values.id}
@@ -613,7 +613,7 @@ const TaskDetailViews = props => {
               dataJenisKeg={values.jenisKeg}
               dataUpdateTarget={handleTaskUpdate}
               dataMitraLimitHonor={props.dataMitraLimit}
-            ></TablePerusahaanTaskDetails>
+            ></TableTaskDetailsHands>
             // <Button type='submit' variant={'contained'} onClick={handleSimpan} fullWidth>
             //   Simpan
             // </Button>

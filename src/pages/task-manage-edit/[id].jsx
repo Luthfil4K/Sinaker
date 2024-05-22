@@ -13,6 +13,11 @@ const TaskManageEdit = ({ data }) => {
         data={dataEdit.task}
         dataT={dataEdit.template}
         dataTK={dataEdit.templateKolom}
+        dataPerusahaan={dataEdit.perusahaanTask}
+        dataMitra={dataEdit.mitraTask}
+        dataPML={dataEdit.pegawai}
+        dataPH={dataEdit.pekerjaanHarian}
+        dataMitraLimit={dataEdit.mitraLimitHonor}
       ></TaskManageEditViews>
     </>
   )
@@ -48,30 +53,28 @@ export async function getServerSideProps(context) {
   })
   let mitras
 
-  mitras = await prisma.mitra.findMany({
-    where: {
-      id: {
-        not: 0
-      }
-    },
-    include: {
-      TaskPeserta: {
-        select: {
-          id: true,
-          task: true
-        }
-      },
-      beban_kerja_mitra: {
-        select: {
-          bebanKerja: true
-        }
-      }
-    }
-  })
+  // mitras = await prisma.mitra.findMany({
+  //   where: {
+  //     id: {
+  //       not: 0
+  //     }
+  //   },
+  //   include: {
+  //     TaskPeserta: {
+  //       select: {
+  //         id: true,
+  //         task: true
+  //       }
+  //     },
+  //     beban_kerja_mitra: {
+  //       select: {
+  //         bebanKerja: true
+  //       }
+  //     }
+  //   }
+  // })
 
-  let oraganik
-
-  oraganik = await prisma.user.findMany({
+  const pegawai = await prisma.user.findMany({
     where: {
       id: {
         not: 99
@@ -103,7 +106,117 @@ export async function getServerSideProps(context) {
 
   const template = await prisma.template_table.findMany({})
   const templateKolom = await prisma.template_table_kolom.findMany({})
-  const data = { task, template, mitras, oraganik, templateKolom }
+
+  const perusahaanTask = await prisma.data_target_realisasi.findMany({
+    where: {
+      taskId: parseInt(context.params.id)
+    }
+  })
+
+  // const mitraTask = await prisma.sub_kegiatan_mitra.findMany({
+  //   where: {
+  //     taskId: parseInt(context.params.id)
+  //   },
+  //   include: {
+  //     mitra: true
+  //   }
+  // })
+
+  const mitraTask = await prisma.mitra.findMany({
+    where: {
+      id: {
+        not: 0
+      }
+    }
+  })
+
+  // const organik = await prisma.sub_kegiatan_user.findMany({
+  //   where: {
+  //     taskId: parseInt(context.params.id)
+  //   },
+  //   include: {
+  //     organik: true
+  //   }
+  // })
+
+  const arrayOfIds = mitraTask.map(task => task.id)
+
+  const mitraLimitHonor = []
+
+  // console.log(arrayOfIds)
+  for (const id of arrayOfIds) {
+    const result = await prisma.data_target_realisasi.findMany({
+      where: {
+        OR: [{ pmlId: parseInt(id) }, { pclId: parseInt(id) }]
+      },
+      select: {
+        id: true,
+        pmlId: true,
+        pclId: true,
+        gajiPml: true,
+        gajiPcl: true,
+        task: true
+      }
+    })
+    //console.log(result)
+
+    //console.log('result')
+
+    if (result.length > 0) {
+      // Cek apakah id sudah ada di mitraLimitHonor
+      //console.log('masuk ke if result')
+
+      for (const res of result) {
+        //console.log('masuk ke for result')
+        const existingEntry = mitraLimitHonor.find(entry => entry.id === res.id)
+
+        if (!existingEntry) {
+          mitraLimitHonor.push(res)
+        } else {
+          // Jika tidak ada hasil, tambahkan entri dengan nilai default
+          mitraLimitHonor.push({
+            id,
+            pmlId: parseInt(id),
+            pclId: parseInt(id),
+            gajiPml: 0,
+            gajiPcl: 0
+          })
+        }
+      }
+    } else {
+      //console.log('masuk ke else result')
+      mitraLimitHonor.push({
+        id,
+        pmlId: parseInt(id),
+        pclId: parseInt(id),
+        gajiPml: 0,
+        gajiPcl: 0
+      })
+    }
+  }
+
+  const pekerjaanHarian = await prisma.pekerjaan_harian.findMany({
+    where: {
+      taskId: parseInt(context.params.id)
+    },
+    select: {
+      id: true,
+      namaKegiatan: true,
+      durasi: true,
+      userId: true
+    }
+  })
+
+  const data = {
+    task,
+    template,
+    templateKolom,
+    perusahaanTask,
+    mitraTask,
+    pegawai,
+    pekerjaanHarian,
+    mitraLimitHonor
+  }
 
   return {
     props: {
