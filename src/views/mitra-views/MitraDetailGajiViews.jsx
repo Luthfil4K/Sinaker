@@ -30,6 +30,7 @@ import ChevronDown from 'mdi-material-ui/ChevronDown'
 
 const MitraDetailGajiViews = props => {
   const [selectedYear, setSelectedYear] = useState(2023)
+  console.log(props.dataKolom)
 
   const handleYearChange = event => {
     setSelectedYear(parseInt(event.target.value))
@@ -82,144 +83,6 @@ const MitraDetailGajiViews = props => {
     mitraTanggalLahir: props.data[0].tanggalLahir
   })
 
-  // const [oktober, setOktober] = useState(() => {
-  //   console.log(tpp)
-  //   const totalGajiOktober = tpp
-  //     .filter(tppRow => tppRow.pclId === values.id)
-  //     .filter(tppRow => {
-  //       const tppDueDate = new Date(tppRow.task.duedate)
-  //       return tppDueDate.getMonth() === 9 // Oktober memiliki indeks bulan 9
-  //     })
-  //     .reduce((totalGaji, tppRow) => totalGaji + tppRow.gajiPcl, 0)
-
-  //   const perusahaan = tpp
-  //     .filter(tppRow => tppRow.pclId === values.id)
-  //     .filter(tppRow => {
-  //       const tppDueDate = new Date(tppRow.task.duedate)
-  //       return tppDueDate.getMonth() === 9 // Oktober memiliki indeks bulan 9
-  //     })
-  //     .map(data => data.nama)
-
-  //   const subKeg = tpp
-  //     .filter(tppRow => tppRow.pclId === values.id)
-  //     .filter(tppRow => {
-  //       const tppDueDate = new Date(tppRow.task.duedate)
-  //       return tppDueDate.getMonth() === 9 // Oktober memiliki indeks bulan 9
-  //     })
-  //     .reduce((uniqueItems, data) => {
-  //       const existingItem = uniqueItems.find(item => item.taskId === data.taskId)
-
-  //       if (existingItem) {
-  //         existingItem.taskTotalGaji += data.gajiPcl
-  //         existingItem.listPerusahaan.push(data.nama)
-  //         existingItem.gajiPerusahaan.push(data.gajiPcl)
-  //       } else {
-  //         uniqueItems.push({
-  //           nama: data.task.title,
-  //           taskId: data.taskId,
-  //           taskTotalGaji: data.gajiPcl,
-  //
-  //           listPerusahaan: [data.nama],
-  //           gajiPerusahaan: [data.gajiPcl]
-  //         })
-  //       }
-
-  //       return uniqueItems
-  //     }, [])
-  //   const totalGajiSubkeg = tpp
-  //     .filter(tppRow => tppRow.pclId === values.id)
-  //     .filter(tppRow => {
-  //       const tppDueDate = new Date(tppRow.task.duedate)
-  //       return tppDueDate.getMonth() === 9 // Oktober memiliki indeks bulan 9
-  //     })
-  //     .map(data => data.task.title)
-  //     .reduce((totalGaji, tppRow) => totalGaji + tppRow.gajiPcl, 0)
-
-  //   return { totalGajiOktober, perusahaan, subKeg, totalGajiSubkeg }
-  // })\
-  console.log(tpp)
-
-  // const [bulanData, setBulanData] = useState(() => {
-  //   const bulanData = []
-
-  //   for (let bulan = 0; bulan < 12; bulan++) {
-  //     const selectedYear = 2023 // Ganti dengan tahun yang dipilih
-
-  //     const totalGajiBulanPCL = tpp
-  //       .filter(tppRow => tppRow.pclId === values.id)
-  //       .filter(tppRow => {
-  //         const tppDueDate = new Date(tppRow.task.duedate)
-  //         return tppDueDate.getMonth() === bulan && tppDueDate.getFullYear() === selectedYear
-  //       })
-  //       .reduce((totalGaji, tppRow) => totalGaji + tppRow.gajiPcl, 0)
-
-  //     const totalGajiBulanPML = tpp
-  //       .filter(tppRow => tppRow.pmlId === values.id)
-  //       .filter(tppRow => {
-  //         const tppDueDate = new Date(tppRow.task.duedate)
-  //         return tppDueDate.getMonth() === bulan && tppDueDate.getFullYear() === selectedYear
-  //       })
-  //       .reduce((totalGaji, tppRow) => totalGaji + tppRow.gajiPml, 0)
-  //     const totalGajiBulan = totalGajiBulanPCL + totalGajiBulanPML
-
-  //     const subKeg = tpp
-  //       .filter(tppRow => tppRow.pclId === values.id || tppRow.pmlId === values.id)
-  //       .filter(tppRow => {
-  //         const tppDueDate = new Date(tppRow.task.duedate)
-  //         return tppDueDate.getMonth() === bulan && tppDueDate.getFullYear() === selectedYear
-  //       })
-  //       .reduce((uniqueItems, data) => {
-  //         const existingItem = uniqueItems.find(item => item.taskId === data.taskId)
-
-  //         let gajiType
-  //         if (data.pclId === values.id) {
-  //           gajiType = 'PCL'
-  //         } else if (data.pmlId === values.id) {
-  //           gajiType = 'PML'
-  //         }
-
-  //         if (existingItem) {
-  //           existingItem.taskTotalGaji += gajiType === 'PCL' ? data.gajiPcl : data.gajiPml
-  //           existingItem.listPerusahaan.push({
-  //             nama: data.nama,
-  //             nbs: data.nbs,
-  //             nks: data.nks,
-  //             idSls: data.idSls
-  //           })
-  //           existingItem.gajiPerusahaan.push({
-  //             value: gajiType === 'PCL' ? data.gajiPcl : data.gajiPml,
-  //             type: gajiType
-  //           })
-  //         } else {
-  //           uniqueItems.push({
-  //             nama: data.task.title,
-  //             taskId: data.taskId,
-  //             taskTotalGaji: gajiType === 'PCL' ? data.gajiPcl : data.gajiPml,
-  //             listPerusahaan: [
-  //               {
-  //                 nama: data.nama,
-  //                 nbs: data.nbs,
-  //                 nks: data.nks,
-  //                 idSls: data.idSls
-  //               }
-  //             ],
-  //             gajiPerusahaan: [
-  //               {
-  //                 value: gajiType === 'PCL' ? data.gajiPcl : data.gajiPml,
-  //                 type: gajiType
-  //               }
-  //             ]
-  //           })
-  //         }
-
-  //         return uniqueItems
-  //       }, [])
-
-  //     bulanData.push({ totalGajiBulan, subKeg })
-  //   }
-
-  //   return bulanData
-  // })
   const [bulanData, setBulanData] = useState([])
 
   useEffect(() => {
@@ -263,10 +126,9 @@ const MitraDetailGajiViews = props => {
           if (existingItem) {
             existingItem.taskTotalGaji += gajiType === 'PCL' ? data.gajiPcl : data.gajiPml
             existingItem.listPerusahaan.push({
-              nama: data.nama,
-              nbs: data.nbs,
-              nks: data.nks,
-              idSls: data.idSls
+              kol1: data.kol1,
+              kol2: data.kol2,
+              labelKol: data.templateTable
             })
             existingItem.gajiPerusahaan.push({
               value: gajiType === 'PCL' ? data.gajiPcl : data.gajiPml,
@@ -279,10 +141,9 @@ const MitraDetailGajiViews = props => {
               taskTotalGaji: gajiType === 'PCL' ? data.gajiPcl : data.gajiPml,
               listPerusahaan: [
                 {
-                  nama: data.nama,
-                  nbs: data.nbs,
-                  nks: data.nks,
-                  idSls: data.idSls
+                  kol1: data.kol1,
+                  kol2: data.kol2,
+                  labelKol: data.templateTable
                 }
               ],
               gajiPerusahaan: [
@@ -319,7 +180,7 @@ const MitraDetailGajiViews = props => {
               {namaBulan}
             </Typography>
             <Typography textAlign={'end'} variant={'body1'}>
-              Gaji Bulanan :{' '}
+              Total Honor Bulan :{' '}
               <span style={{ fontWeight: 500, color: `${totalGaji < 3000000 ? '#804BDF' : '#FF6166'}` }}>
                 {' '}
                 Rp{totalGaji.toLocaleString('id-ID')}
@@ -369,27 +230,20 @@ const MitraDetailGajiViews = props => {
                       <CardContent>
                         {subKeg.listPerusahaan.map((perusahaan, index) => (
                           <div key={index}>
-                            {perusahaan.nama ? (
-                              <>
-                                <Typography variant={'caption'}>Perusahaan/Dinas: {perusahaan.nama}</Typography>
-                                <br></br>
-                              </>
-                            ) : perusahaan.idSls ? (
-                              <>
-                                <Typography variant={'caption'}>ID SLS: {perusahaan.idSls}</Typography>
-                                <br></br>
-                              </>
-                            ) : (
-                              <>
-                                <Typography variant={'caption'}>NBS: {perusahaan.nbs}</Typography>
-                                <br></br>
-                                <Typography variant={'caption'}>NKS: {perusahaan.nks}</Typography>
-                                <br></br>
-                              </>
-                            )}
+                            <Typography variant={'caption'}>
+                              {/* {props.dataKolom.filter(tppRow => {
+                                tppRow.templateTableId = perusahaan.labelKolom
+                                console.log(tppRow.kolomTable)
+                                return tppRow.kolomTable
+                              })}{' '} */}
+                              {props.dataKolom.find(item => item.templateTableId == perusahaan.labelKol)?.kolomTable}
+                              {': '}
+                              {perusahaan.kol1}
+                            </Typography>
+                            <br></br>
 
                             <Typography variant={'caption'}>
-                              Gaji sebagai ({subKeg.gajiPerusahaan[index].type}): Rp
+                              Honor ({subKeg.gajiPerusahaan[index].type}): Rp
                               {subKeg.gajiPerusahaan[index].value.toLocaleString('id-ID')}
                             </Typography>
                             <br />

@@ -87,7 +87,8 @@ export default async function handler(req, res) {
             year,
             notes,
             projectId: Number(projectId),
-            userId
+            userId,
+            importStatus: 1
           }
         })
         if (jenisSample === 1) {

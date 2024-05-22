@@ -7,7 +7,11 @@ const Mitra = ({ data }) => {
   const [mitra, setMitra] = useState(JSON.parse(data))
   return (
     <>
-      <MitraDetailGajiViews data={mitra.mitra} dataTpp={mitra.perusahaanTask}></MitraDetailGajiViews>
+      <MitraDetailGajiViews
+        dataKolom={mitra.templateKolom}
+        data={mitra.mitra}
+        dataTpp={mitra.perusahaanTask}
+      ></MitraDetailGajiViews>
     </>
   )
 }
@@ -31,16 +35,25 @@ export async function getServerSideProps(context) {
     }
   })
 
-  const perusahaanTask = await prisma.taskPerusahaanProduksi.findMany({
+  // const perusahaanTask = await prisma.taskPerusahaanProduksi.findMany({
+  //   include: {
+  //     perusahaan: true,
+  //     task: true
+  //   }
+  // })
+  const perusahaanTask = await prisma.data_target_realisasi.findMany({
     include: {
-      perusahaan: true,
       task: true
     }
   })
 
+  const template = await prisma.template_table.findMany({})
+  const templateKolom = await prisma.template_table_kolom.findMany({})
   const data = {
     perusahaanTask,
-    mitra
+    mitra,
+    template,
+    templateKolom
   }
 
   return {
