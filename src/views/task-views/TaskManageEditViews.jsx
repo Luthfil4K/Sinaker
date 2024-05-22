@@ -22,6 +22,7 @@ import CardContent from '@mui/material/CardContent'
 import CardActions from '@mui/material/CardActions'
 import Divider from '@mui/material/Divider'
 import { styled } from '@mui/material/styles'
+import { useSession } from 'next-auth/react'
 
 import { useRouter } from 'next/dist/client/router'
 
@@ -65,6 +66,7 @@ import InputAdornment from '@mui/material/InputAdornment'
 import IconButton from '@mui/material/IconButton'
 import SendIcon from 'mdi-material-ui/Send'
 import AccountIcon from 'mdi-material-ui/Account'
+import TablePerusahaanTaskDetails from 'src/views/tables/TablePerusahaanTaskDetails'
 
 // chartjs dan visualiasi lain
 import { Line, Bar, Doughnut } from 'react-chartjs-2'
@@ -76,6 +78,17 @@ import LinearProgress from '@mui/material/LinearProgress'
 const TaskManageEditViews = props => {
   const dataTemplatePerusahaan = props.dataT.filter(TP => TP.jenisSample === 1)
 
+  // data={props.dataPerusahaan}
+  // dataProjectFungsi={props.data.project.fungsi}
+  // dataId={values.id}
+  // dataMitra={props.dataMitra}
+  // dataPML={props.dataPML}
+  // dataTaskSample={values.subKegJenisSample}
+  // dataJenisKeg={values.subKegJenis}
+  // dataUpdateTarget={handleTaskUpdate}
+  // dataMitraLimitHonor={props.dataMitraLimit}
+
+  const session = useSession()
   const [kolomLP, setKolomLP] = useState({
     kol1: 'nbs',
     kol2: 'nks'
@@ -87,8 +100,7 @@ const TaskManageEditViews = props => {
       .replace(/[\W_]/g, '')
       .replace(/[A-Z]/g, (match, index) => (index === 0 ? match.toLowerCase() : match))
   }
-  // console.log(dataTemplatePerusahaan)
-  // console.log(dataTemplateNonPerusahaan)
+
   const CustomInputEnd = forwardRef((props, ref) => {
     return <TextField fullWidth {...props} inputRef={ref} label='Tanggal Berakhir' autoComplete='on' />
   })
@@ -112,6 +124,9 @@ const TaskManageEditViews = props => {
   })
   const handleChangeHarian = props => event => {
     setValuesHarian({ ...valuesHarian, [props]: event.target.value })
+  }
+  const handleTaskUpdate = (realisasi, trgt) => {
+    setValues({ ...values, target: trgt, realisasi })
   }
 
   const [values, setValues] = useState({
@@ -656,7 +671,6 @@ const TaskManageEditViews = props => {
     }
   }
 
-  console.log(data)
   return (
     <>
       <Grid container spacing={4}>
@@ -817,7 +831,7 @@ const TaskManageEditViews = props => {
                     <Grid container p={4} height={450}>
                       <Grid item xs={8} md={10}>
                         <Typography color={'primary.dark'} variant={'h4'}>
-                          {props.data.title} hands on table
+                          {props.data.title}
                         </Typography>
                       </Grid>
                       <Grid item xs={4} md={2} display={'flex'} justifyContent={'end'}>
@@ -1095,27 +1109,28 @@ const TaskManageEditViews = props => {
                   </form>
                 </Grid>
               </Grid>
+              {session.status === 'authenticated' &&
+                (session.data.role == 'teamleader' || session.data.role == 'admin') && (
+                  <TablePerusahaanTaskDetails
+                    data={props.dataPerusahaan}
+                    dataProjectFungsi={props.data.project.fungsi}
+                    dataId={values.id}
+                    dataMitra={props.dataMitra}
+                    dataPML={props.dataPML}
+                    dataTaskSample={values.subKegJenisSample}
+                    dataJenisKeg={values.subKegJenis}
+                    dataUpdateTarget={handleTaskUpdate}
+                    dataMitraLimitHonor={props.dataMitraLimit}
+                    dataTemplate={props.dataT}
+                    dataTemplateKolom={props.dataTK}
+                    dataSubKegId={values.subKegId}
+                  ></TablePerusahaanTaskDetails>
+                  // <Button type='submit' variant={'contained'} onClick={handleSimpan} fullWidth>
+                  //   Simpan
+                  // </Button>
+                )}
             </Grid>
             {}
-
-            {/* {session.status === 'authenticated' &&
-              (session.data.role == 'teamleader' || session.data.role == 'admin') &&
-              (values.jenisKeg === 65 || values.jenisKeg === 67) && (
-                <TablePerusahaanTaskDetails
-                  data={participants}
-                  dataProjectFungsi={props.data.project.fungsi}
-                  dataId={values.id}
-                  dataMitra={mitra}
-                  dataPML={pegawai}
-                  dataTaskSample={values.jenisSample}
-                  dataJenisKeg={values.jenisKeg}
-                  dataUpdateTarget={handleTaskUpdate}
-                  dataMitraLimitHonor={props.dataMitraLimit}
-                ></TablePerusahaanTaskDetails>
-                // <Button type='submit' variant={'contained'} onClick={handleSimpan} fullWidth>
-                //   Simpan
-                // </Button>
-              )} */}
           </Grid>
         </TabPanel>
         <TabPanel value='3' sx={{ p: 0, height: 350 }}>
@@ -1125,7 +1140,7 @@ const TaskManageEditViews = props => {
           <Card sx={{ padding: 4 }}>
             <Box sx={{ mt: 5, mb: 6 }}>
               <Typography variant='h5' sx={{ fontWeight: 600, marginBottom: 1.5 }}>
-                Edit Sub Kegiatan
+                Import data target dan realisasi
               </Typography>
               {/* <Typography variant='body2'>Fill this blank field below</Typography> */}
             </Box>
