@@ -17,8 +17,17 @@ export default async function handler(req, res) {
 
     return res.status(200).json({ success: true, data: task })
   } else if (method === 'POST') {
-    const { unitTarget, jenisSample, participants, honorPetugas1, honorPetugas2, templateTable, duedate, kolomLP } =
-      req.body
+    const {
+      unitTarget,
+      jenisSample,
+      participants,
+      honorPetugas1,
+      honorPetugas2,
+      templateTable,
+      duedate,
+      kolomLP,
+      importStatus
+    } = req.body
 
     try {
       participants.map(async participant => {
@@ -44,14 +53,26 @@ export default async function handler(req, res) {
             kol1: participant[kolomLP.kol1].toString(),
             kol2: participant[kolomLP.kol2].toString(),
             templateTable: templateTable.toString(),
-            duedate: new Date()
+            duedate: new Date(duedate)
           }
         })
       })
 
+      const task = await prisma.sub_kegiatan.update({
+        where: {
+          id: Number(id)
+        },
+        data: {
+          jenisSample,
+          unitTarget,
+          importStatus
+        }
+      })
+
       return res.status(200).json({ success: true })
     } catch (error) {
-      return res.status(400).json({ success: false })
+      console.log(error)
+      return res.status(400).json({ success: false, message: error })
     }
   } else if (method === 'DELETE') {
     try {

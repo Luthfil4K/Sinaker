@@ -75,7 +75,7 @@ const TableManageTaskList = props => {
       renderCell: params => (
         <Link
           onClick={e => {
-            router.push(`/task-detail/${params.row.id}`)
+            router.push(`/task-manage-edit/${params.row.id}`)
           }}
           sx={{ cursor: 'pointer' }}
         >

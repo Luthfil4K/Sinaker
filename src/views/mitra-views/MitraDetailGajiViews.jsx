@@ -29,8 +29,10 @@ import ChevronUp from 'mdi-material-ui/ChevronUp'
 import ChevronDown from 'mdi-material-ui/ChevronDown'
 
 const MitraDetailGajiViews = props => {
-  const [selectedYear, setSelectedYear] = useState(2023)
+  const [selectedYear, setSelectedYear] = useState(2024)
   console.log(props.dataKolom)
+
+  const [totalGajiTahun, setTotalGajiTahun] = useState(0)
 
   const handleYearChange = event => {
     setSelectedYear(parseInt(event.target.value))
@@ -88,7 +90,7 @@ const MitraDetailGajiViews = props => {
   useEffect(() => {
     // Di sini Anda dapat memperbarui bulanData sesuai dengan selectedYear
     const updatedBulanData = []
-
+    const honorTahunIni = []
     for (let bulan = 0; bulan < 12; bulan++) {
       const totalGajiBulanPCL = tpp
         .filter(tppRow => tppRow.pclId === values.id)
@@ -158,8 +160,12 @@ const MitraDetailGajiViews = props => {
           return uniqueItems
         }, [])
       updatedBulanData.push({ totalGajiBulan, subKeg })
+      honorTahunIni.push(totalGajiBulan)
     }
+    console.log(honorTahunIni)
+    console.log('honorTahunIni')
     setBulanData(updatedBulanData)
+    setTotalGajiTahun(honorTahunIni.reduce((a, b) => a + b, 0))
   }, [selectedYear])
 
   function BulanCard({ namaBulan, totalGaji, subKegData }) {
@@ -206,7 +212,7 @@ const MitraDetailGajiViews = props => {
                         <Typography display={'inline'} variant={'body2'}>
                           <Link
                             onClick={async e => {
-                              router.push(`/task-detail/${subKeg.taskId}`)
+                              router.push(`/task-manage-edit/${subKeg.taskId}`)
                             }}
                             sx={{ color: '#777B82', textDecoration: 'underline', cursor: 'pointer' }}
                           >
@@ -371,7 +377,7 @@ const MitraDetailGajiViews = props => {
                       display='inline'
                       sx={{ marginRight: 30, fontWeight: 500, fontSize: '1.2rem !important', textAlign: 'center' }}
                     >
-                      {`${totalGaji.toLocaleString('id-ID')}`}
+                      {`${totalGajiTahun.toLocaleString('id-ID')}`}
                     </Typography>
                   </Grid>
                   <Grid item md={6} xs={6}>
@@ -406,9 +412,9 @@ const MitraDetailGajiViews = props => {
               size={'small'}
               onChange={handleYearChange}
             >
-              <MenuItem value={2023}>2023</MenuItem>
               <MenuItem value={2024}>2024</MenuItem>
               <MenuItem value={2025}>2025</MenuItem>
+              <MenuItem value={2026}>2026</MenuItem>
             </Select>
           </FormControl>
         </Card>

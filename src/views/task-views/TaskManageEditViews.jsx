@@ -93,6 +93,7 @@ const TaskManageEditViews = props => {
     kol1: 'nbs',
     kol2: 'nks'
   })
+
   const dataTemplateNonPerusahaan = props.dataT.filter(TP => TP.jenisSample === 0)
   const camelCase = str => {
     return str
@@ -146,7 +147,8 @@ const TaskManageEditViews = props => {
     subKegNotes: props.data.notes,
     templateTable: 4,
     subKegHonorPmlPerPerusahaan: 0,
-    subKegHonorPclPerPerusahaan: 0
+    subKegHonorPclPerPerusahaan: 0,
+    subKegImportStatus: props.data.importStatus
   })
 
   const statusObj = {
@@ -640,6 +642,7 @@ const TaskManageEditViews = props => {
         const res = await axios.post(`/task/task-import/${values.subKegId}`, {
           unitTarget: values.subKegUnitTarget,
           jenisSample: values.subKegJenisSample,
+          importStatus: 1,
           participants: data,
           honorPetugas1: values.subKegJenisSample == 1 ? parseInt(values.subKegHonorPmlPerPerusahaan) : 0,
           honorPetugas2: values.subKegJenisSample == 1 ? parseInt(values.subKegHonorPclPerPerusahaan) : 0,
@@ -684,16 +687,182 @@ const TaskManageEditViews = props => {
       <Divider sx={{ marginTop: 0 }} />
       <TabContext value={value}>
         <TabList variant='fullWidth' onChange={handleChangeTab} aria-label='card navigation example'>
-          <Tab value='1' label='Informasi Sub Kegiatan' />
-          <Tab value='2' label='Progres Sub Kegiatan' />
+          {session.status === 'authenticated' &&
+            (session.data.role == 'teamleader' || session.data.role == 'admin') && (
+              <Tab value='1' label='Progres Sub Kegiatan' />
+            )}
+          <Tab value='2' label='Informasi Sub Kegiatan' />
           <Tab value='3' label='Pekerjaan Harian' />
-
           {(values.subKegJenis == 65 ||
             values.subKegJenis == 66 ||
             values.subKegJenis == 67 ||
             values.subKegJenis == 70) && <Tab value='4' label='Import Tabel Target Realisasi' />}
         </TabList>
-        <TabPanel value='1' sx={{ p: 0, height: 335 }}>
+
+        <>
+          <TabPanel value='1' sx={{ p: 0, height: 1935 }}>
+            <Grid container spacing={4}>
+              <Grid item md={12}>
+                <Grid container spacing={4}>
+                  <Grid item xs={12} md={8}>
+                    <Card>
+                      {/* <CardHeader title='Nama Project' sx={{ color: 'primary.dark' }}></CardHeader> */}
+                      <Grid container p={4} height={450}>
+                        <Grid item xs={8} md={10}>
+                          <Typography color={'primary.dark'} variant={'h4'}>
+                            {props.data.title}
+                          </Typography>
+                        </Grid>
+                        <Grid item xs={4} md={2} display={'flex'} justifyContent={'end'}>
+                          <Chip
+                            label={statusObj[props.data.target / props.data.realisasi === 1 ? 1 : 0].status}
+                            color={statusObj[props.data.target / props.data.realisasi === 1 ? 1 : 0].color}
+                            sx={{
+                              height: 24,
+                              fontSize: '0.75rem',
+                              width: 100,
+                              textTransform: 'capitalize',
+                              '& .MuiChip-label': { fontWeight: 500 }
+                            }}
+                          />
+                        </Grid>
+                        <Grid mt={1} item md={12}>
+                          <Typography variant={'body1'}></Typography>
+                        </Grid>
+                        <Grid justifyContent={'start'} mt={2} xs={6} item md={6}>
+                          <Typography textAlign={'start'} variant={'body1'}>
+                            {/* Target Kegiatan : 900 */}
+                          </Typography>
+                        </Grid>
+                        <Grid justifyContent={'end'} mt={2} xs={6} item md={6}>
+                          <Typography textAlign={'end'} variant={'body2'}>
+                            Due Date: {new Date(props.data.duedate).toLocaleDateString('id')}
+                          </Typography>
+                        </Grid>
+
+                        <Grid mt={2} item xs={12} md={12} height={335} overflow={'none'}>
+                          <Divider sx={{ marginTop: 3.5 }} />
+
+                          <Typography variant={'body2'}>{props.data.description}</Typography>
+                        </Grid>
+                      </Grid>
+                    </Card>
+                  </Grid>
+                  <Grid item md={4}>
+                    <form onSubmit={e => e.preventDefault()}>
+                      <Card>
+                        <Grid container p={4}>
+                          <Grid item xs={12} md={12}>
+                            <Typography color={'primary.dark'} variant={'h5'}>
+                              Progres Sub Kegiatan
+                            </Typography>
+                          </Grid>
+                          <Grid item xs={12} md={12} mt={2} display={'flex'} alignItems={'start'}>
+                            <Typography variant={'body2'}>Unit Target: {props.data.unitTarget}</Typography>
+                          </Grid>
+                          <Grid item xs={12} md={12} mt={3}>
+                            <TextField
+                              value={values.subKegRealisasi}
+                              size='small'
+                              fullWidth
+                              type={'number'}
+                              label='Realisasi'
+                              onChange={handleChange('realisasi')}
+                              placeholder='Realisasi'
+                            />
+                          </Grid>
+
+                          <Grid item xs={12} md={12} mt={2}>
+                            <TextField
+                              value={values.subKegTarget}
+                              size='small'
+                              fullWidth
+                              multiline
+                              label='Target'
+                              type={'number'}
+                              onChange={handleChange('target')}
+                              placeholder='Target'
+                            />
+                          </Grid>
+                        </Grid>
+                      </Card>
+                      <Card sx={{ marginTop: 4 }}>
+                        <Grid container p={4} height={200} spacing={2} overflow={'auto'}>
+                          <Grid item xs={1} md={1} display={'inline'}>
+                            <AccountIcon></AccountIcon>
+                          </Grid>
+                          <Grid item xs={11} md={11} display={'inline'}>
+                            <Typography color={'primary.dark'} variant={'body1'}>
+                              Note
+                            </Typography>
+                          </Grid>
+                          <Grid mt={1} display={'flex'} justifyContent={'center'} xs={12} item md={12}>
+                            <FormControl fullWidth sx={{ overflowY: 'auto' }}>
+                              <OutlinedInput
+                                name='subKegNotes'
+                                value={values.subKegNotes}
+                                onChange={handleChange('subKegNotes')}
+                                minRows={3}
+                                multiline
+                                endAdornment={
+                                  <InputAdornment position='end'>
+                                    <IconButton
+                                      type='submit'
+                                      onClick={handleSimpan}
+                                      edge='end'
+                                      aria-label='toggle password visibility'
+                                    >
+                                      <SendIcon></SendIcon>
+                                    </IconButton>
+                                  </InputAdornment>
+                                }
+                              />
+                            </FormControl>
+                          </Grid>
+                        </Grid>
+                      </Card>
+                      <Grid container spacing={3}>
+                        <Grid justifyContent={'center'} mt={2} item xs={12} md={12}>
+                          <Button type='submit' variant={'contained'} onClick={handleSimpan} fullWidth>
+                            Simpan
+                          </Button>
+                        </Grid>
+                      </Grid>
+                    </form>
+                  </Grid>
+                </Grid>
+                {session.status === 'authenticated' &&
+                  (session.data.role == 'teamleader' || session.data.role == 'admin') &&
+                  (values.subKegJenis == 65 ||
+                    values.subKegJenis == 66 ||
+                    values.subKegJenis == 67 ||
+                    values.subKegJenis == 70) &&
+                  values.subKegImportStatus === 1 && (
+                    <TablePerusahaanTaskDetails
+                      data={props.dataPerusahaan}
+                      dataProjectFungsi={props.data.project.fungsi}
+                      dataId={values.id}
+                      dataMitra={props.dataMitra}
+                      dataPML={props.dataPML}
+                      dataTaskSample={values.subKegJenisSample}
+                      dataJenisKeg={values.subKegJenis}
+                      dataUpdateTarget={handleTaskUpdate}
+                      dataMitraLimitHonor={props.dataMitraLimit}
+                      dataTemplate={props.dataT}
+                      dataTemplateKolom={props.dataTK}
+                      dataSubKegId={values.subKegId}
+                    ></TablePerusahaanTaskDetails>
+                    // <Button type='submit' variant={'contained'} onClick={handleSimpan} fullWidth>
+                    //   Simpan
+                    // </Button>
+                  )}
+              </Grid>
+              {}
+            </Grid>
+          </TabPanel>
+        </>
+
+        <TabPanel value='2' sx={{ p: 0, height: 335 }}>
           <Card sx={{ padding: 4 }}>
             <Box sx={{ mt: 5, mb: 6 }}>
               <Typography variant='h5' sx={{ fontWeight: 600, marginBottom: 1.5 }}>
@@ -821,318 +990,6 @@ const TaskManageEditViews = props => {
             </form>
           </Card>
         </TabPanel>
-        <TabPanel value='2' sx={{ p: 0, height: 1935 }}>
-          <Grid container spacing={4}>
-            <Grid item md={12}>
-              <Grid container spacing={4}>
-                <Grid item xs={12} md={8}>
-                  <Card>
-                    {/* <CardHeader title='Nama Project' sx={{ color: 'primary.dark' }}></CardHeader> */}
-                    <Grid container p={4} height={450}>
-                      <Grid item xs={8} md={10}>
-                        <Typography color={'primary.dark'} variant={'h4'}>
-                          {props.data.title}
-                        </Typography>
-                      </Grid>
-                      <Grid item xs={4} md={2} display={'flex'} justifyContent={'end'}>
-                        <Chip
-                          label={statusObj[props.data.target / props.data.realisasi === 1 ? 1 : 0].status}
-                          color={statusObj[props.data.target / props.data.realisasi === 1 ? 1 : 0].color}
-                          sx={{
-                            height: 24,
-                            fontSize: '0.75rem',
-                            width: 100,
-                            textTransform: 'capitalize',
-                            '& .MuiChip-label': { fontWeight: 500 }
-                          }}
-                        />
-                      </Grid>
-                      <Grid mt={1} item md={12}>
-                        <Typography variant={'body1'}></Typography>
-                      </Grid>
-                      <Grid justifyContent={'start'} mt={2} xs={6} item md={6}>
-                        <Typography textAlign={'start'} variant={'body1'}>
-                          {/* Target Kegiatan : 900 */}
-                        </Typography>
-                      </Grid>
-                      <Grid justifyContent={'end'} mt={2} xs={6} item md={6}>
-                        <Typography textAlign={'end'} variant={'body2'}>
-                          Due Date: {new Date(props.data.duedate).toLocaleDateString('id')}
-                        </Typography>
-                      </Grid>
-
-                      <Grid mt={2} item xs={12} md={12} height={335} overflow={'none'}>
-                        <Divider sx={{ marginTop: 3.5 }} />
-
-                        <Typography variant={'body2'}>{props.data.description}</Typography>
-                        <TabContext value={value}>
-                          <TabList variant='fullWidth' onChange={handleChangeTab2} aria-label='card navigation example'>
-                            <Tab value='1' label='Pekerjaan Harian' />
-                            <Tab value='2' label='Grafik' />
-                          </TabList>
-                          <TabPanel value='2' sx={{ p: 0, height: 170 }}>
-                            <Typography mt={4} textAlign={'center'} variant={'body1'}>
-                              {/* Target Realisasi per {judulGrafik} */}
-                              Target Realisasi per
-                            </Typography>
-                            <Grid item md={12} xs={12}>
-                              {/* <Bar
-                                datasetIdKey='id'
-                                data={dataLine}
-                                width={500}
-                                height={140}
-                                options={{
-                                  plugins: {
-                                    title: {
-                                      display: true,
-                                      text: ''
-                                    }
-                                  },
-                                  responsive: true,
-                                  scales: {
-                                    x: {
-                                      stacked: true
-                                    },
-                                    y: {
-                                      stacked: true
-                                    }
-                                  }
-                                }}
-                              /> */}
-                              {/* <Line
-                            datasetIdKey='id'
-                            data={dataLine}
-                            width={500}
-                            height={140}
-                            options={{
-                              scaleOverride: true,
-                              scaleSteps: 114,
-                              scaleStepWidth: 25,
-                              scaleStartValue: 0,
-                              responsive: true,
-                              scales: {
-                                x: {
-                                  ticks: {
-                                    display: true
-                                  }
-                                }
-                              },
-                              plugins: {
-                                legend: {
-                                  position: 'top'
-                                },
-                                title: {
-                                  display: true,
-                                  text: ` `
-                                }
-                              }
-                            }}
-                          /> */}
-                            </Grid>
-                          </TabPanel>
-                          <TabPanel value='1' sx={{ p: 0, height: 170 }}>
-                            <Grid container spacing={4}>
-                              <Grid xs={12} mt={5} item height={200} overflow={'auto'}>
-                                {dataPHreal.length > 0 ? (
-                                  dataPHreal.map(ph => (
-                                    <>
-                                      {' '}
-                                      <List key={ph.id}>
-                                        <ListItem
-                                          secondaryAction={
-                                            <IconButton
-                                              onClick={() => {
-                                                Swal.fire({
-                                                  title: 'Hapus Kegiatan Harian?',
-                                                  text: '',
-                                                  icon: 'warning',
-                                                  showCancelButton: true,
-                                                  confirmButtonColor: '#3085d6',
-                                                  cancelButtonColor: '#d33',
-                                                  confirmButtonText: 'Yes'
-                                                }).then(result => {
-                                                  if (result.isConfirmed) {
-                                                    handleDeleteKegiatanHarian(ph.id)
-                                                  }
-                                                })
-                                              }}
-                                              edge='end'
-                                              aria-label='delete'
-                                            >
-                                              <DeleteIcon />
-                                            </IconButton>
-                                          }
-                                        >
-                                          <ListItemAvatar>
-                                            <Avatar>
-                                              <FolderIcon />
-                                            </Avatar>
-                                          </ListItemAvatar>
-                                          <ListItemText primary={ph.namaKegiatan} />
-                                        </ListItem>
-                                      </List>
-                                    </>
-                                  ))
-                                ) : (
-                                  <>
-                                    <Typography>Belum Ada Kegiatan Harian, Silahkan Input Dibawah</Typography>
-                                  </>
-                                )}
-                              </Grid>
-                              <Grid mt={2} item xs={12}>
-                                <Grid container spacing={4}>
-                                  <Grid item xs={7}>
-                                    <TextField
-                                      value={valuesHarian.namaKegiatan}
-                                      size='small'
-                                      fullWidth
-                                      multiline
-                                      type={'string'}
-                                      onChange={handleChangeHarian('namaKegiatan')}
-                                      placeholder='Nama Kegiatan'
-                                    />
-                                  </Grid>
-                                  <Grid item xs={4}>
-                                    {' '}
-                                    <TextField
-                                      value={valuesHarian.durasi}
-                                      size='small'
-                                      fullWidth
-                                      multiline
-                                      type={'number'}
-                                      onChange={handleChangeHarian('durasi')}
-                                      placeholder='Durasi Pengerjaan '
-                                    />
-                                  </Grid>
-                                  <Grid item mt={5} xs={1}>
-                                    {' '}
-                                    <InputAdornment position='end'>
-                                      <IconButton
-                                        onClick={handleKegiatanHarian}
-                                        size='medium'
-                                        type='submit'
-                                        aria-label='toggle password visibility'
-                                      >
-                                        <SendIcon></SendIcon>
-                                      </IconButton>
-                                    </InputAdornment>
-                                  </Grid>
-                                </Grid>
-                              </Grid>
-                            </Grid>
-                          </TabPanel>
-                        </TabContext>
-                      </Grid>
-                    </Grid>
-                  </Card>
-                </Grid>
-                <Grid item md={4}>
-                  <form onSubmit={e => e.preventDefault()}>
-                    <Card>
-                      <Grid container p={4}>
-                        <Grid item xs={12} md={12}>
-                          <Typography color={'primary.dark'} variant={'h5'}>
-                            Progres Sub Kegiatan
-                          </Typography>
-                        </Grid>
-                        <Grid item xs={12} md={12} mt={2} display={'flex'} alignItems={'start'}>
-                          <Typography variant={'body2'}>Unit Target: {props.data.unitTarget}</Typography>
-                        </Grid>
-                        <Grid item xs={12} md={12} mt={3}>
-                          <TextField
-                            value={values.subKegRealisasi}
-                            size='small'
-                            fullWidth
-                            type={'number'}
-                            label='Realisasi'
-                            onChange={handleChange('realisasi')}
-                            placeholder='Realisasi'
-                          />
-                        </Grid>
-
-                        <Grid item xs={12} md={12} mt={2}>
-                          <TextField
-                            value={values.subKegTarget}
-                            size='small'
-                            fullWidth
-                            multiline
-                            label='Target'
-                            type={'number'}
-                            onChange={handleChange('target')}
-                            placeholder='Target'
-                          />
-                        </Grid>
-                      </Grid>
-                    </Card>
-                    <Card sx={{ marginTop: 4 }}>
-                      <Grid container p={4} height={200} spacing={2} overflow={'auto'}>
-                        <Grid item xs={1} md={1} display={'inline'}>
-                          <AccountIcon></AccountIcon>
-                        </Grid>
-                        <Grid item xs={11} md={11} display={'inline'}>
-                          <Typography color={'primary.dark'} variant={'body1'}>
-                            Note
-                          </Typography>
-                        </Grid>
-                        <Grid mt={1} display={'flex'} justifyContent={'center'} xs={12} item md={12}>
-                          <FormControl fullWidth sx={{ overflowY: 'auto' }}>
-                            <OutlinedInput
-                              name='subKegNotes'
-                              value={values.subKegNotes}
-                              onChange={handleChange('subKegNotes')}
-                              minRows={3}
-                              multiline
-                              endAdornment={
-                                <InputAdornment position='end'>
-                                  <IconButton
-                                    type='submit'
-                                    onClick={handleSimpan}
-                                    edge='end'
-                                    aria-label='toggle password visibility'
-                                  >
-                                    <SendIcon></SendIcon>
-                                  </IconButton>
-                                </InputAdornment>
-                              }
-                            />
-                          </FormControl>
-                        </Grid>
-                      </Grid>
-                    </Card>
-                    <Grid container spacing={3}>
-                      <Grid justifyContent={'center'} mt={2} item xs={12} md={12}>
-                        <Button type='submit' variant={'contained'} onClick={handleSimpan} fullWidth>
-                          Simpan
-                        </Button>
-                      </Grid>
-                    </Grid>
-                  </form>
-                </Grid>
-              </Grid>
-              {session.status === 'authenticated' &&
-                (session.data.role == 'teamleader' || session.data.role == 'admin') && (
-                  <TablePerusahaanTaskDetails
-                    data={props.dataPerusahaan}
-                    dataProjectFungsi={props.data.project.fungsi}
-                    dataId={values.id}
-                    dataMitra={props.dataMitra}
-                    dataPML={props.dataPML}
-                    dataTaskSample={values.subKegJenisSample}
-                    dataJenisKeg={values.subKegJenis}
-                    dataUpdateTarget={handleTaskUpdate}
-                    dataMitraLimitHonor={props.dataMitraLimit}
-                    dataTemplate={props.dataT}
-                    dataTemplateKolom={props.dataTK}
-                    dataSubKegId={values.subKegId}
-                  ></TablePerusahaanTaskDetails>
-                  // <Button type='submit' variant={'contained'} onClick={handleSimpan} fullWidth>
-                  //   Simpan
-                  // </Button>
-                )}
-            </Grid>
-            {}
-          </Grid>
-        </TabPanel>
         <TabPanel value='3' sx={{ p: 0, height: 350 }}>
           <Grid container></Grid>
         </TabPanel>
@@ -1156,6 +1013,7 @@ const TaskManageEditViews = props => {
                       label='Dokumen/Responden'
                       onChange={handleDokumenResponden}
                       value={values.subKegUnitTarget}
+                      disabled={values.subKegImportStatus == 1 ? true : false}
                     >
                       <MenuItem key={''} value={''}>
                         {''}
@@ -1173,6 +1031,7 @@ const TaskManageEditViews = props => {
                   <FormControl fullWidth>
                     <InputLabel id='demo-simple-select-helper-label'>Jenis Sample</InputLabel>
                     <Select
+                      disabled={values.subKegImportStatus == 1 ? true : false}
                       fullWidth
                       labelId='demo-simple-select-helper-label'
                       id='demo-simple-select-helper'
@@ -1197,6 +1056,7 @@ const TaskManageEditViews = props => {
                       <>
                         <InputLabel id='demo-simple-select-helper-label'>Level Pencatatan</InputLabel>
                         <Select
+                          disabled={values.subKegImportStatus == 1 ? true : false}
                           fullWidth
                           labelId='demo-simple-select-helper-label'
                           onChange={handleTemplateChange}
@@ -1224,6 +1084,7 @@ const TaskManageEditViews = props => {
                           labelId='demo-simple-select-helper-label'
                           onChange={handleTemplateChange}
                           value={values.templateTable}
+                          disabled={values.subKegImportStatus == 1 ? 'true' : 'false'}
                           id='demo-simple-select-helper'
                           label='Level Pencatatan'
                           name='Level Pencatatan'
@@ -1249,6 +1110,7 @@ const TaskManageEditViews = props => {
                         fullWidth
                         labelId='demo-simple-select-helper-label'
                         id='demo-simple-select-helper'
+                        disabled={values.subKegImportStatus == 1 ? 'true' : 'false'}
                         label='Honor PML/Dokumen'
                         onChange={handleChange('subKegHonorPmlPerPerusahaan')}
                         value={values.subKegHonorPmlPerPerusahaan}
@@ -1259,6 +1121,7 @@ const TaskManageEditViews = props => {
                         fullWidth
                         labelId='demo-simple-select-helper-label'
                         id='demo-simple-select-helper'
+                        disabled={values.subKegImportStatus == 1 ? 'true' : 'false'}
                         label='Honor PCL/Dokumen'
                         onChange={handleChange('subKegHonorPclPerPerusahaan')}
                         value={values.subKegHonorPclPerPerusahaan}

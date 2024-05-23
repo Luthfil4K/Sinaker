@@ -447,7 +447,10 @@ const TableMitra = props => {
               width: '100%'
             }}
             columnVisibilityModel={{
-              action: session.status === 'authenticated' && session.data.uid === 1099999 ? true : false
+              action:
+                session.status === 'authenticated' && (session.data.uid === 1099999 || session.data.role == 'admin')
+                  ? true
+                  : false
             }}
             slots={{
               toolbar: GridToolbar

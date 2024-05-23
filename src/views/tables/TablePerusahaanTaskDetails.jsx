@@ -74,8 +74,10 @@ const TableGroupPerusahaan = props => {
   const fungsi = props.dataProjectFungsi
   const jenisKeg = props.dataJenisKeg
   const jenisSample = props.dataTaskSample
+  const [pmlAutoComplete, setPmlAutoComplete] = useState({})
+  const [pclAutoComplete, setPclAutoComplete] = useState({})
 
-  const templateTable = participants.length > 0 ? participants[1].templateTable : 5
+  const templateTable = participants.length > 0 ? participants[0].templateTable : 5
   const [kolomLP, setKolomLP] = useState({
     kol1: 'nbs',
     kol2: 'nks'
@@ -204,8 +206,19 @@ const TableGroupPerusahaan = props => {
     }).then(result => {
       if (result.isConfirmed) {
         axios
-          .delete(`/perusahaan/${id}`)
-          .then(setRows(rows.filter(row => row.id !== id)))
+          .delete(`/task/task-tarel-progress/${id}`)
+          .then(res => {
+            console.log(res.message)
+            Swal.fire({
+              position: 'bottom-end',
+              icon: 'success',
+              title: 'Berhasil Diahaus',
+              showConfirmButton: false,
+              timer: 1000,
+              width: 300
+            })
+            setRows(rows.filter(row => row.id !== id))
+          })
 
           .catch(err => {
             Swal.fire('Error', 'Something went wrong. Please try again.', 'error')
@@ -230,6 +243,15 @@ const TableGroupPerusahaan = props => {
       setRows(rows.filter(row => row.id !== id))
     }
   }
+
+  useEffect(() => {
+    console.log('ini pcl autocomplete')
+    console.log(pclAutoComplete)
+    console.log('ini pcl autocomplete')
+    console.log(pclAutoComplete)
+    console.log('ini pcl autocomplete')
+    console.log(pclAutoComplete)
+  }, [pclAutoComplete])
 
   // const processRowUpdate = newRow => {
   //   const updatedRow = { ...newRow, isNew: false }
@@ -296,17 +318,6 @@ const TableGroupPerusahaan = props => {
       kol1: updatedRow.kol1 ? updatedRow.kol1 : 0,
       kol2: updatedRow.kol2 ? updatedRow.kol2 : 0
     }
-
-    console.log('ini data')
-    console.log('ini data')
-    console.log('ini data')
-    console.log('ini data')
-    console.log('ini data')
-    console.log('ini data')
-    console.log('ini data')
-    console.log('ini data')
-    console.log('ini data')
-    console.log(data)
 
     if (updatedRow.id < 100000) {
       if (data.realisasi <= data.target) {
@@ -618,26 +629,25 @@ const TableGroupPerusahaan = props => {
       ),
       type: 'singleSelect',
       valueOptions: optionPCL.sort((a, b) => a.label.localeCompare(b.label)),
-
       // renderEditCell: params => {
       //   return (
-      //     // <Autocomplete
-      //     //   // options={optionPCL}
-      //     //   autoComplete
-      //     //   options={optionPCL.sort((a, b) => a.label.localeCompare(b.label))}
-      //     //   sx={{ width: 3003 }}
-      //     //   renderInput={params => <TextField {...params} sx={{ width: 450 }} />}
-      //     // />
+      //
       //     <Autocomplete
+      //       value={params.row.pclId != 0 ? optionPCL.find(a => a.value === params.row.pclId).label : 0}
       //       disablePortal
       //       id='combo-box-demo'
       //       // options={optionPCL}
+      //       onChange={(event, newValue) => {
+      //         setPclAutoComplete({ ...pclAutoComplete, rowId: params.row.id, namaPcl: newValue })
+      //       }}
+      //       // setValues({ ...values, target: trgt, realisasi })
       //       options={optionPCL.sort((a, b) => a.label.localeCompare(b.label))}
       //       sx={{ width: 300 }}
       //       renderInput={params => <TextField {...params} sx={500} />}
       //     />
       //   )
       // },
+
       width: 180,
       editable: true
     },
@@ -686,26 +696,27 @@ const TableGroupPerusahaan = props => {
       //     />
       //   )
       // },
-      //   renderEditCell: params => {
-      //     return (
-      //       // <Autocomplete
-      //       //   // options={optionPCL}
-      //       //   autoComplete
-      //       //   options={optionPCL.sort((a, b) => a.label.localeCompare(b.label))}
-      //       //   sx={{ width: 3003 }}
-      //       //   renderInput={params => <TextField {...params} sx={{ width: 450 }} />}
-      //       // />
-      //       <Autocomplete
-      //         value={'asd'}
-      //         disablePortal
-      //         id='combo-box-demo'
-      //         // options={optionPCL}
-      //         options={optionPCL.sort((a, b) => a.label.localeCompare(b.label))}
-      //         sx={{ width: 300 }}
-      //         renderInput={params => <TextField {...params} sx={500} />}
-      //       />
-      //     )
-      //   }
+      // renderEditCell: params => {
+      //   return (
+      //     // <Autocomplete
+      //     //   // options={optionPCL}
+      //     //   autoComplete
+      //     //   options={optionPCL.sort((a, b) => a.label.localeCompare(b.label))}
+      //     //   sx={{ width: 3003 }}
+      //     //   renderInput={params => <TextField {...params} sx={{ width: 450 }} />}
+      //     // />
+      //     <Autocomplete
+      //       value={params.row.pcl}
+      //       disablePortal
+      //       id='combo-box-demo'
+      //       // options={optionPCL}
+
+      //       options={optionPCL.sort((a, b) => a.label.localeCompare(b.label))}
+      //       sx={{ width: 300 }}
+      //       renderInput={params => <TextField {...params} sx={500} />}
+      //     />
+      //   )
+      // }
     },
     {
       field: 'tanggalDob',

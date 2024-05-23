@@ -226,7 +226,7 @@ const PeopleDetailGajiViews = props => {
                         <Typography display={'inline'} variant={'body2'}>
                           <Link
                             onClick={async e => {
-                              router.push(`/task-detail/${subKeg.taskId}`)
+                              router.push(`/task-manage-edit/${subKeg.taskId}`)
                             }}
                             sx={{ color: '#777B82', textDecoration: 'underline', cursor: 'pointer' }}
                           >

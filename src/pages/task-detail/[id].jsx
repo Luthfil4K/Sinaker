@@ -19,6 +19,8 @@ const TaskDetail = ({ data }) => {
         dataPML={task.pegawai}
         dataPH={task.pekerjaanHarian}
         dataMitraLimit={task.mitraLimitHonor}
+        dataT={task.template}
+        dataTK={task.templateKolom}
       ></TaskDetailViews>
     </>
   )
@@ -111,7 +113,8 @@ export async function getServerSideProps(context) {
   const mitraLimitHonor = []
 
   for (const id of arrayOfIds) {
-    const result = await prisma.taskPerusahaanProduksi.findMany({
+    // const result = await prisma.taskPerusahaanProduksi.findMany({
+    const result = await prisma.data_target_realisasi.findMany({
       where: {
         OR: [{ pmlId: parseInt(id) }, { pclId: parseInt(id) }]
       },
@@ -175,13 +178,18 @@ export async function getServerSideProps(context) {
   //   }
   // })
 
+  const template = await prisma.template_table.findMany({})
+  const templateKolom = await prisma.template_table_kolom.findMany({})
+
   const data = {
     task,
     perusahaanTask,
     mitraTask,
     pegawai,
     pekerjaanHarian,
-    mitraLimitHonor
+    mitraLimitHonor,
+    templateKolom,
+    template
   }
 
   return {

@@ -125,7 +125,7 @@ const TableProjectDetailTask = props => {
       renderCell: params => (
         <Link
           onClick={async e => {
-            router.push(`/task-detail/${params.row.id}`)
+            router.push(`/task-manage-edit/${params.row.id}`)
           }}
           sx={{ cursor: 'pointer' }}
         >

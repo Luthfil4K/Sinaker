@@ -417,7 +417,7 @@ const CardProjectDetail = props => {
             </TabPanel>
             <Divider sx={{ marginTop: 3.5 }} />
             {/* {session.status === 'authenticated' && (arrId.includes(session.data.uid) || session.data.uid === 1099999) && ( */}
-            {session.status === 'authenticated' && session.data.role == 'teamleader' && (
+            {session.status === 'authenticated' && (session.data.role == 'teamleader' || session.data.role == 'admin') && (
               <>
                 <Grid container sx={{ mt: 3 }} spacing={4}>
                   <Grid item>

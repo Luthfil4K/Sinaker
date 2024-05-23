@@ -74,6 +74,7 @@ const TaskDetailViews = props => {
     notes: props.data.notes,
     notesSubKeg: props.data.notes,
     jenisKeg: props.data.jenisKeg,
+    subKegJenis: props.data.jenisKeg,
     jenisSample: props.data.jenisSample
   })
 
@@ -603,7 +604,7 @@ const TaskDetailViews = props => {
         {session.status === 'authenticated' &&
           (session.data.role == 'teamleader' || session.data.role == 'admin') &&
           (values.jenisKeg === 65 || values.jenisKeg === 67) && (
-            <TableTaskDetailsHands
+            <TablePerusahaanTaskDetails
               data={participants}
               dataProjectFungsi={props.data.project.fungsi}
               dataId={values.id}
@@ -613,7 +614,10 @@ const TaskDetailViews = props => {
               dataJenisKeg={values.jenisKeg}
               dataUpdateTarget={handleTaskUpdate}
               dataMitraLimitHonor={props.dataMitraLimit}
-            ></TableTaskDetailsHands>
+              dataTemplate={props.dataT}
+              dataTemplateKolom={props.dataTK}
+              dataSubKegId={values.id}
+            ></TablePerusahaanTaskDetails>
             // <Button type='submit' variant={'contained'} onClick={handleSimpan} fullWidth>
             //   Simpan
             // </Button>

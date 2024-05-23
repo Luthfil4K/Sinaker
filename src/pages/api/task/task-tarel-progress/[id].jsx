@@ -65,6 +65,13 @@ export default async function handler(req, res) {
       return res.status(400).json({ success: false })
     }
   } else if (method === 'DELETE') {
+    console.log('masukKe delet')
+    console.log(id)
+    console.log('ini id')
+    console.log(id)
+    console.log('ini id')
+    console.log(id)
+    console.log('ini id')
     try {
       const dataTarelDel = await prisma.data_target_realisasi.delete({
         where: {
@@ -72,8 +79,9 @@ export default async function handler(req, res) {
         }
       })
 
-      return res.status(200).json({ success: true, data: dataTarelDel, message: 'row deleted' })
+      return res.status(200).json({ success: true, message: 'row deleted' })
     } catch (error) {
+      console.log(error)
       return res.status(400).json({ success: false, message: 'row not found, error' })
     }
   }
