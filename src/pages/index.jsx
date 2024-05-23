@@ -713,7 +713,7 @@ const Dashboard = ({ dataTask }) => {
       renderCell: params => (
         <Link
           onClick={async e => {
-            router.push(`/task-detail/${params.row.taskId}`)
+            router.push(`/task-manage-edit/${params.row.taskId}`)
           }}
           sx={{ cursor: 'pointer' }}
         >
@@ -1006,7 +1006,7 @@ const Dashboard = ({ dataTask }) => {
           }
           sx={{ fontWeight: 500, fontSize: '0.875rem !important' }}
         >
-          {params.row.status2}
+          {Math.round(params.row.status2)}
         </Typography>
       ),
       type: 'string',
@@ -1038,7 +1038,11 @@ const Dashboard = ({ dataTask }) => {
           }
           sx={{ fontWeight: 500, fontSize: '0.875rem !important' }}
         >
-          {params.row.durationOff} Hari
+          {params.row.durationOff === 'Kegiatan telah selesai'
+            ? params.row.durationOff === 'Kegiatan belum dimulai'
+              ? params.row.durationOff
+              : params.row.durationOff
+            : `${Math.round(params.row.durationOff)} Hari`}
         </Typography>
       ),
       type: 'string',
@@ -1070,7 +1074,11 @@ const Dashboard = ({ dataTask }) => {
           sx={{ fontWeight: 500, fontSize: '0.875rem !important' }}
         >
           {' '}
-          {params.row.akumulasiTargetHariIni}
+          {params.row.akumulasiTargetHariIni === 'Kegiatan telah selesai'
+            ? params.row.akumulasiTargetHariIni === 'Kegiatan belum dimulai'
+              ? params.row.akumulasiTargetHariIni
+              : params.row.akumulasiTargetHariIni
+            : Math.round(params.row.akumulasiTargetHariIni)}
         </Typography>
       ),
       type: 'string',
@@ -1092,10 +1100,10 @@ const Dashboard = ({ dataTask }) => {
     const hariBerjalan =
       tanggalSekarang >= startDateObj
         ? tanggalSekarang <= duedateObj
-          ? Math.round(Math.abs(tanggalSekarang.getTime() - startDateObj.getTime()) / (1000 * 3600 * 24)) + 1
+          ? Math.abs(tanggalSekarang.getTime() - startDateObj.getTime()) / (1000 * 3600 * 24) + 1
           : 'Kegiatan telah selesai'
         : 'Kegiatan belum dimulai'
-    const targetHarian = Math.round(task.target / differenceInDays)
+    const targetHarian = task.target / differenceInDays
     const akumulasiTargetHariIni =
       tanggalSekarang >= startDateObj
         ? tanggalSekarang <= duedateObj
@@ -1105,7 +1113,7 @@ const Dashboard = ({ dataTask }) => {
     const yellowAkumulasiTargetHariIni =
       tanggalSekarang >= startDateObj
         ? tanggalSekarang <= duedateObj
-          ? Math.round(targetHarian * hariBerjalan * 0.8)
+          ? targetHarian * hariBerjalan * 0.8
           : 'Kegiatan telah selesai'
         : 'Kegiatan belum dimulai'
 

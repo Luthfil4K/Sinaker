@@ -421,11 +421,19 @@ const CardProjectDetail = props => {
               <>
                 <Grid container sx={{ mt: 3 }} spacing={4}>
                   <Grid item>
-                    <Link onClick={e => router.push(`/task-manage/${project.id}`)}>
+                    {/* <Link onClick={e => router.push(`/task-manage/${project.id}`)}>
                       <Button component='div' variant='contained'>
                         Pengaturan Sub Kegiatan
                       </Button>
-                    </Link>
+                    </Link> */}
+                    <Button
+                      onClick={e => {
+                        router.push(`/task-manage-add/${project.id}`)
+                      }}
+                      variant={'contained'}
+                    >
+                      Tambah Sub Kegiatan
+                    </Button>
                   </Grid>
                   <Grid item>
                     {/* <Button component='div' variant='contained'>
