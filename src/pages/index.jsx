@@ -1138,9 +1138,84 @@ const Dashboard = ({ dataTask }) => {
       yellowAkumulasiTargetHariIni
     }
   })
+
+  const [valueDropDown, setValueDropDown] = useState({
+    tahun: new Date().getFullYear(),
+    bulan: new Date().getMonth() + 1,
+    fungsi: 10
+  })
+
+  const handleDropDownTahun = params => {
+    setValueDropDown(valueDropDown => ({
+      ...valueDropDown,
+      tahun: params.target.value
+    }))
+  }
+  const handleDropDownBulan = params => {
+    setValueDropDown(valueDropDown => ({
+      ...valueDropDown,
+      bulan: params.target.value
+    }))
+  }
+
+  useEffect(() => {
+    // Melakukan filtering pada task berdasarkan bulan
+    valueDropDown.bulan == 13
+      ? // const filteredTasks =
+        // task.filter(item => item.bulan === valueDropDown.bulan)
+
+        // Mengatur ulang state task dengan hasil filtering
+        setTask(JSON.parse(dataTask))
+      : setTask(JSON.parse(dataTask).filter(item => item.month + 1 === valueDropDown.bulan))
+    console.log(task)
+    console.log(valueDropDown.bulan)
+  }, [valueDropDown])
+
   return (
     <>
       <Grid item md={12}>
+        <Grid item md={12}>
+          <FormControl sx={{ m: 1, minWidth: 120 }}>
+            <InputLabel id='demo-simple-select-helper-label'>Tahun</InputLabel>
+            <Select
+              labelId='demo-simple-select-helper-label'
+              id='demo-simple-select-helper'
+              value={valueDropDown.tahun}
+              label='Tahun'
+              size={'small'}
+              onChange={handleDropDownTahun}
+            >
+              <MenuItem value={2023}>2023</MenuItem>
+              <MenuItem value={2024}>2024</MenuItem>
+              <MenuItem value={2025}>2025</MenuItem>
+            </Select>
+          </FormControl>
+          <FormControl sx={{ m: 1, minWidth: 120 }}>
+            <InputLabel id='demo-simple-select-helper-label'>Bulan</InputLabel>
+            <Select
+              labelId='demo-simple-select-helper-label'
+              id='demo-simple-select-helper'
+              value={valueDropDown.bulan}
+              label='Bulan'
+              size={'small'}
+              onChange={handleDropDownBulan}
+            >
+              <MenuItem value={13}>--Semua--</MenuItem>
+              <MenuItem value={1}>Januari</MenuItem>
+              <MenuItem value={2}>Februari</MenuItem>
+              <MenuItem value={3}>Maret</MenuItem>
+              <MenuItem value={4}>April</MenuItem>
+              <MenuItem value={5}>Mei</MenuItem>
+              <MenuItem value={6}>Juni</MenuItem>
+              <MenuItem value={7}>Juli</MenuItem>
+              <MenuItem value={8}>Agustus</MenuItem>
+              <MenuItem value={9}>September</MenuItem>
+              <MenuItem value={10}>Oktober</MenuItem>
+              <MenuItem value={11}>November</MenuItem>
+              <MenuItem value={12}>Desember</MenuItem>
+            </Select>
+          </FormControl>
+        </Grid>
         <Card height={300}>
           <DataGrid
             height={300}
