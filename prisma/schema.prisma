@@ -331,6 +331,7 @@ model meet {
   description               String                      @db.LongText
   createdBy                 User                        @relation(fields: [createdById], references: [id], onDelete: Cascade, onUpdate: Cascade)
   createdById               Int
+  statusSendEmail           Int
   user_meet                 user_meet[]
   notulensi_meet            notulensi_meet[]
   status                    String                      @db.VarChar(128)
