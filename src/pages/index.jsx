@@ -1166,7 +1166,13 @@ const Dashboard = ({ dataTask }) => {
 
         // Mengatur ulang state task dengan hasil filtering
         setTask(JSON.parse(dataTask))
-      : setTask(JSON.parse(dataTask).filter(item => item.month + 1 === valueDropDown.bulan))
+      : setTask(
+          JSON.parse(dataTask).filter(
+            item =>
+              new Date(item.duedate).getMonth() + 1 === valueDropDown.bulan ||
+              new Date(item.startDate).getMonth() + 1 === valueDropDown.bulan
+          )
+        )
     console.log(task)
     console.log(valueDropDown.bulan)
   }, [valueDropDown])
@@ -1185,9 +1191,9 @@ const Dashboard = ({ dataTask }) => {
               size={'small'}
               onChange={handleDropDownTahun}
             >
-              <MenuItem value={2023}>2023</MenuItem>
               <MenuItem value={2024}>2024</MenuItem>
               <MenuItem value={2025}>2025</MenuItem>
+              <MenuItem value={2026}>2026</MenuItem>
             </Select>
           </FormControl>
           <FormControl sx={{ m: 1, minWidth: 120 }}>
