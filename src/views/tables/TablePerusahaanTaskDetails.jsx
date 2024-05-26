@@ -120,8 +120,8 @@ const TableGroupPerusahaan = props => {
   }
 
   const totalGajiMitra = hitungTotalGaji(props.dataMitraLimitHonor)
-  // console.log(totalGajiMitra)
-  // console.log(props.dataMitraLimitHonor)
+  console.log(totalGajiMitra)
+  console.log(props.dataMitraLimitHonor)
 
   const [organikMitra, setOrganikMitra] = useState({
     value: '',

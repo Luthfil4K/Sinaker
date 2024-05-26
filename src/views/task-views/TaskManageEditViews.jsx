@@ -76,25 +76,15 @@ Chart.register(CategoryScale)
 import LinearProgress from '@mui/material/LinearProgress'
 
 const TaskManageEditViews = props => {
-  const dataTemplatePerusahaan = props.dataT.filter(TP => TP.jenisSample === 1)
-
-  // data={props.dataPerusahaan}
-  // dataProjectFungsi={props.data.project.fungsi}
-  // dataId={values.id}
-  // dataMitra={props.dataMitra}
-  // dataPML={props.dataPML}
-  // dataTaskSample={values.subKegJenisSample}
-  // dataJenisKeg={values.subKegJenis}
-  // dataUpdateTarget={handleTaskUpdate}
-  // dataMitraLimitHonor={props.dataMitraLimit}
-
   const session = useSession()
   const [kolomLP, setKolomLP] = useState({
     kol1: 'nbs',
     kol2: 'nks'
   })
 
+  const dataTemplatePerusahaan = props.dataT.filter(TP => TP.jenisSample === 1)
   const dataTemplateNonPerusahaan = props.dataT.filter(TP => TP.jenisSample === 0)
+
   const camelCase = str => {
     return str
       .toLowerCase()
@@ -320,26 +310,10 @@ const TaskManageEditViews = props => {
     },
     {
       field: camelCase(kolomLP.kol1),
-      // values.templateTable == 5 //Produksi or Distribusi
-      //   ? 'alamat'
-      //   : values.templateTable == 4 || values.templateTable == 3 //Sosial or IPDS dokumen
-      //   ? 'nbs'
-      //   : values.templateTable == 7 // IPDS Responden
-      //   ? 'idSbr'
-      //   : values.templateTable == 6 //Nerwilis responden
-      //   ? 'nus'
-      //   : '',
+
       renderHeader: () => (
         <Typography sx={{ fontWeight: 900, fontSize: '0.875rem !important', textAlign: 'center' }}>
-          {/* {values.templateTable == 5 //Produksi or Distribusi
-            ? 'Alamat'
-            : values.templateTable == 4 || values.templateTable == 3 //Sosial or IPDS dokumen
-            ? 'NBS'
-            : values.templateTable == 7 // IPDS Responden
-            ? 'ID SBR'
-            : values.templateTable == 6 //Nerwilis responden
-            ? 'NUS'
-            : ''} */}{' '}
+          {' '}
           {kolomLP.kol1}
         </Typography>
       ),
@@ -347,27 +321,10 @@ const TaskManageEditViews = props => {
       flex: 1
     },
     {
-      field: kolomLP.kol2,
-      // values.templateTable == 5 || values.templateTable == 6 //NerwilisResponden or IPDS Responden
-      //   ? 'namaPerusahaan'
-      //   : values.templateTable == 4 // Nerwilis Dok
-      //   ? 'idSls'
-      //   : values.templateTable == 3 //Sosial
-      //   ? 'nks'
-      //   : values.templateTable == 7 //IPDS Dok
-      //   ? 'namaPerusahaan'
-      //   : '',
+      field: camelCase(kolomLP.kol2),
+
       renderHeader: () => (
         <Typography sx={{ fontWeight: 900, fontSize: '0.875rem !important', textAlign: 'center' }}>
-          {/* {values.templateTable == 5 || values.templateTable == 6 //Nerwilis Responden or IPDS Responden
-            ? 'Nama Perusahaan'
-            : values.templateTable == 4 // Nerwilis Dok
-            ? 'ID SLS'
-            : values.templateTable == 3 //Sosial
-            ? 'NKS'
-            : values.templateTable == 7 //IPDS Dok
-            ? 'Nama Perusahaan'
-            : ''} */}
           {kolomLP.kol2}
         </Typography>
       ),
@@ -499,7 +456,8 @@ const TaskManageEditViews = props => {
           confirmButtonText: 'Ok'
         })
 
-        router.push(`/task-manage/${values.id}`)
+        // router.push(`/task-manage/${values.id}`)
+        router.reload()
       })
       .catch(err => {
         Swal.fire({
@@ -674,12 +632,101 @@ const TaskManageEditViews = props => {
     }
   }
 
+  // forchart
+
+  const [duration, setDuration] = useState(
+    props.dataPerusahaan.map(task => {
+      const duedateObj = new Date(values.subKegDl)
+      const startDateObj = new Date(values.subKegStart)
+      const tanggalSekarang = new Date()
+
+      const differenceInMilliseconds = duedateObj.getTime() - startDateObj.getTime()
+      const differenceInDays = differenceInMilliseconds / (1000 * 3600 * 24) + 1
+
+      const hariBerjalan =
+        tanggalSekarang >= startDateObj
+          ? tanggalSekarang <= duedateObj
+            ? Math.abs(tanggalSekarang.getTime() - startDateObj.getTime()) / (1000 * 3600 * 24) + 1
+            : 'Kegiatan telah selesai'
+          : 'Kegiatan belum dimulai'
+      const targetHarian = task.target / differenceInDays
+      const akumulasiTargetHariIni =
+        tanggalSekarang >= startDateObj
+          ? tanggalSekarang <= duedateObj
+            ? Number(targetHarian * hariBerjalan)
+            : 'Kegiatan telah selesai'
+          : 'Kegiatan belum dimulai'
+      const yellowAkumulasiTargetHariIni =
+        tanggalSekarang >= startDateObj
+          ? tanggalSekarang <= duedateObj
+            ? targetHarian * hariBerjalan * 0.8
+            : 'Kegiatan telah selesai'
+          : 'Kegiatan belum dimulai'
+      return {
+        durasi: differenceInDays,
+        targetHarian: targetHarian,
+        durationOff: hariBerjalan,
+        akumulasiTargetHariIni: Math.round(akumulasiTargetHariIni),
+        yellowAkumulasiTargetHariIni
+      }
+    })
+  )
+
+  console.log('duration')
+  console.log('duration')
+  console.log('duration')
+  console.log(duration)
+  console.log(duration)
+  console.log(duration)
+  const [lineTarel, setLineTaRel] = useState({
+    target: props.dataPerusahaan.map(pr => pr.target),
+    realisasi: props.dataPerusahaan.map(pr => pr.realisasi),
+    akumulasiTargetHarian: duration.map(pr => pr.akumulasiTargetHariIni),
+    label: props.dataPerusahaan.map(pr => pr.kol1 + '/' + pr.kol2)
+  })
+
+  const dataLine = {
+    labels: lineTarel.label,
+    datasets: [
+      {
+        label: 'Target',
+        data: lineTarel.target,
+        backgroundColor: ['rgba(255, 99, 132, 1)']
+      },
+      {
+        label: 'Realisasi',
+        data: lineTarel.realisasi,
+        backgroundColor: ['rgba(25, 19, 132, 1)']
+      },
+      {
+        label: 'Akumulasi Target Sampai Hari Ini',
+        data: lineTarel.akumulasiTargetHarian,
+        backgroundColor: ['rgba(11, 11, 11, 1)']
+      }
+    ]
+  }
+
+  const [judulGrafik, setJudulGrafik] = useState()
+
+  useEffect(() => {
+    setJudulGrafik(
+      props.dataTK.find(
+        head => head.templateTableId === (props.dataPerusahaan.length > 0 ? props.dataPerusahaan[0].templateTable : 1)
+      )
+    )
+    console.log(judulGrafik)
+    console.log(judulGrafik)
+    console.log('judulGrafik')
+    console.log('judulGrafik')
+    console.log('judulGrafik')
+  }, [props.dataPerusahaan])
+
   return (
     <>
       <Grid container spacing={4}>
         <Grid item xs={6}>
           <Typography variant='h6' sx={{ marginBottom: 3.5 }}>
-            nama rapat
+            Detail Sub Kegiatan
           </Typography>
         </Grid>
         <Grid item xs={6} flexDirection={'column'} display={'flex'} alignItems={'end'}></Grid>
@@ -742,8 +789,39 @@ const TaskManageEditViews = props => {
 
                         <Grid mt={2} item xs={12} md={12} height={335} overflow={'none'}>
                           <Divider sx={{ marginTop: 3.5 }} />
-
+                          <Typography mt={4} textAlign={'center'} variant={'body1'}>
+                            Target Realisasi per
+                          </Typography>
                           <Typography variant={'body2'}>{props.data.description}</Typography>
+                          <Line
+                            datasetIdKey='id'
+                            data={dataLine}
+                            width={500}
+                            height={140}
+                            options={{
+                              scaleOverride: true,
+                              scaleSteps: 114,
+                              scaleStepWidth: 25,
+                              scaleStartValue: 0,
+                              responsive: true,
+                              scales: {
+                                x: {
+                                  ticks: {
+                                    display: true
+                                  }
+                                }
+                              },
+                              plugins: {
+                                legend: {
+                                  position: 'top'
+                                },
+                                title: {
+                                  display: true,
+                                  text: ` `
+                                }
+                              }
+                            }}
+                          />
                         </Grid>
                       </Grid>
                     </Card>
@@ -767,7 +845,7 @@ const TaskManageEditViews = props => {
                               fullWidth
                               type={'number'}
                               label='Realisasi'
-                              onChange={handleChange('realisasi')}
+                              onChange={handleChange('subKegRealisasi')}
                               placeholder='Realisasi'
                             />
                           </Grid>
@@ -780,7 +858,7 @@ const TaskManageEditViews = props => {
                               multiline
                               label='Target'
                               type={'number'}
-                              onChange={handleChange('target')}
+                              onChange={handleChange('subKegTarget')}
                               placeholder='Target'
                             />
                           </Grid>
@@ -793,7 +871,7 @@ const TaskManageEditViews = props => {
                           </Grid>
                           <Grid item xs={11} md={11} display={'inline'}>
                             <Typography color={'primary.dark'} variant={'body1'}>
-                              Note
+                              Catatan
                             </Typography>
                           </Grid>
                           <Grid mt={1} display={'flex'} justifyContent={'center'} xs={12} item md={12}>
@@ -808,7 +886,7 @@ const TaskManageEditViews = props => {
                                   <InputAdornment position='end'>
                                     <IconButton
                                       type='submit'
-                                      onClick={handleSimpan}
+                                      onClick={handleEdit}
                                       edge='end'
                                       aria-label='toggle password visibility'
                                     >
@@ -823,7 +901,7 @@ const TaskManageEditViews = props => {
                       </Card>
                       <Grid container spacing={3}>
                         <Grid justifyContent={'center'} mt={2} item xs={12} md={12}>
-                          <Button type='submit' variant={'contained'} onClick={handleSimpan} fullWidth>
+                          <Button type='submit' variant={'contained'} onClick={handleEdit} fullWidth>
                             Simpan
                           </Button>
                         </Grid>
@@ -865,9 +943,7 @@ const TaskManageEditViews = props => {
         <TabPanel value='2' sx={{ p: 0, height: 335 }}>
           <Card sx={{ padding: 4 }}>
             <Box sx={{ mt: 5, mb: 6 }}>
-              <Typography variant='h5' sx={{ fontWeight: 600, marginBottom: 1.5 }}>
-                Edit Sub Kegiatan
-              </Typography>
+              <Typography variant='h5' sx={{ fontWeight: 600, marginBottom: 1.5 }}></Typography>
               {/* <Typography variant='body2'>Fill this blank field below</Typography> */}
             </Box>
             <form noValidate autoComplete='off' onSubmit={e => e.preventDefault()}>
@@ -985,7 +1061,7 @@ const TaskManageEditViews = props => {
 
               {/* <TableAddParticipant></TableAddParticipant> */}
               <Button fullWidth onClick={handleEdit} size='medium' variant='contained' sx={{ marginTop: 4 }}>
-                Edit Sub Kegiatan
+                Simpan
               </Button>
             </form>
           </Card>

@@ -139,7 +139,7 @@ export async function getServerSideProps(context) {
   //   }
   // })
 
-  const arrayOfIds = mitraTask.map(task => task.id)
+  const arrayOfIds = mitraTask.map(mitra => mitra.id)
 
   const mitraLimitHonor = []
 
@@ -158,24 +158,17 @@ export async function getServerSideProps(context) {
         task: true
       }
     })
-    //console.log(result)
-
-    //console.log('result')
 
     if (result.length > 0) {
-      // Cek apakah id sudah ada di mitraLimitHonor
-      //console.log('masuk ke if result')
-
       for (const res of result) {
-        //console.log('masuk ke for result')
         const existingEntry = mitraLimitHonor.find(entry => entry.id === res.id)
 
         if (!existingEntry) {
+          console.log(res)
           mitraLimitHonor.push(res)
         } else {
-          // Jika tidak ada hasil, tambahkan entri dengan nilai default
           mitraLimitHonor.push({
-            id,
+            id: res.id,
             pmlId: parseInt(id),
             pclId: parseInt(id),
             gajiPml: 0,
@@ -184,9 +177,8 @@ export async function getServerSideProps(context) {
         }
       }
     } else {
-      //console.log('masuk ke else result')
       mitraLimitHonor.push({
-        id,
+        id: result.id,
         pmlId: parseInt(id),
         pclId: parseInt(id),
         gajiPml: 0,
@@ -194,6 +186,9 @@ export async function getServerSideProps(context) {
       })
     }
   }
+
+  const ada993 = mitraLimitHonor.find(entry => entry.pclId === 993)
+  console.log(ada993)
 
   const pekerjaanHarian = await prisma.pekerjaan_harian.findMany({
     where: {

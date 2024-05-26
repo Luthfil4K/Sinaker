@@ -17,6 +17,8 @@ const TaskManageAdd = ({ data }) => {
         dataBobotMitra={project.kriteriaMitra}
         dataBobotPegawai={project.kriteriaPegawai}
         dataOrganikProject_member={project.oraganikProject_member}
+        dataT={project.template}
+        dataTK={project.templateKolom}
       ></TaskManageAddViews>
     </>
   )
@@ -151,6 +153,9 @@ export async function getServerSideProps(context) {
     }
   })
 
+  const template = await prisma.template_table.findMany({})
+  const templateKolom = await prisma.template_table_kolom.findMany({})
+
   const data = {
     project,
     mitras,
@@ -158,7 +163,9 @@ export async function getServerSideProps(context) {
     oraganik,
     oraganikProject_member,
     kriteriaMitra,
-    kriteriaPegawai
+    kriteriaPegawai,
+    template,
+    templateKolom
   }
 
   return {

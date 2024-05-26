@@ -8,6 +8,9 @@ import * as XLSX from 'xlsx/xlsx.mjs'
 // import TemplateExcel from './asd.pdf'
 
 const EXTENSIONS = ['xlsx', 'xls', 'csv']
+// export
+import exportFromJSON from 'export-from-json'
+import xlsx from 'json-as-xlsx'
 
 // axios
 import axios from 'src/pages/api/axios'
@@ -345,7 +348,7 @@ const TaskManageAddViews = propss => {
 
     try {
       while (true) {
-        const res = await axios.post('/task', {
+        const res = await axios.post('/task/task-add', {
           title: values.subKegNama,
           jenisKeg: values.subKegJenis,
           targetTotal: parseInt(values.subKegTarget),
@@ -373,7 +376,9 @@ const TaskManageAddViews = propss => {
           userId: values.subKegUserId,
           notes: '-',
           gaji: values.subKegJenisSample == 1 ? parseInt(values.subKegGajiPerPerusahaan) : 0,
-          templateTable: values.templateTable
+          templateTable: values.templateTable,
+          kolomLP: kolomLP,
+          importStatus: 1
         })
 
         if (res.status === 201) {
@@ -435,14 +440,20 @@ const TaskManageAddViews = propss => {
   ]
 
   const jenisSubKegiatan = [
-    // {
-    //   id: 63,
-    //   nama: 'Pelatihan'
-    // },
-    // {
-    //   id: 64,
-    //   nama: 'Persiapan'
-    // },
+    {
+      id: 63,
+      nama: 'Pelatihan'
+    },
+
+    {
+      id: 64,
+      nama: 'Persiapan '
+    },
+
+    {
+      id: 66,
+      nama: 'Listing '
+    },
     {
       id: 65,
       nama: 'Pencacahan'
@@ -450,19 +461,20 @@ const TaskManageAddViews = propss => {
 
     {
       id: 67,
-      nama: 'Pengolahan-Entri'
+      nama: 'Pengolahan-Entri '
     },
-    // {
-    //   id: 68,
-    //   nama: 'Evaluasi '
-    // },
-    // {
-    //   id: 69,
-    //   nama: 'Diseminasi '
-    // },
     {
       id: 70,
-      nama: 'Pengolahan-Validasi'
+      nama: 'Pengolahan-Validasi '
+    },
+
+    {
+      id: 69,
+      nama: 'Diseminasi '
+    },
+    {
+      id: 68,
+      nama: 'Evaluasi '
     }
   ]
 
@@ -960,70 +972,6 @@ const TaskManageAddViews = propss => {
       type: 'string',
       width: 140
     },
-
-    // {
-    //   field: 'gajiBulanIni',
-    //   renderHeader: () => (
-    //     <Typography sx={{ fontWeight: 900, fontSize: '0.875rem !important', textAlign: 'center' }}>
-    //       Gaji Bulan Ini
-    //     </Typography>
-    //   ),
-    //   headerName: 'Gaji Bulan Ini ',
-    //   type: 'string',
-    //   width: 140,
-    //   renderCell: params => (
-    //     <>
-    //       <Typography
-    //         color={params.row.gajiBulanIni < 3000000 ? 'secondary.main' : 'error.main'}
-    //         sx={{ fontWeight: 500, fontSize: '0.875rem !important', textAlign: 'center' }}
-    //       >
-    //         {`Rp ${params.row.gajiBulanIni.toLocaleString('id-ID')}`}
-    //       </Typography>
-    //     </>
-    //   )
-    // },
-    // {
-    //   field: 'gajiBulanSblm',
-    //   renderHeader: () => (
-    //     <Typography sx={{ fontWeight: 900, fontSize: '0.875rem !important', textAlign: 'center' }}>
-    //       Gaji Bulan Sebelumnya
-    //     </Typography>
-    //   ),
-    //   headerName: 'Gaji Bulan Sebelumnya ',
-    //   type: 'string',
-    //   width: 140,
-    //   renderCell: params => (
-    //     <>
-    //       <Typography
-    //         color={params.row.gajiBulanSblm < 3000000 ? 'secondary.main' : 'error.main'}
-    //         sx={{ fontWeight: 500, fontSize: '0.875rem !important', textAlign: 'center' }}
-    //       >
-    //         {`Rp ${params.row.gajiBulanSblm.toLocaleString('id-ID')}`}
-    //       </Typography>
-    //     </>
-    //   )
-    // },
-    // {
-    //   field: 'gajiBulanDepan',
-    //   renderHeader: () => (
-    //     <Typography sx={{ fontWeight: 900, fontSize: '0.875rem !important', textAlign: 'center' }}>
-    //       Gaji Bulan Depan
-    //     </Typography>
-    //   ),
-    //   headerName: 'Gaji Bulan Depan ',
-    //   type: 'string',
-    //   width: 140,
-    //   renderCell: params => (
-    //     <>
-    //       <Typography
-    //         color={params.row.gajiBulanDepan < 3000000 ? 'secondary.main' : 'error.main'}
-    //         sx={{ fontWeight: 500, fontSize: '0.875rem !important', textAlign: 'center' }}
-    //       >
-    //         {`Rp ${params.row.gajiBulanDepan.toLocaleString('id-ID')}`}
-    //       </Typography>
-    //     </>
-    //   )
-    // },
     {
       field: 'jumlahKegiatan',
       headerName: 'Beban Kerja',
@@ -1059,6 +1007,21 @@ const TaskManageAddViews = propss => {
   ]
 
   // dari sini kebawah buat keperluan import excel,csv
+
+  const camelCase = str => {
+    return str
+      .toLowerCase()
+      .replace(/[\W_]/g, '')
+      .replace(/[A-Z]/g, (match, index) => (index === 0 ? match.toLowerCase() : match))
+  }
+
+  const [kolomLP, setKolomLP] = useState({
+    kol1: 'nbs',
+    kol2: 'nks'
+  })
+
+  const dataTemplatePerusahaan = propss.dataT.filter(TP => TP.jenisSample === 1)
+  const dataTemplateNonPerusahaan = propss.dataT.filter(TP => TP.jenisSample === 0)
   const columnsNew = [
     {
       field: 'kodeDesa',
@@ -1101,55 +1064,23 @@ const TaskManageAddViews = propss => {
       flex: 1
     },
     {
-      field:
-        values.templateTable == 5 //Produksi or Distribusi
-          ? 'alamat'
-          : values.templateTable == 4 || values.templateTable == 3 //Sosial or IPDS dokumen
-          ? 'nbs'
-          : values.templateTable == 7 // IPDS Responden
-          ? 'idSbr'
-          : values.templateTable == 6 //Nerwilis responden
-          ? 'nus'
-          : '',
+      field: camelCase(kolomLP.kol1),
+
       renderHeader: () => (
         <Typography sx={{ fontWeight: 900, fontSize: '0.875rem !important', textAlign: 'center' }}>
-          {values.templateTable == 5 //Produksi or Distribusi
-            ? 'Alamat'
-            : values.templateTable == 4 || values.templateTable == 3 //Sosial or IPDS dokumen
-            ? 'NBS'
-            : values.templateTable == 7 // IPDS Responden
-            ? 'ID SBR'
-            : values.templateTable == 6 //Nerwilis responden
-            ? 'NUS'
-            : ''}
+          {' '}
+          {kolomLP.kol1}
         </Typography>
       ),
       minWidth: 200,
       flex: 1
     },
-
     {
-      field:
-        values.templateTable == 5 || values.templateTable == 6 //NerwilisResponden or IPDS Responden
-          ? 'namaPerusahaan'
-          : values.templateTable == 4 // Nerwilis Dok
-          ? 'idSls'
-          : values.templateTable == 3 //Sosial
-          ? 'nks'
-          : values.templateTable == 7 //IPDS Dok
-          ? 'namaPerusahaan'
-          : '',
+      field: camelCase(kolomLP.kol2),
+
       renderHeader: () => (
         <Typography sx={{ fontWeight: 900, fontSize: '0.875rem !important', textAlign: 'center' }}>
-          {values.templateTable == 5 || values.templateTable == 6 //Nerwilis Responden or IPDS Responden
-            ? 'Nama Perusahaan'
-            : values.templateTable == 4 // Nerwilis Dok
-            ? 'ID SLS'
-            : values.templateTable == 3 //Sosial
-            ? 'NKS'
-            : values.templateTable == 7 //IPDS Dok
-            ? 'Nama Perusahaan'
-            : ''}
+          {kolomLP.kol2}
         </Typography>
       ),
       minWidth: 200,
@@ -1164,7 +1095,8 @@ const TaskManageAddViews = propss => {
     namaDesa: '',
     namaKecamatan: '',
     namaPerusahaan: '',
-    alamat: ''
+    alamat: '',
+    target: ''
   })
 
   const getExention = file => {
@@ -1208,7 +1140,10 @@ const TaskManageAddViews = propss => {
       //removing header
       fileData.splice(0, 1)
 
-      setData(convertToJson(headers, fileData))
+      const midErrorData = convertToJson(headers, fileData)
+
+      const filteredArray = midErrorData.filter(item => Object.keys(item).length !== 0)
+      setData(filteredArray)
     }
     if (file) {
       if (getExention(file)) {
@@ -1237,33 +1172,85 @@ const TaskManageAddViews = propss => {
     return { ...item, kodeKecamatan: kodeKecamatan }
   })
 
-  // Mengambil kode kecamatan dari data perusahaan
-  // useEffect(() => {
-  //   // const updatedRows = rowsM.map(row => {
-  //   //   const participantExists = mitraKecArr.some(mitra => mitra.id === row.id)
-  //   //   return { ...row, checked: participantExists }
-  //   // })
-  //   setRowsM(updatedRows)
-  // }, [mitraKecArr])
-
   useEffect(() => {
     if (data.length > 1) {
       const kodeKecamatanDatas = data.map(item => item.kodeKecamatan)
-      // const countMap = kodeKecamatanDatas.reduce((acc, curr) => {
-      //   acc[curr] = (acc[curr] || 0) + 1
-      //   return acc
-      // }, {})
+
       const kodeKecamatanData = new Set(kodeKecamatanDatas)
       const hasilSaring = mitraKec
         .filter(item => kodeKecamatanData.has(Number(item.kodeKecamatan)))
         .sort((a, b) => a.bebanKerja - b.bebanKerja)
-      // const hasilSaring = mitraKec
-      //   .sort((a, b) => a.beban_kerja_mitra[0].bebanKerja - b.beban_kerja_mitra[0].bebanKerja)
-      //   .filter(item => countMap[Number(item.kodeKecamatan)] && countMap[Number(item.kodeKecamatan)]--)
+
       setMitraKecArr(hasilSaring)
       setRowsM(hasilSaring)
     }
   }, [data])
+
+  const initialRowsT = [
+    {
+      id: 1,
+      kodeDesa: '3',
+      kodeKecamatan: 4,
+      namaDesa: 'Cilebut timur',
+      namaKecamatan: 'Bojonggede',
+      target: 0
+    },
+    {
+      id: 2,
+      kodeDesa: '3',
+      kodeKecamatan: 4,
+      namaDesa: 'Cilebut timur',
+      namaKecamatan: 'Bojonggede',
+      target: 0
+    }
+  ]
+  const newData = initialRowsT.map(obj => {
+    const newObj = {}
+    for (const key in obj) {
+      newObj[key] = obj[key]
+    }
+    newObj[camelCase(kolomLP.kol1)] = 2
+    newObj[camelCase(kolomLP.kol2)] = 4
+    return newObj
+  })
+  const [rowsT, setRowsT] = useState(newData)
+
+  const handleDownloadTable = e => {
+    const dataKolom = columnsNew.map(kol => ({
+      label: kol.field,
+      value: kol.field
+    }))
+
+    dataKolom.unshift({ label: 'id', value: 'id' })
+
+    let dataDownload = [
+      {
+        sheet: 'sheetone',
+        columns: dataKolom,
+        content: rowsT
+      }
+    ]
+
+    let settings = {
+      fileName: 'template_table_' + values.templateTable,
+      extraLength: 3,
+      writeMode: 'writeFile',
+      writeOptions: {},
+      RTL: false
+    }
+
+    xlsx(dataDownload, settings)
+  }
+
+  useEffect(() => {
+    const findKolomLV = propss.dataTK.filter(item => item.templateTableId == values.templateTable)
+
+    setKolomLP(kolomLP => ({
+      ...kolomLP,
+      kol1: camelCase(findKolomLV[0].kolomTable), //kol1
+      kol2: camelCase(findKolomLV[1].kolomTable) // kol2
+    }))
+  }, [values.templateTable])
 
   return (
     <>
@@ -1426,7 +1413,7 @@ const TaskManageAddViews = propss => {
                   </Grid>
                   <Grid item xs={12} md={12}>
                     <FormControl fullWidth>
-                      {session.status === 'authenticated' && values.subKegJenisSample === 0 && (
+                      {values.subKegJenisSample === 0 && (
                         <>
                           <InputLabel id='demo-simple-select-helper-label'>Level Pencatatan</InputLabel>
                           <Select
@@ -1439,12 +1426,17 @@ const TaskManageAddViews = propss => {
                             name='Level Pencatatan'
                             size='medium'
                           >
-                            <MenuItem value={3}>NBS-NKS</MenuItem>
-                            <MenuItem value={4}>NBS-ID SLS</MenuItem>
+                            {dataTemplateNonPerusahaan.map(item => (
+                              <MenuItem key={item.id} value={item.id}>
+                                {item.nama}
+                              </MenuItem>
+                            ))}
+                            {/* <MenuItem value={3}>NBS-NKS</MenuItem>
+                          <MenuItem value={4}>NBS-ID SLS</MenuItem> */}
                           </Select>
                         </>
                       )}
-                      {session.status === 'authenticated' && values.subKegJenisSample === 1 && (
+                      {values.subKegJenisSample === 1 && (
                         <>
                           <InputLabel id='demo-simple-select-helper-label'>Level Pencatatan</InputLabel>
                           <Select
@@ -1457,9 +1449,14 @@ const TaskManageAddViews = propss => {
                             name='Level Pencatatan'
                             size='medium'
                           >
-                            <MenuItem value={5}>Alamat-Nama Perusahaan</MenuItem>
-                            <MenuItem value={6}>NUS-Nama Perusahaan/Dinas</MenuItem>
-                            <MenuItem value={7}>ID SBR-Nama Perusahaan</MenuItem>
+                            {dataTemplatePerusahaan.map(item => (
+                              <MenuItem key={item.id} value={item.id}>
+                                {item.nama}
+                              </MenuItem>
+                            ))}
+                            {/* <MenuItem value={5}>Alamat-Nama Perusahaan</MenuItem>
+                          <MenuItem value={6}>NUS-Nama Perusahaan/Dinas</MenuItem>
+                          <MenuItem value={7}>ID SBR-Nama Perusahaan</MenuItem> */}
                           </Select>
                         </>
                       )}
@@ -1487,81 +1484,9 @@ const TaskManageAddViews = propss => {
                     />
                   </>
                 )}
-              {/* <TextField
-                name='deskripsiSubKeg'
-                value={values.subKegDesk}
-                onChange={handleChange('subKegDesk')}
-                fullWidth
-                multiline
-                minRows={3}
-                label='Deskripsi Sub Kegiatan'
-                placeholder='Deskripsi Sub Kegiatan'
-              /> */}
               <Divider mt={2}></Divider>
             </Grid>
 
-            {/* {session.status === 'authenticated' &&
-              (session.data.uid === 999 ||
-                (values.subKegJenisSample === 1 && (values.subKegJenis === 65 || values.subKegJenis === 67))) && (
-                <>
-                  <Grid item md={6} xs={12}>
-                    <Typography variant={'h6'} mb={4}>
-                      Sample Perusahaan
-                    </Typography>
-                    <FormControl fullWidth>
-                      <InputLabel id='demo-simple-select-helper-label'>Group Perusahaan</InputLabel>
-                      <Select
-                        fullWidth
-                        labelId='demo-simple-select-helper-label'
-                        id='demo-simple-select-helper'
-                        label='Group Perusahaan'
-                        onChange={handleSamplePerusahaan}
-                        value={values.subKegSamplePerusahaan}
-                      >
-                        <MenuItem key={''} value={''}>
-                          {''}
-                        </MenuItem>
-                        {group.map(item => (
-                          <MenuItem key={item.id} value={item.id}>
-                            {item.nama}
-                          </MenuItem>
-                        ))}
-                      </Select>
-                    </FormControl>
-                  </Grid>
-                  <Grid item md={12} xs={12}>
-                    <Grid container spacing={4}>
-                      <Grid item xs={12}>
-                        <Box sx={{ width: '100%' }}>
-                          <DataGrid
-                            initialState={{
-                              // filter: {
-                              //   filterModel: {
-                              //     items: [{ field: 'nama', value: 'antam' }]
-                              //   }
-                              // }
-                              sorting: {
-                                sortModel: [{ field: 'checked', sort: 'desc' }]
-                              }
-                            }}
-                            rows={rows}
-                            columns={columns}
-                            pprioritySize={5}
-                            rowsPerPpriorityOptions={[5]}
-                            disableSelectionOnClick
-                            experimentalFeatures={{ newEditingApi: true }}
-                            sx={{
-                              height: rows.length > 3 ? '70vh' : '45vh',
-                              // overflowY: 'auto',
-                              width: '100%'
-                            }}
-                          />
-                        </Box>
-                      </Grid>
-                    </Grid>
-                  </Grid>
-                </>
-              )} */}
             {session.status === 'authenticated' &&
               (session.data.uid === 999 || values.subKegJenisSample === 0 || values.subKegJenisSample === 1) && (
                 <>
@@ -1583,74 +1508,9 @@ const TaskManageAddViews = propss => {
                         Upload
                       </Button>
                     </label>
-                    {values.templateTable == 3 && (
-                      <>
-                        {' '}
-                        <Button
-                          style={{ marginLeft: 30 }}
-                          variant='contained'
-                          target='_blank'
-                          href='https://docs.google.com/spreadsheets/d/1r7-45vtZHeJc8NIHt-_37nSNvv6b_sdyL-k_RRJY1CA/edit?usp=sharing'
-                        >
-                          Unduh Template
-                        </Button>
-                      </>
-                    )}
-                    {values.templateTable == 4 && (
-                      <>
-                        {' '}
-                        <Button
-                          style={{ marginLeft: 30 }}
-                          variant='contained'
-                          target='_blank'
-                          href='https://docs.google.com/spreadsheets/d/1SMEoofTuCwTbz0S8wWv50c0NdQR7YdTZMkD-MheQ05w/edit?usp=sharing'
-                        >
-                          Unduh Template
-                        </Button>
-                      </>
-                    )}
-
-                    {values.templateTable == 5 && (
-                      <>
-                        {' '}
-                        <Button
-                          style={{ marginLeft: 30 }}
-                          variant='contained'
-                          target='_blank'
-                          href='https://docs.google.com/spreadsheets/d/1__AgNaZCv18rLrdAcza8hNKAs2xZIZszATfeRL5zipI/edit?usp=sharing'
-                        >
-                          Unduh Template
-                        </Button>
-                      </>
-                    )}
-
-                    {values.templateTable == 7 && (
-                      <>
-                        {' '}
-                        <Button
-                          style={{ marginLeft: 30 }}
-                          variant='contained'
-                          target='_blank'
-                          href='https://docs.google.com/spreadsheets/d/1nWR6_tsLBXa1qLdTry5fsx1Hgmvfj---oNsiCQO3ods/edit?usp=sharing'
-                        >
-                          Unduh Template
-                        </Button>
-                      </>
-                    )}
-
-                    {values.templateTable == 6 && (
-                      <>
-                        {' '}
-                        <Button
-                          style={{ marginLeft: 30 }}
-                          variant='contained'
-                          target='_blank'
-                          href='https://docs.google.com/spreadsheets/d/1s9k74pPMlJc8wotQRV1jpBxPAYFqh-BD1sH8BhEFb4Q/edit?usp=sharing'
-                        >
-                          Unduh Template
-                        </Button>
-                      </>
-                    )}
+                    <Button sx={{ marginLeft: 5 }} variant='contained' onClick={handleDownloadTable}>
+                      Unduh Template
+                    </Button>
                   </Grid>
                   <Grid item md={12} xs={12}>
                     <Grid container spacing={4}>
