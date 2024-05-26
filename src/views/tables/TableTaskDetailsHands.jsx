@@ -26,7 +26,7 @@ import CancelIcon from '@mui/icons-material/Close'
 // import 'handsontable/dist/handsontable.full.min.css'
 
 // register Handsontable's modules
-registerAllModules()
+// registerAllModules()
 
 import {
   GridRowModes,
@@ -123,11 +123,11 @@ const TableGroupPerusahaan = props => {
     label: ''
   })
   const optionPCL = mitra.map(mi => ({
-    value: mi.id,
+    value: mi.mitra.id,
     label:
-      mi.name +
+      mi.mitra.name +
       ', total Gaji :  Rp' +
-      ((totalGajiMitra.find(totalGaji => totalGaji.id === mi.id)?.totalGaji || 0).toLocaleString('id-ID') || '0')
+      ((totalGajiMitra.find(totalGaji => totalGaji.id === mi.mitra.id)?.totalGaji || 0).toLocaleString('id-ID') || '0')
   }))
   const optionPML = pml.map(pml => ({
     value: pml.organik.id,
@@ -244,21 +244,52 @@ const TableGroupPerusahaan = props => {
   const processRowUpdate = newRow => {
     const updatedRow = { ...newRow, isNew: false }
 
+    console.log('ini update row')
+    console.log(updatedRow)
+
     // Cari data mitra yang sesuai dengan pmlId dari updatedRow
     const mitraToUpdatePml = totalGajiMitra.find(mitra => mitra.id === updatedRow.pmlId)
-
+    console.log('ini mitra to update pml')
+    console.log(mitraToUpdatePml)
     // Hitung total gaji setelah update untuk pmlId
-    const newTotalGajiPml = mitraToUpdatePml.totalGaji + (updatedRow.gajiPml || 0) // gajiPml dari updatedRow atau 0 jika tidak ada
-
+    const newTotalGajiPml = mitraToUpdatePml
+      ? mitraToUpdatePml.totalGaji + (updatedRow.gajiPml || 0)
+      : updatedRow.gajiPml // gajiPml dari updatedRow atau 0 jika tidak ada
+    console.log('ini gaji total pml')
+    console.log(newTotalGajiPml)
     // Cari data mitra yang sesuai dengan pclId dari updatedRow
-    const mitraToUpdatePcl = totalGajiMitra.find(mitra => mitra.id === updatedRow.pclId)
+    const mitraToUpdatePcl = updatedRow.pclId ? totalGajiMitra.find(mitra => mitra.id === updatedRow.pclId) : undefined
+    console.log('mitra to update pcl')
+    console.log(mitraToUpdatePcl)
 
     // Hitung total gaji setelah update untuk pclId
-    const newTotalGajiPcl = mitraToUpdatePcl.totalGaji + (updatedRow.gajiPcl || 0) // gajiPcl dari updatedRow atau 0 jika tidak ada
-
+    const newTotalGajiPcl = mitraToUpdatePcl ? mitraToUpdatePcl.totalGaji + (updatedRow.gajiPcl || 0) : 0 // gajiPcl dari updatedRow atau 0 jika tidak ada
+    console.log('newTotalGajiPcl')
+    console.log(newTotalGajiPcl)
     // Validasi total gaji untuk pmlId dan pclId
-    const isPmlValid = newTotalGajiPml <= 4000000
+    const isPmlValid = newTotalGajiPml ? newTotalGajiPml <= 4000000 : true
     const isPclValid = newTotalGajiPcl <= 4000000
+    console.log('isPmlValid')
+    console.log(isPmlValid)
+    console.log('isPclValid')
+    console.log(isPclValid)
+
+    //////// yang lama
+    // // Cari data mitra yang sesuai dengan pmlId dari updatedRow
+    // const mitraToUpdatePml = totalGajiMitra.find(mitra => mitra.id === updatedRow.pmlId)
+
+    // // Hitung total gaji setelah update untuk pmlId
+    // const newTotalGajiPml = mitraToUpdatePml.totalGaji + (updatedRow.gajiPml || 0) // gajiPml dari updatedRow atau 0 jika tidak ada
+
+    // // Cari data mitra yang sesuai dengan pclId dari updatedRow
+    // const mitraToUpdatePcl = totalGajiMitra.find(mitra => mitra.id === updatedRow.pclId)
+
+    // // Hitung total gaji setelah update untuk pclId
+    // const newTotalGajiPcl = mitraToUpdatePcl.totalGaji + (updatedRow.gajiPcl || 0) // gajiPcl dari updatedRow atau 0 jika tidak ada
+
+    // // Validasi total gaji untuk pmlId dan pclId
+    // const isPmlValid = newTotalGajiPml <= 4000000
+    // const isPclValid = newTotalGajiPcl <= 4000000
 
     // Lakukan pengecekan dan pengiriman permintaan AJAX di sini
     const data = {
@@ -830,21 +861,21 @@ const TableGroupPerusahaan = props => {
             : 'Operator'}
         </Typography>
       ),
-      type: 'singleSelect',
-      valueOptions: optionPCL.sort((a, b) => a.label.localeCompare(b.label)),
+      // type: 'singleSelect',
+      // valueOptions: optionPCL.sort((a, b) => a.label.localeCompare(b.label)),
 
-      // renderEditCell: params => {
-      //   return (
-      //     <Autocomplete
-      //       disablePortal
-      //       id='combo-box-demo'
-      //       // options={optionPCL}
-      //       options={optionPCL.sort((a, b) => a.label.localeCompare(b.label))}
-      //       sx={{ width: 300 }}
-      //       renderInput={params => <TextField {...params} />}
-      //     />
-      //   )
-      // },
+      renderEditCell: params => {
+        return (
+          <Autocomplete
+            disablePortal
+            id='combo-box-demo'
+            // options={optionPCL}
+            options={optionPCL.sort((a, b) => a.label.localeCompare(b.label))}
+            sx={{ width: 300 }}
+            renderInput={params => <TextField {...params} />}
+          />
+        )
+      },
 
       // renderCell: params => (
       //   <Autocomplete {...params} options={optionPCL} freeSolo={false} multiple={false} disableClearable />
@@ -875,108 +906,31 @@ const TableGroupPerusahaan = props => {
         </Typography>
       ),
       type: 'singleSelect',
-      valueOptions:
-        jenisSample === 1
-          ? jenisKeg === 65 //Produksi or Distribusi
-            ? [
-                'New York',
-                'Los Angeles',
-                'Chicago',
-                'Houston',
-                'Phoenix',
-                'Philadelphia',
-                'San Antonio',
-                'San Diego',
-                'Dallas',
-                'San Jose',
-                'Austin',
-                'Jacksonville',
-                'Fort Worth',
-                'Columbus',
-                'Charlotte',
-                'San Francisco',
-                'Indianapolis',
-                'Seattle',
-                'Denver',
-                'Washington',
-                'Boston',
-                'El Paso',
-                'Nashville',
-                'Detroit',
-                'Oklahoma City',
-                'Portland',
-                'Las Vegas',
-                'Memphis',
-                'Louisville',
-                'Baltimore'
-              ]
-            : [
-                'New York',
-                'Los Angeles',
-                'Chicago',
-                'Houston',
-                'Phoenix',
-                'Philadelphia',
-                'San Antonio',
-                'San Diego',
-                'Dallas',
-                'San Jose',
-                'Austin',
-                'Jacksonville',
-                'Fort Worth',
-                'Columbus',
-                'Charlotte',
-                'San Francisco',
-                'Indianapolis',
-                'Seattle',
-                'Denver',
-                'Washington',
-                'Boston',
-                'El Paso',
-                'Nashville',
-                'Detroit',
-                'Oklahoma City',
-                'Portland',
-                'Las Vegas',
-                'Memphis',
-                'Louisville',
-                'Baltimore'
-              ]
-          : [
-              'New York',
-              'Los Angeles',
-              'Chicago',
-              'Houston',
-              'Phoenix',
-              'Philadelphia',
-              'San Antonio',
-              'San Diego',
-              'Dallas',
-              'San Jose',
-              'Austin',
-              'Jacksonville',
-              'Fort Worth',
-              'Columbus',
-              'Charlotte',
-              'San Francisco',
-              'Indianapolis',
-              'Seattle',
-              'Seattle3',
-              'Seattle2',
-              'Seattle4',
-              'Denver',
-              'Washington',
-              'Boston',
-              'El Paso',
-              'Nashville',
-              'Detroit',
-              'Oklahoma City',
-              'Portland',
-              'Las Vegas',
-              'Memphis',
-              'Louisville',
-              'Baltimore'
-            ],
+      valueOptions: [
+        'New York',
+        'Los Angeles',
+        'Chicago',
+        'Houston',
+        'Phoenix',
+        'Philadelphia',
+        'San Antonio',
+        'San Diego',
+        'Dallas',
+        'San Jose'
+      ],
+      renderEditCell: params => {
+        return (
+          <Autocomplete
+            disablePortal
+            id='combo-box-demo'
+            // options={optionPCL}
+            options={optionsKota}
+            sx={{ width: 300 }}
+            renderInput={params => <TextField {...params} />}
+          />
+        )
+      },
+
       width: 180,
       editable: true,
       description: 'asdasd'
