@@ -155,51 +155,52 @@ const RapatCreateViews = props => {
     e.preventDefault()
 
     try {
-      while (true) {
-        const res = await axios.post('/rapat', {
-          namaRapat: values.namaRapat,
-          meetDate: selectedDate,
-          startTime: selectedTimeS,
-          endTime: selectedTimeE,
-          duration: selectedTimeE - selectedTimeS,
-          tempatRapat: values.tempatRapat,
-          description: values.deskRapat,
-          createdById: session.data.uid,
-          pesertaRapatId: values.kegAnggotaId,
-          nomor: values.nomor,
-          lampiran: values.lampiran,
-          perihal: values.perihal,
-          ditujukan: values.ditujukan
-        })
-
-        if (res.status === 201) {
-          Swal.fire({
-            position: 'center',
-            icon: 'success',
-            title: 'Rapat Berhasil Dibuat',
-            showConfirmButton: false,
-            timer: 1000,
-            width: 300
-          }).then(router.push('/rapat-create'))
-
-          setValues({
-            namaRapat: '',
-            tempatRapat: '',
-            deskRapat: '-',
-            pesertaRapat: 7,
-            kegTim: '',
-            kegAnggotaId: '',
-            kegAnggota: [dataUser[3].name, dataUser[1].name],
-            kegKetuaId: ''
+      if (rapat)
+        while (true) {
+          const res = await axios.post('/rapat', {
+            namaRapat: values.namaRapat,
+            meetDate: selectedDate,
+            startTime: selectedTimeS,
+            endTime: selectedTimeE,
+            duration: selectedTimeE - selectedTimeS,
+            tempatRapat: values.tempatRapat,
+            description: values.deskRapat,
+            createdById: session.data.uid,
+            pesertaRapatId: values.kegAnggotaId,
+            nomor: values.nomor,
+            lampiran: values.lampiran,
+            perihal: values.perihal,
+            ditujukan: values.ditujukan
           })
 
-          setSelectedDate(new Date())
-          setSelectedTimeS(new Date())
-          setSelectedTimeE(new Date())
-        }
+          if (res.status === 201) {
+            Swal.fire({
+              position: 'center',
+              icon: 'success',
+              title: 'Rapat Berhasil Dibuat',
+              showConfirmButton: false,
+              timer: 1000,
+              width: 300
+            }).then(router.push('/rapat-create'))
 
-        break
-      }
+            setValues({
+              namaRapat: '',
+              tempatRapat: '',
+              deskRapat: '-',
+              pesertaRapat: 7,
+              kegTim: '',
+              kegAnggotaId: '',
+              kegAnggota: [dataUser[3].name, dataUser[1].name],
+              kegKetuaId: ''
+            })
+
+            setSelectedDate(new Date())
+            setSelectedTimeS(new Date())
+            setSelectedTimeE(new Date())
+          }
+
+          break
+        }
     } catch (error) {
       Swal.fire({
         title: 'Create Rapat Failed',

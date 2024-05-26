@@ -46,7 +46,8 @@ export default async function handler(req, res) {
           lampiran,
           perihal,
           ditujukan,
-          createdById
+          createdById,
+          statusSendEmail: 0
         }
       })
 
@@ -64,29 +65,29 @@ export default async function handler(req, res) {
       //     return participant.email
       //   }
       // })
-      mailOptions.to = 'jelakora141516@gmail.com'
+      // mailOptions.to = 'jelakora141516@gmail.com'
 
-      mailOptions.subject = namaRapat
-      mailOptions.title = namaRapat
-      mailOptions.description = description
-      mailOptions.meetDate = new Date(meetDate).toLocaleDateString('id-ID')
-      mailOptions.starttime =
-        new Date(startTime).getHours() +
-        ':' +
-        (new Date(startTime).getMinutes() < 10 ? '0' : '') +
-        new Date(startTime).getMinutes()
-      mailOptions.endtime =
-        new Date(endTime).getHours() +
-        ':' +
-        (new Date(endTime).getMinutes() < 10 ? '0' : '') +
-        new Date(endTime).getMinutes() +
-        ' WIB'
-      console.log(mailOptions.starttime)
-      mailOptions.endTime = new Date(meetDate).toLocaleDateString('id-ID')
-      mailOptions.link = tempatRapat
-      mailOptions.duration = duration
+      // mailOptions.subject = namaRapat
+      // mailOptions.title = namaRapat
+      // mailOptions.description = description
+      // mailOptions.meetDate = new Date(meetDate).toLocaleDateString('id-ID')
+      // mailOptions.starttime =
+      //   new Date(startTime).getHours() +
+      //   ':' +
+      //   (new Date(startTime).getMinutes() < 10 ? '0' : '') +
+      //   new Date(startTime).getMinutes()
+      // mailOptions.endtime =
+      //   new Date(endTime).getHours() +
+      //   ':' +
+      //   (new Date(endTime).getMinutes() < 10 ? '0' : '') +
+      //   new Date(endTime).getMinutes() +
+      //   ' WIB'
+      // console.log(mailOptions.starttime)
+      // mailOptions.endTime = new Date(meetDate).toLocaleDateString('id-ID')
+      // mailOptions.link = tempatRapat
+      // mailOptions.duration = duration
 
-      sendMailMeetCreated(mailOptions)
+      // sendMailMeetCreated(mailOptions)
 
       return res.status(201).json({ success: true })
     } catch (error) {

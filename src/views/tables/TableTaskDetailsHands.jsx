@@ -458,7 +458,7 @@ const TableGroupPerusahaan = props => {
     setRowModesModel(newRowModesModel)
   }
 
-  const dataHotAsu = participants.map(row => ({
+  const dataHots = participants.map(row => ({
     id: row.id,
     kip: row.perusahaan.kip,
     nama: row.nama,
@@ -483,7 +483,7 @@ const TableGroupPerusahaan = props => {
     hasilPencacahan: row.hasilPencacahan,
     tanggalDob: new Date(row.duedate)
   }))
-  // console.log(dataHotAsu)
+  // console.log(dataHots)
 
   const newsObject = {
     id: 'id',
@@ -509,7 +509,7 @@ const TableGroupPerusahaan = props => {
     hasilPencacahan: 'hasilPencacahan',
     tanggalDob: 'Tanggal'
   }
-  dataHotAsu.unshift(newsObject)
+  dataHots.unshift(newsObject)
 
   const dataHOT = [
     { id: 1, name: 'Ted Right', address: '' },
@@ -1078,7 +1078,7 @@ const TableGroupPerusahaan = props => {
       </Grid>
       <Grid item md={12} xs={12}>
         {/* <HotTable
-          data={dataHotAsu}
+          data={dataHots}
           startRows={5}
           startCols={5}
           height='auto'

@@ -39,10 +39,11 @@ import TabContext from '@mui/lab/TabContext'
 // export pdf undangan
 import html2canvas from 'html2canvas'
 import jsPDF from 'jspdf'
-
 import CloudUploadRoundedIcon from '@mui/icons-material/CloudUploadRounded'
-
 import DragAndDrop from 'src/views/form-layouts/DragAndDrop'
+
+// icon
+import DocumentScannerIcon from '@mui/icons-material/DocumentScanner'
 
 const StyledBox = styled(Box)(({ theme }) => ({
   [theme.breakpoints.up('sm')]: {
@@ -51,11 +52,16 @@ const StyledBox = styled(Box)(({ theme }) => ({
 }))
 
 const RapatDetailViews = props => {
-  const [tampil, setTampil] = useState('flex')
+  const [tampil, setTampil] = useState('none')
   const pdfRef = useRef()
   const [value, setValue] = useState('1')
   const [fileTambahan, setFileTambahan] = useState([])
   const [dokumenRapat, setDokumenRapat] = useState(props.dataDokumen)
+
+  console.log('dokumenRapat')
+  console.log('dokumenRapat')
+  console.log(dokumenRapat)
+  console.log(dokumenRapat)
   console.log(dokumenRapat)
   const handleChangeTab = (event, newValue) => {
     setValue(newValue)
@@ -66,10 +72,10 @@ const RapatDetailViews = props => {
     const Img = styled('img')(({ theme }) => ({ height: 110 }))
     return (
       <>
-        <Paper sx={{ display: tampil }}>
-          <Grid container sx={{ height: 850 }}>
+        <Paper bgC sx={{ display: 'flex' }}>
+          <Grid container sx={{ height: 800 }}>
             <Grid item xs={12}>
-              <Grid ref={pdfRef} container sx={{ height: 850 }}>
+              <Grid ref={pdfRef} container sx={{ height: 800 }}>
                 <Grid item xs={1}></Grid>
                 <Grid item xs={10}>
                   <Grid container>
@@ -289,6 +295,97 @@ const RapatDetailViews = props => {
       }
     })
   }
+
+  const handleSendUndangan = async e => {
+    e.preventDefault()
+
+    try {
+      if (dokumenRapat.statusSendEmail == 0) {
+        while (true) {
+          const res = await axios.put(`/rapat-send-undangan/${props.dataRapat.id}`, {
+            namaRapat: props.dataRapat.namaRapat,
+            meetDate: props.dataRapat.meetDate,
+            startTime: props.dataRapat.startTime,
+            endTime: props.dataRapat.endTime,
+            duration: props.dataRapat.duration,
+            tempatRapat: props.dataRapat.tempatRapat,
+            description: props.dataRapat.deskRapat,
+            nomor: props.dataRapat.nomor,
+            lampiran: props.dataRapat.lampiran,
+            perihal: props.dataRapat.perihal,
+            ditujukan: props.dataRapat.ditujukan,
+            pesertaRapatId: props.dataPesertaRapat
+          })
+
+          if (res.status === 201) {
+            Swal.fire({
+              position: 'center',
+              icon: 'success',
+              title: 'Undangan berhasil dikirim',
+              showConfirmButton: false,
+              timer: 1000,
+              width: 300
+            })
+          }
+
+          break
+        }
+      } else {
+        Swal.fire({
+          title: 'Anda sudah pernah mengirimkan email sebelumnya',
+          text: 'Apa anda ingin mengirimkan email lagi?',
+          icon: 'warning',
+          showCancelButton: true,
+          confirmButtonColor: '#3085d6',
+          cancelButtonColor: '#d33',
+          confirmButtonText: 'Ya Kirim'
+        }).then(result => {
+          if (result.isConfirmed) {
+            axios
+              .put(`/rapat-send-undangan/${props.dataRapat.id}`, {
+                namaRapat: props.dataRapat.namaRapat,
+                meetDate: props.dataRapat.meetDate,
+                startTime: props.dataRapat.startTime,
+                endTime: props.dataRapat.endTime,
+                duration: props.dataRapat.duration,
+                tempatRapat: props.dataRapat.tempatRapat,
+                description: props.dataRapat.deskRapat,
+                nomor: props.dataRapat.nomor,
+                lampiran: props.dataRapat.lampiran,
+                perihal: props.dataRapat.perihal,
+                ditujukan: props.dataRapat.ditujukan,
+                pesertaRapatId: props.dataPesertaRapat
+              })
+              .then(async res => {
+                await Swal.fire({
+                  icon: 'success',
+                  title: 'Success',
+                  text: 'Undangan berhasil dikirim'
+                })
+              })
+              .catch(err => {
+                Swal.fire({
+                  icon: 'error',
+                  title: 'Error',
+                  text: 'Something went wrong'
+                })
+              })
+          } else {
+            router.push('/people')
+          }
+        })
+      }
+    } catch (error) {
+      Swal.fire({
+        title: 'Kirim undangan gagal',
+        text: error,
+        icon: 'error',
+        confirmButtonColor: '#d33',
+        confirmButtonText: 'OK'
+      })
+    }
+  }
+
   const handleUnduhUndangan = () => {
     setTampil('flex')
     const input = pdfRef.current
@@ -296,7 +393,7 @@ const RapatDetailViews = props => {
       html2canvas(input).then(canvas => {
         const imgData = canvas.toDataURL('image/png')
         const pdf = new jsPDF('p', 'mm', 'a4', true)
-        const pdfWidth = pdf.internal.pageSize.getWidth()
+        const pdfWidth = pdf.internal.pageSize.getWidth() + 1
         const pdfHeight = pdf.internal.pageSize.getHeight()
         const imgWidth = canvas.width + 100
         const imgHeight = canvas.height + 100
@@ -309,7 +406,7 @@ const RapatDetailViews = props => {
     } catch (error) {
       console.error('Error while processing:', error)
     } finally {
-      setTampil('flex')
+      setTampil('none')
     }
   }
   const handleSubmitFile = e => {
@@ -339,9 +436,9 @@ const RapatDetailViews = props => {
   }
 
   useEffect(() => {
-    console.log(fileTambahan)
-    console.log('fileTambahan')
-    console.log('fileTambahan')
+    // console.log(fileTambahan)
+    // console.log('fileTambahan')
+    // console.log('fileTambahan')
   }, [fileTambahan])
   useEffect(() => {
     fileTambahan.length > 0 ? setDokumenRapat(prevValues => [...prevValues, ...fileTambahan]) : 0
@@ -392,6 +489,11 @@ const RapatDetailViews = props => {
       link.click()
       document.body.removeChild(link)
     }
+  }
+
+  const handleTampil = () => {
+    // tampil === 'none' ? setTampil('flex') : setTampil('none')
+    console.log(tampil)
   }
   return (
     <>
@@ -525,11 +627,37 @@ const RapatDetailViews = props => {
                 </CardActions>
               )}
             </TabPanel>
-            <TabPanel value='2' sx={{ p: 0, height: 1935 }}>
+            <TabPanel value='2' sx={{ p: 0, height: tampil === 'none' ? 335 : 1235 }}>
               <Grid mt={4} container spacing={4}>
                 <Grid display={'flex'} justifyContent={'center'} item xs={5} height={330}>
-                  <Card sx={{ width: 300, height: 300 }}>
-                    <CardContent sx={{ width: 200 }}></CardContent>
+                  <Card sx={{ width: 270, height: 300 }}>
+                    <CardContent
+                      height={270}
+                      sx={{
+                        // backgroundColor: 'black',
+                        marginTop: 5,
+                        width: 270,
+                        heigth: 300,
+                        onClick: handleTampil,
+                        justifyContent: 'center',
+                        display: 'flex',
+                        aligItems: 'center'
+                      }}
+                    >
+                      <IconButton>
+                        <DocumentScannerIcon sx={{ fontSize: 200 }} size={'large'}>
+                          <input
+                            style={{ display: 'none' }}
+                            id='raised-button-file'
+                            multiple
+                            type='file'
+                            className='h-full w-full bg-green-200 opacity-0 z-10 absolute cursor-pointer'
+                            name='upfile'
+                            ref={refParam => (inputRef = refParam)}
+                          />
+                        </DocumentScannerIcon>
+                      </IconButton>
+                    </CardContent>
                   </Card>
                 </Grid>
                 <Grid item xs={7} height={330} bgcolor={'white'}>
@@ -543,7 +671,7 @@ const RapatDetailViews = props => {
                       </Typography>
                     </Grid>
                     <Grid item xs={12}>
-                      <Button sx={{ width: 160 }} size='small' variant='contained'>
+                      <Button sx={{ width: 160 }} onClick={handleSendUndangan} size='small' variant='contained'>
                         Kirim undangan
                       </Button>
                     </Grid>

@@ -1164,7 +1164,7 @@ const Dashboard = ({ dataTask }) => {
       ? // const filteredTasks =
         // task.filter(item => item.bulan === valueDropDown.bulan)
 
-        // Mengatur ulang state task dengan hasil filtering
+        // Mengatur ulang state task pake hasil filtering
         setTask(JSON.parse(dataTask))
       : setTask(
           JSON.parse(dataTask).filter(
@@ -1180,7 +1180,7 @@ const Dashboard = ({ dataTask }) => {
   return (
     <>
       <Grid item md={12}>
-        <Grid item md={12}>
+        <Grid mb={4} item md={12} alignItems='end' justifyContent={'end'} display={'flex'}>
           <FormControl sx={{ m: 1, minWidth: 120 }}>
             <InputLabel id='demo-simple-select-helper-label'>Tahun</InputLabel>
             <Select
@@ -1222,7 +1222,7 @@ const Dashboard = ({ dataTask }) => {
             </Select>
           </FormControl>
         </Grid>
-        <Card height={300}>
+        <Card mt={4} height={300}>
           <DataGrid
             height={300}
             // initialState={{
