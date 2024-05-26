@@ -144,7 +144,7 @@ const RapatApproveList = props => {
   }
 
   const columns = [
-    { field: 'id', headerName: 'No', type: 'string', maxWidth: 20 },
+    // { field: 'id', headerName: 'No', type: 'string', maxWidth: 20 },
     {
       field: 'namaRapat',
       renderHeader: () => (
@@ -295,7 +295,7 @@ const RapatApproveList = props => {
       id: row.id,
       namaRapat: row.namaRapat,
       waktu:
-        new Date(row.meetDate).toLocaleDateString('id') +
+        new Date(row.meetDate).toLocaleDateString('en') +
         ' (' +
         new Date(row.startTime).getHours() +
         ':' +
