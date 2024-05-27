@@ -714,11 +714,6 @@ const TaskManageEditViews = props => {
         head => head.templateTableId === (props.dataPerusahaan.length > 0 ? props.dataPerusahaan[0].templateTable : 1)
       )
     )
-    console.log(judulGrafik)
-    console.log(judulGrafik)
-    console.log('judulGrafik')
-    console.log('judulGrafik')
-    console.log('judulGrafik')
   }, [props.dataPerusahaan])
 
   return (

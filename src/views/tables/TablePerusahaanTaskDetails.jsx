@@ -5,7 +5,7 @@ import axios from 'src/pages/api/axios'
 import Swal from 'sweetalert2'
 
 import * as React from 'react'
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useMemo } from 'react'
 import { Autocomplete } from '@mui/material'
 import Box from '@mui/material/Box'
 import Grid from '@mui/material/Grid'
@@ -77,6 +77,7 @@ const TableGroupPerusahaan = props => {
   const [pmlAutoComplete, setPmlAutoComplete] = useState({})
   const [pclAutoComplete, setPclAutoComplete] = useState({})
 
+  console.log(mitra)
   const templateTable = participants.length > 0 ? participants[0].templateTable : 5
   const [kolomLP, setKolomLP] = useState({
     kol1: 'nbs',
@@ -127,13 +128,17 @@ const TableGroupPerusahaan = props => {
     value: '',
     label: ''
   })
-  const optionPCL = mitra.map(mi => ({
-    value: mi.id,
-    label:
-      mi.name +
-      ', total Gaji :  Rp' +
-      ((totalGajiMitra.find(totalGaji => totalGaji.id === mi.id)?.totalGaji || 0).toLocaleString('id-ID') || '0')
-  }))
+  const optionPCL = useMemo(
+    () =>
+      mitra.map(mi => ({
+        value: mi.id,
+        label:
+          mi.name +
+          ', total Gaji :  Rp' +
+          ((totalGajiMitra.find(totalGaji => totalGaji.id === mi.id)?.totalGaji || 0).toLocaleString('id-ID') || '0')
+      })),
+    [mitra]
+  )
   const optionPML = pml.map(pml => ({
     value: pml.id,
     label: pml.name + ' - Organik'

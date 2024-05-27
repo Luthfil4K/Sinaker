@@ -117,9 +117,10 @@ const TableProjectDetailTask = props => {
   }
 
   const columns = [
-    // { field: 'id', headerName: 'No', type: 'string', width: 70 },
+    // { field: 'id', resizable: true, headerName: 'No', type: 'string', width: 70 },
     {
       field: 'subKegiatan',
+
       headerName: 'Sub Kegiatan',
 
       renderCell: params => (
@@ -138,6 +139,7 @@ const TableProjectDetailTask = props => {
     },
     {
       field: 'jenisKegiatan',
+
       headerName: 'Jenis Kegiatan',
       width: 150,
       renderCell: params => (
@@ -150,11 +152,12 @@ const TableProjectDetailTask = props => {
     {
       field: 'realisasi',
       width: 70,
+
       headerName: 'Realisasi',
       type: 'string'
     },
 
-    { field: 'target', headerName: 'Target', type: 'string', width: 70 },
+    { field: 'target', resizable: true, headerName: 'Target', type: 'string', width: 70 },
     {
       field: 'status',
       renderCell: params => (
@@ -171,11 +174,13 @@ const TableProjectDetailTask = props => {
         />
       ),
       width: 120,
+
       headerName: 'Status',
       type: 'string'
     },
     {
       field: 'persentase',
+
       headerName: 'Persentase progres',
       renderCell: params => (
         <Typography sx={{ fontWeight: 500, fontSize: '0.875rem !important' }}>
@@ -190,6 +195,7 @@ const TableProjectDetailTask = props => {
     },
     {
       field: 'deadline',
+
       headerName: 'Tanggal Berakhir',
       width: 140,
       type: 'string',
@@ -252,6 +258,7 @@ const TableProjectDetailTask = props => {
     <>
       <Card>
         <DataGrid
+          disableColumnResize={false}
           initialState={{
             sorting: {
               sortModel: [{ field: 'deadline', sort: 'asc' }]

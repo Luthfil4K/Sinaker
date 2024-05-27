@@ -58,11 +58,6 @@ const RapatDetailViews = props => {
   const [fileTambahan, setFileTambahan] = useState([])
   const [dokumenRapat, setDokumenRapat] = useState(props.dataDokumen)
 
-  console.log('dokumenRapat')
-  console.log('dokumenRapat')
-  console.log(dokumenRapat)
-  console.log(dokumenRapat)
-  console.log(dokumenRapat)
   const handleChangeTab = (event, newValue) => {
     setValue(newValue)
   }
@@ -435,11 +430,7 @@ const RapatDetailViews = props => {
     setFileTambahan(abc)
   }
 
-  useEffect(() => {
-    // console.log(fileTambahan)
-    // console.log('fileTambahan')
-    // console.log('fileTambahan')
-  }, [fileTambahan])
+  useEffect(() => {}, [fileTambahan])
   useEffect(() => {
     fileTambahan.length > 0 ? setDokumenRapat(prevValues => [...prevValues, ...fileTambahan]) : 0
   }, [fileTambahan])
@@ -492,8 +483,8 @@ const RapatDetailViews = props => {
   }
 
   const handleTampil = () => {
-    // tampil === 'none' ? setTampil('flex') : setTampil('none')
-    console.log(tampil)
+    tampil === 'none' ? setTampil('flex') : setTampil('none')
+    // console.log(tampil)
   }
   return (
     <>
@@ -630,34 +621,30 @@ const RapatDetailViews = props => {
             <TabPanel value='2' sx={{ p: 0, height: tampil === 'none' ? 335 : 1235 }}>
               <Grid mt={4} container spacing={4}>
                 <Grid display={'flex'} justifyContent={'center'} item xs={5} height={330}>
-                  <Card sx={{ width: 270, height: 300 }}>
-                    <CardContent
-                      height={270}
-                      sx={{
-                        // backgroundColor: 'black',
-                        marginTop: 5,
-                        width: 270,
-                        heigth: 300,
-                        onClick: handleTampil,
-                        justifyContent: 'center',
-                        display: 'flex',
-                        aligItems: 'center'
-                      }}
-                    >
-                      <IconButton>
-                        <DocumentScannerIcon sx={{ fontSize: 200 }} size={'large'}>
-                          <input
-                            style={{ display: 'none' }}
-                            id='raised-button-file'
-                            multiple
-                            type='file'
-                            className='h-full w-full bg-green-200 opacity-0 z-10 absolute cursor-pointer'
-                            name='upfile'
-                            ref={refParam => (inputRef = refParam)}
-                          />
-                        </DocumentScannerIcon>
-                      </IconButton>
-                    </CardContent>
+                  <Card sx={{ backgroundColor: '#F2F2F2', width: 270, height: 300 }}>
+                    <Link>
+                      <CardContent
+                        height={270}
+                        sx={{
+                          // backgroundColor: 'black',
+                          marginTop: 5,
+                          width: 270,
+                          heigth: 300,
+                          justifyContent: 'center',
+                          display: 'flex',
+                          aligItems: 'center'
+                        }}
+                      >
+                        <IconButton
+                          type='submit'
+                          onClick={handleTampil}
+                          edge='end'
+                          aria-label='toggle password visibility'
+                        >
+                          <DocumentScannerIcon sx={{ fontSize: 200 }} size={'large'}></DocumentScannerIcon>
+                        </IconButton>
+                      </CardContent>
+                    </Link>
                   </Card>
                 </Grid>
                 <Grid item xs={7} height={330} bgcolor={'white'}>

@@ -80,7 +80,9 @@ export async function getServerSideProps(context) {
         not: 99
       }
     },
-    include: {
+    select: {
+      id: true,
+      name: true,
       UserProject: {
         select: {
           id: true,
@@ -102,6 +104,28 @@ export async function getServerSideProps(context) {
       },
       pekerjaan_harian: true
     }
+    // include: {
+    //   UserProject: {
+    //     select: {
+    //       id: true,
+    //       project: true
+    //     }
+    //   },
+    //   TaskOrganik: {
+    //     select: {
+    //       id: true,
+    //       task: true
+    //     }
+    //   },
+    //   TimKerjaPegawai: true,
+    //   taskToDo: true,
+    //   beban_kerja_pegawai: {
+    //     select: {
+    //       bebanKerja: true
+    //     }
+    //   },
+    //   pekerjaan_harian: true
+    // }
   })
 
   const template = await prisma.template_table.findMany({})
@@ -127,6 +151,10 @@ export async function getServerSideProps(context) {
       id: {
         not: 0
       }
+    },
+    select: {
+      id: true,
+      name: true
     }
   })
 
@@ -154,8 +182,8 @@ export async function getServerSideProps(context) {
         pmlId: true,
         pclId: true,
         gajiPml: true,
-        gajiPcl: true,
-        task: true
+        gajiPcl: true
+        // task: true
       }
     })
 
@@ -164,7 +192,7 @@ export async function getServerSideProps(context) {
         const existingEntry = mitraLimitHonor.find(entry => entry.id === res.id)
 
         if (!existingEntry) {
-          console.log(res)
+          // console.log(res)
           mitraLimitHonor.push(res)
         } else {
           mitraLimitHonor.push({
@@ -187,8 +215,8 @@ export async function getServerSideProps(context) {
     }
   }
 
-  const ada993 = mitraLimitHonor.find(entry => entry.pclId === 993)
-  console.log(ada993)
+  // const ada993 = mitraLimitHonor.find(entry => entry.pclId === 993)
+  // console.log(ada993)
 
   const pekerjaanHarian = await prisma.pekerjaan_harian.findMany({
     where: {

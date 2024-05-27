@@ -805,6 +805,37 @@ const Dashboard = ({ dataTask }) => {
       ),
       width: 100
     },
+    {
+      field: 'persentase',
+      headerName: 'Persentase',
+      renderHeader: () => (
+        <Typography sx={{ fontWeight: 900, fontSize: '0.875rem !important', textAlign: 'center' }}>
+          Persentase
+        </Typography>
+      ),
+      renderCell: params => (
+        <Typography
+          textAlign={'center'}
+          color={
+            params.row.durationOff != 'Kegiatan belum dimulai'
+              ? params.row.durationOff != 'Kegiatan telah selesai'
+                ? params.row.realisasi < params.row.akumulasiTargetHariIni
+                  ? params.row.realisasi <= params.row.yellowAkumulasiTargetHariIni
+                    ? 'error.main'
+                    : 'warning.main'
+                  : 'success.main'
+                : params.row.durationOff == 'Kegiatan telah selesai' && params.row.realisasi >= params.row.target
+                ? 'secondary.dark'
+                : 'error.main'
+              : 'secondary.dark'
+          }
+          sx={{ fontWeight: 500, fontSize: '0.875rem !important' }}
+        >
+          {params.row.persentase}
+        </Typography>
+      ),
+      width: 100
+    },
 
     {
       field: 'status',
@@ -1127,6 +1158,7 @@ const Dashboard = ({ dataTask }) => {
       jenisKegiatan: task.jenisKeg,
       target: task.target,
       realisasi: task.realisasi,
+      persentase: task.realisasi && task.target != 0 ? `${Math.round(100 * (task.realisasi / task.target))}%` : `0%`,
       status: task.target / task.realisasi === 1 ? 'Done' : 'On Progress',
       deadline: new Date(task.duedate).toLocaleDateString('id'),
       startDate: new Date(task.startDate).toLocaleDateString('id'),

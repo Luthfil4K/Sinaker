@@ -123,7 +123,7 @@ export default async function handler(req, res) {
                     kecamatan: participant.kodeKecamatan.toString(),
                     namaKec: participant.namaKecamatan,
                     alamat: templateTable == 5 ? participant.alamat : '',
-                    target: 0,
+                    target: 1,
                     realisasi: 0,
                     hasilPencacahan: '',
 
@@ -141,6 +141,7 @@ export default async function handler(req, res) {
                   }
                 })
               }
+
               async function createNewData() {
                 const company = await prisma.perusahaan.create({
                   data: {
@@ -185,6 +186,17 @@ export default async function handler(req, res) {
                 })
               }
             })
+
+            if (tpp) {
+              const statusImportTarel = await prisma.sub_kegiatan.update({
+                where: {
+                  id: Number(task.id)
+                },
+                data: {
+                  importStatus: 1
+                }
+              })
+            }
 
             // buat add peserta disini
 
@@ -244,7 +256,7 @@ export default async function handler(req, res) {
                   kecamatan: participant.kodeKecamatan.toString(),
                   namaKec: participant.namaKecamatan,
                   alamat: '',
-                  target: 0,
+                  target: 1,
                   realisasi: 0,
                   hasilPencacahan: '',
                   duedate: new Date(),
@@ -261,6 +273,17 @@ export default async function handler(req, res) {
                 }
               })
             })
+
+            if (tnp) {
+              const statusImportTarel = await prisma.sub_kegiatan.update({
+                where: {
+                  id: Number(task.id)
+                },
+                data: {
+                  importStatus: 1
+                }
+              })
+            }
 
             peserta.map(async peserta => {
               const tp = await prisma.sub_kegiatan_mitra.create({

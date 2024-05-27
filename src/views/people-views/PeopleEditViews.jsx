@@ -120,7 +120,7 @@ const PeopleAddViews = props => {
             label='Nip'
             sx={{ marginBottom: 4 }}
           />
-          <FormControl fullWidth sx={{ marginBottom: 4 }}>
+          {/* <FormControl fullWidth sx={{ marginBottom: 4 }}>
             <InputLabel id='form-layouts-separator-select-label'>Fungsi</InputLabel>
             <Select
               name='pegawaiFungsi'
@@ -139,7 +139,7 @@ const PeopleAddViews = props => {
               <MenuItem value={6}>Neraca Wilayah dan Analisis Statistik</MenuItem>
               <MenuItem value={7}>Integrasi Pengolahan dan Diseminasi Statistik</MenuItem>
             </Select>
-          </FormControl>
+          </FormControl> */}
           <TextField
             name='pegawaiEmail'
             onChange={handleChange('pegawaiEmail')}
@@ -150,7 +150,7 @@ const PeopleAddViews = props => {
             label='Email/Username'
             sx={{}}
           />
-          <FormControl fullWidth sx={{ marginTop: 4 }}>
+          {/* <FormControl fullWidth sx={{ marginTop: 4 }}>
             <InputLabel htmlFor='auth-login-password'>Password</InputLabel>
             <OutlinedInput
               name='pegawaiPassword'
@@ -172,7 +172,7 @@ const PeopleAddViews = props => {
                 </InputAdornment>
               }
             />
-          </FormControl>
+          </FormControl> */}
 
           <Button onClick={handleEdit} fullWidth size='medium' variant='contained' sx={{ marginTop: 4 }}>
             Edit
