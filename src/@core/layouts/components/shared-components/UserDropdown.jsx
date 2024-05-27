@@ -149,7 +149,7 @@ const UserDropdown = props => {
           </Box>
         </Box>
         <Divider sx={{ mt: 0, mb: 1 }} />
-        <MenuItem sx={{ p: 0 }} onClick={() => handleDropdownClose(`/pegawai-detail-gaji/${user.id}`)}>
+        <MenuItem sx={{ p: 0 }} onClick={() => handleDropdownClose(`/account/${user.id}`)}>
           <Box sx={styles}>
             <AccountOutline sx={{ marginRight: 2 }} />
             Profile
