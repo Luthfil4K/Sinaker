@@ -157,7 +157,7 @@ const TableProjectDetailTask = props => {
       type: 'string'
     },
 
-    { field: 'target', resizable: true, headerName: 'Target', type: 'string', width: 70 },
+    { field: 'target', headerName: 'Target', type: 'string', width: 70 },
     {
       field: 'status',
       renderCell: params => (
