@@ -334,7 +334,9 @@ model meet {
   statusSendEmail           Int
   user_meet                 user_meet[]
   notulensi_meet            notulensi_meet[]
+  undangan_file             undangan_file[]
   status                    String                      @db.VarChar(128)
+
 }
 
 model user_meet {
@@ -348,6 +350,15 @@ model user_meet {
 model notulensi_meet {
   id                        Int                         @id @default(autoincrement())
   taskfile                  String?                     @db.VarChar(255)
+  meet                      meet                        @relation(fields: [meetId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  meetId                    Int
+}
+
+model undangan_file{
+  id                        Int                         @id @default(autoincrement())
+  filename                  String
+  path                      String
+  createdAt                 DateTime                    @default(now())
   meet                      meet                        @relation(fields: [meetId], references: [id], onDelete: Cascade, onUpdate: Cascade)
   meetId                    Int
 }
@@ -445,5 +456,4 @@ model pesan_pencairan{
   pesan                     String
   resolve                   Int                         @default(0)
 }
-
 

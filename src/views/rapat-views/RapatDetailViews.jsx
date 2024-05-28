@@ -309,7 +309,8 @@ const RapatDetailViews = props => {
             lampiran: props.dataRapat.lampiran,
             perihal: props.dataRapat.perihal,
             ditujukan: props.dataRapat.ditujukan,
-            pesertaRapatId: props.dataPesertaRapat
+            pesertaRapatId: props.dataPesertaRapat,
+            fileUndangan: props.dataRapat.undangan_file ? props.dataRapat.undangan_file : 'tidak ada'
           })
 
           if (res.status === 201) {
@@ -349,7 +350,8 @@ const RapatDetailViews = props => {
                 lampiran: props.dataRapat.lampiran,
                 perihal: props.dataRapat.perihal,
                 ditujukan: props.dataRapat.ditujukan,
-                pesertaRapatId: props.dataPesertaRapat
+                pesertaRapatId: props.dataPesertaRapat,
+                fileUndangan: props.dataRapat.undangan_file ? props.dataRapat.undangan_file : 'tidak ada'
               })
               .then(async res => {
                 await Swal.fire({
@@ -366,7 +368,6 @@ const RapatDetailViews = props => {
                 })
               })
           } else {
-            router.push('/people')
           }
         })
       }
@@ -397,6 +398,24 @@ const RapatDetailViews = props => {
         const imgY = 30
         pdf.addImage(imgData, 'PNG', imgX, imgY, imgWidth * ratio, imgHeight * ratio)
         pdf.save('invoice.pdf')
+        // Convert PDF to Blob
+        // const blob = pdf.output('blob')
+        // const file = new File([blob], 'invoice.pdf', { type: 'application/pdf' })
+
+        // // Create FormData and append file
+        // const formData = new FormData()
+        // formData.append('file', file)
+
+        // // Upload the PDF file to the server
+        // axios
+        //   .post('/rapat-download-undangan', formData)
+        //   .then(res => {
+        //     console.log(res.data)
+        //     alert('File uploaded successfully')
+        //   })
+        //   .catch(err => {
+        //     console.error('Error while uploading the file:', err)
+        //   })
       })
     } catch (error) {
       console.error('Error while processing:', error)

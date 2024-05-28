@@ -26,6 +26,9 @@ export async function getServerSideProps(context) {
   const rapat = await prisma.meet.findUnique({
     where: {
       id: parseInt(context.params.id)
+    },
+    include: {
+      undangan_file: true
     }
   })
   const userRapat = await prisma.user_meet.findMany({

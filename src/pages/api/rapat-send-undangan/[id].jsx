@@ -6,19 +6,6 @@ export default async function handler(req, res) {
 
   const { method } = req
 
-  console.log('id')
-  console.log('id')
-  console.log('id')
-  console.log('id')
-  console.log(id)
-  console.log(id)
-  console.log(id)
-  console.log(id)
-  console.log(id)
-  console.log(id)
-  console.log(id)
-  console.log(id)
-
   if (method === 'PUT') {
     const {
       namaRapat,
@@ -33,8 +20,13 @@ export default async function handler(req, res) {
       nomor,
       lampiran,
       perihal,
-      ditujukan
+      ditujukan,
+      fileUndangan
     } = req.body
+
+    const daftarEmail = pesertaRapatId.map(a => {
+      return a.user.email
+    })
 
     try {
       const rapat = await prisma.meet.update({
@@ -45,14 +37,17 @@ export default async function handler(req, res) {
           statusSendEmail: 1
         }
       })
+      // const rapat = await prisma.meet.get({})
 
       // mailOptions.to = participants.map(participant => {
       //   if (participant.checked) {
       //     return participant.email
       //   }
       // })
-      mailOptions.to = 'jelakora141516@gmail.com'
 
+      mailOptions.to = ['jelakora141516@gmail.com', 'akaishuichi141516@gmail.com']
+
+      console.log(fileUndangan.file)
       mailOptions.subject = namaRapat
       mailOptions.title = namaRapat
       mailOptions.description = description
@@ -72,6 +67,10 @@ export default async function handler(req, res) {
       mailOptions.endTime = new Date(meetDate).toLocaleDateString('id-ID')
       mailOptions.link = tempatRapat
       mailOptions.duration = duration
+      mailOptions.id = id
+      mailOptions.undanganNama = fileUndangan[0].filename
+      mailOptions.undanganPath = fileUndangan[0].path
+      mailOptions.undanganId = fileUndangan[0].id
 
       sendMailMeetCreated(mailOptions)
 

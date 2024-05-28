@@ -1,5 +1,5 @@
 // react import
-import { useState, forwardRef, useEffect } from 'react'
+import { useState, forwardRef, useEffect, useRef } from 'react'
 
 // axios
 import axios from 'src/pages/api/axios'
@@ -24,9 +24,11 @@ import MenuItem from '@mui/material/MenuItem'
 import FormGroup from '@mui/material/FormGroup'
 import FormControlLabel from '@mui/material/FormControlLabel'
 import Chip from '@mui/material/Chip'
+import Paper from '@mui/material/Paper'
+import { styled } from '@mui/material/styles'
 
 import { useRouter } from 'next/dist/client/router'
-import { Autocomplete } from '@mui/lab'
+import Autocomplete from '@mui/material/Autocomplete'
 
 import TableAddParticipant from 'src/views/tables/TableAddParticipant'
 import DragAndDrop from 'src/views/form-layouts/DragAndDrop'
@@ -36,12 +38,16 @@ import DatePicker from 'react-datepicker'
 import 'react-datepicker/dist/react-datepicker.css'
 import DatePickerWrapper from 'src/@core/styles/libs/react-datepicker'
 
+// export pdf undangan
+import html2canvas from 'html2canvas'
+import jsPDF from 'jspdf'
+
 const RapatCreateViews = props => {
+  const pdfRef = useRef()
   const [selectedDate, setSelectedDate] = useState(new Date())
   const [selectedTimeS, setSelectedTimeS] = useState(new Date())
   const [selectedTimeE, setSelectedTimeE] = useState(new Date())
   const session = useSession()
-  console.log(session)
   const [timKerja, setTimKerja] = useState(props.dataTim)
   const [dataUser, setDataUser] = useState(props.data)
   const [values, setValues] = useState({
@@ -68,9 +74,205 @@ const RapatCreateViews = props => {
           Browse
         </Button>
       </label> */}
-      {/* <DragAndDrop dataMeet={props.dataRapat}></DragAndDrop> */}
+      {/* <DragAndDrop dataMeet={values}></DragAndDrop> */}
     </>
   )
+
+  const UndanganRapat = () => {
+    const Img = styled('img')(({ theme }) => ({ height: 110 }))
+    return (
+      <>
+        <Paper bgC sx={{ display: 'flex' }}>
+          <Grid container sx={{ height: 800 }}>
+            <Grid item xs={12}>
+              <Grid ref={pdfRef} container sx={{ height: 800 }}>
+                <Grid item xs={1}></Grid>
+                <Grid item xs={10}>
+                  <Grid container>
+                    <Grid sx={{ height: 150 }} item xs={12}>
+                      <Img alt='Stumptown Roasters' src='/images/logos/logobpsBogor.png' />
+                    </Grid>
+                    {/* nomor dan perihal */}
+                    <Grid sx={{ height: 100 }} item xs={12}>
+                      <Grid container>
+                        <Grid item xs={1}></Grid>
+                        <Grid item xs={2}>
+                          <Typography color={'black'} variant={'body2'}>
+                            Nomor
+                          </Typography>
+                          <Typography color={'black'} variant={'body2'}>
+                            Lampiran
+                          </Typography>
+                          <Typography color={'black'} variant={'body2'}>
+                            Perihal
+                          </Typography>
+                        </Grid>
+                        <Grid item xs={6}>
+                          <Typography color={'black'} variant={'body2'}>
+                            {/* : B-406/32010/PL.200/{(new Date().getMonth() + 1).toString().padStart(2, '0')}/
+                            {new Date().getFullYear()} */}
+                            : {values.nomor}
+                            {/* menambahkan karakter tertentu ke awal sebuah string sehingga panjang total string tersebut menjadi setidaknya sama dengan panjang target yang ditentukan.
+                             Jika panjang string awal sudah mencapai atau melebihi panjang target, maka metode padStart tidak melakukan apa pun. */}
+                          </Typography>
+                          <Typography color={'black'} variant={'body2'}>
+                            : {values.lampiran}
+                          </Typography>
+                          <Typography color={'black'} variant={'body2'}>
+                            {/* : Undangan {values.namaRapat} */}: {values.perihal}
+                          </Typography>
+                        </Grid>
+                        <Grid display={'flex'} justifyContent={'end'} item xs={2}>
+                          <Typography color={'black'} variant={'body2'}>
+                            {/* Bogor, 16 Maret 2024 */}
+                            Cibinong,{' '}
+                            {new Date().toLocaleDateString('id-ID', {
+                              year: 'numeric',
+                              month: 'long',
+                              day: 'numeric'
+                            })}
+                          </Typography>
+                        </Grid>
+                        <Grid display={'flex'} justifyContent={'end'} item xs={1}></Grid>
+                      </Grid>
+                    </Grid>
+                    {/* isi */}
+                    <Grid sx={{ height: 400 }} item xs={12}>
+                      <Grid container>
+                        <Grid item xs={1}></Grid>
+                        <Grid item xs={11}>
+                          <Typography color={'black'} variant={'body2'}>
+                            Yth.
+                          </Typography>
+                          <Typography color={'black'} variant={'body2'}>
+                            {values.ditujukan}
+                          </Typography>
+                          <Typography color={'black'} variant={'body2'}>
+                            Di
+                          </Typography>
+                        </Grid>
+                        <Grid item xs={1}></Grid>
+                        <Grid item xs={11}>
+                          <Typography sx={{ marginLeft: 5 }} color={'black'} variant={'body2'}>
+                            Cibinong
+                          </Typography>
+                        </Grid>
+                        <Grid item xs={12} height={20}></Grid>
+                        <Grid item xs={1}></Grid>
+                        <Grid item xs={10}>
+                          <Typography sx={{ marginLeft: 10 }} color={'black'} variant={'body2'}>
+                            Dalam rangka {values.deskRapat} saudara diundang untuk menghadiri rapat pada:
+                          </Typography>
+                        </Grid>
+                        <Grid item xs={1}></Grid>
+                        <Grid item xs={12} height={20}></Grid>
+                        {/* haritanggal rapat, dll */}
+                        <Grid item xs={2}></Grid>
+                        <Grid item xs={9}>
+                          <Grid container>
+                            <Grid item xs={3}>
+                              <Typography color={'black'} variant={'body2'}>
+                                Hari
+                              </Typography>
+                              <Typography color={'black'} variant={'body2'}>
+                                Tanggal
+                              </Typography>
+                              <Typography color={'black'} variant={'body2'}>
+                                Waktu
+                              </Typography>
+
+                              <Typography color={'black'} variant={'body2'}>
+                                Tempat
+                              </Typography>
+                            </Grid>
+                            <Grid item xs={9}>
+                              <Typography color={'black'} variant={'body2'}>
+                                :{' '}
+                                {new Date(selectedDate).toLocaleDateString('id-ID', {
+                                  weekday: 'long'
+                                })}
+                              </Typography>
+                              <Typography color={'black'} variant={'body2'}>
+                                :{' '}
+                                {new Date(selectedDate).toLocaleDateString('id-ID', {
+                                  year: 'numeric',
+                                  month: 'long',
+                                  day: 'numeric'
+                                })}
+                              </Typography>
+                              <Typography color={'black'} variant={'body2'}>
+                                :{' '}
+                                {new Date(selectedTimeS).toLocaleTimeString('id-ID', {
+                                  hour: '2-digit',
+                                  minute: '2-digit'
+                                })}{' '}
+                                -
+                                {new Date(selectedTimeE).toLocaleTimeString('id-ID', {
+                                  hour: '2-digit',
+                                  minute: '2-digit'
+                                })}{' '}
+                                WIB
+                              </Typography>
+
+                              <Typography color={'black'} variant={'body2'}>
+                                : {values.tempatRapat}
+                              </Typography>
+                            </Grid>
+                          </Grid>
+                        </Grid>
+                        <Grid item xs={1}></Grid>
+                        {/* Penutup */}
+                        <Grid item xs={12} height={20}></Grid>
+                        <Grid item xs={1}></Grid>
+                        <Grid item xs={10}>
+                          <Typography sx={{ marginLeft: 10 }} color={'black'} variant={'body2'}>
+                            Demikian atas perhatian dan kerja samanya, diucapkan terima kasih.
+                          </Typography>
+                        </Grid>
+                        <Grid item xs={1}></Grid>
+                        {/* ttd */}
+                        <Grid item xs={12} height={20}></Grid>
+                        <Grid item xs={12} height={20}></Grid>
+                        <Grid item xs={12} height={20}></Grid>
+                        <Grid container>
+                          <Grid item xs={8}></Grid>
+                          <Grid item xs={3}>
+                            <Typography textAlign={'center'} color={'black'} variant={'body2'}>
+                              Kepala Badan Pusat Statistik
+                            </Typography>
+                            <Typography textAlign={'center'} color={'black'} variant={'body2'}>
+                              Kabupaten Bogor
+                            </Typography>
+                            <Grid mt={5} height={50} container>
+                              {/* <Grid item xs={12} display={'flex'} justifyContent={'center'}>
+                                {values.status === 'disetujui' ? (
+                                  <>
+                                    <img alt='Stumptown Roasters' src='/images/logos/e-ttd.png' />
+                                  </>
+                                ) : (
+                                  ''
+                                )}
+                              </Grid> */}
+                            </Grid>
+                            <Typography mt={5} textAlign={'center'} color={'black'} variant={'body2'}>
+                              Dr. Daryanto, S.ST, M.M
+                            </Typography>
+                          </Grid>
+                          <Grid item xs={1}></Grid>
+                        </Grid>
+                      </Grid>
+                    </Grid>
+                    {/* <Grid sx={{ height: 150 }} item xs={12} bgcolor={'success.dark'}></Grid> */}
+                  </Grid>
+                </Grid>
+                <Grid item xs={1}></Grid>
+              </Grid>
+            </Grid>
+          </Grid>
+        </Paper>
+      </>
+    )
+  }
 
   const handleTempatRapat = e => {
     setValues(values => ({
@@ -146,61 +348,111 @@ const RapatCreateViews = props => {
     setValues({ ...values, kegAnggotaId: tmpId })
   }, [values.kegAnggota])
   const router = useRouter()
-  console.log(selectedTimeE)
-  console.log(selectedTimeS)
-  useEffect(() => {
-    console.log(selectedTimeE - selectedTimeS)
-  }, [values])
+
   const handleCreateRapat = async e => {
     e.preventDefault()
-
+    const input = pdfRef.current
     try {
-      if (rapat)
-        while (true) {
-          const res = await axios.post('/rapat', {
-            namaRapat: values.namaRapat,
-            meetDate: selectedDate,
-            startTime: selectedTimeS,
-            endTime: selectedTimeE,
-            duration: selectedTimeE - selectedTimeS,
-            tempatRapat: values.tempatRapat,
-            description: values.deskRapat,
-            createdById: session.data.uid,
-            pesertaRapatId: values.kegAnggotaId,
-            nomor: values.nomor,
-            lampiran: values.lampiran,
-            perihal: values.perihal,
-            ditujukan: values.ditujukan
-          })
+      while (true) {
+        // const res = await axios.post('/rapat', {
+        //   namaRapat: values.namaRapat,
+        //   meetDate: selectedDate,
+        //   startTime: selectedTimeS,
+        //   endTime: selectedTimeE,
+        //   duration: selectedTimeE - selectedTimeS,
+        //   tempatRapat: values.tempatRapat,
+        //   description: values.deskRapat,
+        //   createdById: session.data.uid,
+        //   pesertaRapatId: values.kegAnggotaId,
+        //   nomor: values.nomor,
+        //   lampiran: values.lampiran,
+        //   perihal: values.perihal,
+        //   ditujukan: values.ditujukan
+        // })
 
-          if (res.status === 201) {
-            Swal.fire({
-              position: 'center',
-              icon: 'success',
-              title: 'Rapat Berhasil Dibuat',
-              showConfirmButton: false,
-              timer: 1000,
-              width: 300
-            }).then(router.push('/rapat-create'))
+        html2canvas(input).then(canvas => {
+          const imgData = canvas.toDataURL('image/png')
+          const pdf = new jsPDF('p', 'mm', 'a4', true)
+          const pdfWidth = pdf.internal.pageSize.getWidth() + 1
+          const pdfHeight = pdf.internal.pageSize.getHeight()
+          const imgWidth = canvas.width + 100
+          const imgHeight = canvas.height + 100
+          const ratio = Math.min(pdfWidth / imgWidth, pdfHeight / imgHeight)
+          const imgX = (pdfWidth - imgWidth * ratio) / 2
+          const imgY = 30
+          pdf.addImage(imgData, 'PNG', imgX, imgY, imgWidth * ratio, imgHeight * ratio)
+          // pdf.save('invoice.pdf')
+          // Convert PDF to Blob
+          const blob = pdf.output('blob')
+          const file = new File([blob], 'invoice.pdf', { type: 'application/pdf' })
 
-            setValues({
-              namaRapat: '',
-              tempatRapat: '',
-              deskRapat: '-',
-              pesertaRapat: 7,
-              kegTim: '',
-              kegAnggotaId: '',
-              kegAnggota: [dataUser[3].name, dataUser[1].name],
-              kegKetuaId: ''
+          // Create FormData and append file
+          const formData = new FormData()
+
+          formData.append('namaRapat', values.namaRapat)
+          formData.append('meetDate', selectedDate)
+          formData.append('startTime', selectedTimeS)
+          formData.append('endTime', selectedTimeE)
+          formData.append('duration', selectedTimeE - selectedTimeS)
+          formData.append('tempatRapat', values.tempatRapat)
+          formData.append('description', values.deskRapat)
+          formData.append('createdById', session.data.uid)
+          formData.append('pesertaRapatId', JSON.stringify(values.kegAnggotaId)) // Array needs to be stringified
+          formData.append('nomor', values.nomor)
+          formData.append('lampiran', values.lampiran)
+          formData.append('perihal', values.perihal)
+          formData.append('ditujukan', values.ditujukan)
+
+          // Assuming formData is your file input
+          formData.append('file', file) // Ensure 'file' corresponds to the name attribute in your input
+
+          // Upload the PDF file to the server
+          axios
+            .post('/rapat-create-rapat-undangan', formData, {
+              headers: {
+                'Content-Type': 'multipart/form-data'
+              }
             })
+            .then(res => {
+              console.log(res.data)
+              Swal.fire({
+                position: 'center',
+                icon: 'success',
+                title: 'Rapat Berhasil Dibuat',
+                showConfirmButton: false,
+                timer: 1000,
+                width: 300
+              }).then(router.push('/rapat-create'))
 
-            setSelectedDate(new Date())
-            setSelectedTimeS(new Date())
-            setSelectedTimeE(new Date())
-          }
+              setValues({
+                namaRapat: '',
+                tempatRapat: '',
+                deskRapat: '-',
+                pesertaRapat: 7,
+                kegTim: '',
+                kegAnggotaId: '',
+                kegAnggota: [dataUser[3].name, dataUser[1].name],
+                kegKetuaId: ''
+              })
 
-          break
-        }
+              setSelectedDate(new Date())
+              setSelectedTimeS(new Date())
+              setSelectedTimeE(new Date())
+            })
+            .catch(err => {
+              console.log(err)
+              Swal.fire({
+                title: 'Create Rapat Failed',
+                text: err,
+                icon: 'error',
+                confirmButtonColor: '#d33',
+                confirmButtonText: 'OK'
+              })
+            })
+        })
+
+        break
+      }
     } catch (error) {
       Swal.fire({
         title: 'Create Rapat Failed',
@@ -213,7 +465,7 @@ const RapatCreateViews = props => {
   }
   const handleCreate = e => {
     Swal.fire({
-      text: 'Buat Rapat?',
+      text: 'Ajukan Rapat?',
       icon: 'warning',
       showCancelButton: true,
       confirmButtonColor: '#3085d6',
@@ -239,19 +491,8 @@ const RapatCreateViews = props => {
     return <TextField fullWidth {...props} inputRef={ref} label='Waktu Selesai' autoComplete='off' />
   })
 
-  const projectRutin = [
-    'PENGELOLAAN WEB',
-    'SURVEI IBS BULANAN',
-    'SURVEI IBS TAHUNAN',
-    'SURVEI',
-    'SAKERNAS SEMESTERAN',
-    'SAKERNAS TAHUNAN'
-  ]
-  const jenisKegiatan = ['Pengolahan', 'Pelaksanaan', 'evaluasi', 'persiapan']
-
-  const pegawai = ['Pegawai1', 'Pegawai2', 'Pegawai3', 'Pegawai4']
   return (
-    <Card>
+    <Card sx={{ height: 950 }}>
       <Grid container spacing={5} sx={{ padding: '32px' }}>
         <Grid item xs={12}>
           <Typography variant='h5'>Ajukan Rapat</Typography>
@@ -364,22 +605,6 @@ const RapatCreateViews = props => {
         </Grid>
 
         <Grid item xs={12}>
-          {/* <TextField
-            value={values.tempatRapat}
-            onChange={handleChange('tempatRapat')}
-            fullWidth
-            multiline
-            label='Meeting Place'
-            placeholder='Meeting Place'
-          /> */}
-          {/* <FormControl fullWidth>
-            <InputLabel id='link'>Meeting Place</InputLabel>
-            <Select labelId='Link' id='demo-simple-select' label='Meeting Place'>
-              <MenuItem value={10}>Link 1</MenuItem>
-              <MenuItem value={20}>Link 2</MenuItem>
-              <MenuItem value={30}>Link 3</MenuItem>
-            </Select>
-          </FormControl> */}
           <FormControl fullWidth>
             <InputLabel id='demo-simple-select-helper-label'>Meeting Place</InputLabel>
             <Select
@@ -455,10 +680,16 @@ const RapatCreateViews = props => {
         </Grid>
         {/* <TableAddParticipant></TableAddParticipant> */}
         <Divider sx={{ margin: 0 }} />
+
         <Grid item xs={12} md={3} lg={3}>
           <Button onClick={handleCreateRapat} size='medium' type='submit' variant='contained'>
-            Buat Rapat
+            Ajukan Rapat
           </Button>
+        </Grid>
+      </Grid>
+      <Grid container height={1}>
+        <Grid mt={50} item xs={9} height={1}>
+          <UndanganRapat></UndanganRapat>
         </Grid>
       </Grid>
     </Card>
