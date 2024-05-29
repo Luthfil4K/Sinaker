@@ -1155,7 +1155,7 @@ const TaskManageEditViews = props => {
                           labelId='demo-simple-select-helper-label'
                           onChange={handleTemplateChange}
                           value={values.templateTable}
-                          disabled={values.subKegImportStatus == 1 ? 'true' : 'false'}
+                          disabled={values.subKegImportStatus == 1 ? true : false}
                           id='demo-simple-select-helper'
                           label='Level Pencatatan'
                           name='Level Pencatatan'

@@ -553,7 +553,7 @@ const RapatDetailViews = props => {
               <Tab value='2' label='Undangan Rapat' />
               <Tab value='3' label='Notulensi Rapat' />
             </TabList>
-            <TabPanel value='1' sx={{ p: 0, height: 335 }}>
+            <TabPanel value='1' sx={{ p: 0, height: 435 }}>
               <Grid container mt={4} spacing={6}>
                 <Grid item xs={12} sm={5} md={4} lg={3}>
                   <StyledBox>

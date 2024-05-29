@@ -253,7 +253,7 @@ const DragAndDrop = props => {
               style={{ display: showButton ? 'block' : 'none' }}
               onClick={handleSubmitFile}
             >
-              Submit
+              Upload
             </Button>
             <Divider sx={{ marginTop: 0, marginBottom: 6.75 }} />
             <Grid item xs={12}></Grid>
