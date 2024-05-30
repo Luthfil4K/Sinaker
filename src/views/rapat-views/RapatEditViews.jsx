@@ -46,6 +46,7 @@ const RapatCreateViews = props => {
   const aaa = props.dataPesertaRapat.map(a => {
     return a.user.name
   })
+  const [isiAll, setIsiAll] = useState('0')
 
   const [values, setValues] = useState({
     rapatId: props.dataRapatEdit.id,
@@ -57,10 +58,9 @@ const RapatCreateViews = props => {
     tempatRapat: props.dataRapatEdit.tempatRapat,
     deskRapat: props.dataRapatEdit.description,
     pesertaRapat: 7,
-    kegTim: '',
+
     kegAnggotaId: '',
-    kegAnggota: aaa,
-    kegKetuaId: ''
+    kegAnggota: aaa
   })
 
   console.log(values.kegAnggotaId)
@@ -114,14 +114,22 @@ const RapatCreateViews = props => {
   }, [values.kegAnggota])
   const router = useRouter()
 
+  // cek input isi all
   useEffect(() => {
-    console.log('')
+    const allFilled = Object.values(values).every(
+      value =>
+        (typeof value === 'string' && value.trim() !== '') ||
+        (Array.isArray(value) && value.length > 0) ||
+        (typeof value === 'number' && value !== null)
+    )
+    setIsiAll(allFilled ? '1' : '0')
   }, [values])
+
   const handleEditRapat = async e => {
     e.preventDefault()
 
     try {
-      while (true) {
+      if (isiAll == '1') {
         const res = await axios.put(`/rapat-edit/${values.rapatId}`, {
           namaRapat: values.namaRapat,
           meetDate: selectedDate,
@@ -147,24 +155,15 @@ const RapatCreateViews = props => {
             timer: 1000,
             width: 300
           }).then(router.push(`/rapat-detail/${props.dataRapatEdit.id}`))
-
-          setValues({
-            namaRapat: '',
-            tempatRapat: '',
-            deskRapat: '-',
-            pesertaRapat: 7,
-            kegTim: '',
-            kegAnggotaId: '',
-            kegAnggota: [dataUser[3].name, dataUser[1].name],
-            kegKetuaId: ''
-          })
-
-          setSelectedDate(new Date())
-          setSelectedTimeS(new Date())
-          setSelectedTimeE(new Date())
         }
-
-        break
+      } else {
+        Swal.fire({
+          title: 'Form belum lengkap',
+          text: 'Pastika semua field telah terisi',
+          icon: 'error',
+          confirmButtonColor: '#d33',
+          confirmButtonText: 'OK'
+        })
       }
     } catch (error) {
       Swal.fire({

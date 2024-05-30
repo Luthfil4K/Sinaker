@@ -615,7 +615,7 @@ const RapatDetailViews = props => {
               {session.status === 'authenticated' && session.data.uid === 1099999 && (
                 <CardActions style={{ display: 'flex', justifyContent: 'end' }}>
                   <Button
-                    onClick={e => router.push(`/edit-meeting/${props.dataRapat.id}`)}
+                    onClick={e => router.push(`/rapat-edit/${props.dataRapat.id}`)}
                     size='medium'
                     type='submit'
                     sx={{ mr: 2 }}
