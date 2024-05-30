@@ -31,6 +31,7 @@ import MenuItem from '@mui/material/MenuItem'
 import { pink } from '@mui/material/colors'
 import Checkbox from '@mui/material/Checkbox'
 import FormGroup from '@mui/material/FormGroup'
+import FormLabel from '@mui/material/FormLabel'
 import FormControlLabel from '@mui/material/FormControlLabel'
 import Chip from '@mui/material/Chip'
 import Stack from '@mui/material/Stack'
@@ -513,18 +514,20 @@ const CreateProjectViews = props => {
               onChange={handleChange('kegNama')}
               multiline
               label='Nama Kegiatan'
+              placeholder='SUSENAS/SAKERNAS/dll.'
               name='namaKegiatan'
             />
           </Grid>
-          <Grid item xs={12} md={12} sx={{ backgroundColor: 'primary' }}>
-            <FormGroup row>
+          <Grid item xs={6}>
+            <FormLabel component='legend'>Ada dibulan apa saja</FormLabel>
+            <FormGroup sx={{ minHeight: 150, padding: 2, border: 1, borderColor: '#DCDCDC', borderRadius: 1 }} row>
               <FormControlLabel
                 value='Januari'
                 control={
                   <Checkbox disabled={disabled.jan} checked={bulan.jan} onChange={handleChangeBulan} name='jan' />
                 }
                 label='Jan'
-                labelPlacement='top'
+                labelPlacement='right'
               />
               <FormControlLabel
                 value='Februari'
@@ -532,7 +535,7 @@ const CreateProjectViews = props => {
                   <Checkbox disabled={disabled.feb} checked={bulan.feb} onChange={handleChangeBulan} name='feb' />
                 }
                 label='Feb'
-                labelPlacement='top'
+                labelPlacement='right'
               />
               <FormControlLabel
                 value='Maret'
@@ -540,7 +543,7 @@ const CreateProjectViews = props => {
                   <Checkbox disabled={disabled.mar} checked={bulan.mar} onChange={handleChangeBulan} name='mar' />
                 }
                 label='Mar'
-                labelPlacement='top'
+                labelPlacement='right'
               />
               <FormControlLabel
                 value='April'
@@ -548,7 +551,7 @@ const CreateProjectViews = props => {
                   <Checkbox disabled={disabled.apr} checked={bulan.apr} onChange={handleChangeBulan} name='apr' />
                 }
                 label='Apr'
-                labelPlacement='top'
+                labelPlacement='right'
               />
               <FormControlLabel
                 value='Mei'
@@ -556,7 +559,7 @@ const CreateProjectViews = props => {
                   <Checkbox disabled={disabled.may} checked={bulan.may} onChange={handleChangeBulan} name='may' />
                 }
                 label='May'
-                labelPlacement='top'
+                labelPlacement='right'
               />
               <FormControlLabel
                 value='Juni'
@@ -564,7 +567,7 @@ const CreateProjectViews = props => {
                   <Checkbox disabled={disabled.june} checked={bulan.june} onChange={handleChangeBulan} name='june' />
                 }
                 label='June'
-                labelPlacement='top'
+                labelPlacement='right'
               />
               <FormControlLabel
                 value='Juli'
@@ -572,7 +575,7 @@ const CreateProjectViews = props => {
                   <Checkbox disabled={disabled.july} checked={bulan.july} onChange={handleChangeBulan} name='july' />
                 }
                 label='July'
-                labelPlacement='top'
+                labelPlacement='right'
               />
               <FormControlLabel
                 value='Agustus'
@@ -580,7 +583,7 @@ const CreateProjectViews = props => {
                   <Checkbox disabled={disabled.aug} checked={bulan.aug} onChange={handleChangeBulan} name='aug' />
                 }
                 label='Aug'
-                labelPlacement='top'
+                labelPlacement='right'
               />
               <FormControlLabel
                 value='September'
@@ -588,7 +591,7 @@ const CreateProjectViews = props => {
                   <Checkbox disabled={disabled.sep} checked={bulan.sep} onChange={handleChangeBulan} name='sep' />
                 }
                 label='Sep'
-                labelPlacement='top'
+                labelPlacement='right'
               />
               <FormControlLabel
                 value='Oktober'
@@ -596,7 +599,7 @@ const CreateProjectViews = props => {
                   <Checkbox disabled={disabled.oct} checked={bulan.oct} onChange={handleChangeBulan} name='oct' />
                 }
                 label='Oct'
-                labelPlacement='top'
+                labelPlacement='right'
               />
               <FormControlLabel
                 value='November'
@@ -604,7 +607,7 @@ const CreateProjectViews = props => {
                   <Checkbox disabled={disabled.nov} checked={bulan.nov} onChange={handleChangeBulan} name='nov' />
                 }
                 label='Nov'
-                labelPlacement='top'
+                labelPlacement='right'
               />
               <FormControlLabel
                 value='Desember'
@@ -612,12 +615,13 @@ const CreateProjectViews = props => {
                   <Checkbox disabled={disabled.dec} checked={bulan.dec} onChange={handleChangeBulan} name='dec' />
                 }
                 label='Dec'
-                labelPlacement='top'
+                labelPlacement='right'
               />
             </FormGroup>
           </Grid>
-          <Grid item xs={12}>
-            <FormGroup column>
+          <Grid item xs={6}>
+            <FormLabel component='legend'>Sub Kegiatan</FormLabel>
+            <FormGroup sx={{ minHeight: 150, padding: 2, border: 1, borderColor: '#DCDCDC', borderRadius: 1 }} row>
               <FormControlLabel
                 name='pelatihan'
                 onChange={handleChangeSubKeg}
@@ -713,7 +717,7 @@ const CreateProjectViews = props => {
               multiline
               minRows={3}
               label='Deskripsi Kegiatan'
-              placeholder='Description'
+              placeholder='Dapat dikosongkan..'
               value={values.kegDesk}
               onChange={handleChange('kegDesk')}
               name='kegaitanDesk'
@@ -800,7 +804,7 @@ const CreateProjectViews = props => {
             />
           </Grid>
 
-          <Grid item xs={12} height={220}>
+          {/* <Grid item xs={12} height={220}>
             <Card sx={{ backgroundColor: '#F4F4F4', borderSpacing: 50, border: '4px dashed #E7E7E7' }}>
               <CardContent sx={{ height: 210, textAlign: 'center', display: 'flex', justifyContent: 'center' }}>
                 {/* <Grid container display={'flex'} justifyContent={'center'}>
@@ -812,14 +816,14 @@ const CreateProjectViews = props => {
                         <Grid display={'flex'} justifyContent={'center'} item xs={12}>
                           <Typography>Upload your files here!</Typography>
                         </Grid>
-                      </Grid> */}
+                      </Grid> 
                 <Grid display={'flex'} justifyContent={'center'} item xs={12}>
-                  {button}
+                  {button} 
                 </Grid>
               </CardContent>
               <CardActions className='card-action-dense'></CardActions>
             </Card>
-          </Grid>
+          </Grid> */}
         </Grid>
         {/* <TableAddParticipant></TableAddParticipant> */}
         <Divider sx={{ margin: 0 }} />

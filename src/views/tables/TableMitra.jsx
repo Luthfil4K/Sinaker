@@ -243,10 +243,10 @@ const TableMitra = props => {
       field: 'gajiBulanIni',
       renderHeader: () => (
         <Typography sx={{ fontWeight: 900, fontSize: '0.875rem !important', textAlign: 'center' }}>
-          Gaji Bulan Ini
+          Honor Bulan Ini
         </Typography>
       ),
-      headerName: 'Gaji Bulan Ini ',
+      headerName: 'Honor Bulan Ini ',
       type: 'string',
       width: 140,
       renderCell: params => (
@@ -264,10 +264,10 @@ const TableMitra = props => {
       field: 'gajiBulanSblm',
       renderHeader: () => (
         <Typography sx={{ fontWeight: 900, fontSize: '0.875rem !important', textAlign: 'center' }}>
-          Gaji Bulan Sebelumnya
+          Honor Bulan Sebelumnya
         </Typography>
       ),
-      headerName: 'Gaji Bulan Sebelumnya ',
+      headerName: 'Honor Bulan Sebelumnya ',
       type: 'string',
       width: 140,
       renderCell: params => (
@@ -285,10 +285,10 @@ const TableMitra = props => {
       field: 'gajiBulanDepan',
       renderHeader: () => (
         <Typography sx={{ fontWeight: 900, fontSize: '0.875rem !important', textAlign: 'center' }}>
-          Gaji Bulan Depan
+          Honor Bulan Depan
         </Typography>
       ),
-      headerName: 'Gaji Bulan Depan ',
+      headerName: 'Honor Bulan Depan ',
       type: 'string',
       width: 140,
       renderCell: params => (
