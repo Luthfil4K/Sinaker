@@ -38,7 +38,7 @@ const authOptions = {
 
         if (!user) {
           prisma.$disconnect()
-          throw new Error('invalid credentials')
+          throw new Error('Username atau Password Tidak Ditemukan')
         }
         let validkan = false
         const apakah = (pwLogin, pwDb) => {
@@ -51,7 +51,7 @@ const authOptions = {
         if (!validkan) {
           prisma.$disconnect()
 
-          throw new Error('invalid credentials')
+          throw new Error('Username atau Password Tidak Ditemukan')
         }
 
         return user

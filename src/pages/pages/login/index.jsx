@@ -98,8 +98,8 @@ const LoginPage = () => {
 
     if (res.status === 200) {
       Swal.fire({
-        title: 'Login Success',
-        text: 'Press OK to continue',
+        title: 'Login Berhasil',
+        text: '',
         icon: 'success',
         confirmButtonColor: '#68B92E',
         confirmButtonText: 'OK'
@@ -108,7 +108,7 @@ const LoginPage = () => {
       router.push('/')
     } else {
       Swal.fire({
-        title: 'Login Failed',
+        title: 'Login Gagal',
         text: res.error,
         icon: 'error',
         confirmButtonColor: '#d33',

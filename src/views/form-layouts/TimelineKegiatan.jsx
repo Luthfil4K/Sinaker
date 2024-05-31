@@ -79,23 +79,23 @@ const DragAndDrop = props => {
       })
       if (res.status === 201) {
         Swal.fire({
-          title: 'Create Project Success',
-          text: 'Press OK to continue',
+          title: 'Upload berhasil',
+          text: '',
           icon: 'success',
           confirmButtonColor: '#68B92E',
           confirmButtonText: 'OK'
         }).then(res => {
           Swal.fire({
             icon: 'success',
-            title: 'Success',
-            text: 'Task has been submitted'
+            title: 'Berhasil',
+            text: ''
           })
           router.push(`/rapat-detail/${props.dataMeet.id}`, undefined)
         })
       }
     } catch (error) {
       Swal.fire({
-        title: 'Upload Notulensi Failed',
+        title: 'Upload dokumen gagal',
         text: error,
         icon: 'error',
         confirmButtonColor: '#d33',

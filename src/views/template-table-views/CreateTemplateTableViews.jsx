@@ -82,8 +82,8 @@ const TemplateTableDetailViews = props => {
 
         if (res.status === 201) {
           Swal.fire({
-            title: 'Create Template Table Success',
-            text: 'Press OK to continue',
+            title: 'Template table berhasil ditambahkan',
+            text: '',
             icon: 'success',
             confirmButtonColor: '#68B92E',
             confirmButtonText: 'OK'
@@ -94,7 +94,7 @@ const TemplateTableDetailViews = props => {
       }
     } catch (error) {
       Swal.fire({
-        title: 'Create Template Table Failed',
+        title: 'Template Table Gagal ditambahkan',
         text: error,
         icon: 'error',
         confirmButtonColor: '#d33',

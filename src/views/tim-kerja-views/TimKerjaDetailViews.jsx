@@ -436,14 +436,14 @@ const CreateKegiatanPerusahaanViews = props => {
     e.preventDefault()
 
     Swal.fire({
-      title: 'Delete Tim Kerja?',
+      title: 'Hapus Tim Kerja?',
       text: '',
       icon: 'warning',
       showCancelButton: true,
       confirmButtonColor: '#68B92E',
       cancelButtonColor: '#d33',
-      confirmButtonText: 'Yes, Delete Tim Kerja',
-      cancelButtonText: 'No, Cancel',
+      confirmButtonText: 'Hapus',
+      cancelButtonText: 'Batal',
       reverseButtons: true
     }).then(result => {
       if (result.isConfirmed) {

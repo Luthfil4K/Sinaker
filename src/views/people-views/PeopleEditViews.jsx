@@ -75,12 +75,12 @@ const PeopleAddViews = props => {
   const handleEdit = () => {
     Swal.fire({
       title: 'Apa Anda Yakin?',
-      text: 'Untuk mengedit akun ini!',
+      text: 'Untuk menyimpan perubahan',
       icon: 'warning',
       showCancelButton: true,
       confirmButtonColor: '#3085d6',
       cancelButtonColor: '#d33',
-      confirmButtonText: 'Yes, edit akun !'
+      confirmButtonText: 'Yes, simpan '
     }).then(result => {
       if (result.isConfirmed) {
         router.push('/pegawai')

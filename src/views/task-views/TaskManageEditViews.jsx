@@ -450,8 +450,8 @@ const TaskManageEditViews = props => {
       .put(`/task/${values.subKegId}`, data)
       .then(res => {
         Swal.fire({
-          title: 'Success!',
-          text: 'Sub Kegiatan berhasil diedit',
+          title: 'Berhasil disimpan',
+          text: '',
           icon: 'success',
           confirmButtonText: 'Ok'
         })
@@ -497,7 +497,7 @@ const TaskManageEditViews = props => {
       : Swal.fire({
           title: 'Error!',
           text: 'Realisasi lebih besar dari target',
-          icon: 'error',
+          icon: 'warning',
           confirmButtonText: 'Ok'
         }).then(
           setValues(values => ({
@@ -518,8 +518,8 @@ const TaskManageEditViews = props => {
       .post(`/kegiatan-harian`, data)
       .then(res => {
         Swal.fire({
-          title: 'Success!',
-          text: 'Berhasil disimpan',
+          title: 'Berhasil disimpan',
+          text: '',
           icon: 'success',
           confirmButtonText: 'Ok'
         })
@@ -611,8 +611,8 @@ const TaskManageEditViews = props => {
 
         if (res.status === 201) {
           Swal.fire({
-            title: 'Tambah Sub Kegiatan Success',
-            text: 'Tekan OK untuk lanjut',
+            title: 'Tambah Sub Kegiatan Berhasil',
+            text: '',
             icon: 'success',
             confirmButtonColor: '#68B92E',
             confirmButtonText: 'OK'

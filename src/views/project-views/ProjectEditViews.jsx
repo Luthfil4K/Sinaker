@@ -114,8 +114,8 @@ const ProjectEditViews = props => {
       .put(`/project/${values.id}`, data)
       .then(res => {
         Swal.fire({
-          title: 'Success!',
-          text: 'Project has been updated',
+          title: 'Berhasil tersimpan',
+          text: '',
           icon: 'success',
           confirmButtonText: 'Ok'
         })

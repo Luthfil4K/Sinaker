@@ -73,8 +73,8 @@ const UserDropdown = props => {
     handleDropdownClose()
 
     const confirm = await Swal.fire({
-      title: 'Are you sure?',
-      text: 'You will be logged out',
+      title: 'Anda yakin?',
+      text: 'untuk log out?',
       icon: 'warning',
       confirmButtonColor: '#68B92E',
       confirmButtonText: 'OK',

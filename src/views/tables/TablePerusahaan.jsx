@@ -57,7 +57,7 @@ const TablePerusahaan = props => {
         await Swal.fire({
           icon: 'success',
           title: 'Success',
-          text: 'Perusahaan Deleted'
+          text: 'Berhasil dihapus'
         })
         router.reload()
       })

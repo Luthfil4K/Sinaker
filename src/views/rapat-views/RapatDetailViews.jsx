@@ -275,8 +275,8 @@ const RapatDetailViews = props => {
           .then(async res => {
             await Swal.fire({
               icon: 'success',
-              title: 'Success',
-              text: 'Rapat Dihapus'
+              title: '',
+              text: 'Rapat Berhasil Dihapus'
             })
             router.push('/timeline')
           })
@@ -356,7 +356,7 @@ const RapatDetailViews = props => {
               .then(async res => {
                 await Swal.fire({
                   icon: 'success',
-                  title: 'Success',
+                  title: '',
                   text: 'Undangan berhasil dikirim'
                 })
               })
@@ -438,8 +438,8 @@ const RapatDetailViews = props => {
       .then(res => {
         Swal.fire({
           icon: 'success',
-          title: 'Success',
-          text: 'Task has been submitted'
+          title: '',
+          text: 'Berhasil diupload'
         })
         router.push(`/rapat-detail/${props.dataRapat.id}`)
       })
@@ -473,7 +473,7 @@ const RapatDetailViews = props => {
         await Swal.fire({
           icon: 'success',
           title: 'Success',
-          text: 'Dokumen Deleted'
+          text: 'Dokumen dihapus'
         }).then(() => {
           const updatedDokumen = dokumenRapat.filter(item => item.id !== id)
           // Perbarui state dengan array baru

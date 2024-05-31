@@ -149,8 +149,8 @@ const RapatCreateViews = props => {
         if (res.status === 200) {
           Swal.fire({
             position: 'center',
-            icon: 'success',
-            title: 'Perubahan Berhasil Disimpan',
+            icon: 'Berhasil disimpan',
+            title: '',
             showConfirmButton: false,
             timer: 1000,
             width: 300

@@ -66,7 +66,7 @@ const RapatApproveList = props => {
           .then(async res => {
             await Swal.fire({
               icon: 'success',
-              title: 'Success',
+              title: 'Berhasil!',
               text: 'Rapat Disetujui'
             })
           })
@@ -114,7 +114,7 @@ const RapatApproveList = props => {
           .then(async res => {
             await Swal.fire({
               icon: 'success',
-              title: 'Success',
+              title: '',
               text: 'Rapat Ditolak'
             })
           })

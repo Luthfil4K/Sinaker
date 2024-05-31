@@ -102,8 +102,8 @@ const TableProjectDetailTask = props => {
       .then(async res => {
         await Swal.fire({
           icon: 'success',
-          title: 'Success',
-          text: 'Task Deleted'
+          title: '',
+          text: 'Berhasil dihapus'
         })
         router.reload()
       })
@@ -229,13 +229,14 @@ const TableProjectDetailTask = props => {
           <Button
             onClick={() => {
               Swal.fire({
-                title: 'Hapus Tugas?',
+                title: 'Hapus Sub Kegiatan?',
                 text: '',
                 icon: 'warning',
                 showCancelButton: true,
                 confirmButtonColor: '#3085d6',
                 cancelButtonColor: '#d33',
-                confirmButtonText: 'Ya, Hapus Tugas'
+                confirmButtonText: 'Hapus',
+                cancelButtonText: 'Batal'
               }).then(result => {
                 if (result.isConfirmed) {
                   handleDelete(params.row.id)

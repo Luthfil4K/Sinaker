@@ -160,7 +160,7 @@ const TableMitra = props => {
         await Swal.fire({
           icon: 'success',
           title: 'Success',
-          text: 'Mitra Deleted'
+          text: 'Berhasil dihapus'
         })
         router.reload()
       })

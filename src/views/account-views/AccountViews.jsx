@@ -149,7 +149,7 @@ const AccountViews = props => {
       .put(`/account/${values.id}`, data)
       .then(res => {
         Swal.fire({
-          title: 'Success!',
+          title: '',
           text: 'Berhasil disimpan',
           icon: 'success',
           confirmButtonText: 'Ok'

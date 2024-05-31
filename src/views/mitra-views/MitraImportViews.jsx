@@ -66,8 +66,8 @@ const MitraImportViews = props => {
 
         if (res.status === 201) {
           Swal.fire({
-            title: 'Import Mitra Success',
-            text: 'Press OK to continue',
+            title: 'Import Mitra Berhasil',
+            text: '',
             icon: 'success',
             confirmButtonColor: '#68B92E',
             confirmButtonText: 'OK'
@@ -78,7 +78,7 @@ const MitraImportViews = props => {
       }
     } catch (error) {
       Swal.fire({
-        title: 'Import Mitra Failed',
+        title: 'Import mitra gagal',
         text: error,
         icon: 'error',
         confirmButtonColor: '#d33',

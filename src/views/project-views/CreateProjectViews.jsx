@@ -441,8 +441,8 @@ const CreateProjectViews = props => {
 
         if (res.status === 201) {
           Swal.fire({
-            title: 'Create Project Success',
-            text: 'Press OK to continue',
+            title: 'Kegiatan berhasil dibuat',
+            text: '',
             icon: 'success',
             confirmButtonColor: '#68B92E',
             confirmButtonText: 'OK'
@@ -469,7 +469,7 @@ const CreateProjectViews = props => {
       }
     } catch (error) {
       Swal.fire({
-        title: 'Create Project Failed',
+        title: 'Kegiatan gagal dibuat',
         text: error,
         icon: 'error',
         confirmButtonColor: '#d33',

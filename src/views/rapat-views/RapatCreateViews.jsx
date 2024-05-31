@@ -422,7 +422,7 @@ const RapatCreateViews = props => {
               Swal.fire({
                 position: 'center',
                 icon: 'success',
-                title: 'Rapat Berhasil Dibuat',
+                title: 'Rapat berhasil diajukan',
                 showConfirmButton: false,
                 timer: 1000,
                 width: 300
@@ -447,7 +447,7 @@ const RapatCreateViews = props => {
             .catch(err => {
               console.log(err)
               Swal.fire({
-                title: 'Create Rapat Failed',
+                title: 'Rapat gagal diajukan',
                 text: err,
                 icon: 'error',
                 confirmButtonColor: '#d33',
@@ -466,7 +466,7 @@ const RapatCreateViews = props => {
       }
     } catch (error) {
       Swal.fire({
-        title: 'Create Rapat Failed',
+        title: 'Rapat gagal diajukan',
         text: error,
         icon: 'error',
         confirmButtonColor: '#d33',

@@ -416,8 +416,8 @@ const CreateKegiatanPerusahaanViews = props => {
           //   confirmButtonText: 'OK'
           // }).then(router.push(`/tim-kerja-detail/${values.idGroup}`))
           Swal.fire({
-            title: 'Ubah Tim Kerja Success',
-            text: 'Press OK to continue',
+            title: 'Berhasil disimpan',
+            text: '',
             icon: 'success',
             confirmButtonColor: '#68B92E',
             confirmButtonText: 'OK'
@@ -433,7 +433,7 @@ const CreateKegiatanPerusahaanViews = props => {
       }
     } catch (error) {
       Swal.fire({
-        title: 'Create Tim Kerja Failed',
+        title: 'Gagal disimpan',
         text: error,
         icon: 'error',
         confirmButtonColor: '#d33',

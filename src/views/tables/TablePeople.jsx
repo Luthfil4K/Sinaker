@@ -57,7 +57,7 @@ const TablePeople = props => {
       if (response.status === 201) {
         Swal.fire({
           title: 'Berhasil Mengubah Peran Pegawai',
-          text: 'Tekan OK untuk melanjutkan',
+          text: '',
           icon: 'success',
           confirmButtonColor: '#68B92E',
           confirmButtonText: 'OK'
@@ -614,7 +614,7 @@ const TablePeople = props => {
       showCancelButton: true,
       confirmButtonColor: '#3085d6',
       cancelButtonColor: '#d33',
-      confirmButtonText: 'Yes, Hapus akun !'
+      confirmButtonText: 'Hapus'
     }).then(result => {
       if (result.isConfirmed) {
         router.push('/people')

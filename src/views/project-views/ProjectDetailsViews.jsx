@@ -64,8 +64,8 @@ const ProjectDetailsViews = props => {
   }
   const handleDelete = () => {
     Swal.fire({
-      title: 'Delete Project?',
-      text: '',
+      title: 'Hapus Kegiatan?',
+      text: 'Semua data pada kegiatan ini akan dihapus',
       icon: 'warning',
       showCancelButton: true,
       confirmButtonColor: '#68B92E',
@@ -78,7 +78,7 @@ const ProjectDetailsViews = props => {
         axios
           .delete(`/project/${project.id}`)
           .then(res => {
-            Swal.fire('Deleted', 'Project has been deleted. ', 'success')
+            Swal.fire('Berhasil terhapus', 'success')
 
             router.push('/project-list')
           })
@@ -89,7 +89,7 @@ const ProjectDetailsViews = props => {
         /* Read more about handling dismissals below */
         result.dismiss === Swal.DismissReason.cancel
       ) {
-        Swal.fire('Cancelled!', ' Press "OK" to continue.', 'error')
+        Swal.fire('Cancelled!', ' Press "OK" to continue.', 'warning')
       }
     })
   }

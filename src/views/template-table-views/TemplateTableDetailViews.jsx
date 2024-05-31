@@ -89,7 +89,7 @@ const TemplateTableDetailViews = props => {
     e.preventDefault()
 
     Swal.fire({
-      title: 'Delete Template?',
+      title: 'Hapus Template?',
       text: '',
       icon: 'warning',
       showCancelButton: true,

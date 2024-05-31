@@ -136,8 +136,8 @@ const TaskDetailViews = props => {
       .then(async res => {
         await Swal.fire({
           icon: 'success',
-          title: 'Success',
-          text: 'Kegiatan Harian Deleted'
+          title: '',
+          text: 'Berhasil dihapus'
         })
         router.reload()
       })
@@ -184,8 +184,8 @@ const TaskDetailViews = props => {
       .post(`/kegiatan-harian`, data)
       .then(res => {
         Swal.fire({
-          title: 'Success!',
-          text: 'Berhasil disimpan',
+          title: 'Berhasil disimpan',
+          text: '',
           icon: 'success',
           confirmButtonText: 'Ok'
         })
@@ -212,8 +212,8 @@ const TaskDetailViews = props => {
           .put(`/taskdetail/${values.id}`, data)
           .then(res => {
             Swal.fire({
-              title: 'Success!',
-              text: 'Berhasil disimpan',
+              title: 'Berhasil disimpan',
+              text: '',
               icon: 'success',
               confirmButtonText: 'Ok'
             })
@@ -229,7 +229,7 @@ const TaskDetailViews = props => {
       : Swal.fire({
           title: 'Error!',
           text: 'Realisasi lebih besar dari target',
-          icon: 'error',
+          icon: 'warning',
           confirmButtonText: 'Ok'
         }).then(
           setValues(values => ({
@@ -245,8 +245,8 @@ const TaskDetailViews = props => {
           .put(`/taskdetail/${values.id}`, data)
           .then(res => {
             Swal.fire({
-              title: 'Success!',
-              text: 'Berhasil disimpan',
+              title: 'Berhasil disimpan',
+              text: '',
               icon: 'success',
               confirmButtonText: 'Ok'
             })
@@ -262,7 +262,7 @@ const TaskDetailViews = props => {
       : Swal.fire({
           title: 'Error!',
           text: 'Realisasi lebih besar dari target',
-          icon: 'error',
+          icon: 'warning',
           confirmButtonText: 'Ok'
         }).then(
           setValues(values => ({
@@ -438,7 +438,8 @@ const TaskDetailViews = props => {
                                               showCancelButton: true,
                                               confirmButtonColor: '#3085d6',
                                               cancelButtonColor: '#d33',
-                                              confirmButtonText: 'Yes'
+                                              confirmButtonText: 'Hapus',
+                                              cancelButtonText: 'Batal'
                                             }).then(result => {
                                               if (result.isConfirmed) {
                                                 handleDeleteKegiatanHarian(ph.id)

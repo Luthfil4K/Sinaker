@@ -129,7 +129,7 @@ const DragAndDrop = props => {
           fileArray.push(res.data.message)
           Swal.fire({
             title: 'Dokumen Berhasil Terupload',
-            text: 'Press OK to continue',
+            text: '',
             icon: 'success',
             confirmButtonColor: '#68B92E',
             confirmButtonText: 'OK'
@@ -142,7 +142,7 @@ const DragAndDrop = props => {
       props.dataUpdateUpload(fileArray)
     } catch (error) {
       Swal.fire({
-        title: 'Upload Notulensi Failed',
+        title: 'Upload dokumen gagal',
         text: error,
         icon: 'error',
         confirmButtonColor: '#d33',

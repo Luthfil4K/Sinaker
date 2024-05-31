@@ -466,8 +466,8 @@ const CreateKegiatanPerusahaanViews = props => {
 
         if (res.status === 201) {
           Swal.fire({
-            title: 'Create Tim Kerja Success',
-            text: 'Press OK to continue',
+            title: 'Tim kerja berhasil dibuat',
+            text: '',
             icon: 'success',
             confirmButtonColor: '#68B92E',
             confirmButtonText: 'OK'
@@ -483,7 +483,7 @@ const CreateKegiatanPerusahaanViews = props => {
       }
     } catch (error) {
       Swal.fire({
-        title: 'Create Tim Kerja Failed',
+        title: 'Tim kerja gagal dibuat',
         text: error,
         icon: 'error',
         confirmButtonColor: '#d33',

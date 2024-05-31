@@ -199,14 +199,14 @@ const TableGroupPerusahaan = props => {
 
   const handleDeleteClick = id => () => {
     Swal.fire({
-      title: 'Delete Baris?',
-      text: 'Press "Delete Baris"',
+      title: 'Hapus Baris?',
+      text: '',
       icon: 'warning',
       showCancelButton: true,
       confirmButtonColor: '#68B92E',
       cancelButtonColor: '#d33',
-      confirmButtonText: 'Ya, Delete Baris',
-      cancelButtonText: 'No, Cancel',
+      confirmButtonText: 'Hapus',
+      cancelButtonText: 'Batal',
       reverseButtons: true
     }).then(result => {
       if (result.isConfirmed) {
@@ -217,7 +217,7 @@ const TableGroupPerusahaan = props => {
             Swal.fire({
               position: 'bottom-end',
               icon: 'success',
-              title: 'Berhasil Diahaus',
+              title: 'Berhasil dihapus',
               showConfirmButton: false,
               timer: 1000,
               width: 300
@@ -352,7 +352,7 @@ const TableGroupPerusahaan = props => {
         } else {
           Swal.fire({
             title: 'Error!',
-            text: 'Honor yang anda input melebihi akumulai bulanan mitra ',
+            text: 'Honor yang anda inputkan melebihi akumulai bulanan mitra ',
             icon: 'error',
             confirmButtonText: 'Ok'
           })
@@ -399,8 +399,8 @@ const TableGroupPerusahaan = props => {
           .then(res => {
             Swal.fire({
               position: 'bottom-end',
-              icon: 'success',
-              title: 'Your work has been saved',
+              icon: 'Berhasil disimpan',
+              title: '',
               showConfirmButton: false,
               timer: 1000,
               width: 300
