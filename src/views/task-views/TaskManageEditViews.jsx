@@ -737,7 +737,7 @@ const TaskManageEditViews = props => {
         </TabList>
 
         <>
-          <TabPanel value='1' sx={{ p: 0, height: 1935 }}>
+          <TabPanel value='1' sx={{ p: 0 }}>
             <Grid container spacing={4}>
               <Grid item md={12}>
                 <Grid container spacing={4}>
@@ -932,7 +932,7 @@ const TaskManageEditViews = props => {
           </TabPanel>
         </>
 
-        <TabPanel value='2' sx={{ p: 0, height: 335 }}>
+        <TabPanel value='2' sx={{ p: 0 }}>
           <Card sx={{ padding: 4 }}>
             <Box sx={{ mt: 5, mb: 6 }}>
               <Typography variant='h5' sx={{ fontWeight: 600, marginBottom: 1.5 }}></Typography>
