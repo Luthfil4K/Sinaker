@@ -186,13 +186,14 @@ model data_target_realisasi {
  realisasi                  Int                         @db.Int
  desa                       String                      @db.VarChar(128)
  namadesa                   String                      @db.VarChar(128)
- namaKec                   String                      @db.VarChar(128)
+ namaKec                    String                      @db.VarChar(128)
  kecamatan                  String                      @db.VarChar(128)
  hasilPencacahan            String                      @db.VarChar(128)
  kol1                       String                      @db.VarChar(128)
  kol2                       String                      @db.VarChar(128)
  templateTable              String                      @db.VarChar(128)
  duedate                    DateTime                    @db.Date
+ month                      Int                         @db.Int
 }
 
 model data_pencatatan_ss {
