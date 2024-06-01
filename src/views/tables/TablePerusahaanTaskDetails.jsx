@@ -120,6 +120,7 @@ const TableGroupPerusahaan = props => {
   }
 
   // const totalGajiMitra = hitungTotalGaji(props.dataMitraLimitHonor)
+  const totalGajiMitra = props.dataMitraLimitHonor
 
   const [organikMitra, setOrganikMitra] = useState({
     value: '',
@@ -267,28 +268,28 @@ const TableGroupPerusahaan = props => {
 
   const processRowUpdate = newRow => {
     const updatedRow = { ...newRow, isNew: false }
-    // console.log('ini update row')
-    // console.log(updatedRow)
+    console.log('ini update row')
+    console.log(updatedRow)
 
     // Cari data mitra yang sesuai dengan pmlId dari updatedRow
     const mitraToUpdatePml = totalGajiMitra.find(mitra => mitra.id === updatedRow.pmlId)
-    // console.log('ini mitra to update pml')
-    // console.log(mitraToUpdatePml)
+    console.log('ini mitra to update pml')
+    console.log(mitraToUpdatePml)
     // Hitung total gaji setelah update untuk pmlId
     const newTotalGajiPml = mitraToUpdatePml
       ? mitraToUpdatePml.totalGaji + (updatedRow.gajiPml || 0)
       : updatedRow.gajiPml // gajiPml dari updatedRow atau 0 jika tidak ada
-    // console.log('ini gaji total pml')
-    // console.log(newTotalGajiPml)
+    console.log('ini gaji total pml')
+    console.log(newTotalGajiPml)
     // Cari data mitra yang sesuai dengan pclId dari updatedRow
     const mitraToUpdatePcl = updatedRow.pclId ? totalGajiMitra.find(mitra => mitra.id === updatedRow.pclId) : undefined
-    // console.log('mitra to update pcl')
-    // console.log(mitraToUpdatePcl)
+    console.log('mitra to update pcl')
+    console.log(mitraToUpdatePcl)
 
     // Hitung total gaji setelah update untuk pclId
     const newTotalGajiPcl = mitraToUpdatePcl ? mitraToUpdatePcl.totalGaji + (updatedRow.gajiPcl || 0) : 0 // gajiPcl dari updatedRow atau 0 jika tidak ada
-    // console.log('newTotalGajiPcl')
-    // console.log(newTotalGajiPcl)
+    console.log('newTotalGajiPcl')
+    console.log(newTotalGajiPcl)
     // Validasi total gaji untuk pmlId dan pclId
     const isPmlValid = newTotalGajiPml ? newTotalGajiPml <= 4000000 : true
     const isPclValid = newTotalGajiPcl <= 4000000
