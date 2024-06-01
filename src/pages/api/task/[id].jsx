@@ -37,6 +37,14 @@ export default async function handler(req, res) {
           year
         }
       })
+      const bulanTarel = await prisma.data_target_realisasi.updateMany({
+        where: {
+          taskId: Number(id)
+        },
+        data: {
+          month: parseInt(month)
+        }
+      })
 
       console.log(res.message)
       return res.status(200).json({ success: true, data: task })

@@ -26,7 +26,8 @@ export default async function handler(req, res) {
       templateTable,
       duedate,
       kolomLP,
-      importStatus
+      importStatus,
+      month
     } = req.body
 
     try {
@@ -53,7 +54,8 @@ export default async function handler(req, res) {
             kol1: participant[kolomLP.kol1].toString(),
             kol2: participant[kolomLP.kol2].toString(),
             templateTable: templateTable.toString(),
-            duedate: new Date(duedate)
+            duedate: new Date(duedate),
+            month: parseInt(month)
           }
         })
       })

@@ -35,8 +35,8 @@ const navigation = () => {
     }
   }, [session])
 
-  console.log(userRole)
-  console.log('asdasdasdasdasdsa')
+  // console.log(userRole)
+  // console.log('asdasdasdasdasdsa')
 
   if (userRole === 'teamleader') {
     return [
@@ -309,44 +309,44 @@ const navigation = () => {
         icon: HomeOutline,
         path: '/'
       },
-      {
-        title: 'Account Settings',
-        icon: AccountCogOutline,
-        path: '/account-settings'
-      },
+      // {
+      //   title: 'Account Settings',
+      //   icon: AccountCogOutline,
+      //   path: '/account/1'
+      // },
       {
         sectionTitle: 'Pages '
       },
-      {
-        title: 'Login',
-        icon: Login,
-        path: '/pages/login',
-        openInNewTab: true
-      },
-      {
-        title: 'Register',
-        icon: AccountPlusOutline,
-        path: '/pages/register',
-        openInNewTab: true
-      },
-      {
-        title: 'Error',
-        icon: AlertCircleOutline,
-        path: '/pages/error',
-        openInNewTab: true
-      },
+      // {
+      //   title: 'Login',
+      //   icon: Login,
+      //   path: '/pages/login',
+      //   openInNewTab: true
+      // },
+      // {
+      //   title: 'Register',
+      //   icon: AccountPlusOutline,
+      //   path: '/pages/register',
+      //   openInNewTab: true
+      // },
+      // {
+      //   title: 'Error',
+      //   icon: AlertCircleOutline,
+      //   path: '/pages/error',
+      //   openInNewTab: true
+      // },
 
-      {
-        title: 'Dashboard',
-        icon: HomeOutline,
-        path: '/'
-      },
+      // {
+      //   title: 'Dashboard',
+      //   icon: HomeOutline,
+      //   path: '/'
+      // },
 
-      {
-        title: 'Pengumuman',
-        icon: CubeOutline,
-        path: '/pengumuman'
-      },
+      // {
+      //   title: 'Pengumuman',
+      //   icon: CubeOutline,
+      //   path: '/pengumuman'
+      // },
       {
         title: 'Timeline',
         icon: CubeOutline,
@@ -379,11 +379,11 @@ const navigation = () => {
         icon: Table,
         path: '/project-list'
       },
-      {
-        title: 'Sub Kegiatan',
-        icon: CubeOutline,
-        path: '/task'
-      },
+      // {
+      //   title: 'Sub Kegiatan',
+      //   icon: CubeOutline,
+      //   path: '/task'
+      // },
 
       {
         sectionTitle: 'Pencairan'
@@ -408,19 +408,19 @@ const navigation = () => {
         path: '/create-tim-kerja'
       },
 
-      {
-        sectionTitle: 'Perusahaan'
-      },
-      {
-        title: 'List Group Perusahaan',
-        icon: Table,
-        path: '/perusahaan-group-list'
-      },
-      {
-        title: 'Buat Group Perusahaan',
-        icon: Login,
-        path: '/create-kegiatan-perusahaan'
-      },
+      // {
+      //   sectionTitle: 'Perusahaan'
+      // },
+      // {
+      //   title: 'List Group Perusahaan',
+      //   icon: Table,
+      //   path: '/perusahaan-group-list'
+      // },
+      // {
+      //   title: 'Buat Group Perusahaan',
+      //   icon: Login,
+      //   path: '/create-kegiatan-perusahaan'
+      // },
 
       {
         sectionTitle: 'Pustaka'
@@ -457,55 +457,55 @@ const navigation = () => {
         title: 'Table Kegiatan',
         icon: Table,
         path: '/template-table-list'
-      },
-
-      {
-        sectionTitle: 'Pustaka'
-      },
-      {
-        title: 'Induk Kegiatan',
-        icon: CubeOutline,
-        path: '/master-induk-kegiatan'
-      },
-      {
-        title: 'Kode',
-        icon: Login,
-        path: '/master-kode'
-      },
-
-      {
-        sectionTitle: 'User Interface'
-      },
-      {
-        title: 'Typography',
-        icon: FormatLetterCase,
-        path: '/typography'
-      },
-      {
-        title: 'Icons',
-        path: '/icons',
-        icon: GoogleCirclesExtended
-      },
-      {
-        title: 'Cards',
-        icon: CreditCardOutline,
-        path: '/cards'
-      },
-      {
-        title: 'Tables',
-        icon: Table,
-        path: '/tables'
-      },
-      {
-        icon: CubeOutline,
-        title: 'Form Layouts',
-        path: '/form-layouts'
-      },
-      {
-        icon: CubeOutline,
-        title: 'iccon',
-        path: '/iccon'
       }
+
+      // {
+      //   sectionTitle: 'Pustaka'
+      // }
+      // {
+      //   title: 'Induk Kegiatan',
+      //   icon: CubeOutline,
+      //   path: '/master-induk-kegiatan'
+      // },
+      // {
+      //   title: 'Kode',
+      //   icon: Login,
+      //   path: '/master-kode'
+      // },
+
+      // {
+      //   sectionTitle: 'User Interface'
+      // },
+      // {
+      //   title: 'Typography',
+      //   icon: FormatLetterCase,
+      //   path: '/typography'
+      // },
+      // {
+      //   title: 'Icons',
+      //   path: '/icons',
+      //   icon: GoogleCirclesExtended
+      // },
+      // {
+      //   title: 'Cards',
+      //   icon: CreditCardOutline,
+      //   path: '/cards'
+      // },
+      // {
+      //   title: 'Tables',
+      //   icon: Table,
+      //   path: '/tables'
+      // },
+      // {
+      //   icon: CubeOutline,
+      //   title: 'Form Layouts',
+      //   path: '/form-layouts'
+      // },
+      // {
+      //   icon: CubeOutline,
+      //   title: 'iccon',
+      //   path: '/iccon'
+      // }
     ]
   }
 }

@@ -17,7 +17,8 @@ const TaskManageEdit = ({ data }) => {
         dataMitra={dataEdit.mitraTask}
         dataPML={dataEdit.pegawai}
         dataPH={dataEdit.pekerjaanHarian}
-        dataMitraLimit={dataEdit.mitraLimitHonor}
+        // dataMitraLimit={dataEdit.mitraLimitHonor}
+        dataResultTotalGaji={dataEdit.resultTotalGaji}
       ></TaskManageEditViews>
     </>
   )
@@ -34,6 +35,9 @@ export async function getServerSideProps(context) {
       }
     }
   }
+
+  const now = new Date()
+  const currentMonth = now.getMonth()
   const task = await prisma.sub_kegiatan.findUnique({
     where: {
       id: parseInt(context.params.id)
@@ -167,57 +171,96 @@ export async function getServerSideProps(context) {
   //   }
   // })
 
-  const arrayOfIds = mitraTask.map(mitra => mitra.id)
+  // const arrayOfIds = mitraTask.map(mitra => mitra.id)
 
   const mitraLimitHonor = []
 
-  // console.log(arrayOfIds)
-  for (const id of arrayOfIds) {
-    const result = await prisma.data_target_realisasi.findMany({
-      where: {
-        OR: [{ pmlId: parseInt(id) }, { pclId: parseInt(id) }]
-      },
-      select: {
-        id: true,
-        pmlId: true,
-        pclId: true,
-        gajiPml: true,
-        gajiPcl: true
-        // task: true
-      }
-    })
-
-    if (result.length > 0) {
-      for (const res of result) {
-        const existingEntry = mitraLimitHonor.find(entry => entry.id === res.id)
-
-        if (!existingEntry) {
-          // console.log(res)
-          mitraLimitHonor.push(res)
-        } else {
-          mitraLimitHonor.push({
-            id: res.id,
-            pmlId: parseInt(id),
-            pclId: parseInt(id),
-            gajiPml: 0,
-            gajiPcl: 0
-          })
-        }
-      }
-    } else {
-      mitraLimitHonor.push({
-        id: result.id,
-        pmlId: parseInt(id),
-        pclId: parseInt(id),
-        gajiPml: 0,
-        gajiPcl: 0
-      })
+  const pekerjaanBulanIni = await prisma.data_target_realisasi.findMany({
+    where: {
+      month: currentMonth
+    },
+    select: {
+      id: true,
+      pmlId: true,
+      pclId: true,
+      gajiPml: true,
+      gajiPcl: true
     }
-  }
+  })
+
+  let gajiMap = {}
+
+  pekerjaanBulanIni.forEach(pekerjaan => {
+    if (pekerjaan.pmlId !== null) {
+      if (!gajiMap[pekerjaan.pmlId]) {
+        gajiMap[pekerjaan.pmlId] = 0
+      }
+      gajiMap[pekerjaan.pmlId] += pekerjaan.gajiPml || 0
+    }
+
+    if (pekerjaan.pclId !== null) {
+      if (!gajiMap[pekerjaan.pclId]) {
+        gajiMap[pekerjaan.pclId] = 0
+      }
+      gajiMap[pekerjaan.pclId] += pekerjaan.gajiPcl || 0
+    }
+  })
+
+  const resultTotalGaji = mitraTask.map(user => {
+    return {
+      mitraId: user.id,
+      nama: user.name,
+      totalGaji: gajiMap[user.id] || 0
+    }
+  })
+
+  // console.log(arrayOfIds)
+  // for (const id of arrayOfIds) {
+  //   const result = await prisma.data_target_realisasi.findMany({
+  //     where: {
+  //       OR: [{ pmlId: parseInt(id) }, { pclId: parseInt(id) }]
+  //     },
+  //     select: {
+  //       id: true,
+  //       pmlId: true,
+  //       pclId: true,
+  //       gajiPml: true,
+  //       gajiPcl: true
+  //       // task: true
+  //     }
+  //   })
+
+  //   if (result.length > 0) {
+  //     for (const res of result) {
+  //       const existingEntry = mitraLimitHonor.find(entry => entry.id === res.id)
+
+  //       if (!existingEntry) {
+  //         // console.log(res)
+  //         mitraLimitHonor.push(res)
+  //       } else {
+  //         mitraLimitHonor.push({
+  //           id: res.id,
+  //           pmlId: parseInt(id),
+  //           pclId: parseInt(id),
+  //           gajiPml: 0,
+  //           gajiPcl: 0
+  //         })
+  //       }
+  //     }
+  //   } else {
+  //     mitraLimitHonor.push({
+  //       id: result.id,
+  //       pmlId: parseInt(id),
+  //       pclId: parseInt(id),
+  //       gajiPml: 0,
+  //       gajiPcl: 0
+  //     })
+  //   }
+  // }
 
   // const ada993 = mitraLimitHonor.find(entry => entry.pclId === 993)
-  // console.log(ada993)
 
+  // console.log(ada993)
   const pekerjaanHarian = await prisma.pekerjaan_harian.findMany({
     where: {
       taskId: parseInt(context.params.id)
@@ -238,7 +281,8 @@ export async function getServerSideProps(context) {
     mitraTask,
     pegawai,
     pekerjaanHarian,
-    mitraLimitHonor
+    // mitraLimitHonor,
+    resultTotalGaji
   }
 
   return {

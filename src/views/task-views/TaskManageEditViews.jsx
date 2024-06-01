@@ -442,7 +442,7 @@ const TaskManageEditViews = props => {
       duedate: values.subKegDl,
       startDate: values.subKegStart,
       description: values.subKegDesk,
-      month: parseInt(values.subKegMonth),
+      month: parseInt(new Date(values.subKegDl).getMonth()),
       year: parseInt(values.subKegYear)
     }
 
@@ -606,24 +606,25 @@ const TaskManageEditViews = props => {
           honorPetugas2: values.subKegJenisSample == 1 ? parseInt(values.subKegHonorPclPerPerusahaan) : 0,
           templateTable: values.templateTable,
           duedate: values.subKegDl,
-          kolomLP: kolomLP
+          kolomLP: kolomLP,
+          month: props.data.month
         })
 
         if (res.status === 201) {
           Swal.fire({
-            title: 'Tambah Sub Kegiatan Berhasil',
+            title: 'Import data berhasil',
             text: '',
             icon: 'success',
             confirmButtonColor: '#68B92E',
             confirmButtonText: 'OK'
-          }).then(router.push(`/project-detail/${values.subKegId}`))
+          })
         }
 
         break
       }
     } catch (error) {
       Swal.fire({
-        title: 'Tambah Sub Kegiatan Gagal',
+        title: 'Import gagal',
         text: error,
         icon: 'error',
         confirmButtonColor: '#d33',
@@ -672,12 +673,6 @@ const TaskManageEditViews = props => {
     })
   )
 
-  console.log('duration')
-  console.log('duration')
-  console.log('duration')
-  console.log(duration)
-  console.log(duration)
-  console.log(duration)
   const [lineTarel, setLineTaRel] = useState({
     target: props.dataPerusahaan.map(pr => pr.target),
     realisasi: props.dataPerusahaan.map(pr => pr.realisasi),
@@ -911,20 +906,22 @@ const TaskManageEditViews = props => {
                     values.subKegJenis == 67 ||
                     values.subKegJenis == 70) &&
                   values.subKegImportStatus === 1 && (
-                    <TablePerusahaanTaskDetails
-                      data={props.dataPerusahaan}
-                      dataProjectFungsi={props.data.project.fungsi}
-                      dataId={values.id}
-                      dataMitra={props.dataMitra}
-                      dataPML={props.dataPML}
-                      dataTaskSample={values.subKegJenisSample}
-                      dataJenisKeg={values.subKegJenis}
-                      dataUpdateTarget={handleTaskUpdate}
-                      dataMitraLimitHonor={props.dataMitraLimit}
-                      dataTemplate={props.dataT}
-                      dataTemplateKolom={props.dataTK}
-                      dataSubKegId={values.subKegId}
-                    ></TablePerusahaanTaskDetails>
+                    <>
+                      <TablePerusahaanTaskDetails
+                        data={props.dataPerusahaan}
+                        dataProjectFungsi={props.data.project.fungsi}
+                        dataId={values.id}
+                        dataMitra={props.dataMitra}
+                        dataPML={props.dataPML}
+                        dataTaskSample={values.subKegJenisSample}
+                        dataJenisKeg={values.subKegJenis}
+                        dataUpdateTarget={handleTaskUpdate}
+                        dataMitraLimitHonor={props.dataResultTotalGaji}
+                        dataTemplate={props.dataT}
+                        dataTemplateKolom={props.dataTK}
+                        dataSubKegId={values.subKegId}
+                      ></TablePerusahaanTaskDetails>
+                    </>
                     // <Button type='submit' variant={'contained'} onClick={handleSimpan} fullWidth>
                     //   Simpan
                     // </Button>
