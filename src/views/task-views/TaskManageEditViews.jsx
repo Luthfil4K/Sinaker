@@ -610,7 +610,7 @@ const TaskManageEditViews = props => {
           month: props.data.month
         })
 
-        if (res.status === 201) {
+        if (res.status === 200) {
           Swal.fire({
             title: 'Import data berhasil',
             text: '',
@@ -1266,7 +1266,7 @@ const TaskManageEditViews = props => {
                         fullWidth
                         labelId='demo-simple-select-helper-label'
                         id='demo-simple-select-helper'
-                        disabled={values.subKegImportStatus == 1 ? 'true' : 'false'}
+                        disabled={values.subKegImportStatus == 1 ? true : false}
                         label='Honor PML/Dokumen'
                         onChange={handleChange('subKegHonorPmlPerPerusahaan')}
                         value={values.subKegHonorPmlPerPerusahaan}
@@ -1277,7 +1277,7 @@ const TaskManageEditViews = props => {
                         fullWidth
                         labelId='demo-simple-select-helper-label'
                         id='demo-simple-select-helper'
-                        disabled={values.subKegImportStatus == 1 ? 'true' : 'false'}
+                        disabled={values.subKegImportStatus == 1 ? true : false}
                         label='Honor PCL/Dokumen'
                         onChange={handleChange('subKegHonorPclPerPerusahaan')}
                         value={values.subKegHonorPclPerPerusahaan}
