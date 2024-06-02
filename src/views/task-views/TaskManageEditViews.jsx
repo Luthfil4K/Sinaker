@@ -457,7 +457,7 @@ const TaskManageEditViews = props => {
         })
 
         // router.push(`/task-manage/${values.id}`)
-        router.reload()
+        // router.reload()
       })
       .catch(err => {
         Swal.fire({
@@ -908,6 +908,7 @@ const TaskManageEditViews = props => {
                   values.subKegImportStatus === 1 && (
                     <>
                       <TablePerusahaanTaskDetails
+                        dataBulan={values.subKegMonth}
                         data={props.dataPerusahaan}
                         dataProjectFungsi={props.data.project.fungsi}
                         dataId={values.id}

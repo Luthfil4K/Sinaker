@@ -612,30 +612,31 @@ const RapatDetailViews = props => {
                 </Grid>
               </Grid>
               <Divider sx={{ marginTop: 2.5 }} />
-              {session.status === 'authenticated' && session.data.uid === 1099999 && (
-                <CardActions style={{ display: 'flex', justifyContent: 'end' }}>
-                  <Button
-                    onClick={e => router.push(`/rapat-edit/${props.dataRapat.id}`)}
-                    size='medium'
-                    type='submit'
-                    sx={{ mr: 2 }}
-                    variant='contained'
-                    disabled={props.dataRapat.status === 'disetujui' ? true : false}
-                  >
-                    Edit
-                  </Button>
-                  <Button
-                    onClick={handleDelete(props.dataRapat.id)}
-                    size='medium'
-                    color='error'
-                    type='submit'
-                    sx={{ mr: 2 }}
-                    variant='contained'
-                  >
-                    Delete
-                  </Button>
-                </CardActions>
-              )}
+              {session.status === 'authenticated' &&
+                (session.data.uid === 1099999 || session.data.role == 'teamleader') && (
+                  <CardActions style={{ display: 'flex', justifyContent: 'end' }}>
+                    <Button
+                      onClick={e => router.push(`/rapat-edit/${props.dataRapat.id}`)}
+                      size='medium'
+                      type='submit'
+                      sx={{ mr: 2 }}
+                      variant='contained'
+                      disabled={props.dataRapat.status === 'disetujui' ? true : false}
+                    >
+                      Edit
+                    </Button>
+                    <Button
+                      onClick={handleDelete(props.dataRapat.id)}
+                      size='medium'
+                      color='error'
+                      type='submit'
+                      sx={{ mr: 2 }}
+                      variant='contained'
+                    >
+                      Hapus
+                    </Button>
+                  </CardActions>
+                )}
             </TabPanel>
             <TabPanel value='2' sx={{ p: 0, height: tampil === 'none' ? 335 : 1235 }}>
               <Grid mt={4} container spacing={4}>

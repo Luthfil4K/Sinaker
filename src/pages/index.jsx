@@ -21,7 +21,7 @@ import Divider from '@mui/material/Divider'
 import { signOut, useSession } from 'next-auth/react'
 
 import { useRouter } from 'next/dist/client/router'
-import { DataGrid } from '@mui/x-data-grid'
+import { DataGrid, GridToolbar } from '@mui/x-data-grid'
 // ** MUI chart
 // import { BarPlot } from '@mui/x-charts/BarChart'
 // import { ChartContainer } from '@mui/x-charts/ChartContainer'
@@ -634,16 +634,16 @@ const statusObj = {
   0: { color: 'warning', status: 'On Progress' },
   1: { color: 'success', status: 'Done' }
 }
-
 const jenisSub = {
   63: { namaJenisSub: 'Pelatihan', color: 'warning' },
   64: { namaJenisSub: 'Persiapan', color: 'warning' },
-  65: { namaJenisSub: 'Lapangan', color: 'warning' },
-  66: { namaJenisSub: 'Pengawasan', color: 'warning' },
-  67: { namaJenisSub: 'Pengolahan', color: 'warning' },
+  66: { namaJenisSub: 'Pelaksanaan', color: 'warning' },
+  65: { namaJenisSub: 'Pencacahan', color: 'warning' },
+  67: { namaJenisSub: 'Pengolahan-Entri', color: 'warning' },
   68: { namaJenisSub: 'Evaluasi', color: 'warning' },
   69: { namaJenisSub: 'Diseminasi', color: 'warning' },
-  70: { namaJenisSub: 'Pengolahan-Validasi', color: 'warning' }
+  70: { namaJenisSub: 'Pengolahan-Validasi', color: 'warning' },
+  71: { namaJenisSub: 'Listing', color: 'warning' }
 }
 
 const Dashboard = ({ dataTask }) => {
@@ -911,7 +911,7 @@ const Dashboard = ({ dataTask }) => {
           sx={{ fontWeight: 500, fontSize: '0.875rem !important' }}
         >
           {' '}
-          {jenisSub[parseInt(params.row.jenisKegiatan)].namaJenisSub}
+          {params.row.jenisKegiatan ? jenisSub[parseInt(params.row.jenisKegiatan)].namaJenisSub : 0}
         </Typography>
       ),
       type: 'string',
@@ -1267,6 +1267,9 @@ const Dashboard = ({ dataTask }) => {
             sx={{
               height: rows.length > 3 ? '81vh' : '45vh',
               width: '100%'
+            }}
+            slotProps={{
+              toolbar: { showQuickFilter: true }
             }}
           />
         </Card>

@@ -50,8 +50,8 @@ export default async function handler(req, res) {
           gajiPml,
           pclId,
           gajiPcl,
-          kol1: kol1.toString(),
-          kol2: kol2.toString(),
+          kol1,
+          kol2,
           desa,
           namadesa,
           kecamatan,
@@ -61,7 +61,7 @@ export default async function handler(req, res) {
 
       return res.status(200).json({ success: true, data: dataTarel })
     } catch (error) {
-      console.log(error.message)
+      //console.log(error.message)
       return res.status(400).json({ success: false })
     }
   } else if (method === 'DELETE') {

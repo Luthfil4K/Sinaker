@@ -131,7 +131,7 @@ const TableGroupPerusahaan = props => {
     () =>
       honorBulanIni.map(mi => ({
         value: mi.mitraId,
-        label: mi.nama + ', total Gaji :  Rp' + mi.totalGaji
+        label: mi.nama + ', total Gaji :  Rp' + mi.totalGaji.toLocaleString('id')
       })),
     [honorBulanIni]
   )
@@ -318,7 +318,8 @@ const TableGroupPerusahaan = props => {
       pclId: updatedRow.pclId ? updatedRow.pclId : 0,
       gajiPcl: updatedRow.gajiPcl ? updatedRow.gajiPcl : 0,
       kol1: updatedRow.kol1 ? updatedRow.kol1.toString() : '',
-      kol2: updatedRow.kol2 ? updatedRow.kol2.toString() : ''
+      kol2: updatedRow.kol2 ? updatedRow.kol2.toString() : '',
+      month: props.dataBulan
     }
 
     if (updatedRow.id < 100000) {
@@ -450,7 +451,7 @@ const TableGroupPerusahaan = props => {
           .catch(err => {
             Swal.fire({
               title: 'Error!',
-              text: 'Berhasil Disimpan',
+              text: 'Gagal Disimpan',
               icon: 'error',
               confirmButtonText: 'Ok'
             })

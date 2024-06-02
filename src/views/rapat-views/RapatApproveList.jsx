@@ -321,26 +321,40 @@ const RapatApproveList = props => {
         </Typography>
       </Grid>
       <Grid container spacing={5}>
-        <Grid item md={12} xs={12} display={'flex'} justifyContent={'start'}>
+        <Grid item md={12} xs={12}>
           <Card sx={{ padding: 4 }}>
-            <DataGrid
-              rowHeight={65}
-              initialState={{
-                sorting: {
-                  sortModel: [{ field: 'nama', sort: 'asc' }]
+            <Box
+              sx={{
+                overflowX: 'auto',
+
+                width: '100%',
+                '& .actions': {
+                  color: 'text.secondary'
+                },
+                '& .textPrimary': {
+                  color: 'text.primary'
                 }
               }}
-              rows={rows}
-              columns={columns}
-              sx={{
-                height: rows.length > 3 ? '80vh' : '45vh',
-                // overflowY: 'auto',
-                width: '100%'
-              }}
-              columnVisibilityModel={{
-                action: session.status === 'authenticated' && session.data.uid === 1099999 ? true : false
-              }}
-            />
+            >
+              <DataGrid
+                rowHeight={65}
+                initialState={{
+                  sorting: {
+                    sortModel: [{ field: 'nama', sort: 'asc' }]
+                  }
+                }}
+                rows={rows}
+                columns={columns}
+                sx={{
+                  height: rows.length > 3 ? '80vh' : '45vh',
+                  // overflowY: 'auto',
+                  width: '100%'
+                }}
+                columnVisibilityModel={{
+                  action: session.status === 'authenticated' && session.data.uid === 1099999 ? true : false
+                }}
+              />
+            </Box>
           </Card>
         </Grid>
       </Grid>

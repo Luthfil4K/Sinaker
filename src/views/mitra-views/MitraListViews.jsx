@@ -25,7 +25,7 @@ const MitraListViews = props => {
           <Typography variant={'h5'}>Daftar Mitra</Typography>
         </Grid>
         <Grid item md={6} xs={6} display={'flex'} justifyContent={'end'}>
-          {session.status === 'authenticated' && session.data.uid === 1099999 && (
+          {session.status === 'authenticated' && (session.data.uid === 1099999 || session.data.role === 'admin') && (
             <Link onClick={e => router.push(`/mitra-import`)}>
               <Button variant={'contained'}> Tambah Mitra</Button>
             </Link>
