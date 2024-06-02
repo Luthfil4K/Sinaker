@@ -37,6 +37,10 @@ import { DataGrid } from '@mui/x-data-grid'
 import TableAddParticipant from 'src/views/tables/TableAddParticipant'
 import { number } from 'mathjs'
 
+// topsis
+import { create, all } from 'mathjs'
+import { getBest } from '../../function/topsis'
+
 const statusObj = {
   0: { color: 'error', status: 'Overload' },
   1: { color: 'success', status: 'Available' }
@@ -52,6 +56,7 @@ const jenisFungsi = {
 
 const CreateKegiatanPerusahaanViews = props => {
   const [timMember, setTimMember] = useState(props.data.timKerjaPegawai)
+  const [kriteria, setKriteria] = useState(props.dataKriteria)
 
   const [values, setValues] = useState({
     idGroup: props.data.id,
@@ -77,65 +82,91 @@ const CreateKegiatanPerusahaanViews = props => {
       ...values, // Pertahankan nilai properti lainnya
       kegKetua: event.target.value // Perbarui nilai kegRentang
     }))
-    participants.map(users => {
+    dataBebanKerja.map(users => {
       if (users.id === event.target.value) {
         return { ...users, checked: true }
       }
     })
   }
 
-  const rows = participants.map(row => {
-    const gajiBulanIni = tpp
+  const userAll = participants.map(row => {
+    const jumlahKerjaanTpp = tpp
       .filter(tppRow => tppRow.pmlId === row.id)
       .filter(tppRow => {
         const tppDueDate = new Date(tppRow.task.duedate)
         const currentDate = new Date()
-        return (
-          tppDueDate.getFullYear() === currentDate.getFullYear() && tppDueDate.getMonth() === currentDate.getMonth()
-        )
+        return tppDueDate.getFullYear() === currentDate.getFullYear()
       })
-      .reduce((totalGaji, tppRow) => totalGaji + tppRow.gajiPml, 0)
+      .reduce((count, item) => count + 1, 0)
 
-    const gajiBulanSblm = tpp
+    const jumlahJamKerja = row.pekerjaan_harian
+      .filter(ph => ph.task.jenisKeg === 65)
+      .filter(hari => {
+        const tppDueDate = new Date(hari.tanggalSubmit)
+        const currentDate = new Date()
+        return tppDueDate.getFullYear() === currentDate.getFullYear()
+      })
+      .reduce((total, item) => total + item.durasi, 0)
+
+    return {
+      pegawai_id: row.id,
+      jumlahKegiatan: jumlahKerjaanTpp,
+      jumlahJamKerja
+    }
+  })
+
+  const arrayUser = userAll.map(item => [item.jumlahKegiatan, item.jumlahJamKerja])
+  const arrayUserId = userAll.map(item => item.pegawai_id)
+
+  // topsis
+  const config = {}
+  const math = create(all, config)
+
+  // pegawai
+  let m = math.matrix(arrayUser)
+  let w = kriteria
+  let ia = ['min', 'min']
+  let id = arrayUserId
+  let result = getBest(m, w, ia, id)
+
+  const resultBaru = result.map(item => {
+    return { bebanKerja: item.ps }
+  })
+
+  const dataBebanKerja = participants.map((item, index) => {
+    return {
+      ...item,
+      ...resultBaru[index]
+    }
+  })
+
+  const rows = dataBebanKerja.map(row => {
+    const jumlahKerjaanTpp = tpp
       .filter(tppRow => tppRow.pmlId === row.id)
       .filter(tppRow => {
         const tppDueDate = new Date(tppRow.task.duedate)
         const currentDate = new Date()
-        return currentDate.getMonth != 0
-          ? tppDueDate.getFullYear() === currentDate.getFullYear() &&
-              tppDueDate.getMonth() === currentDate.getMonth() - 1
-          : tppDueDate.getFullYear() === currentDate.getFullYear() - 1 && tppDueDate.getMonth() === 12
+        return tppDueDate.getFullYear() === currentDate.getFullYear()
       })
-      .reduce((totalGaji, tppRow) => totalGaji + tppRow.gajiPml, 0)
+      .reduce((count, item) => count + 1, 0)
 
-    const gajiBulanDepan = tpp
-      .filter(tppRow => tppRow.pmlId === row.id)
-      .filter(tppRow => {
-        const tppDueDate = new Date(tppRow.task.duedate)
+    const jumlahJamKerja = row.pekerjaan_harian
+      .filter(ph => ph.task.jenisKeg === 65)
+      .filter(hari => {
+        const tppDueDate = new Date(hari.tanggalSubmit)
         const currentDate = new Date()
-        return currentDate.getMonth != 11
-          ? tppDueDate.getFullYear() === currentDate.getFullYear() &&
-              tppDueDate.getMonth() === currentDate.getMonth() + 1
-          : tppDueDate.getFullYear() === currentDate.getFullYear() + 1 && tppDueDate.getMonth() === 0
+        return tppDueDate.getFullYear() === currentDate.getFullYear()
       })
-      .reduce((totalGaji, tppRow) => totalGaji + tppRow.gajiPml, 0)
-
-    // const bebanKerja = row.beban_kerja_pegawai[0].bebanKerja
-    // const nilaiBebanKerja = number(bebanKerja).toFixed(2)
-    const jamKerja = row.pekerjaan_harian.reduce((total, item) => total + item.durasi, 0)
+      .reduce((total, item) => total + item.durasi, 0)
 
     return {
       id: row.id,
       nama: row.name,
       fungsi: row.fungsi,
-      jumlahKegiatan: row.TaskOrganik.length,
+      jumlahKegiatan: jumlahKerjaanTpp,
       jumlahTimKerja: row.TimKerjaPegawai.length,
-      jumlahJamKerja: jamKerja,
-      // gajiBulanIni,
-      // gajiBulanSblm,
-      // gajiBulanDepan,
-      // bebanKerja: nilaiBebanKerja,
-      // over: gajiBulanIni,
+      jumlahJamKerja: jumlahJamKerja,
+      // bebanKerja: row.bebanKerja,
       checked: row.checked
     }
   })
@@ -211,110 +242,46 @@ const CreateKegiatanPerusahaanViews = props => {
         </Link>
       )
     },
-    {
-      field: 'over',
-      renderCell: params => (
-        <>
-          <Chip
-            label={statusObj[params.row.jumlahKegiatan < 15 ? 1 : 0].status}
-            color={statusObj[params.row.jumlahKegiatan < 15 ? 1 : 0].color}
-            sx={{
-              height: 24,
-              fontSize: '0.75rem',
-              width: 100,
-              textTransform: 'capitalize',
-              '& .MuiChip-label': { fontWeight: 500 }
-            }}
-          />
-        </>
-      ),
-      renderHeader: () => (
-        <Typography sx={{ fontWeight: 900, fontSize: '0.875rem !important', textAlign: 'center' }}>
-          Status Bulan Ini
-        </Typography>
-      ),
-      type: 'string',
-      width: 140
-    },
+    // {
+    //   field: 'over',
+    //   renderCell: params => (
+    //     <>
+    //       <Chip
+    //         label={statusObj[params.row.jumlahKegiatan < 15 ? 1 : 0].status}
+    //         color={statusObj[params.row.jumlahKegiatan < 15 ? 1 : 0].color}
+    //         sx={{
+    //           height: 24,
+    //           fontSize: '0.75rem',
+    //           width: 100,
+    //           textTransform: 'capitalize',
+    //           '& .MuiChip-label': { fontWeight: 500 }
+    //         }}
+    //       />
+    //     </>
+    //   ),
+    //   renderHeader: () => (
+    //     <Typography sx={{ fontWeight: 900, fontSize: '0.875rem !important', textAlign: 'center' }}>
+    //       Status Bulan Ini
+    //     </Typography>
+    //   ),
+    //   type: 'string',
+    //   width: 140
+    // },
+    // {
+    //   field: 'fungsi',
+    //   headerName: 'Fungsi',
+    //   renderHeader: () => (
+    //     <Typography sx={{ fontWeight: 900, fontSize: '0.875rem !important', textAlign: 'center' }}>Fungsi</Typography>
+    //   ),
 
-    // {
-    //   field: 'gajiBulanIni',
-    //   renderHeader: () => (
-    //     <Typography sx={{ fontWeight: 900, fontSize: '0.875rem !important', textAlign: 'center' }}>
-    //       Gaji Bulan Ini
-    //     </Typography>
-    //   ),
-    //   headerName: 'Gaji Bulan Ini ',
-    //   type: 'string',
-    //   width: 140,
+    //   minWidth: 170,
     //   renderCell: params => (
-    //     <>
-    //       <Typography
-    //         color={params.row.gajiBulanIni < 3000000 ? 'secondary.main' : 'error.main'}
-    //         sx={{ fontWeight: 500, fontSize: '0.875rem !important', textAlign: 'center' }}
-    //       >
-    //         {`Rp ${params.row.gajiBulanIni.toLocaleString('id-ID')}`}
-    //       </Typography>
-    //     </>
+    //     <Typography sx={{ fontWeight: 500, fontSize: '0.875rem !important' }}>
+    //       {' '}
+    //       {jenisFungsi[parseInt(params.row.fungsi)].bagFungsi}
+    //     </Typography>
     //   )
     // },
-    // {
-    //   field: 'gajiBulanSblm',
-    //   renderHeader: () => (
-    //     <Typography sx={{ fontWeight: 900, fontSize: '0.875rem !important', textAlign: 'center' }}>
-    //       Gaji Bulan Sebelumnya
-    //     </Typography>
-    //   ),
-    //   headerName: 'Gaji Bulan Sebelumnya ',
-    //   type: 'string',
-    //   width: 140,
-    //   renderCell: params => (
-    //     <>
-    //       <Typography
-    //         color={params.row.gajiBulanSblm < 3000000 ? 'secondary.main' : 'error.main'}
-    //         sx={{ fontWeight: 500, fontSize: '0.875rem !important', textAlign: 'center' }}
-    //       >
-    //         {`Rp ${params.row.gajiBulanSblm.toLocaleString('id-ID')}`}
-    //       </Typography>
-    //     </>
-    //   )
-    // },
-    // {
-    //   field: 'gajiBulanDepan',
-    //   renderHeader: () => (
-    //     <Typography sx={{ fontWeight: 900, fontSize: '0.875rem !important', textAlign: 'center' }}>
-    //       Gaji Bulan Depan
-    //     </Typography>
-    //   ),
-    //   headerName: 'Gaji Bulan Depan ',
-    //   type: 'string',
-    //   width: 140,
-    //   renderCell: params => (
-    //     <>
-    //       <Typography
-    //         color={params.row.gajiBulanDepan < 3000000 ? 'secondary.main' : 'error.main'}
-    //         sx={{ fontWeight: 500, fontSize: '0.875rem !important', textAlign: 'center' }}
-    //       >
-    //         {`Rp ${params.row.gajiBulanDepan.toLocaleString('id-ID')}`}
-    //       </Typography>
-    //     </>
-    //   )
-    // },
-    {
-      field: 'fungsi',
-      headerName: 'Fungsi',
-      renderHeader: () => (
-        <Typography sx={{ fontWeight: 900, fontSize: '0.875rem !important', textAlign: 'center' }}>Fungsi</Typography>
-      ),
-
-      minWidth: 170,
-      renderCell: params => (
-        <Typography sx={{ fontWeight: 500, fontSize: '0.875rem !important' }}>
-          {' '}
-          {jenisFungsi[parseInt(params.row.fungsi)].bagFungsi}
-        </Typography>
-      )
-    },
     {
       field: 'jumlahKegiatan',
       headerName: 'Jumlah Kegiatan',
@@ -373,7 +340,7 @@ const CreateKegiatanPerusahaanViews = props => {
 
   const handleKegiatanPerusahaan = async e => {
     e.preventDefault()
-    const ketuadanParticipants = participants.map(row => {
+    const ketuadanParticipants = dataBebanKerja.map(row => {
       if (row.id === values.kegKetua) {
         if (!row.checked) {
           return { ...row, checked: true }

@@ -1059,7 +1059,95 @@ const TaskManageEditViews = props => {
           </Card>
         </TabPanel>
         <TabPanel value='3' sx={{ p: 0, height: 350 }}>
-          <Grid container></Grid>
+          <Grid container spacing={4}>
+            <Grid xs={12} mt={5} item height={200} overflow={'auto'}>
+              {dataPHreal.length > 0 ? (
+                dataPHreal.map(ph => (
+                  <>
+                    {' '}
+                    <List key={ph.id}>
+                      <ListItem
+                        secondaryAction={
+                          <IconButton
+                            onClick={() => {
+                              Swal.fire({
+                                title: 'Hapus Kegiatan Harian?',
+                                text: '',
+                                icon: 'warning',
+                                showCancelButton: true,
+                                confirmButtonColor: '#3085d6',
+                                cancelButtonColor: '#d33',
+                                confirmButtonText: 'Yes'
+                              }).then(result => {
+                                if (result.isConfirmed) {
+                                  handleDeleteKegiatanHarian(ph.id)
+                                }
+                              })
+                            }}
+                            edge='end'
+                            aria-label='delete'
+                          >
+                            <DeleteIcon />
+                          </IconButton>
+                        }
+                      >
+                        <ListItemAvatar>
+                          <Avatar>
+                            <FolderIcon />
+                          </Avatar>
+                        </ListItemAvatar>
+                        <ListItemText primary={ph.namaKegiatan} />
+                      </ListItem>
+                    </List>
+                  </>
+                ))
+              ) : (
+                <>
+                  <Typography>Belum Ada Pekerjaan Harian Pada Kegiatan Ini, Silahkan Input Dibawah</Typography>
+                </>
+              )}
+            </Grid>
+            <Grid mt={2} item xs={12}>
+              <Grid container spacing={4}>
+                <Grid item xs={7}>
+                  <TextField
+                    value={valuesHarian.namaKegiatan}
+                    size='small'
+                    fullWidth
+                    multiline
+                    type={'string'}
+                    onChange={handleChangeHarian('namaKegiatan')}
+                    placeholder='Nama Kegiatan'
+                  />
+                </Grid>
+                <Grid item xs={4}>
+                  {' '}
+                  <TextField
+                    value={valuesHarian.durasi}
+                    size='small'
+                    fullWidth
+                    multiline
+                    type={'number'}
+                    onChange={handleChangeHarian('durasi')}
+                    placeholder='Durasi Pengerjaan '
+                  />
+                </Grid>
+                <Grid item mt={5} xs={1}>
+                  {' '}
+                  <InputAdornment position='end'>
+                    <IconButton
+                      onClick={handleKegiatanHarian}
+                      size='medium'
+                      type='submit'
+                      aria-label='toggle password visibility'
+                    >
+                      <SendIcon></SendIcon>
+                    </IconButton>
+                  </InputAdornment>
+                </Grid>
+              </Grid>
+            </Grid>
+          </Grid>
         </TabPanel>
         <TabPanel value='4' sx={{ p: 0 }}>
           <Card sx={{ padding: 4 }}>

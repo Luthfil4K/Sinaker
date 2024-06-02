@@ -507,6 +507,74 @@ const navigation = () => {
       //   path: '/iccon'
       // }
     ]
+  } else if (userRole == 'verifikator' || userRole == 'ppspm' || userRole == 'bendahara') {
+    return [
+      {
+        title: 'Dashboard',
+        icon: HomeOutline,
+        path: '/'
+      },
+
+      {
+        title: 'Timeline',
+        icon: CubeOutline,
+        path: '/timeline'
+      },
+
+      {
+        title: 'Daftar Rapat',
+        icon: Login,
+        path: '/rapat-ajuan-list'
+      },
+      {
+        sectionTitle: 'Kegiatan'
+      },
+
+      {
+        title: 'List Kegiatan',
+        icon: Table,
+        path: '/project-list'
+      },
+      // {
+      //   title: 'Sub Kegiatan',
+      //   icon: CubeOutline,
+      //   path: '/task'
+      // },
+
+      {
+        sectionTitle: 'Pencairan'
+      },
+      {
+        title: 'Pencairan',
+        icon: Cash,
+        path: '/pencairan'
+      },
+
+      {
+        sectionTitle: 'Tim Kerja'
+      },
+      {
+        title: 'Tim Kerja',
+        icon: CubeOutline,
+        path: '/tim-kerja-list'
+      },
+
+      {
+        sectionTitle: 'Pustaka'
+      },
+
+      {
+        title: 'Daftar Pegawai',
+        icon: Account,
+        path: '/pegawai'
+      },
+
+      {
+        title: 'Daftar Mitra',
+        icon: FormatLetterCase,
+        path: '/mitra'
+      }
+    ]
   }
 }
 

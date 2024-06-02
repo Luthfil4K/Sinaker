@@ -19,10 +19,13 @@ import { useRouter } from 'next/dist/client/router'
 import { useSession } from 'next-auth/react'
 
 // icon
-
 import PencilOutline from 'mdi-material-ui/PencilOutline'
 import DeleteOutline from 'mdi-material-ui/DeleteOutline'
 import router from 'next/router'
+
+// topsis
+import { create, all } from 'mathjs'
+import { getBest } from '../../function/topsis'
 
 const jenisFungsi = {
   2: { bagFungsi: 'Bagian Umum', color: 'warning' },
@@ -33,33 +36,6 @@ const jenisFungsi = {
   7: { bagFungsi: 'Integrasi Pengolahan dan Diseminasi Statistik', color: 'warning' }
 }
 
-const data = [
-  {
-    id: 1,
-    nama: 'Pegawai1',
-    fungsi: 'Nerwilis',
-    totalGaji: 3000000,
-    gajiBulanan: 10000,
-    gajiTriwulanan: 110000,
-    gajiSemesteran: 150000,
-    gajiTahunan: 210000,
-    jumlahKegiatan: 10,
-    jumlahSubkegiatan: 10
-  },
-  {
-    id: 2,
-    nama: 'Pegawai2',
-    fungsi: 'IPDS',
-    totalGaji: 140000,
-    gajiBulanan: 310000,
-    gajiTriwulanan: 550000,
-    gajiSemesteran: 230000,
-    gajiTahunan: 23000,
-    jumlahKegiatan: 5
-    // jumlahSubkegiatan: 14
-  }
-]
-
 const TablePeople = props => {
   const session = useSession()
   const statusObj = {
@@ -67,9 +43,68 @@ const TablePeople = props => {
     1: { color: 'success', status: 'Available' }
   }
   const [tpp, setTpp] = useState(props.dataTpp)
+  const [kriteria, setKriteria] = useState(props.dataKriteria)
   const { dataUser } = props
-  // console.log(tpp)
-  const rows = dataUser.map(row => {
+  const userAll = dataUser.map(row => {
+    const jumlahKerjaanTpp = tpp
+      .filter(tppRow => tppRow.pmlId === row.id)
+      .filter(tppRow => {
+        const tppDueDate = new Date(tppRow.task.duedate)
+        const currentDate = new Date()
+        return tppDueDate.getFullYear() === currentDate.getFullYear()
+      })
+      .reduce((count, item) => count + 1, 0)
+
+    // if (pegawaiOrganik.some(tes => tes.id == row.id)) {
+    //   jumlahKegiatan = row.TaskOrganik.length + 1
+    // } else {
+    //   jumlahKegiatan = row.TaskOrganik.length
+    // }
+
+    console.log(row.pekerjaan_harian)
+
+    const jumlahJamKerja = row.pekerjaan_harian
+      .filter(ph => ph.task.jenisKeg === 65)
+      .filter(hari => {
+        const tppDueDate = new Date(hari.tanggalSubmit)
+        const currentDate = new Date()
+        return tppDueDate.getFullYear() === currentDate.getFullYear()
+      })
+      .reduce((total, item) => total + item.durasi, 0)
+
+    return {
+      pegawai_id: row.id,
+      jumlahKegiatan: jumlahKerjaanTpp,
+      jumlahJamKerja
+    }
+  })
+
+  const arrayUser = userAll.map(item => [item.jumlahKegiatan, item.jumlahJamKerja])
+  const arrayUserId = userAll.map(item => item.pegawai_id)
+
+  // topsis
+  const config = {}
+  const math = create(all, config)
+
+  // pegawai
+  let m = math.matrix(arrayUser)
+  let w = kriteria
+  let ia = ['min', 'min']
+  let id = arrayUserId
+  let result = getBest(m, w, ia, id)
+
+  const resultBaru = result.map(item => {
+    return { bebanKerja: item.ps }
+  })
+
+  const dataBebanKerja = dataUser.map((item, index) => {
+    return {
+      ...item,
+      ...resultBaru[index]
+    }
+  })
+
+  const rows = dataBebanKerja.map(row => {
     // const gajiBulanIni = tpp
     //   .filter(tppRow => tppRow.pmlId === row.id)
     //   .filter(tppRow => {
@@ -105,18 +140,38 @@ const TablePeople = props => {
     //   })
     //   .reduce((totalGaji, tppRow) => totalGaji + tppRow.gajiPml, 0)
 
-    const bebanKerja = row.beban_kerja_pegawai[0].bebanKerja
+    const jumlahKerjaanTpp = tpp
+      .filter(tppRow => tppRow.pmlId === row.id)
+      .filter(tppRow => {
+        const tppDueDate = new Date(tppRow.task.duedate)
+        const currentDate = new Date()
+        return tppDueDate.getFullYear() === currentDate.getFullYear()
+      })
+      .reduce((count, item) => count + 1, 0)
+
+    // const bebanKerja = row.beban_kerja_pegawai[0].bebanKerja
+    // const nilaiBebanKerja = Number(bebanKerja).toFixed(2)
+
+    const bebanKerja = row.bebanKerja
     const nilaiBebanKerja = Number(bebanKerja).toFixed(2)
 
-    const nilaiJamKerja = row.pekerjaan_harian.reduce((total, item) => total + item.durasi, 0)
+    const jumlahJamKerja = row.pekerjaan_harian
+      .filter(ph => ph.task.jenisKeg === 65)
+      .filter(hari => {
+        const tppDueDate = new Date(hari.tanggalSubmit)
+        const currentDate = new Date()
+        return tppDueDate.getFullYear() === currentDate.getFullYear()
+      })
+      .reduce((total, item) => total + item.durasi, 0)
 
     return {
       id: row.id,
       nama: row.name,
       fungsi: row.fungsi,
-      jumlahKegiatan: row.TaskOrganik.length,
+      // jumlahKegiatan: row.TaskOrganik.length,
+      jumlahKegiatan: jumlahKerjaanTpp,
       bebanKerja: nilaiBebanKerja,
-      jamKerja: nilaiJamKerja,
+      jamKerja: jumlahJamKerja,
       // gajiBulanIni,
       // gajiBulanSblm,
       // gajiBulanDepan,
@@ -157,31 +212,31 @@ const TablePeople = props => {
         </Link>
       )
     },
-    {
-      field: 'over',
-      renderCell: params => (
-        <>
-          <Chip
-            label={statusObj[params.row.jumlahKegiatan < 15 ? 1 : 0].status}
-            color={statusObj[params.row.jumlahKegiatan < 15 ? 1 : 0].color}
-            sx={{
-              height: 24,
-              fontSize: '0.75rem',
-              width: 100,
-              textTransform: 'capitalize',
-              '& .MuiChip-label': { fontWeight: 500 }
-            }}
-          />
-        </>
-      ),
-      renderHeader: () => (
-        <Typography sx={{ fontWeight: 900, fontSize: '0.875rem !important', textAlign: 'center' }}>
-          Status Bulan Ini
-        </Typography>
-      ),
-      type: 'string',
-      width: 140
-    },
+    // {
+    //   field: 'over',
+    //   renderCell: params => (
+    //     <>
+    //       <Chip
+    //         label={statusObj[params.row.jumlahKegiatan < 15 ? 1 : 0].status}
+    //         color={statusObj[params.row.jumlahKegiatan < 15 ? 1 : 0].color}
+    //         sx={{
+    //           height: 24,
+    //           fontSize: '0.75rem',
+    //           width: 100,
+    //           textTransform: 'capitalize',
+    //           '& .MuiChip-label': { fontWeight: 500 }
+    //         }}
+    //       />
+    //     </>
+    //   ),
+    //   renderHeader: () => (
+    //     <Typography sx={{ fontWeight: 900, fontSize: '0.875rem !important', textAlign: 'center' }}>
+    //       Status Bulan Ini
+    //     </Typography>
+    //   ),
+    //   type: 'string',
+    //   width: 140
+    // },
 
     // {
     //   field: 'gajiBulanIni',
@@ -293,10 +348,10 @@ const TablePeople = props => {
     // },
     {
       field: 'jumlahKegiatan',
-      headerName: 'Jumlah Kegiatan',
+      headerName: 'Jumlah Pekerjaan',
       renderHeader: () => (
         <Typography sx={{ fontWeight: 900, fontSize: '0.875rem !important', textAlign: 'center' }}>
-          Jumlah Kegiatan
+          Jumlah Pekerjaan
         </Typography>
       ),
 

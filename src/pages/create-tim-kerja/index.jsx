@@ -9,7 +9,11 @@ const CreateKegiatanPerusahaan = ({ data }) => {
   const [user, setUser] = useState(JSON.parse(data))
   return (
     <>
-      <CreateTimKerjaViews data={user.user} dataTpp={user.perusahaanTask}></CreateTimKerjaViews>
+      <CreateTimKerjaViews
+        data={user.user}
+        dataTpp={user.perusahaanTask}
+        dataKriteria={user.kriteria}
+      ></CreateTimKerjaViews>
     </>
   )
 }
@@ -52,7 +56,11 @@ export async function getServerSideProps(context) {
           bebanKerja: true
         }
       },
-      pekerjaan_harian: true
+      pekerjaan_harian: {
+        include: {
+          task: true
+        }
+      }
     }
   })
 
@@ -63,8 +71,13 @@ export async function getServerSideProps(context) {
     }
   })
 
+  const kriteria = await prisma.kriteria_beban_kerja_pegawai.findUnique({
+    where: { id: 1 }
+  })
+
   const data = {
     perusahaanTask,
+    kriteria,
     user
   }
   return {

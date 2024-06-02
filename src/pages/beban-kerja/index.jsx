@@ -13,6 +13,8 @@ const BebanKerja = ({ data }) => {
         dataMitra={project.mitras}
         dataOrganik={project.oraganik}
         dataTpp={project.perusahaanTask}
+        dataKriteriaP={project.kriteriaPegawai}
+        dataKriteriaM={project.kriteriaMitra}
       ></BebanKerjaViews>
     </>
   )
@@ -44,12 +46,12 @@ export async function getServerSideProps(context) {
           id: true,
           task: true
         }
-      },
-      beban_kerja_mitra: {
-        select: {
-          bebanKerja: true
-        }
       }
+      // beban_kerja_mitra: {
+      //   select: {
+      //     bebanKerja: true
+      //   }
+      // }
     }
   })
 
@@ -62,26 +64,32 @@ export async function getServerSideProps(context) {
       }
     },
     include: {
-      UserProject: {
-        select: {
-          id: true,
-          project: true
-        }
-      },
-      TaskOrganik: {
-        select: {
-          id: true,
+      // UserProject: {
+      //   select: {
+      //     id: true,
+      //     project: true
+      //   }
+      // },
+      // TaskOrganik: {
+      //   select: {
+      //     id: true,
+      //     task: true
+      //   }
+      // },
+      // TimKerjaPegawai: true,
+      // taskToDo: true,
+      // beban_kerja_pegawai: {
+      //   select: {
+      //     bebanKerja: true
+      //   }
+      // },
+
+      // semua jenis kegiatan
+      pekerjaan_harian: {
+        include: {
           task: true
         }
-      },
-      TimKerjaPegawai: true,
-      taskToDo: true,
-      beban_kerja_pegawai: {
-        select: {
-          bebanKerja: true
-        }
-      },
-      pekerjaan_harian: true
+      }
     }
   })
 
@@ -92,7 +100,17 @@ export async function getServerSideProps(context) {
     }
   })
 
+  const kriteriaPegawai = await prisma.kriteria_beban_kerja_pegawai.findUnique({
+    where: { id: 1 }
+  })
+
+  const kriteriaMitra = await prisma.kriteria_beban_kerja_mitra.findUnique({
+    where: { id: 1 }
+  })
+
   const data = {
+    kriteriaMitra,
+    kriteriaPegawai,
     perusahaanTask,
     mitras,
     oraganik

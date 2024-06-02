@@ -37,6 +37,10 @@ import { DataGrid, GridToolbar } from '@mui/x-data-grid'
 import TableAddParticipant from 'src/views/tables/TableAddParticipant'
 import { number } from 'mathjs'
 
+// topsis
+import { create, all } from 'mathjs'
+import { getBest } from '../../function/topsis'
+
 const statusObj = {
   0: { color: 'error', status: 'Overload' },
   1: { color: 'success', status: 'Available' }
@@ -51,6 +55,7 @@ const jenisFungsi = {
 }
 
 const CreateKegiatanPerusahaanViews = props => {
+  const [kriteria, setKriteria] = useState(props.dataKriteria)
   const [participants, setParticipants] = useState(
     props.data.map(users => {
       return {
@@ -74,59 +79,85 @@ const CreateKegiatanPerusahaanViews = props => {
     }))
     console.log(values)
   }
-  const rows = participants.map(row => {
-    const gajiBulanIni = tpp
+
+  const userAll = participants.map(row => {
+    const jumlahKerjaanTpp = tpp
       .filter(tppRow => tppRow.pmlId === row.id)
       .filter(tppRow => {
         const tppDueDate = new Date(tppRow.task.duedate)
         const currentDate = new Date()
-        return (
-          tppDueDate.getFullYear() === currentDate.getFullYear() && tppDueDate.getMonth() === currentDate.getMonth()
-        )
+        return tppDueDate.getFullYear() === currentDate.getFullYear()
       })
-      .reduce((totalGaji, tppRow) => totalGaji + tppRow.gajiPml, 0)
+      .reduce((count, item) => count + 1, 0)
 
-    const gajiBulanSblm = tpp
+    const jumlahJamKerja = row.pekerjaan_harian
+      .filter(ph => ph.task.jenisKeg === 65)
+      .filter(hari => {
+        const tppDueDate = new Date(hari.tanggalSubmit)
+        const currentDate = new Date()
+        return tppDueDate.getFullYear() === currentDate.getFullYear()
+      })
+      .reduce((total, item) => total + item.durasi, 0)
+
+    return {
+      pegawai_id: row.id,
+      jumlahKegiatan: jumlahKerjaanTpp,
+      jumlahJamKerja
+    }
+  })
+
+  const arrayUser = userAll.map(item => [item.jumlahKegiatan, item.jumlahJamKerja])
+  const arrayUserId = userAll.map(item => item.pegawai_id)
+
+  // topsis
+  const config = {}
+  const math = create(all, config)
+
+  // pegawai
+  let m = math.matrix(arrayUser)
+  let w = kriteria
+  let ia = ['min', 'min']
+  let id = arrayUserId
+  let result = getBest(m, w, ia, id)
+
+  const resultBaru = result.map(item => {
+    return { bebanKerja: item.ps }
+  })
+
+  const dataBebanKerja = participants.map((item, index) => {
+    return {
+      ...item,
+      ...resultBaru[index]
+    }
+  })
+
+  const rows = dataBebanKerja.map(row => {
+    const jumlahKerjaanTpp = tpp
       .filter(tppRow => tppRow.pmlId === row.id)
       .filter(tppRow => {
         const tppDueDate = new Date(tppRow.task.duedate)
         const currentDate = new Date()
-        return currentDate.getMonth != 0
-          ? tppDueDate.getFullYear() === currentDate.getFullYear() &&
-              tppDueDate.getMonth() === currentDate.getMonth() - 1
-          : tppDueDate.getFullYear() === currentDate.getFullYear() - 1 && tppDueDate.getMonth() === 12
+        return tppDueDate.getFullYear() === currentDate.getFullYear()
       })
-      .reduce((totalGaji, tppRow) => totalGaji + tppRow.gajiPml, 0)
+      .reduce((count, item) => count + 1, 0)
 
-    const gajiBulanDepan = tpp
-      .filter(tppRow => tppRow.pmlId === row.id)
-      .filter(tppRow => {
-        const tppDueDate = new Date(tppRow.task.duedate)
+    const jumlahJamKerja = row.pekerjaan_harian
+      .filter(ph => ph.task.jenisKeg === 65)
+      .filter(hari => {
+        const tppDueDate = new Date(hari.tanggalSubmit)
         const currentDate = new Date()
-        return currentDate.getMonth != 11
-          ? tppDueDate.getFullYear() === currentDate.getFullYear() &&
-              tppDueDate.getMonth() === currentDate.getMonth() + 1
-          : tppDueDate.getFullYear() === currentDate.getFullYear() + 1 && tppDueDate.getMonth() === 0
+        return tppDueDate.getFullYear() === currentDate.getFullYear()
       })
-      .reduce((totalGaji, tppRow) => totalGaji + tppRow.gajiPml, 0)
-
-    // const bebanKerja = row.beban_kerja_pegawai[0].bebanKerja
-    // const nilaiBebanKerja = number(bebanKerja).toFixed(2)
-
-    const jamKerja = row.pekerjaan_harian.reduce((total, item) => total + item.durasi, 0)
+      .reduce((total, item) => total + item.durasi, 0)
 
     return {
       id: row.id,
       nama: row.name,
       fungsi: row.fungsi,
-      jumlahKegiatan: row.TaskOrganik.length,
+      jumlahKegiatan: jumlahKerjaanTpp,
       jumlahTimKerja: row.TimKerjaPegawai.length,
-      jumlahJamKerja: jamKerja,
-      // gajiBulanIni,
-      // gajiBulanSblm,
-      // gajiBulanDepan,
-      // bebanKerja: nilaiBebanKerja,
-      // over: gajiBulanIni,
+      jumlahJamKerja: jumlahJamKerja,
+      bebanKerja: row.bebanKerja,
       checked: row.checked
     }
   })
@@ -366,18 +397,18 @@ const CreateKegiatanPerusahaanViews = props => {
       ),
 
       minWidth: 150
-    }
-    // {
-    //   field: 'bebanKerja',
-    //   headerName: 'Beban Kerja',
-    //   renderHeader: () => (
-    //     <Typography sx={{ fontWeight: 900, fontSize: '0.875rem !important', textAlign: 'center' }}>
-    //       Beban Kerja
-    //     </Typography>
-    //   ),
+    },
+    {
+      field: 'bebanKerja',
+      headerName: 'Beban Kerja',
+      renderHeader: () => (
+        <Typography sx={{ fontWeight: 900, fontSize: '0.875rem !important', textAlign: 'center' }}>
+          Beban Kerja
+        </Typography>
+      ),
 
-    //   minWidth: 150
-    // }
+      minWidth: 150
+    }
 
     // {
     //   field: 'role',
@@ -446,7 +477,7 @@ const CreateKegiatanPerusahaanViews = props => {
   const handleKegiatanPerusahaan = async e => {
     e.preventDefault()
 
-    const ketuadanParticipants = participants.map(row => {
+    const ketuadanParticipants = dataBebanKerja.map(row => {
       if (row.id === values.kegKetua) {
         if (!row.checked) {
           return { ...row, checked: true }

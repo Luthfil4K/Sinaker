@@ -48,6 +48,7 @@ export async function getServerSideProps(context) {
           tahapanId: true,
           tahapan: true,
           tanggalMulai: true,
+          tanggalSPM: true,
           pesan_pencairan: true,
           surat_pencairan: true
         }
@@ -55,12 +56,9 @@ export async function getServerSideProps(context) {
     }
   })
 
-  const perusahaanTask = await prisma.taskPerusahaanProduksi.findMany({
+  const perusahaanTask = await prisma.data_target_realisasi.findMany({
     where: {
       taskId: parseInt(context.params.id)
-    },
-    include: {
-      perusahaan: true
     }
   })
 

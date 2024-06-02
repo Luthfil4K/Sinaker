@@ -107,9 +107,34 @@ export async function getServerSideProps(context) {
             equals: 0
           }
         },
+        // pelatihan
         {
           jenisKeg: {
             equals: 63
+          }
+        },
+        // persiapan
+        {
+          jenisKeg: {
+            equals: 64
+          }
+        },
+        // listing
+        {
+          jenisKeg: {
+            equals: 66
+          }
+        },
+        // diseminasi
+        {
+          jenisKeg: {
+            equals: 69
+          }
+        },
+        // evaluasi
+        {
+          jenisKeg: {
+            equals: 68
           }
         }
       ]

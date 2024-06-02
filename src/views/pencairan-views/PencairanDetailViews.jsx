@@ -42,14 +42,26 @@ import { Null } from 'mdi-material-ui'
 import { typeOf } from 'mathjs'
 
 const ProjectDetailsViews = props => {
+  console.log(props.dataEmail)
   const statusPencairan = props.data.pencairan[0].status
   const tanggalMulai = props.data.project.startdate
   const tanggalBerakhir = props.data.duedate
-  const tanggalMulaiPencairan = props.data.pencairan[0].tanggalMulai
+  const tanggalSPM = new Date(props.data.pencairan[0].tanggalSPM)
   const tanggalNow = new Date()
   const penanggungJawab = props.data.project.projectLeader.name
-  const jumlahMitra = props.dataMitra
-  const [totalGaji, setTotalGaji] = useState(props.dataTpp.reduce((totalGaji, tppRow) => totalGaji + tppRow.gajiPcl, 0))
+  // Filter data yang memenuhi kondisi pmlId dan pclId kurang dari 10000
+  const filteredData = props.dataTpp.filter(item => item.pmlId < 10000 && item.pclId < 10000)
+  // Mengumpulkan pmlId dan pclId yang unik
+  const pmlIdSet = new Set(filteredData.map(item => item.pmlId))
+  const pclIdSet = new Set(filteredData.map(item => item.pclId))
+  // Gabungkan kedua set ID unik
+  const combinedIdSet = new Set([...pmlIdSet, ...pclIdSet])
+  const jumlahMitra = combinedIdSet.size
+  const [totalGaji, setTotalGaji] = useState(
+    props.dataTpp
+      .filter(item => item.pmlId < 10000 && item.pclId < 10000)
+      .reduce((totalGaji, tppRow) => totalGaji + tppRow.gajiPcl + tppRow.gajiPml, 0)
+  )
   const router = useRouter()
   const session = useSession()
 
@@ -163,7 +175,9 @@ const ProjectDetailsViews = props => {
         return acc
       }, {})
       setValues(updatedValues)
-      setEditPJK(1)
+      if (props.data.pencairan[0].tahapanId !== 0) {
+        setEditPJK(1)
+      }
     }
   }, [])
 
@@ -238,42 +252,89 @@ const ProjectDetailsViews = props => {
       values.SPJ != null &&
       values.formPermintaan != null
     ) {
-      const data_surat = Object.keys(values).map((key, index) => {
-        if (key != 'SPM') {
-          return { lokasi: values[key], jenis: index + 1, id: props.data.pencairan[0].id }
+      if (props.data.pencairan[0].surat_pencairan.length > 0) {
+        const data_surat_edit = []
+        if (valuesBeforeEdit.suratTugas != values.suratTugas) {
+          data_surat_edit.push({ lokasi: values.suratTugas, jenis: 1, id: props.data.pencairan[0].id })
         }
-      })
-      try {
-        const res = await axios.post('/surat_pencairan', {
-          data_surat: data_surat
-        })
+        if (valuesBeforeEdit.SK != values.SK) {
+          data_surat_edit.push({ lokasi: values.SK, jenis: 2, id: props.data.pencairan[0].id })
+        }
+        if (valuesBeforeEdit.KAK != values.KAK) {
+          data_surat_edit.push({ lokasi: values.KAK, jenis: 3, id: props.data.pencairan[0].id })
+        }
+        if (valuesBeforeEdit.SPJ != values.SPJ) {
+          data_surat_edit.push({ lokasi: values.SPJ, jenis: 4, id: props.data.pencairan[0].id })
+        }
+        if (valuesBeforeEdit.formPermintaan != values.formPermintaan) {
+          data_surat_edit.push({ lokasi: values.formPermintaan, jenis: 5, id: props.data.pencairan[0].id })
+        }
+        try {
+          const response = await axios.put(`/surat_pencairan/${props.data.pencairan[0].id}`, {
+            data_surat_edit: data_surat_edit
+          })
 
-        const response = await axios.put(`/pencairan/${props.data.pencairan[0].id}`, {
-          tahapanChange: 1,
-          tahapanId: 1,
-          taskId: props.data.id
-        })
-
-        if (res.status === 201 && response.status === 201) {
+          if (response.status === 201) {
+            Swal.fire({
+              title: 'Berhasil Mengubah Dokumen Pencairan',
+              text: 'Tekan OK untuk melanjutkan',
+              icon: 'success',
+              confirmButtonColor: '#68B92E',
+              confirmButtonText: 'OK'
+            }).then(() => {
+              handleComplete()
+              router.push(`/pencairan-detail/${props.data.id}`)
+            })
+          }
+        } catch (error) {
           Swal.fire({
-            title: 'Berhasil Menambahkan Dokumen Pencairan',
-            text: 'Tekan OK untuk melanjutkan',
-            icon: 'success',
-            confirmButtonColor: '#68B92E',
+            title: 'Gagal Mengubah Dokumen Pencairan',
+            text: 'Pastikan form sudah terisi lengkap',
+            icon: 'error',
+            confirmButtonColor: '#d33',
             confirmButtonText: 'OK'
-          }).then(() => {
-            handleComplete()
-            router.push(`/pencairan-detail/${props.data.id}`)
           })
         }
-      } catch (error) {
-        Swal.fire({
-          title: 'Gagal Menambahkan Dokumen Pencairan',
-          text: 'Pastikan form sudah terisi lengkap',
-          icon: 'error',
-          confirmButtonColor: '#d33',
-          confirmButtonText: 'OK'
+      } else {
+        const data_surat = Object.keys(values).map((key, index) => {
+          if (key != 'SPM') {
+            return { lokasi: values[key], jenis: index + 1, id: props.data.pencairan[0].id }
+          }
         })
+        try {
+          const res = await axios.post('/surat_pencairan', {
+            data_surat: data_surat
+          })
+
+          const response = await axios.put(`/pencairan/${props.data.pencairan[0].id}`, {
+            tahapanChange: 1,
+            tahapanId: 1,
+            taskId: props.data.id,
+            subject: props.data.title + ' ' + props.data.project.title,
+            kegiatan: props.data.project.title
+          })
+
+          if (res.status === 201 && response.status === 201) {
+            Swal.fire({
+              title: 'Berhasil Menambahkan Dokumen Pencairan',
+              text: 'Tekan OK untuk melanjutkan',
+              icon: 'success',
+              confirmButtonColor: '#68B92E',
+              confirmButtonText: 'OK'
+            }).then(() => {
+              handleComplete()
+              router.push(`/pencairan-detail/${props.data.id}`)
+            })
+          }
+        } catch (error) {
+          Swal.fire({
+            title: 'Gagal Menambahkan Dokumen Pencairan',
+            text: 'Pastikan form sudah terisi lengkap',
+            icon: 'error',
+            confirmButtonColor: '#d33',
+            confirmButtonText: 'OK'
+          })
+        }
       }
     } else {
       Swal.fire({
@@ -338,7 +399,7 @@ const ProjectDetailsViews = props => {
       title: 'Kembalikan Dokumen ke PJK?',
       input: 'text',
       inputLabel: 'Masukkan Pesan Kesalahan',
-      confirmButtonText: 'Kirim',
+      confirmButtonText: 'Kembalikan ke PJK',
       showCancelButton: true,
       inputValidator: value => {
         if (!value) {
@@ -362,7 +423,10 @@ const ProjectDetailsViews = props => {
         const response = await axios.put(`/pencairan/${props.data.pencairan[0].id}`, {
           tahapanChange: 1,
           tahapanId: 0,
-          taskId: props.data.id
+          taskId: props.data.id,
+          subject: props.data.title + ' ' + props.data.project.title,
+          pesan: pesan,
+          email: props.data.project.projectLeader.email
         })
 
         if (res.status === 201 && response.status === 201) {
@@ -395,7 +459,11 @@ const ProjectDetailsViews = props => {
       const response = await axios.put(`/pencairan/${props.data.pencairan[0].id}`, {
         tahapanChange: 1,
         tahapanId: 2,
-        taskId: props.data.id
+        taskId: props.data.id,
+        subject: props.data.title + ' ' + props.data.project.title,
+        kegiatan: props.data.title + ' ' + props.data.project.title,
+        tahap: props.data.pencairan[0].tahapan.deskripsi,
+        email: props.data.project.projectLeader.email
       })
 
       if (response.status === 201) {
@@ -439,7 +507,11 @@ const ProjectDetailsViews = props => {
           SPMChange: 1,
           tahapanId: 3,
           taskId: props.data.id,
-          tanggalSPM: new Date()
+          tanggalSPM: new Date(),
+          subject: props.data.title + ' ' + props.data.project.title,
+          kegiatan: props.data.title + ' ' + props.data.project.title,
+          tahap: props.data.pencairan[0].tahapan.deskripsi,
+          email: props.data.project.projectLeader.email
         })
 
         if (res.status === 201 && response.status === 201) {
@@ -512,6 +584,7 @@ const ProjectDetailsViews = props => {
   }
 
   const [openBendahara, setOpenBendahara] = useState(true)
+  const [pesanBendahara, setPesanBendahara] = useState('')
 
   const handleBendahara = async e => {
     e.preventDefault()
@@ -520,7 +593,9 @@ const ProjectDetailsViews = props => {
       const response = await axios.put(`/pencairan/${props.data.pencairan[0].id}`, {
         tahapanChange: 1,
         tahapanId: 4,
-        taskId: props.data.id
+        taskId: props.data.id,
+        tahap: props.data.pencairan[0].tahapan.deskripsi,
+        email: props.data.project.projectLeader.email
       })
 
       const response2 = await axios.put(`/pencairan/${props.data.pencairan[0].id}`, {
@@ -554,13 +629,71 @@ const ProjectDetailsViews = props => {
     }
   }
 
+  const openModalBendahara = async tahapanId => {
+    const { value: pesanError } = Swal.fire({
+      title: 'Masukkan Pesan Keterangan?',
+      input: 'text',
+      inputLabel: 'Masukkan Pesan',
+      confirmButtonText: 'Kirim Pesan',
+      showCancelButton: true,
+      inputValidator: value => {
+        if (!value) {
+          return 'Pesan keterangan harus diisi'
+        }
+      }
+    }).then(result => {
+      if (result.isConfirmed) {
+        setPesanBendahara(result.value)
+      }
+    })
+    if (pesanBendahara) {
+      try {
+        const res = await axios.post('/pesan_pencairan', {
+          tahapanId: tahapanId,
+          pencairanId: props.data.pencairan[0].id,
+          pesan: pesanBendahara,
+          resolve: 0
+        })
+
+        const response = await axios.put(`/pencairan/${props.data.pencairan[0].id}`, {
+          tahapanChange: 1,
+          tahapanId: 3,
+          taskId: props.data.id,
+          subject: props.data.title + ' ' + props.data.project.title,
+          pesan: pesanBendahara,
+          email: props.data.project.projectLeader.email
+        })
+
+        if (res.status === 201 && response.status === 201) {
+          Swal.fire({
+            title: 'Berhasil Memberikan Keterangan',
+            text: 'Tekan OK untuk melanjutkan',
+            icon: 'success',
+            confirmButtonColor: '#68B92E',
+            confirmButtonText: 'OK'
+          }).then(() => {
+            router.push(`/pencairan`)
+          })
+        }
+      } catch (error) {
+        Swal.fire({
+          title: 'Gagal Mengirimkan Pesan Keterangan',
+          text: 'Pastikan form sudah terisi lengkap',
+          icon: 'error',
+          confirmButtonColor: '#d33',
+          confirmButtonText: 'OK'
+        })
+      }
+    }
+  }
+
   return (
     <Card>
       <CardContent>
         <Grid container spacing={5}>
           <Grid item xs={6} display={'flex'} justifyContent={'start'}>
             <Typography variant='h6' sx={{ mt: 2, mb: 1, py: 1 }}>
-              {props.data.title}
+              {props.data.title + ' ' + props.data.project.title}
             </Typography>
           </Grid>
           <Grid item xs={6} display={'flex'} justifyContent={'end'}>
@@ -598,7 +731,7 @@ const ProjectDetailsViews = props => {
               <Box sx={{ display: 'flex', alignItems: 'center' }}>
                 <ClipboardFileOutline sx={{ color: 'secondary', marginRight: 2.25 }} fontSize='small' />
                 <Typography variant='body2' sx={{ fontSize: '12px' }}>
-                  Jumlah Mitra: <strong>{jumlahMitra.length} Orang</strong>
+                  Jumlah Mitra: <strong>{jumlahMitra} Orang</strong>
                 </Typography>
               </Box>
               <Box sx={{ display: 'flex', alignItems: 'center' }}>
@@ -616,7 +749,7 @@ const ProjectDetailsViews = props => {
             <Box sx={{ width: '100%' }}>
               <Stepper nonLinear activeStep={activeStep}>
                 {steps.map((label, index) => (
-                  <Step key={label} completed={completed[index]}>
+                  <Step key={label} completed={completed[index]} onClick={handleStep(index)}>
                     <StepButton color='inherit'>{label}</StepButton>
                   </Step>
                 ))}
@@ -664,7 +797,7 @@ const ProjectDetailsViews = props => {
                       label='Link Surat Tugas'
                       name='suratTugas'
                       disabled={
-                        session?.data?.role === 'pjk' && session.data.uid === props.data.project.projectLeaderId
+                        session?.data?.role === 'teamleader' && session.data.uid === props.data.project.projectLeaderId
                           ? false
                           : true
                       }
@@ -679,7 +812,7 @@ const ProjectDetailsViews = props => {
                       label='Link SK'
                       name='SK'
                       disabled={
-                        session?.data?.role === 'pjk' && session.data.uid === props.data.project.projectLeaderId
+                        session?.data?.role === 'teamleader' && session.data.uid === props.data.project.projectLeaderId
                           ? false
                           : true
                       }
@@ -694,7 +827,7 @@ const ProjectDetailsViews = props => {
                       label='Link KAK'
                       name='KAK'
                       disabled={
-                        session?.data?.role === 'pjk' && session.data.uid === props.data.project.projectLeaderId
+                        session?.data?.role === 'teamleader' && session.data.uid === props.data.project.projectLeaderId
                           ? false
                           : true
                       }
@@ -709,7 +842,7 @@ const ProjectDetailsViews = props => {
                       label='Link SPJ'
                       name='SPJ'
                       disabled={
-                        session?.data?.role === 'pjk' && session.data.uid === props.data.project.projectLeaderId
+                        session?.data?.role === 'teamleader' && session.data.uid === props.data.project.projectLeaderId
                           ? false
                           : true
                       }
@@ -724,12 +857,12 @@ const ProjectDetailsViews = props => {
                       label='Link Form Permintaan Pencairan'
                       name='formPermintaan'
                       disabled={
-                        session?.data?.role === 'pjk' && session.data.uid === props.data.project.projectLeaderId
+                        session?.data?.role === 'teamleader' && session.data.uid === props.data.project.projectLeaderId
                           ? false
                           : true
                       }
                     />
-                    {session?.data?.role === 'pjk' && session.data.uid === props.data.project.projectLeaderId ? (
+                    {session?.data?.role === 'teamleader' && session.data.uid === props.data.project.projectLeaderId ? (
                       <Box sx={{ display: 'flex', flexDirection: 'row', pt: 2 }}>
                         <Box sx={{ flex: '1 1 auto' }} />
                         <Button onClick={editPJK === 1 ? handleEditPJK : handlePJK}>
@@ -743,41 +876,56 @@ const ProjectDetailsViews = props => {
                 </React.Fragment>
               ) : activeStep == 1 ? (
                 <React.Fragment>
-                  <Chip
-                    sx={{ mb: 2, mt: 7, width: '100%' }}
-                    label='Lihat Surat Tugas'
-                    component='a'
-                    href='#basic-chip'
-                    clickable
-                  />
-                  <Chip
-                    sx={{ mb: 2, mt: 4, width: '100%' }}
-                    label='Lihat SK'
-                    component='a'
-                    href='#basic-chip'
-                    clickable
-                  />
-                  <Chip
-                    sx={{ mb: 2, mt: 4, width: '100%' }}
-                    label='Lihat KAK'
-                    component='a'
-                    href='#basic-chip'
-                    clickable
-                  />
-                  <Chip
-                    sx={{ mb: 2, mt: 4, width: '100%' }}
-                    label='Lihat SPJ'
-                    component='a'
-                    href='#basic-chip'
-                    clickable
-                  />
-                  <Chip
-                    sx={{ mb: 2, mt: 4, width: '100%' }}
-                    label='Lihat Form Permintaan Pencairan'
-                    component='a'
-                    href='#basic-chip'
-                    clickable
-                  />
+                  {props.data.pencairan[0].surat_pencairan
+                    ? props.data.pencairan[0].surat_pencairan.map(surat =>
+                        surat.jenisId === 1 ? (
+                          <Chip
+                            sx={{ mb: 2, mt: 7, width: '100%' }}
+                            label='Lihat Surat Tugas'
+                            component='a'
+                            href={surat.lokasi}
+                            target='_blank'
+                            clickable
+                          />
+                        ) : surat.jenisId === 2 ? (
+                          <Chip
+                            sx={{ mb: 2, mt: 4, width: '100%' }}
+                            label='Lihat SK'
+                            component='a'
+                            href={surat.lokasi}
+                            target='_blank'
+                            clickable
+                          />
+                        ) : surat.jenisId === 3 ? (
+                          <Chip
+                            sx={{ mb: 2, mt: 4, width: '100%' }}
+                            label='Lihat KAK'
+                            component='a'
+                            href={surat.lokasi}
+                            target='_blank'
+                            clickable
+                          />
+                        ) : surat.jenisId === 4 ? (
+                          <Chip
+                            sx={{ mb: 2, mt: 4, width: '100%' }}
+                            label='Lihat SPJ'
+                            component='a'
+                            href={surat.lokasi}
+                            target='_blank'
+                            clickable
+                          />
+                        ) : (
+                          <Chip
+                            sx={{ mb: 2, mt: 4, width: '100%' }}
+                            label='Lihat Form Permintaan Pencairan'
+                            component='a'
+                            href={surat.lokasi}
+                            target='_blank'
+                            clickable
+                          />
+                        )
+                      )
+                    : null}
                   {session?.data?.role === 'verifikator' ? (
                     <Box sx={{ display: 'flex', flexDirection: 'row', pt: 2 }}>
                       <Box sx={{ flex: '1 1 auto' }} />
@@ -818,55 +966,77 @@ const ProjectDetailsViews = props => {
                 </React.Fragment>
               ) : (
                 <React.Fragment>
-                  <Chip
-                    sx={{ mb: 2, mt: 7, width: '100%' }}
-                    label='Lihat Surat Tugas'
-                    component='a'
-                    href='#basic-chip'
-                    clickable
-                  />
-                  <Chip
-                    sx={{ mb: 2, mt: 4, width: '100%' }}
-                    label='Lihat SK'
-                    component='a'
-                    href='#basic-chip'
-                    clickable
-                  />
-                  <Chip
-                    sx={{ mb: 2, mt: 4, width: '100%' }}
-                    label='Lihat KAK'
-                    component='a'
-                    href='#basic-chip'
-                    clickable
-                  />
-                  <Chip
-                    sx={{ mb: 2, mt: 4, width: '100%' }}
-                    label='Lihat SPJ'
-                    component='a'
-                    href='#basic-chip'
-                    clickable
-                  />
-                  <Chip
-                    sx={{ mb: 2, mt: 4, width: '100%' }}
-                    label='Lihat Form Permintaan Pencairan'
-                    component='a'
-                    href='#basic-chip'
-                    clickable
-                  />
-                  <Chip
-                    sx={{ mb: 2, mt: 4, width: '100%' }}
-                    label='Lihat SPM'
-                    component='a'
-                    href='#basic-chip'
-                    clickable
-                  />
-                  {Math.ceil((tanggalNow - tanggalMulai) / (1000 * 60 * 60 * 24)) > 3 &&
+                  {props.data.pencairan[0].surat_pencairan
+                    ? props.data.pencairan[0].surat_pencairan.map(surat =>
+                        surat.jenisId === 1 ? (
+                          <Chip
+                            sx={{ mb: 2, mt: 7, width: '100%' }}
+                            label='Lihat Surat Tugas'
+                            component='a'
+                            href={surat.lokasi}
+                            target='_blank'
+                            clickable
+                          />
+                        ) : surat.jenisId === 2 ? (
+                          <Chip
+                            sx={{ mb: 2, mt: 4, width: '100%' }}
+                            label='Lihat SK'
+                            component='a'
+                            href={surat.lokasi}
+                            target='_blank'
+                            clickable
+                          />
+                        ) : surat.jenisId === 3 ? (
+                          <Chip
+                            sx={{ mb: 2, mt: 4, width: '100%' }}
+                            label='Lihat KAK'
+                            component='a'
+                            href={surat.lokasi}
+                            target='_blank'
+                            clickable
+                          />
+                        ) : surat.jenisId === 4 ? (
+                          <Chip
+                            sx={{ mb: 2, mt: 4, width: '100%' }}
+                            label='Lihat SPJ'
+                            component='a'
+                            href={surat.lokasi}
+                            target='_blank'
+                            clickable
+                          />
+                        ) : surat.jenisId === 5 ? (
+                          <Chip
+                            sx={{ mb: 2, mt: 4, width: '100%' }}
+                            label='Lihat Form Permintaan Pencairan'
+                            component='a'
+                            href={surat.lokasi}
+                            target='_blank'
+                            clickable
+                          />
+                        ) : (
+                          <Chip
+                            sx={{ mb: 2, mt: 4, width: '100%' }}
+                            label='Lihat Form Permintaan Pencairan'
+                            component='a'
+                            href={surat.lokasi}
+                            target='_blank'
+                            clickable
+                          />
+                        )
+                      )
+                    : null}
+                  {Math.ceil((tanggalNow - tanggalSPM) / (1000 * 60 * 60 * 24)) > 3 &&
                   session?.data?.role === 'bendahara' ? (
                     <Collapse sx={{ mt: 5 }} in={openBendahara}>
                       <Alert
                         severity='error'
                         action={
-                          <IconButton aria-label='close' color='inherit' size='small' onClick={() => openModal(3)}>
+                          <IconButton
+                            aria-label='close'
+                            color='inherit'
+                            size='small'
+                            onClick={() => openModalBendahara(3)}
+                          >
                             <Message fontSize='inherit' />
                           </IconButton>
                         }

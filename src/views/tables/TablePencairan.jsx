@@ -105,10 +105,10 @@ const TableTask = props => {
       ),
       renderCell: params => (
         <Link
-          onClick={async e => {
-            router.push(`/project-detail/${params.row.kegiatanNameid}`)
-          }}
-          sx={{ cursor: 'pointer' }}
+        // onClick={async e => {
+        //   router.push(`/project-detail/${params.row.kegiatanNameid}`)
+        // }}
+        // sx={{ cursor: 'pointer' }}
         >
           <Typography sx={{ textDecoration: 'underline', fontWeight: 500, fontSize: '0.875rem !important' }}>
             {params.row.kegiatanName}
@@ -121,10 +121,10 @@ const TableTask = props => {
       field: 'taskName',
       renderCell: params => (
         <Link
-          onClick={async e => {
-            router.push(`/task--manage-edit/${params.row.taskId}`)
-          }}
-          sx={{ cursor: 'pointer' }}
+        // onClick={async e => {
+        //   router.push(`/task--manage-edit/${params.row.taskId}`)
+        // }}
+        // sx={{ cursor: 'pointer' }}
         >
           <Typography sx={{ fontWeight: 500, textDecoration: 'underline', fontSize: '0.875rem !important' }}>
             {params.row.taskName}
@@ -222,9 +222,9 @@ const TableTask = props => {
           <Button
             variant='outlined'
             color={
-              params.row.aksi === 99 && session?.data?.role == 'pjk'
+              params.row.aksi === 99 && session?.data?.role == 'teamleader'
                 ? 'info'
-                : params.row.aksi === 0 && session?.data?.role == 'pjk'
+                : params.row.aksi === 0 && session?.data?.role == 'teamleader'
                 ? 'primary'
                 : params.row.aksi === 1 && session?.data?.role == 'verifikator'
                 ? 'primary'
@@ -235,9 +235,9 @@ const TableTask = props => {
                 : 'success'
             }
           >
-            {params.row.aksi === 99 && session?.data?.role == 'pjk'
+            {params.row.aksi === 99 && session?.data?.role == 'teamleader'
               ? 'Mulai Pencairan'
-              : params.row.aksi === 0 && session?.data?.role == 'pjk'
+              : params.row.aksi === 0 && session?.data?.role == 'teamleader'
               ? 'Upload Dokumen'
               : params.row.aksi === 1 && session?.data?.role == 'verifikator'
               ? 'Review'
@@ -312,6 +312,9 @@ const TableTask = props => {
   const [rowsVerifikator, setRowsVerifikator] = useState([])
   const [rowsPPSPM, setRowsPPSPM] = useState([])
   const [rowsBendahara, setRowsBendahara] = useState([])
+
+  console.log(data)
+  console.log(session.data.uid)
 
   useEffect(() => {
     const updatedRowsPJK = data
@@ -515,7 +518,7 @@ const TableTask = props => {
               }
             }}
             rows={
-              session?.data?.role == 'pjk'
+              session?.data?.role == 'teamleader'
                 ? rowsPJK
                 : session?.data?.role == 'verifikator'
                 ? rowsVerifikator

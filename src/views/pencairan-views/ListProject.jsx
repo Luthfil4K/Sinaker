@@ -85,7 +85,7 @@ const ListProject = props => {
   )
 
   useEffect(() => {
-    if (session?.data?.role == 'pjk' && valueDropDown.kategori === 1) {
+    if (session?.data?.role == 'teamleader' && valueDropDown.kategori === 1) {
       const updatedRowPJK = cardP0.filter(task => {
         const pencairan = task.pencairan && task.pencairan[0]
         const status = pencairan ? pencairan.status : 0
@@ -114,6 +114,17 @@ const ListProject = props => {
         return tahapan === 3
       })
       setCardP(updatedRowBendahara)
+    } else if (
+      (session?.data?.role == 'admin' || session?.data?.role == 'superAdmin') &&
+      valueDropDown.kategori === 1
+    ) {
+      const updatedRowPJK = cardP0.filter(task => {
+        const pencairan = task.pencairan && task.pencairan[0]
+        const status = pencairan ? pencairan.status : 0
+        const tahapan = pencairan ? pencairan.tahapanId : 99
+        return status != 2 || tahapan >= 4
+      })
+      setCardP(updatedRowPJK)
     }
   }, [])
 
@@ -121,7 +132,7 @@ const ListProject = props => {
 
   useEffect(() => {
     let tmp = []
-    if (session?.data?.role == 'pjk' && valueDropDown.kategori === 1) {
+    if (session?.data?.role == 'teamleader' && valueDropDown.kategori === 1) {
       tmp = cardP0.filter(task => {
         const pencairan = task.pencairan && task.pencairan[0]
         const status = pencairan ? pencairan.status : 0
@@ -146,7 +157,16 @@ const ListProject = props => {
         const tahapan = pencairan ? pencairan.tahapanId : 99
         return tahapan === 3
       })
-    } else if (session?.data?.role == 'pjk' && valueDropDown.kategori === 0) {
+    } else if (
+      (session?.data?.role == 'admin' || session?.data?.role == 'superAdmin') &&
+      valueDropDown.kategori === 1
+    ) {
+      tmp = cardP0.filter(task => {
+        const pencairan = task.pencairan && task.pencairan[0]
+        const tahapan = pencairan ? pencairan.tahapanId : 99
+        return tahapan != 4
+      })
+    } else if (session?.data?.role == 'teamleader' && valueDropDown.kategori === 0) {
       tmp = cardP0.filter(task => {
         const pencairan = task.pencairan && task.pencairan[0]
         const status = pencairan ? pencairan.status : 0
@@ -170,6 +190,15 @@ const ListProject = props => {
         const pencairan = task.pencairan && task.pencairan[0]
         const tahapan = pencairan ? pencairan.tahapanId : 99
         return tahapan >= 3 && tahapan != 99
+      })
+    } else if (
+      (session?.data?.role == 'admin' || session?.data?.role == 'superAdmin') &&
+      valueDropDown.kategori === 0
+    ) {
+      tmp = cardP0.filter(task => {
+        const pencairan = task.pencairan && task.pencairan[0]
+        const tahapan = pencairan ? pencairan.tahapanId : 99
+        return tahapan >= 0
       })
     }
     // Filter berdasarkan bulan

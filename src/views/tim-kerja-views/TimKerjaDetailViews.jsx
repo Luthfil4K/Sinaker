@@ -39,6 +39,10 @@ import { number } from 'mathjs'
 
 import { useSession } from 'next-auth/react'
 
+// topsis
+import { create, all } from 'mathjs'
+import { getBest } from '../../function/topsis'
+
 const statusObj = {
   0: { color: 'error', status: 'Overload' },
   1: { color: 'success', status: 'Available' }
@@ -54,6 +58,8 @@ const jenisFungsi = {
 
 const CreateKegiatanPerusahaanViews = props => {
   const [timMember, setTimMember] = useState(props.data.timKerjaPegawai)
+  console.log(timMember)
+  const [kriteria, setKriteria] = useState(props.dataKriteria)
 
   const [tpp, setTpp] = useState(props.dataTpp)
   const session = useSession()
@@ -66,42 +72,7 @@ const CreateKegiatanPerusahaanViews = props => {
 
   // console.log(props.data)
 
-  const rows = timMember.map(row => {
-    const gajiBulanIni = tpp
-      .filter(tppRow => tppRow.pmlId === row.userId_fkey.id)
-      .filter(tppRow => {
-        const tppDueDate = new Date(tppRow.task.duedate)
-        const currentDate = new Date()
-        return (
-          tppDueDate.getFullYear() === currentDate.getFullYear() && tppDueDate.getMonth() === currentDate.getMonth()
-        )
-      })
-      .reduce((totalGaji, tppRow) => totalGaji + tppRow.gajiPml, 0)
-
-    const gajiBulanSblm = tpp
-      .filter(tppRow => tppRow.pmlId === row.userId_fkey.id)
-      .filter(tppRow => {
-        const tppDueDate = new Date(tppRow.task.duedate)
-        const currentDate = new Date()
-        return currentDate.getMonth != 0
-          ? tppDueDate.getFullYear() === currentDate.getFullYear() &&
-              tppDueDate.getMonth() === currentDate.getMonth() - 1
-          : tppDueDate.getFullYear() === currentDate.getFullYear() - 1 && tppDueDate.getMonth() === 12
-      })
-      .reduce((totalGaji, tppRow) => totalGaji + tppRow.gajiPml, 0)
-
-    const gajiBulanDepan = tpp
-      .filter(tppRow => tppRow.pmlId === row.userId_fkey.id)
-      .filter(tppRow => {
-        const tppDueDate = new Date(tppRow.task.duedate)
-        const currentDate = new Date()
-        return currentDate.getMonth != 11
-          ? tppDueDate.getFullYear() === currentDate.getFullYear() &&
-              tppDueDate.getMonth() === currentDate.getMonth() + 1
-          : tppDueDate.getFullYear() === currentDate.getFullYear() + 1 && tppDueDate.getMonth() === 0
-      })
-      .reduce((totalGaji, tppRow) => totalGaji + tppRow.gajiPml, 0)
-
+  const userAll = timMember.map(row => {
     const jumlahKerjaanTpp = tpp
       .filter(tppRow => tppRow.pmlId === row.id)
       .filter(tppRow => {
@@ -111,23 +82,73 @@ const CreateKegiatanPerusahaanViews = props => {
       })
       .reduce((count, item) => count + 1, 0)
 
-    // const bebanKerja = row.userId_fkey.beban_kerja_pegawai[0].bebanKerja
-    // const nilaiBebanKerja = number(bebanKerja).toFixed(2)
+    const jumlahJamKerja = row.userId_fkey.pekerjaan_harian
+      .filter(ph => ph.task.jenisKeg === 65)
+      .filter(hari => {
+        const tppDueDate = new Date(hari.tanggalSubmit)
+        const currentDate = new Date()
+        return tppDueDate.getFullYear() === currentDate.getFullYear()
+      })
+      .reduce((total, item) => total + item.durasi, 0)
 
-    const jamKerja = row.userId_fkey.pekerjaan_harian.reduce((total, item) => total + item.durasi, 0)
+    return {
+      pegawai_id: row.id,
+      jumlahKegiatan: jumlahKerjaanTpp,
+      jumlahJamKerja
+    }
+  })
+
+  const arrayUser = userAll.map(item => [item.jumlahKegiatan, item.jumlahJamKerja])
+  const arrayUserId = userAll.map(item => item.pegawai_id)
+
+  // topsis
+  const config = {}
+  const math = create(all, config)
+
+  // pegawai
+  let m = math.matrix(arrayUser)
+  let w = kriteria
+  let ia = ['min', 'min']
+  let id = arrayUserId
+  let result = getBest(m, w, ia, id)
+
+  const resultBaru = result.map(item => {
+    return { bebanKerja: item.ps }
+  })
+
+  const dataBebanKerja = timMember.map((item, index) => {
+    return {
+      ...item,
+      ...resultBaru[index]
+    }
+  })
+
+  const rows = dataBebanKerja.map(row => {
+    const jumlahKerjaanTpp = tpp
+      .filter(tppRow => tppRow.pmlId === row.id)
+      .filter(tppRow => {
+        const tppDueDate = new Date(tppRow.task.duedate)
+        const currentDate = new Date()
+        return tppDueDate.getFullYear() === currentDate.getFullYear()
+      })
+      .reduce((count, item) => count + 1, 0)
+
+    const jumlahJamKerja = row.userId_fkey.pekerjaan_harian
+      .filter(ph => ph.task.jenisKeg === 65)
+      .filter(hari => {
+        const tppDueDate = new Date(hari.tanggalSubmit)
+        const currentDate = new Date()
+        return tppDueDate.getFullYear() === currentDate.getFullYear()
+      })
+      .reduce((total, item) => total + item.durasi, 0)
 
     return {
       id: row.userId_fkey.id,
       nama: row.userId_fkey.name,
       fungsi: row.userId_fkey.fungsi,
       jumlahKegiatan: jumlahKerjaanTpp,
-      jumlahJamKerja: jamKerja
-      // gajiBulanIni,
-      // gajiBulanSblm,
-      // gajiBulanDepan,
-      // bebanKerjaO: nilaiBebanKerja,
-      // over: bebanKerja
-      // checked: row.checked
+      jumlahJamKerja: jumlahJamKerja
+      // bebanKerjaO: row.bebanKerja,
     }
   })
 
@@ -450,18 +471,18 @@ const CreateKegiatanPerusahaanViews = props => {
         axios
           .delete(`/tim-kerja/${values.idGroup}`)
           .then(res => {
-            Swal.fire('Deleted', 'Tim kerja has been deleted. ', 'success')
+            Swal.fire('Terhapus', 'Tim kerja berhasil dihapus. ', 'success')
 
             router.push('/tim-kerja-list')
           })
           .catch(err => {
-            Swal.fire('Error', 'Something went wrong. Please try again.', 'error')
+            Swal.fire('Error', 'Perubahan gagal disimpan.', 'error')
           })
       } else if (
         /* Read more about handling dismissals below */
         result.dismiss === Swal.DismissReason.cancel
       ) {
-        Swal.fire('Cancelled!', ' Press "OK" to continue.', 'error')
+        Swal.fire('Dibatalkan!', ' Tekan "OK" untuk melanjutkan.', 'error')
       }
     })
   }

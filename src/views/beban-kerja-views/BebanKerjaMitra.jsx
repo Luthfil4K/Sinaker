@@ -21,28 +21,9 @@ import { useSession } from 'next-auth/react'
 import PencilOutline from 'mdi-material-ui/PencilOutline'
 import DeleteOutline from 'mdi-material-ui/DeleteOutline'
 
-const rows2 = [
-  {
-    id: 1,
-    nama: 'Mitra A',
-    gajiBulanan: 21000,
-    gajiTriwulanan: 34000,
-    gajiSemesteran: 76000,
-    gajiTahunan: 67000,
-    jumlahKegiatan: '3',
-    jumlahSubkegiatan: '7'
-  },
-  {
-    id: 2,
-    nama: 'Mitra B',
-    gajiBulanan: 95000,
-    gajiTriwulanan: 39000,
-    gajiSemesteran: 40000,
-    gajiTahunan: 100000,
-    jumlahKegiatan: '5',
-    jumlahSubkegiatan: '5'
-  }
-]
+// topsis
+import { create, all } from 'mathjs'
+import { getBest } from '../../function/topsis'
 
 const TableMitra = props => {
   const statusObj = {
@@ -52,9 +33,10 @@ const TableMitra = props => {
 
   const [mitra, setMitra] = useState(props.data)
   const [tpp, setTpp] = useState(props.dataTpp)
+  const [kriteriaM, setKriteriaM] = useState(props.dataKriteriaM)
   const session = useSession()
 
-  const rows = mitra.map(row => {
+  const userAllM = mitra.map(row => {
     const gajiBulanIniPCL = tpp
       .filter(tppRow => tppRow.pclId === row.id)
       .filter(tppRow => {
@@ -80,93 +62,119 @@ const TableMitra = props => {
     // Gabungkan total gaji dari kedua kasus
     const gajiBulanIni = gajiBulanIniPCL + gajiBulanIniPML
 
-    const gajiBulanSblmPCL = tpp
-      .filter(tppRow => tppRow.pclId === row.id)
-      .filter(tppRow => {
-        const tppDueDate = new Date(tppRow.task.duedate)
-        const currentDate = new Date()
-        return currentDate.getMonth != 0
-          ? tppDueDate.getFullYear() === currentDate.getFullYear() &&
-              tppDueDate.getMonth() === currentDate.getMonth() - 1
-          : tppDueDate.getFullYear() === currentDate.getFullYear() - 1 && tppDueDate.getMonth() === 12
-      })
-      .reduce((totalGaji, tppRow) => totalGaji + tppRow.gajiPcl, 0)
-
-    const gajiBulanSblmPML = tpp
+    const jumlahKerjaanTppPML = tpp
       .filter(tppRow => tppRow.pmlId === row.id)
       .filter(tppRow => {
         const tppDueDate = new Date(tppRow.task.duedate)
         const currentDate = new Date()
-        return currentDate.getMonth != 0
-          ? tppDueDate.getFullYear() === currentDate.getFullYear() &&
-              tppDueDate.getMonth() === currentDate.getMonth() - 1
-          : tppDueDate.getFullYear() === currentDate.getFullYear() - 1 && tppDueDate.getMonth() === 12
+        return tppDueDate.getFullYear() === currentDate.getFullYear()
       })
-      .reduce((totalGaji, tppRow) => totalGaji + tppRow.gajiPcl, 0)
-    const gajiBulanSblm = gajiBulanSblmPML + gajiBulanSblmPCL
+      .reduce((count, item) => count + 1, 0)
 
-    const gajiBulanDepanPCL = tpp
+    const jumlahKerjaanTppPCL = tpp
       .filter(tppRow => tppRow.pclId === row.id)
       .filter(tppRow => {
         const tppDueDate = new Date(tppRow.task.duedate)
         const currentDate = new Date()
-        return currentDate.getMonth != 11
-          ? tppDueDate.getFullYear() === currentDate.getFullYear() &&
-              tppDueDate.getMonth() === currentDate.getMonth() + 1
-          : tppDueDate.getFullYear() === currentDate.getFullYear() + 1 && tppDueDate.getMonth() === 0
+        return tppDueDate.getFullYear() === currentDate.getFullYear()
       })
-      .reduce((totalGaji, tppRow) => totalGaji + tppRow.gajiPcl, 0)
+      .reduce((count, item) => count + 1, 0)
+    let jumlahKegiatan = jumlahKerjaanTppPCL + jumlahKerjaanTppPML
 
-    const gajiBulanDepanPML = tpp
+    return {
+      mitra_id: row.id,
+      jumlahKegiatan,
+      gajiBulanIni
+    }
+  })
+
+  const arrayUserM = userAllM.map(item => [item.jumlahKegiatan, item.gajiBulanIni])
+  const arrayUserIdM = userAllM.map(item => item.mitra_id)
+
+  console.log(arrayUserM)
+
+  // topsis
+  const config = {}
+  const math = create(all, config)
+
+  // mitra
+  let mm = math.matrix(arrayUserM)
+  let wm = kriteriaM
+  let ia = ['min', 'min']
+  let idm = arrayUserIdM
+  let resultm = getBest(mm, wm, ia, idm)
+
+  console.log(resultm)
+
+  const resultBaruM = resultm.map(item => {
+    return { bebanKerja: item.ps }
+  })
+
+  const dataBebanKerjaM = mitra.map((item, index) => {
+    return {
+      ...item,
+      ...resultBaruM[index]
+    }
+  })
+
+  const rows = dataBebanKerjaM.map(row => {
+    const gajiBulanIniPCL = tpp
       .filter(tppRow => tppRow.pclId === row.id)
       .filter(tppRow => {
         const tppDueDate = new Date(tppRow.task.duedate)
         const currentDate = new Date()
-        return currentDate.getMonth != 11
-          ? tppDueDate.getFullYear() === currentDate.getFullYear() &&
-              tppDueDate.getMonth() === currentDate.getMonth() + 1
-          : tppDueDate.getFullYear() === currentDate.getFullYear() + 1 && tppDueDate.getMonth() === 0
+        return (
+          tppDueDate.getFullYear() === currentDate.getFullYear() && tppDueDate.getMonth() === currentDate.getMonth()
+        )
       })
       .reduce((totalGaji, tppRow) => totalGaji + tppRow.gajiPcl, 0)
 
-    const gajiBulanDepan = gajiBulanDepanPCL + gajiBulanDepanPML
+    const gajiBulanIniPML = tpp
+      .filter(tppRow => tppRow.pmlId === row.id)
+      .filter(tppRow => {
+        const tppDueDate = new Date(tppRow.task.duedate)
+        const currentDate = new Date()
+        return (
+          tppDueDate.getFullYear() === currentDate.getFullYear() && tppDueDate.getMonth() === currentDate.getMonth()
+        )
+      })
+      .reduce((totalGaji, tppRow) => totalGaji + tppRow.gajiPml, 0)
 
-    const bebanKerja = row.beban_kerja_mitra.length == mitra.length ? row.beban_kerja_mitra[0].bebanKerja : 0
+    // Gabungkan total gaji dari kedua kasus
+    const gajiBulanIni = gajiBulanIniPCL + gajiBulanIniPML
+
+    const bebanKerja = row.bebanKerja
     const nilaiBebanKerja = Number(bebanKerja).toFixed(2)
+
+    const jumlahKerjaanTppPML = tpp
+      .filter(tppRow => tppRow.pmlId === row.id)
+      .filter(tppRow => {
+        const tppDueDate = new Date(tppRow.task.duedate)
+        const currentDate = new Date()
+        return tppDueDate.getFullYear() === currentDate.getFullYear()
+      })
+      .reduce((count, item) => count + 1, 0)
+
+    const jumlahKerjaanTppPCL = tpp
+      .filter(tppRow => tppRow.pclId === row.id)
+      .filter(tppRow => {
+        const tppDueDate = new Date(tppRow.task.duedate)
+        const currentDate = new Date()
+        return tppDueDate.getFullYear() === currentDate.getFullYear()
+      })
+      .reduce((count, item) => count + 1, 0)
+    const jumlahKegiatan = jumlahKerjaanTppPCL + jumlahKerjaanTppPML
 
     return {
       id: row.id,
       name: row.name,
-      jumlahKegiatan: row.TaskPeserta.length,
+      jumlahKegiatan: jumlahKegiatan,
       bebanKerja: nilaiBebanKerja,
-      // email: row.email,
-      // status: row.status,
       gajiBulanIni,
-      gajiBulanSblm,
-      // gajiBulanDepan,
       over: gajiBulanIni
     }
   })
-  // console.log(rows)
-  const handleDelete = async id => {
-    axios
-      .delete(`mitra/${id}`)
-      .then(async res => {
-        await Swal.fire({
-          icon: 'success',
-          title: 'Success',
-          text: 'Mitra Deleted'
-        })
-        router.reload()
-      })
-      .catch(err => {
-        Swal.fire({
-          icon: 'error',
-          title: 'Error',
-          text: 'Something went wrong'
-        })
-      })
-  }
+
   const router = useRouter()
   const columns = [
     // { field: 'id', headerName: 'No', type: 'string', width: 40 },
@@ -237,9 +245,7 @@ const TableMitra = props => {
     {
       field: 'gajiBulanIni',
       renderHeader: () => (
-        <Typography sx={{ fontWeight: 900, fontSize: '0.875rem !important', textAlign: 'center' }}>
-          Gaji Bulan Ini
-        </Typography>
+        <Typography sx={{ fontWeight: 900, fontSize: '0.875rem !important', textAlign: 'center' }}>Honor</Typography>
       ),
       headerName: 'Gaji Bulan Ini ',
       type: 'string',
@@ -247,7 +253,7 @@ const TableMitra = props => {
       renderCell: params => (
         <>
           <Typography
-            color={params.row.gajiBulanIni < 3000000 ? 'secondary.main' : 'error.main'}
+            color={params.row.gajiBulanIni < 4200000 ? 'secondary.main' : 'error.main'}
             sx={{ fontWeight: 500, fontSize: '0.875rem !important', textAlign: 'center' }}
           >
             {`Rp${params.row.gajiBulanIni.toLocaleString('id-ID')}`}
@@ -255,27 +261,27 @@ const TableMitra = props => {
         </>
       )
     },
-    {
-      field: 'gajiBulanSblm',
-      renderHeader: () => (
-        <Typography sx={{ fontWeight: 900, fontSize: '0.875rem !important', textAlign: 'center' }}>
-          Gaji Bulan Sebelumnya
-        </Typography>
-      ),
-      headerName: 'Gaji Bulan Sebelumnya ',
-      type: 'string',
-      width: 140,
-      renderCell: params => (
-        <>
-          <Typography
-            color={params.row.gajiBulanSblm < 3000000 ? 'secondary.main' : 'error.main'}
-            sx={{ fontWeight: 500, fontSize: '0.875rem !important', textAlign: 'center' }}
-          >
-            {`Rp${params.row.gajiBulanSblm.toLocaleString('id-ID')}`}
-          </Typography>
-        </>
-      )
-    },
+    // {
+    //   field: 'gajiBulanSblm',
+    //   renderHeader: () => (
+    //     <Typography sx={{ fontWeight: 900, fontSize: '0.875rem !important', textAlign: 'center' }}>
+    //       Gaji Bulan Sebelumnya
+    //     </Typography>
+    //   ),
+    //   headerName: 'Gaji Bulan Sebelumnya ',
+    //   type: 'string',
+    //   width: 140,
+    //   renderCell: params => (
+    //     <>
+    //       <Typography
+    //         color={params.row.gajiBulanSblm < 3000000 ? 'secondary.main' : 'error.main'}
+    //         sx={{ fontWeight: 500, fontSize: '0.875rem !important', textAlign: 'center' }}
+    //       >
+    //         {`Rp${params.row.gajiBulanSblm.toLocaleString('id-ID')}`}
+    //       </Typography>
+    //     </>
+    //   )
+    // },
     // {
     //   field: 'gajiBulanDepan',
     //   renderHeader: () => (

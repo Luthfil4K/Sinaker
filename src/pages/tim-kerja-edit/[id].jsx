@@ -8,7 +8,12 @@ const TimKerjaEdit = ({ data }) => {
   // console.log(TimKerja)
   return (
     <>
-      <EditTimKerja data={timKerja.timkerja} dataUser={timKerja.user} dataTpp={timKerja.perusahaanTask} />
+      <EditTimKerja
+        data={timKerja.timkerja}
+        dataUser={timKerja.user}
+        dataTpp={timKerja.perusahaanTask}
+        dataKriteria={timKerja.kriteria}
+      />
     </>
   )
 }
@@ -72,7 +77,11 @@ export async function getServerSideProps(context) {
           bebanKerja: true
         }
       },
-      pekerjaan_harian: true
+      pekerjaan_harian: {
+        include: {
+          task: true
+        }
+      }
     }
   })
 
@@ -83,8 +92,13 @@ export async function getServerSideProps(context) {
     }
   })
 
+  const kriteria = await prisma.kriteria_beban_kerja_pegawai.findUnique({
+    where: { id: 1 }
+  })
+
   const data = {
     perusahaanTask,
+    kriteria,
     user,
     timkerja
   }

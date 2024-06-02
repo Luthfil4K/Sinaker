@@ -18,6 +18,8 @@ const PeopleViews = props => {
   const [mitra, setMitra] = useState(props.dataMitra)
   const [dataTpp, setdataTpp] = useState(props.dataTpp)
   const [viewData, setViewData] = useState(1)
+  const [bobotPegawai, setBobotPegawai] = useState(props.dataKriteriaP)
+  const [bobotMitra, setBobotMitra] = useState(props.dataKriteriaM)
 
   const handleViewDataGrid = params => {
     setViewData(1)
@@ -25,6 +27,14 @@ const PeopleViews = props => {
   const handleViewDataTable = params => {
     setViewData(2)
   }
+
+  const kriteria1P = parseFloat(bobotPegawai.kriteria1)
+  const kriteria2P = parseFloat(bobotPegawai.kriteria2)
+  const arrayBebanPegawai = [kriteria1P, kriteria2P]
+
+  const kriteria1M = parseFloat(bobotMitra.kriteria1)
+  const kriteria2M = parseFloat(bobotMitra.kriteria2)
+  const arrayBebanMitra = [kriteria1M, kriteria2M]
   const session = useSession()
 
   return (
@@ -65,9 +75,13 @@ const PeopleViews = props => {
           <Card>
             <Box sx={{ width: '100%' }}>
               {viewData == 1 ? (
-                <BebanKerjaPegawai dataUser={user} dataTpp={dataTpp}></BebanKerjaPegawai>
+                <BebanKerjaPegawai
+                  dataUser={user}
+                  dataTpp={dataTpp}
+                  dataKriteria={arrayBebanPegawai}
+                ></BebanKerjaPegawai>
               ) : (
-                <BebanKerjaMitra data={mitra} dataTpp={dataTpp}></BebanKerjaMitra>
+                <BebanKerjaMitra data={mitra} dataTpp={dataTpp} dataKriteriaM={arrayBebanMitra}></BebanKerjaMitra>
               )}
             </Box>
           </Card>
