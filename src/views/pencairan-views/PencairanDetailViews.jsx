@@ -797,7 +797,10 @@ const ProjectDetailsViews = props => {
                       label='Link Surat Tugas'
                       name='suratTugas'
                       disabled={
-                        session?.data?.role === 'teamleader' && session.data.uid === props.data.project.projectLeaderId
+                        (session?.data?.role === 'teamleader' &&
+                          session.data.uid === props.data.project.projectLeaderId) ||
+                        session?.data?.role === 'admin' ||
+                        session?.data?.role === 'superAdmin'
                           ? false
                           : true
                       }
@@ -812,7 +815,10 @@ const ProjectDetailsViews = props => {
                       label='Link SK'
                       name='SK'
                       disabled={
-                        session?.data?.role === 'teamleader' && session.data.uid === props.data.project.projectLeaderId
+                        (session?.data?.role === 'teamleader' &&
+                          session.data.uid === props.data.project.projectLeaderId) ||
+                        session?.data?.role === 'admin' ||
+                        session?.data?.role === 'superAdmin'
                           ? false
                           : true
                       }
@@ -827,7 +833,10 @@ const ProjectDetailsViews = props => {
                       label='Link KAK'
                       name='KAK'
                       disabled={
-                        session?.data?.role === 'teamleader' && session.data.uid === props.data.project.projectLeaderId
+                        (session?.data?.role === 'teamleader' &&
+                          session.data.uid === props.data.project.projectLeaderId) ||
+                        session?.data?.role === 'admin' ||
+                        session?.data?.role === 'superAdmin'
                           ? false
                           : true
                       }
@@ -842,7 +851,10 @@ const ProjectDetailsViews = props => {
                       label='Link SPJ'
                       name='SPJ'
                       disabled={
-                        session?.data?.role === 'teamleader' && session.data.uid === props.data.project.projectLeaderId
+                        (session?.data?.role === 'teamleader' &&
+                          session.data.uid === props.data.project.projectLeaderId) ||
+                        session?.data?.role === 'admin' ||
+                        session?.data?.role === 'superAdmin'
                           ? false
                           : true
                       }
@@ -857,12 +869,18 @@ const ProjectDetailsViews = props => {
                       label='Link Form Permintaan Pencairan'
                       name='formPermintaan'
                       disabled={
-                        session?.data?.role === 'teamleader' && session.data.uid === props.data.project.projectLeaderId
+                        (session?.data?.role === 'teamleader' &&
+                          session.data.uid === props.data.project.projectLeaderId) ||
+                        session?.data?.role === 'admin' ||
+                        session?.data?.role === 'superAdmin'
                           ? false
                           : true
                       }
                     />
-                    {session?.data?.role === 'teamleader' && session.data.uid === props.data.project.projectLeaderId ? (
+                    {(session?.data?.role === 'teamleader' &&
+                      session.data.uid === props.data.project.projectLeaderId) ||
+                    session?.data?.role === 'admin' ||
+                    session?.data?.role === 'superAdmin' ? (
                       <Box sx={{ display: 'flex', flexDirection: 'row', pt: 2 }}>
                         <Box sx={{ flex: '1 1 auto' }} />
                         <Button onClick={editPJK === 1 ? handleEditPJK : handlePJK}>
@@ -926,7 +944,9 @@ const ProjectDetailsViews = props => {
                         )
                       )
                     : null}
-                  {session?.data?.role === 'verifikator' ? (
+                  {session?.data?.role === 'verifikator' ||
+                  session?.data?.role === 'admin' ||
+                  session?.data?.role === 'superAdmin' ? (
                     <Box sx={{ display: 'flex', flexDirection: 'row', pt: 2 }}>
                       <Box sx={{ flex: '1 1 auto' }} />
                       <Button onClick={() => openModal(1)}>Review Kembali</Button>
@@ -950,9 +970,17 @@ const ProjectDetailsViews = props => {
                       multiline
                       label='Link SPM'
                       name='SPM'
-                      disabled={session?.data?.role === 'ppspm' ? false : true}
+                      disabled={
+                        session?.data?.role === 'ppspm' ||
+                        session?.data?.role === 'admin' ||
+                        session?.data?.role === 'superAdmin'
+                          ? false
+                          : true
+                      }
                     />
-                    {session?.data?.role === 'ppspm' ? (
+                    {session?.data?.role === 'ppspm' ||
+                    session?.data?.role === 'admin' ||
+                    session?.data?.role === 'superAdmin' ? (
                       <Box sx={{ display: 'flex', flexDirection: 'row', pt: 2 }}>
                         <Box sx={{ flex: '1 1 auto' }} />
                         <Button onClick={editPPSPM == 1 ? handleEditPPSPM : handlePPSPM}>
@@ -1025,8 +1053,10 @@ const ProjectDetailsViews = props => {
                         )
                       )
                     : null}
-                  {Math.ceil((tanggalNow - tanggalSPM) / (1000 * 60 * 60 * 24)) > 3 &&
-                  session?.data?.role === 'bendahara' ? (
+                  {(Math.ceil((tanggalNow - tanggalSPM) / (1000 * 60 * 60 * 24)) > 3 &&
+                    session?.data?.role === 'bendahara') ||
+                  session?.data?.role === 'admin' ||
+                  session?.data?.role === 'superAdmin' ? (
                     <Collapse sx={{ mt: 5 }} in={openBendahara}>
                       <Alert
                         severity='error'
@@ -1046,7 +1076,9 @@ const ProjectDetailsViews = props => {
                       </Alert>
                     </Collapse>
                   ) : null}
-                  {session?.data?.role === 'bendahara' ? (
+                  {session?.data?.role === 'bendahara' ||
+                  session?.data?.role === 'admin' ||
+                  session?.data?.role === 'superAdmin' ? (
                     <Box sx={{ display: 'flex', flexDirection: 'row', pt: 2 }}>
                       <Box sx={{ flex: '1 1 auto' }} />
                       <Button onClick={handleBendahara}>
