@@ -70,8 +70,8 @@ const ProjectDetailsViews = props => {
       showCancelButton: true,
       confirmButtonColor: '#68B92E',
       cancelButtonColor: '#d33',
-      confirmButtonText: 'Yes, Delete Project',
-      cancelButtonText: 'No, Cancel',
+      confirmButtonText: 'Hapus',
+      cancelButtonText: 'Batal',
       reverseButtons: true
     }).then(result => {
       if (result.isConfirmed) {
@@ -121,7 +121,8 @@ const ProjectDetailsViews = props => {
           <TableProjectDetailTask data={project.Task}></TableProjectDetailTask>
         </Grid>
       </Grid>
-      {session.status === 'authenticated' && (arrId.includes(session.data.uid) || session.data.uid === 1099999) && (
+      {/* {session.status === 'authenticated' && (arrId.includes(session.data.uid) || session.data.uid === 1099999) && ( */}
+      {session.status === 'authenticated' && (session.data.role == 'teamleader' || session.data.role == 'pjk') && (
         <>
           <Grid mt={2} container>
             <Grid item md={12} display={'flex'} justifyContent={'end'} flexDirection={'row'}>

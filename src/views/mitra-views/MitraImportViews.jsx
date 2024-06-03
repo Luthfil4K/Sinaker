@@ -175,25 +175,25 @@ const MitraImportViews = props => {
   const initialRowsT = [
     {
       id: 1,
-      nik: '3201123123',
-      name: 'Luthfil Kasyul Azhim',
+      nik: '320xxxxxxx',
+      name: 'Mitra1',
       jenisKelamin: 'Pria',
-      tanggalLahir: '2002/08/13',
-      umur: '21',
+      tanggalLahir: '1994/08/13',
+      umur: '41',
       pendidikan: 'D4',
-      email: 'luthfilkaa1233@gmail.com',
-      status: 'Mahasiswa'
+      email: 'abc123@gmail.com',
+      status: 'pelajar'
     },
     {
       id: 2,
-      nik: '3201123123',
-      name: 'Luthfil Kasyul Azhim',
-      jenisKelamin: 'Pria',
-      tanggalLahir: '2002/08/13',
+      nik: '320xxxxxx',
+      name: 'Mitra2',
+      jenisKelamin: 'XY',
+      tanggalLahir: '2001/08/13',
       umur: '21',
       pendidikan: 'D4',
-      email: 'luthfilkaa1233@gmail.com',
-      status: 'Mahasiswa'
+      email: '-',
+      status: '-'
     }
   ]
 
@@ -354,7 +354,12 @@ const MitraImportViews = props => {
       //removing header
       fileData.splice(0, 1)
 
-      setData(convertToJson(headers, fileData))
+      // setData(convertToJson(headers, fileData))
+
+      const midErrorData = convertToJson(headers, fileData)
+
+      const filteredArray = midErrorData.filter(item => Object.keys(item).length !== 0)
+      setData(filteredArray)
     }
     if (file) {
       if (getExention(file)) {

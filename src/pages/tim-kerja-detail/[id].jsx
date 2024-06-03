@@ -42,7 +42,6 @@ export async function getServerSideProps(context) {
           id: true,
           userId_fkey: {
             include: {
-              id: true,
               UserProject: true,
               taskToDo: true,
               beban_kerja_pegawai: {

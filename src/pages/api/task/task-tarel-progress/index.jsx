@@ -29,7 +29,8 @@ export default async function handler(req, res) {
       namadesa,
       kecamatan,
       namaKec,
-      templateTable
+      templateTable,
+      month
     } = req.body
 
     try {
@@ -50,7 +51,8 @@ export default async function handler(req, res) {
           namadesa,
           kecamatan,
           templateTable,
-          namaKec
+          namaKec,
+          month
         }
       })
 

@@ -377,7 +377,7 @@ const TableMitra = props => {
     {
       field: 'action',
       renderHeader: () =>
-        session.status === 'authenticated' && session.data.uid === 1099999 ? (
+        session.status === 'authenticated' && (session.data.uid === 1099999 || session.data.role == 'admin') ? (
           <>
             <Typography sx={{ fontWeight: 900, fontSize: '0.875rem !important', textAlign: 'center' }}>
               Action
@@ -389,7 +389,7 @@ const TableMitra = props => {
       minWidth: 215,
       flex: 1,
       renderCell: params =>
-        session.status === 'authenticated' && session.data.uid === 1099999 ? (
+        session.status === 'authenticated' && (session.data.uid === 1099999 || session.data.role == 'admin') ? (
           <>
             <Button
               onClick={e => {

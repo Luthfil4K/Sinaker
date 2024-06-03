@@ -458,7 +458,7 @@ const RapatCreateViews = props => {
       } else {
         Swal.fire({
           title: 'Form belum lengkap',
-          text: 'Pastika semua field telah terisi',
+          text: 'Pastikan semua field telah terisi',
           icon: 'warning',
           confirmButtonColor: 'warning.main',
           confirmButtonText: 'OK'

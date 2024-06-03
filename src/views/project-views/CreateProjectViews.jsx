@@ -42,6 +42,7 @@ import { DataGrid } from '@mui/x-data-grid'
 
 import TableAddParticipant from 'src/views/tables/TableAddParticipant'
 import TimelineKegiatan from 'src/views/form-layouts/TimelineKegiatan'
+import { EmailSearch } from 'mdi-material-ui'
 
 const CustomInputStart = forwardRef((props, ref) => {
   return <TextField fullWidth {...props} inputRef={ref} label='Tanggal Mulai' autoComplete='on' />
@@ -60,9 +61,11 @@ const CreateProjectViews = props => {
     }))
   )
   const [timKerja, setTimKerja] = useState(props.dataTim)
+  const [isiAll, setIsiAll] = useState('0')
   const [anggota, setAnggota] = useState(0)
   const [selectedDate, setSelectedDate] = useState(null)
   const [selectedDateE, setSelectedDateE] = useState(null)
+  const [fieldFilled, setFieldFilled] = useState({})
   const [disabled, setDisabled] = useState({
     jan: false,
     feb: false,
@@ -92,6 +95,7 @@ const CreateProjectViews = props => {
     kegBulan: 0,
     jumlahSubKeg: 0
   })
+
   const [bulan, setBulan] = useState({
     jan: false,
     feb: false,
@@ -166,25 +170,9 @@ const CreateProjectViews = props => {
       })
       .filter(date => date !== null)
 
-    // console.log('Tanggal pertama dan terakhir bulan yang memiliki nilai true:', bulanTrue)
     setValues({ ...values, kegJumlah: jumlahTrue, kegBulan: bulanTrue })
   }, [bulan])
 
-  // coba asal bre,
-  // useEffect(() => {
-  //   const nilai = Object.values(bulan)
-  //   const kunci = Object.keys(bulan)
-  //   console.log(kunci)
-  //   const tmpJmlh = 0
-  //   const tmpBln = []
-  //   nilai.map(n => {
-  //     n === true ? (tmpJmlh = tmpJmlh + 1) : 0
-  //   })
-
-  //   setValues({ ...values, kegJumlah: tmpJmlh })
-  // }, [bulan])
-
-  // buat nyimpen di [values] dari input pilih tim kerja sama anggota tim (intinya handle tim dan anggotanya)
   useEffect(() => {
     const dataAnggota = {}
     const dataAnggotaId = []
@@ -227,7 +215,6 @@ const CreateProjectViews = props => {
       }
     })
 
-    // console.log(tmpId)
     setValues({ ...values, kegAnggotaId: tmpId })
   }, [values.kegAnggota])
 
@@ -278,7 +265,6 @@ const CreateProjectViews = props => {
     }, [])
 
     // newBulanFalse skrg isiny daftar key bulan yang  false
-    // console.log(newBulanFalse)
 
     const bulanTrueValues = bulanValues.filter(value => value === true)
     const jumlahBulanTrue = bulanTrueValues.length
@@ -340,21 +326,17 @@ const CreateProjectViews = props => {
       ...bulan,
       [event.target.name]: event.target.checked
     })
-    // console.log(bulan)
   }
 
   const handleDateChange = date => {
     setSelectedDate(date)
-    // console.log(date)
   }
   const handleDateChangeE = date => {
     setSelectedDateE(date)
-    // console.log(date)
   }
 
   const handleChange = props => event => {
     setValues({ ...values, [props]: event.target.value })
-    // console.log(values)
   }
 
   const handleRentangChange = event => {
@@ -378,6 +360,17 @@ const CreateProjectViews = props => {
     }))
   }
   // handle submit disini
+
+  useEffect(() => {
+    setFieldFilled({
+      ...fieldFilled,
+      fieldNama: values.kegNama,
+      fieldPeriode: values.kegRentang,
+      fieldTim: values.kegKetuaId,
+      fieldAnggota: values.kegAnggotaId,
+      fieldBulan: values.kegBulan
+    })
+  }, [values])
 
   let button
   button = (
@@ -416,53 +409,74 @@ const CreateProjectViews = props => {
     setNamaSubKeg(trueKeys)
   }, [subKeg])
 
-  console.log(namaSubKeg)
+  useEffect(() => {
+    const allFilled = Object.values(fieldFilled).every(
+      value =>
+        (typeof value === 'string' && value.trim() !== '') ||
+        (Array.isArray(value) && value.length > 0) ||
+        (typeof value === 'number' && value !== null)
+    )
+    setIsiAll(allFilled ? '1' : '0')
+  }, [fieldFilled])
+
+  console.log(isiAll)
+  console.log(fieldFilled)
   const handleProject = async e => {
     e.preventDefault()
 
     try {
       while (true) {
-        const res = await axios.post('/project', {
-          title: values.kegNama,
-          rentangWaktu: values.kegRentang.toString(),
-          startdate: selectedDate,
-          enddate: selectedDateE,
-          bulan,
-          fungsi: values.kegFungsi,
-          description: values.kegDesk,
-          projectLeaderId: values.kegKetuaId,
-          anggotaTimId: values.kegAnggotaId,
-          createdById: 99,
-          jumlahKegiatan: values.kegJumlah,
-          bulanKegiatan: values.kegBulan,
-          subKeg: namaSubKeg,
-          jumlahSubKeg: values.jumlahSubKeg
-        })
-
-        if (res.status === 201) {
-          Swal.fire({
-            title: 'Kegiatan berhasil dibuat',
-            text: '',
-            icon: 'success',
-            confirmButtonColor: '#68B92E',
-            confirmButtonText: 'OK'
-          }).then(router.push('/project-list'))
-
-          setValues({
-            kegNama: '',
-            kegRentang: '',
-            kegGajiPml: '',
-            kegGajiPcl: '',
-            kegFungsi: '',
-            kegDesk: '',
-            kegTim: '',
-            kegAnggotaId: '',
-            kegAnggota: [dataUser[3].name, dataUser[1].name],
-            kegKetuaId: ''
+        if (isiAll == '1') {
+          const res = await axios.post('/project', {
+            title: values.kegNama,
+            rentangWaktu: values.kegRentang.toString(),
+            startdate: selectedDate,
+            enddate: selectedDateE,
+            bulan,
+            fungsi: values.kegFungsi,
+            description: values.kegDesk,
+            projectLeaderId: values.kegKetuaId,
+            anggotaTimId: values.kegAnggotaId,
+            createdById: 99,
+            jumlahKegiatan: values.kegJumlah,
+            bulanKegiatan: values.kegBulan,
+            subKeg: namaSubKeg,
+            jumlahSubKeg: values.jumlahSubKeg
           })
 
-          setSelectedDate(new Date())
-          setSelectedDateE(null)
+          if (res.status === 201) {
+            Swal.fire({
+              title: 'Kegiatan berhasil dibuat',
+              text: '',
+              icon: 'success',
+              confirmButtonColor: '#68B92E',
+              confirmButtonText: 'OK'
+            }).then(router.push('/project-list'))
+
+            setValues({
+              kegNama: '',
+              kegRentang: '',
+              kegGajiPml: '',
+              kegGajiPcl: '',
+              kegFungsi: '',
+              kegDesk: '',
+              kegTim: '',
+              kegAnggotaId: '',
+              kegAnggota: [dataUser[3].name, dataUser[1].name],
+              kegKetuaId: ''
+            })
+
+            setSelectedDate(new Date())
+            setSelectedDateE(null)
+          }
+        } else {
+          Swal.fire({
+            title: 'Form belum lengkap',
+            text: 'Pastikan semua field telah terisi',
+            icon: 'warning',
+            confirmButtonColor: 'warning.main',
+            confirmButtonText: 'OK'
+          })
         }
 
         break

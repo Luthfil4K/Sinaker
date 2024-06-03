@@ -39,6 +39,7 @@ const jenisFungsi = {
 
 const TablePeople = props => {
   const session = useSession()
+  const [role, setRole] = useState()
   const statusObj = {
     0: { color: 'error', status: 'Overload' },
     1: { color: 'success', status: 'Available' }
@@ -635,7 +636,11 @@ const TablePeople = props => {
             }
           }}
           rows={rows}
-          columns={session.status === 'authenticated' && session.data.uid === 1099999 ? columnsAdmin : columns}
+          columns={
+            session.status === 'authenticated' && (session.data.uid === 1099999 || session.data.role == 'admin')
+              ? columnsAdmin
+              : columns
+          }
           sx={{
             height: rows.length > 3 ? '80vh' : '45vh',
             // overflowY: 'auto',

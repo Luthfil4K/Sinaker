@@ -81,6 +81,7 @@ const TableGroupPerusahaan = props => {
   const jenisSample = props.dataTaskSample
   const [pmlAutoComplete, setPmlAutoComplete] = useState({})
   const [pclAutoComplete, setPclAutoComplete] = useState({})
+  const [honorBulanIni, setHonorBulanIni] = useState(props.dataMitraLimitHonor)
 
   const templateTable = participants.length > 0 ? participants[0].templateTable : 5
   const [kolomLP, setKolomLP] = useState({
@@ -219,7 +220,7 @@ const TableGroupPerusahaan = props => {
     return { bebanKerja: item.ps }
   })
 
-  const dataBebanKerjaM = props.dataMitraLimitHonor.map((item, index) => {
+  const dataBebanKerjaM = honorBulanIni.map((item, index) => {
     return {
       ...item,
       ...resultBaruM[index]
@@ -230,10 +231,10 @@ const TableGroupPerusahaan = props => {
     () =>
       dataBebanKerjaM.map(mi => ({
         value: mi.mitraId,
-        label: mi.nama + ', total Gaji :  Rp' + mi.totalGaji
+        label: mi.nama + ', total Gaji :  Rp' + mi.totalGaji.toLocaleString('id')
         // label: mi.nama + ', total Gaji :  Rp' + mi.totalGaji + ', beban kerja: ' + mi.bebanKerja
       })),
-    [props.dataMitraLimitHonor]
+    [honorBulanIni]
   )
   const optionPML = dataBebanKerjaPML.map(pml => ({
     value: pml.id,
@@ -374,7 +375,7 @@ const TableGroupPerusahaan = props => {
     console.log(updatedRow)
 
     // Cari data mitra yang sesuai dengan pmlId dari updatedRow
-    const mitraToUpdatePml = totalGajiMitra.find(mitra => mitra.id === updatedRow.pmlId)
+    const mitraToUpdatePml = honorBulanIni.find(mitra => mitra.mitraId === updatedRow.pmlId)
     console.log('ini mitra to update pml')
     console.log(mitraToUpdatePml)
     // Hitung total gaji setelah update untuk pmlId
@@ -384,7 +385,9 @@ const TableGroupPerusahaan = props => {
     console.log('ini gaji total pml')
     console.log(newTotalGajiPml)
     // Cari data mitra yang sesuai dengan pclId dari updatedRow
-    const mitraToUpdatePcl = updatedRow.pclId ? totalGajiMitra.find(mitra => mitra.id === updatedRow.pclId) : undefined
+    const mitraToUpdatePcl = updatedRow.pclId
+      ? honorBulanIni.find(mitra => mitra.mitraId === updatedRow.pclId)
+      : undefined
     console.log('mitra to update pcl')
     console.log(mitraToUpdatePcl)
 
@@ -407,7 +410,6 @@ const TableGroupPerusahaan = props => {
       hasilPencacahan: updatedRow.hasilPencacahan ? updatedRow.hasilPencacahan : '',
       duedate: updatedRow.tanggalDob ? updatedRow.tanggalDob : new Date(),
       taskId: props.dataSubKegId,
-
       desa: updatedRow.desa ? updatedRow.desa : '',
       namadesa: updatedRow.namadesa ? updatedRow.namadesa : '',
       kecamatan: updatedRow.kecamatan ? updatedRow.kecamatan : '',
@@ -417,8 +419,9 @@ const TableGroupPerusahaan = props => {
       gajiPml: updatedRow.gajiPml ? updatedRow.gajiPml : 0,
       pclId: updatedRow.pclId ? updatedRow.pclId : 0,
       gajiPcl: updatedRow.gajiPcl ? updatedRow.gajiPcl : 0,
-      kol1: updatedRow.kol1 ? updatedRow.kol1 : 0,
-      kol2: updatedRow.kol2 ? updatedRow.kol2 : 0
+      kol1: updatedRow.kol1 ? updatedRow.kol1.toString() : '',
+      kol2: updatedRow.kol2 ? updatedRow.kol2.toString() : '',
+      month: props.dataBulan
     }
 
     if (updatedRow.id < 100000) {
@@ -436,6 +439,71 @@ const TableGroupPerusahaan = props => {
                 timer: 1000,
                 width: 300
               })
+              if (updatedRow.pmlId) {
+                if (updatedRow.gajiPml && updatedRow.gajiPcl > 0) {
+                  // const map = new Map(honorBulanIni.map(item => [item.id, item]))
+                  // if (map.has(updatedRow.pmlId)) {
+                  //   map.get(updatedRow.pmlId).totalGaji += updatedRow.gajiPml
+                  // }
+                  // // setHonorBulanIni(Array.from(map.values()))
+                  // const updatedArray = Array.from(map.values())
+                  // console.log(updatedArray)
+
+                  // setHonorBulanIni(prevA =>
+                  //   prevA.map(item =>
+                  //     item.mitraId === updatedRow.pmlId
+                  //       ? { ...item, totalGaji: item.totalGaji + updatedRow.gajiPml }
+                  //       : item
+                  //   )
+                  // )
+
+                  setHonorBulanIni(prevA => {
+                    const index = prevA.findIndex(item => item.mitraId === updatedRow.pmlId)
+                    if (index !== -1) {
+                      const newArray = [...prevA]
+                      newArray[index] = {
+                        ...newArray[index],
+                        totalGaji: newArray[index].totalGaji + updatedRow.gajiPml
+                      }
+                      return newArray
+                    }
+                    return prevA
+                  })
+                }
+              }
+              if (updatedRow.pclId) {
+                if (updatedRow.gajiPcl && updatedRow.gajiPcl > 0) {
+                  // const map = new Map(honorBulanIni.map(item => [item.id, item]))
+
+                  // if (map.has(updatedRow.pclId)) {
+                  //   map.get(updatedRow.pmlId).totalGaji += updatedRow.gajiPcl
+                  // }
+                  // setHonorBulanIni(Array.from(map.values()))
+                  // const updatedArray = Array.from(map.values())
+
+                  // console.log(updatedArray)
+                  // setHonorBulanIni(prevA =>
+                  //   prevA.map(item =>
+                  //     item.mitraId === updatedRow.pclId
+                  //       ? { ...item, totalGaji: item.totalGaji + updatedRow.gajiPcl }
+                  //       : item
+                  //   )
+                  // )
+
+                  setHonorBulanIni(prevA => {
+                    const index = prevA.findIndex(item => item.mitraId === updatedRow.pclId)
+                    if (index !== -1) {
+                      const newArray = [...prevA]
+                      newArray[index] = {
+                        ...newArray[index],
+                        totalGaji: newArray[index].totalGaji + updatedRow.gajiPcl
+                      }
+                      return newArray
+                    }
+                    return prevA
+                  })
+                }
+              }
             })
             .catch(err => {
               console.log(err)
@@ -485,7 +553,7 @@ const TableGroupPerusahaan = props => {
           .catch(err => {
             Swal.fire({
               title: 'Error!',
-              text: 'Berhasil Disimpan',
+              text: 'Gagal Disimpan',
               icon: 'error',
               confirmButtonText: 'Ok'
             })

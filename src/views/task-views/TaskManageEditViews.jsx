@@ -457,7 +457,7 @@ const TaskManageEditViews = props => {
         })
 
         // router.push(`/task-manage/${values.id}`)
-        router.reload()
+        // router.reload()
       })
       .catch(err => {
         Swal.fire({
@@ -610,7 +610,7 @@ const TaskManageEditViews = props => {
           month: props.data.month
         })
 
-        if (res.status === 201) {
+        if (res.status === 200) {
           Swal.fire({
             title: 'Import data berhasil',
             text: '',
@@ -916,6 +916,7 @@ const TaskManageEditViews = props => {
                   values.subKegImportStatus === 1 && (
                     <>
                       <TablePerusahaanTaskDetails
+                        dataBulan={values.subKegMonth}
                         data={props.dataPerusahaan}
                         dataProjectFungsi={props.data.project.fungsi}
                         dataId={values.id}
@@ -1277,7 +1278,7 @@ const TaskManageEditViews = props => {
                         fullWidth
                         labelId='demo-simple-select-helper-label'
                         id='demo-simple-select-helper'
-                        disabled={values.subKegImportStatus == 1 ? 'true' : 'false'}
+                        disabled={values.subKegImportStatus == 1 ? true : false}
                         label='Honor PML/Dokumen'
                         onChange={handleChange('subKegHonorPmlPerPerusahaan')}
                         value={values.subKegHonorPmlPerPerusahaan}
@@ -1288,7 +1289,7 @@ const TaskManageEditViews = props => {
                         fullWidth
                         labelId='demo-simple-select-helper-label'
                         id='demo-simple-select-helper'
-                        disabled={values.subKegImportStatus == 1 ? 'true' : 'false'}
+                        disabled={values.subKegImportStatus == 1 ? true : false}
                         label='Honor PCL/Dokumen'
                         onChange={handleChange('subKegHonorPclPerPerusahaan')}
                         value={values.subKegHonorPclPerPerusahaan}

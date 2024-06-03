@@ -37,7 +37,6 @@ export default async function handler(req, res) {
           statusSendEmail: 1
         }
       })
-      // const rapat = await prisma.meet.get({})
 
       // mailOptions.to = participants.map(participant => {
       //   if (participant.checked) {
@@ -46,6 +45,7 @@ export default async function handler(req, res) {
       // })
 
       mailOptions.to = ['jelakora141516@gmail.com', 'akaishuichi141516@gmail.com']
+      // mailOptions.to =daftarEmail
 
       console.log(fileUndangan.file)
       mailOptions.subject = namaRapat
