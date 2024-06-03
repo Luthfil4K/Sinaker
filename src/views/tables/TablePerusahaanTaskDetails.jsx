@@ -19,6 +19,10 @@ import Typography from '@mui/material/Typography'
 import CancelIcon from '@mui/icons-material/Close'
 import TextField from '@mui/material/TextField'
 
+// topsis
+import { create, all } from 'mathjs'
+import { getBest } from '../../function/topsis'
+
 import {
   GridRowModes,
   GridToolbar,
@@ -70,6 +74,7 @@ const TableGroupPerusahaan = props => {
   const [idAja, setidAja] = useState(props.dataId)
   const [mitra, setMitra] = useState(props.dataMitra)
   const [pml, setPML] = useState(props.dataPML)
+  const [tpp, setTpp] = useState(props.dataTpp)
   const [participants, setParticipants] = useState(props.data)
   const fungsi = props.dataProjectFungsi
   const jenisKeg = props.dataJenisKeg
@@ -126,17 +131,114 @@ const TableGroupPerusahaan = props => {
     value: '',
     label: ''
   })
+
+  // beban kerja
+  const userAll = pml.map(row => {
+    const jumlahKerjaanTpp = tpp.filter(tppRow => tppRow.pmlId === row.id).reduce((count, item) => count + 1, 0)
+
+    // if (pegawaiOrganik.some(tes => tes.id == row.id)) {
+    //   jumlahKegiatan = row.TaskOrganik.length + 1
+    // } else {
+    //   jumlahKegiatan = row.TaskOrganik.length
+    // }
+
+    console.log(row.pekerjaan_harian)
+
+    const jumlahJamKerja = row.pekerjaan_harian
+      .filter(ph => ph.task.jenisKeg === 65)
+      .reduce((total, item) => total + item.durasi, 0)
+
+    return {
+      pegawai_id: row.id,
+      jumlahKegiatan: jumlahKerjaanTpp,
+      jumlahJamKerja
+    }
+  })
+
+  const arrayUser = userAll.map(item => [item.jumlahKegiatan, item.jumlahJamKerja])
+  const arrayUserId = userAll.map(item => item.pegawai_id)
+
+  // topsis
+  const config = {}
+  const math = create(all, config)
+
+  // pegawai
+  let m = math.matrix(arrayUser)
+  let w = props.dataKriteriaP
+  let ia = ['min', 'min']
+  let id = arrayUserId
+  let result = getBest(m, w, ia, id)
+
+  const resultBaru = result.map(item => {
+    return { bebanKerja: item.ps }
+  })
+
+  const dataBebanKerjaPML = pml.map((item, index) => {
+    return {
+      ...item,
+      ...resultBaru[index]
+    }
+  })
+
+  const userAllM = mitra.map(row => {
+    const gajiBulanIniPCL = tpp
+      .filter(tppRow => tppRow.pclId === row.id)
+      .reduce((totalGaji, tppRow) => totalGaji + tppRow.gajiPcl, 0)
+
+    const gajiBulanIniPML = tpp
+      .filter(tppRow => tppRow.pmlId === row.id)
+      .reduce((totalGaji, tppRow) => totalGaji + tppRow.gajiPml, 0)
+
+    // Gabungkan total gaji dari kedua kasus
+    const gajiBulanIni = gajiBulanIniPCL + gajiBulanIniPML
+
+    const jumlahKerjaanTppPML = tpp.filter(tppRow => tppRow.pmlId === row.id).reduce((count, item) => count + 1, 0)
+
+    const jumlahKerjaanTppPCL = tpp.filter(tppRow => tppRow.pclId === row.id).reduce((count, item) => count + 1, 0)
+    let jumlahKegiatan = jumlahKerjaanTppPCL + jumlahKerjaanTppPML
+
+    return {
+      mitra_id: row.id,
+      jumlahKegiatan,
+      gajiBulanIni
+    }
+  })
+
+  const arrayUserM = userAllM.map(item => [item.jumlahKegiatan, item.gajiBulanIni])
+  const arrayUserIdM = userAllM.map(item => item.mitra_id)
+
+  console.log(arrayUserM)
+
+  // mitra
+  let mm = math.matrix(arrayUserM)
+  let wm = props.dataKriteriaM
+  let idm = arrayUserIdM
+  let resultm = getBest(mm, wm, ia, idm)
+
+  const resultBaruM = resultm.map(item => {
+    return { bebanKerja: item.ps }
+  })
+
+  const dataBebanKerjaM = props.dataMitraLimitHonor.map((item, index) => {
+    return {
+      ...item,
+      ...resultBaruM[index]
+    }
+  })
+
   const optionPCL = useMemo(
     () =>
-      props.dataMitraLimitHonor.map(mi => ({
+      dataBebanKerjaM.map(mi => ({
         value: mi.mitraId,
         label: mi.nama + ', total Gaji :  Rp' + mi.totalGaji
+        // label: mi.nama + ', total Gaji :  Rp' + mi.totalGaji + ', beban kerja: ' + mi.bebanKerja
       })),
     [props.dataMitraLimitHonor]
   )
-  const optionPML = pml.map(pml => ({
+  const optionPML = dataBebanKerjaPML.map(pml => ({
     value: pml.id,
     label: pml.name + ' - Organik'
+    // label: pml.name + ' - Organik' + ', beban kerja: ' + pml.bebanKerja
   }))
 
   const combinedOptions = [...optionPCL, ...optionPML]

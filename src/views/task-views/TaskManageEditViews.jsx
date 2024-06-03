@@ -673,6 +673,14 @@ const TaskManageEditViews = props => {
     })
   )
 
+  const kriteria1P = parseFloat(props.dataKriteriaP.kriteria1)
+  const kriteria2P = parseFloat(props.dataKriteriaP.kriteria2)
+  const arrayBebanPegawai = [kriteria1P, kriteria2P]
+
+  const kriteria1M = parseFloat(props.dataKriteriaM.kriteria1)
+  const kriteria2M = parseFloat(props.dataKriteriaM.kriteria2)
+  const arrayBebanMitra = [kriteria1M, kriteria2M]
+
   const [lineTarel, setLineTaRel] = useState({
     target: props.dataPerusahaan.map(pr => pr.target),
     realisasi: props.dataPerusahaan.map(pr => pr.realisasi),
@@ -917,7 +925,10 @@ const TaskManageEditViews = props => {
                         dataJenisKeg={values.subKegJenis}
                         dataUpdateTarget={handleTaskUpdate}
                         dataMitraLimitHonor={props.dataResultTotalGaji}
+                        dataTpp={props.dataTpp}
                         dataTemplate={props.dataT}
+                        dataKriteriaP={arrayBebanPegawai}
+                        dataKriteriaM={arrayBebanMitra}
                         dataTemplateKolom={props.dataTK}
                         dataSubKegId={values.subKegId}
                       ></TablePerusahaanTaskDetails>

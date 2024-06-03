@@ -18,6 +18,9 @@ const TaskManageEdit = ({ data }) => {
         dataPML={dataEdit.pegawai}
         dataPH={dataEdit.pekerjaanHarian}
         // dataMitraLimit={dataEdit.mitraLimitHonor}
+        dataTpp={dataEdit.pekerjaanBulanIni}
+        dataKriteriaP={dataEdit.kriteriaPegawai}
+        dataKriteriaM={dataEdit.kriteriaMitra}
         dataResultTotalGaji={dataEdit.resultTotalGaji}
       ></TaskManageEditViews>
     </>
@@ -106,7 +109,11 @@ export async function getServerSideProps(context) {
           bebanKerja: true
         }
       },
-      pekerjaan_harian: true
+      pekerjaan_harian: {
+        include: {
+          task: true
+        }
+      }
     }
     // include: {
     //   UserProject: {
@@ -139,6 +146,14 @@ export async function getServerSideProps(context) {
     where: {
       taskId: parseInt(context.params.id)
     }
+  })
+
+  const kriteriaPegawai = await prisma.kriteria_beban_kerja_pegawai.findUnique({
+    where: { id: 1 }
+  })
+
+  const kriteriaMitra = await prisma.kriteria_beban_kerja_mitra.findUnique({
+    where: { id: 1 }
   })
 
   // const mitraTask = await prisma.sub_kegiatan_mitra.findMany({
@@ -281,7 +296,10 @@ export async function getServerSideProps(context) {
     mitraTask,
     pegawai,
     pekerjaanHarian,
+    pekerjaanBulanIni,
     // mitraLimitHonor,
+    kriteriaMitra,
+    kriteriaPegawai,
     resultTotalGaji
   }
 
