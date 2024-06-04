@@ -758,9 +758,7 @@ const TableGroupPerusahaan = props => {
       }),
       renderHeader: () => (
         <Typography sx={{ fontWeight: 900, fontSize: '0.875rem !important', textAlign: 'center' }}>
-          {jenisKeg === 65 //Produksi or Distribusi
-            ? 'PML'
-            : 'Operator'}
+          {jenisKeg === 65 || jenisKeg == 66 || jenisKeg == 71 ? 'PML' : 'Operator'}
         </Typography>
       ),
       width: 180,
@@ -772,9 +770,7 @@ const TableGroupPerusahaan = props => {
       type: 'number',
       renderHeader: () => (
         <Typography sx={{ fontWeight: 900, fontSize: '0.875rem !important', textAlign: 'center' }}>
-          {jenisKeg === 65 //Produksi or Distribusi
-            ? 'Honor PML'
-            : 'Honor Operator'}
+          {jenisKeg === 65 || jenisKeg == 66 || jenisKeg == 71 ? 'Honor PML' : 'Honor Operator'}
         </Typography>
       ),
       width: 120,
@@ -786,9 +782,9 @@ const TableGroupPerusahaan = props => {
       renderHeader: () => (
         <Typography sx={{ fontWeight: 900, fontSize: '0.875rem !important', textAlign: 'center' }}>
           {' '}
-          {jenisKeg === 65 //Produksi or Distribusi
+          {jenisKeg === 65 || jenisKeg == 66 || jenisKeg == 71 //Produksi or Distribusi
             ? 'PCL'
-            : 'Operator'}
+            : 'Operator 2'}
         </Typography>
       ),
       type: 'singleSelect',
@@ -820,9 +816,9 @@ const TableGroupPerusahaan = props => {
       headerName: 'Honor PCL',
       renderHeader: () => (
         <Typography sx={{ fontWeight: 900, fontSize: '0.875rem !important', textAlign: 'center' }}>
-          {jenisKeg === 65 //Produksi or Distribusi
+          {jenisKeg === 65 || jenisKeg == 66 || jenisKeg == 71 //Produksi or Distribusi
             ? 'Honor PCL'
-            : 'Honor Operator'}
+            : 'Honor Operator2'}
         </Typography>
       ),
       type: 'number',
