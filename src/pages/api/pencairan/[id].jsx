@@ -47,7 +47,7 @@ export default async function handler(req, res) {
         }
 
         if (tahapanId == 1) {
-          const email = await prisma.user.findMany({
+          const emails = await prisma.user.findMany({
             where: {
               role: {
                 equals: 'verifikator'
@@ -57,7 +57,7 @@ export default async function handler(req, res) {
               email: true
             }
           })
-          email.map(mail => {
+          emails.map(mail => {
             mailOptions.to = mail.email
             mailOptions.subject = subject
             mailOptions.title = subject
@@ -79,7 +79,7 @@ export default async function handler(req, res) {
 
             sendMailProgressPJK(mailOptions)
           }
-          const email = await prisma.user.findMany({
+          const emails = await prisma.user.findMany({
             where: {
               role: {
                 equals: 'ppspm'
@@ -89,7 +89,7 @@ export default async function handler(req, res) {
               email: true
             }
           })
-          email.map(mail => {
+          emails.map(mail => {
             mailOptions.to = mail.email
             mailOptions.subject = subject
             mailOptions.title = subject
@@ -122,7 +122,7 @@ export default async function handler(req, res) {
 
               sendMailProgressPJK(mailOptions)
             }
-            const email = await prisma.user.findMany({
+            const emails = await prisma.user.findMany({
               where: {
                 role: {
                   equals: 'bendahara'
@@ -132,7 +132,7 @@ export default async function handler(req, res) {
                 email: true
               }
             })
-            email.map(mail => {
+            emails.map(mail => {
               mailOptions.to = mail.email
               mailOptions.subject = subject
               mailOptions.title = subject

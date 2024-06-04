@@ -9,12 +9,13 @@ import FilterSettings from 'mdi-material-ui/FilterSettings'
 import HomeOutline from 'mdi-material-ui/HomeOutline'
 import Account from 'mdi-material-ui/Account'
 import Elevator from 'mdi-material-ui/Elevator'
-import FormatLetterCase from 'mdi-material-ui/FormatLetterCase'
+import FormatLetterCase from 'mdi-material-ui/HandshakeOutline'
 import AccountCogOutline from 'mdi-material-ui/AccountCogOutline'
 import CreditCardOutline from 'mdi-material-ui/CreditCardOutline'
 import AccountPlusOutline from 'mdi-material-ui/AccountPlusOutline'
 import AlertCircleOutline from 'mdi-material-ui/AlertCircleOutline'
 import GoogleCirclesExtended from 'mdi-material-ui/GoogleCirclesExtended'
+import Rapat from 'mdi-material-ui/CalendarClock'
 
 // ** Type import
 import { VerticalNavItemsType } from 'src/@core/layouts/types'
@@ -50,19 +51,19 @@ const navigation = () => {
         icon: CubeOutline,
         path: '/timeline'
       },
-      {
-        sectionTitle: 'Rapat'
-      },
-      {
-        title: 'Ajukan Rapat',
-        icon: Login,
-        path: '/rapat-create'
-      },
-      {
-        title: 'Daftar Rapat',
-        icon: Login,
-        path: '/rapat-ajuan-list'
-      },
+      // {
+      //   sectionTitle: 'Rapat'
+      // },
+      // {
+      //   title: 'Ajukan Rapat',
+      //   icon: Login,
+      //   path: '/rapat-create'
+      // },
+      // {
+      //   title: 'Daftar Rapat',
+      //   icon: Login,
+      //   path: '/rapat-ajuan-list'
+      // },
       {
         sectionTitle: 'Kegiatan'
       },
@@ -141,7 +142,7 @@ const navigation = () => {
 
       {
         title: 'Daftar Rapat',
-        icon: Login,
+        icon: Rapat,
         path: '/rapat-ajuan-list'
       },
       {
@@ -244,7 +245,7 @@ const navigation = () => {
       },
       {
         title: 'Daftar Rapat',
-        icon: Login,
+        icon: Rapat,
         path: '/rapat-ajuan-list'
       },
       {
@@ -405,7 +406,7 @@ const navigation = () => {
 
       {
         title: 'Daftar Rapat',
-        icon: Login,
+        icon: Rapat,
         path: '/rapat-ajuan-list'
       },
       {

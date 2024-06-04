@@ -137,12 +137,6 @@ const TableGroupPerusahaan = props => {
   const userAll = pml.map(row => {
     const jumlahKerjaanTpp = tpp.filter(tppRow => tppRow.pmlId === row.id).reduce((count, item) => count + 1, 0)
 
-    // if (pegawaiOrganik.some(tes => tes.id == row.id)) {
-    //   jumlahKegiatan = row.TaskOrganik.length + 1
-    // } else {
-    //   jumlahKegiatan = row.TaskOrganik.length
-    // }
-
     console.log(row.pekerjaan_harian)
 
     const jumlahJamKerja = row.pekerjaan_harian
@@ -231,15 +225,15 @@ const TableGroupPerusahaan = props => {
     () =>
       dataBebanKerjaM.map(mi => ({
         value: mi.mitraId,
-        label: mi.nama + ', total Gaji :  Rp' + mi.totalGaji.toLocaleString('id')
-        // label: mi.nama + ', total Gaji :  Rp' + mi.totalGaji + ', beban kerja: ' + mi.bebanKerja
+        // label: mi.nama + ', total Gaji :  Rp' + mi.totalGaji.toLocaleString('id')
+        label: mi.nama + ', total Gaji :  Rp' + mi.totalGaji + ', beban kerja: ' + mi.bebanKerja
       })),
     [honorBulanIni]
   )
   const optionPML = dataBebanKerjaPML.map(pml => ({
     value: pml.id,
-    label: pml.name + ' - Organik'
-    // label: pml.name + ' - Organik' + ', beban kerja: ' + pml.bebanKerja
+    // label: pml.name + ' - Organik'
+    label: pml.name + ' - Organik' + ', beban kerja: ' + pml.bebanKerja
   }))
 
   const combinedOptions = [...optionPCL, ...optionPML]

@@ -147,8 +147,8 @@ const CreateKegiatanPerusahaanViews = props => {
       nama: row.userId_fkey.name,
       fungsi: row.userId_fkey.fungsi,
       jumlahKegiatan: jumlahKerjaanTpp,
-      jumlahJamKerja: jumlahJamKerja
-      // bebanKerjaO: row.bebanKerja,
+      jumlahJamKerja: jumlahJamKerja,
+      bebanKerjaO: row.bebanKerja
     }
   })
 
@@ -377,18 +377,18 @@ const CreateKegiatanPerusahaanViews = props => {
         </Typography>
       ),
       minWidth: 150
-    }
-    // {
-    //   field: 'bebanKerjaO',
-    //   headerName: 'Beban Kerja',
-    //   renderHeader: () => (
-    //     <Typography sx={{ fontWeight: 900, fontSize: '0.875rem !important', textAlign: 'center' }}>
-    //       Beban Kerja
-    //     </Typography>
-    //   ),
+    },
+    {
+      field: 'bebanKerjaO',
+      headerName: 'Beban Kerja',
+      renderHeader: () => (
+        <Typography sx={{ fontWeight: 900, fontSize: '0.875rem !important', textAlign: 'center' }}>
+          Beban Kerja
+        </Typography>
+      ),
 
-    //   minWidth: 150
-    // }
+      minWidth: 150
+    }
 
     // {
     //   field: 'role',

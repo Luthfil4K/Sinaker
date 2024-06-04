@@ -124,12 +124,14 @@ const CreateKegiatanPerusahaanViews = props => {
     return { bebanKerja: item.ps }
   })
 
-  const dataBebanKerja = participants.map((item, index) => {
-    return {
-      ...item,
-      ...resultBaru[index]
-    }
-  })
+  const [dataBebanKerja, setDataBebanKerja] = useState(
+    participants.map((item, index) => {
+      return {
+        ...item,
+        ...resultBaru[index]
+      }
+    })
+  )
 
   const rows = dataBebanKerja.map(row => {
     const jumlahKerjaanTpp = tpp
@@ -171,11 +173,13 @@ const CreateKegiatanPerusahaanViews = props => {
         <FormControlLabel
           control={
             <Checkbox
-              checked={participants.filter(participant => participant.checked === true).length === participants.length}
+              checked={
+                dataBebanKerja.filter(participant => participant.checked === true).length === participants.length
+              }
               onChange={e => {
                 let checked = e.target.checked
-                setParticipants(
-                  participants.map(participant => {
+                setDataBebanKerja(
+                  dataBebanKerja.map(participant => {
                     return {
                       ...participant,
                       checked: checked
@@ -196,8 +200,8 @@ const CreateKegiatanPerusahaanViews = props => {
               checked={params.value}
               onChange={e => {
                 let checked = e.target.checked
-                setParticipants(
-                  participants.map(participant => {
+                setDataBebanKerja(
+                  dataBebanKerja.map(participant => {
                     if (participant.id === params.id) {
                       participant.checked = checked
                     }
@@ -388,22 +392,22 @@ const CreateKegiatanPerusahaanViews = props => {
       minWidth: 150
     },
     {
-      field: 'jumlahTimKerja',
-      headerName: 'Jumlah Tim Kerja',
+      field: 'bebanKerja',
+      headerName: 'Beban Kerja',
       renderHeader: () => (
         <Typography sx={{ fontWeight: 900, fontSize: '0.875rem !important', textAlign: 'center' }}>
-          Jumlah Tim Kerja
+          Beban Kerja
         </Typography>
       ),
 
       minWidth: 150
     },
     {
-      field: 'bebanKerja',
-      headerName: 'Beban Kerja',
+      field: 'jumlahTimKerja',
+      headerName: 'Jumlah Tim Kerja',
       renderHeader: () => (
         <Typography sx={{ fontWeight: 900, fontSize: '0.875rem !important', textAlign: 'center' }}>
-          Beban Kerja
+          Jumlah Tim Kerja
         </Typography>
       ),
 
@@ -555,7 +559,7 @@ const CreateKegiatanPerusahaanViews = props => {
                 label='Penanggung Jawab'
                 name='penanggungJawab'
               >
-                {participants.map(item => (
+                {dataBebanKerja.map(item => (
                   <MenuItem key={item.id} value={item.id}>
                     {item.name}
                   </MenuItem>
