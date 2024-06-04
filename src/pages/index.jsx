@@ -1265,7 +1265,7 @@ const Dashboard = ({ dataTask }) => {
             rows={rows}
             columns={columns}
             sx={{
-              height: rows.length > 3 ? '81vh' : '45vh',
+              height: rows.length > 2 ? '81vh' : '45vh',
               width: '100%'
             }}
             slotProps={{
