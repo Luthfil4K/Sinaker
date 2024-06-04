@@ -46,24 +46,24 @@ const navigation = () => {
         icon: HomeOutline,
         path: '/'
       },
+      // {
+      //   title: 'Timeline',
+      //   icon: CubeOutline,
+      //   path: '/timeline'
+      // },
       {
-        title: 'Timeline',
-        icon: CubeOutline,
-        path: '/timeline'
+        sectionTitle: 'Rapat'
       },
-      // {
-      //   sectionTitle: 'Rapat'
-      // },
-      // {
-      //   title: 'Ajukan Rapat',
-      //   icon: Login,
-      //   path: '/rapat-create'
-      // },
-      // {
-      //   title: 'Daftar Rapat',
-      //   icon: Login,
-      //   path: '/rapat-ajuan-list'
-      // },
+      {
+        title: 'Ajukan Rapat',
+        icon: Login,
+        path: '/rapat-create'
+      },
+      {
+        title: 'Daftar Rapat',
+        icon: Login,
+        path: '/rapat-ajuan-list'
+      },
       {
         sectionTitle: 'Kegiatan'
       },
