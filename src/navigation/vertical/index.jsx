@@ -46,11 +46,11 @@ const navigation = () => {
         icon: HomeOutline,
         path: '/'
       },
-      // {
-      //   title: 'Timeline',
-      //   icon: CubeOutline,
-      //   path: '/timeline'
-      // },
+      {
+        title: 'Timeline',
+        icon: CubeOutline,
+        path: '/timeline'
+      },
       {
         sectionTitle: 'Rapat'
       },
@@ -197,9 +197,9 @@ const navigation = () => {
       //   icon: AccountCogOutline,
       //   path: '/account/1'
       // },
-      {
-        sectionTitle: 'Pages '
-      },
+      // {
+      //   sectionTitle: 'Pages '
+      // },
       // {
       //   title: 'Login',
       //   icon: Login,
@@ -230,11 +230,11 @@ const navigation = () => {
       //   icon: CubeOutline,
       //   path: '/pengumuman'
       // },
-      // {
-      //   title: 'Timeline',
-      //   icon: CubeOutline,
-      //   path: '/timeline'
-      // },
+      {
+        title: 'Timeline',
+        icon: CubeOutline,
+        path: '/timeline'
+      },
       {
         sectionTitle: 'Rapat'
       },
