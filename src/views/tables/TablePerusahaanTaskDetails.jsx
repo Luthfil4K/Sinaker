@@ -952,30 +952,36 @@ const TableGroupPerusahaan = props => {
             }}
           >
             <Grid container spacing={4}>
-              <Grid item md={2} xs={6}>
+              <Grid item md={3} xs={6}>
                 <Typography variant='body1'>Total Sample</Typography>
                 <Typography variant='caption'>{summary.totalSample}</Typography>
               </Grid>
-              <Grid item md={2} xs={6}>
+              <Grid item md={3} xs={6}>
                 <Typography variant='body1'>Realisasi/Target</Typography>
                 <Typography variant='caption'>
                   {summary.totalRealisasi}/{summary.totalTarget}
                 </Typography>
               </Grid>
-              <Grid item md={2} xs={6}>
+              {/* <Grid item md={3} xs={6}>
                 <Typography variant='body1'>Total Organik</Typography>
                 <Typography variant='caption'>{summary.totalPml} orang</Typography>
               </Grid>
-              <Grid item md={2} xs={6}>
+              <Grid item md={3} xs={6}>
                 <Typography variant='body1'>Total Mitra</Typography>
                 <Typography variant='caption'>{summary.totalPcl} orang</Typography>
-              </Grid>
-              <Grid item md={2} xs={6}>
-                <Typography variant='body1'>Total Honor Pml</Typography>
+              </Grid> */}
+              <Grid item md={3} xs={6}>
+                <Typography variant='body1'>
+                  {' '}
+                  {jenisKeg === 65 || jenisKeg == 66 || jenisKeg == 71 ? 'Total Honor PML' : 'Total Honor Operator 1'}
+                </Typography>
                 <Typography variant='caption'>Rp{summary.totalGajiPml.toLocaleString('id-ID')} </Typography>
               </Grid>
-              <Grid item md={2} xs={6}>
-                <Typography variant='body1'>Total Honor PCL</Typography>
+              <Grid item md={3} xs={6}>
+                <Typography variant='body1'>
+                  {' '}
+                  {jenisKeg === 65 || jenisKeg == 66 || jenisKeg == 71 ? 'Total Honor PCL' : 'Total Honor Operator1'}
+                </Typography>
                 <Typography variant='caption'>Rp{summary.totalGajiPcl.toLocaleString('id-ID')}</Typography>
               </Grid>
             </Grid>
