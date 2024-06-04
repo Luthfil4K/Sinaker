@@ -31,7 +31,8 @@ const ListProject = props => {
   const cardPRef = useRef([{ id: 1 }])
   const [valueDropDown, setValueDropDown] = useState({
     tahun: new Date().getFullYear(),
-    bulan: new Date().getMonth() + 1,
+    // bulan: new Date().getMonth() + 1,
+    bulan: 13,
     kategori: 1
   })
 
