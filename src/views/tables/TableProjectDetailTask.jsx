@@ -70,7 +70,7 @@ const data = [
 const jenisSub = {
   63: { namaJenisSub: 'Pelatihan', color: 'warning' },
   64: { namaJenisSub: 'Persiapan', color: 'warning' },
-  66: { namaJenisSub: 'Pelaksanaan', color: 'warning' },
+  66: { namaJenisSub: 'Listing', color: 'warning' },
   65: { namaJenisSub: 'Pencacahan', color: 'warning' },
   67: { namaJenisSub: 'Pengolahan-Entri', color: 'warning' },
   68: { namaJenisSub: 'Evaluasi', color: 'warning' },
