@@ -568,7 +568,7 @@ const RapatCreateViews = props => {
               />
             </Grid>
             <Grid item xs={12} md={12}>
-              <TextField
+              {/* <TextField
                 value={values.ditujukan}
                 onChange={handleChange('ditujukan')}
                 fullWidth
@@ -576,6 +576,18 @@ const RapatCreateViews = props => {
                 label='Ditujukan kepada'
                 placeholder='Seluruh Pegawai BPS Kabupaten Bogor'
                 required
+              /> */}
+              <Autocomplete
+                disablePortal
+                freeSolo
+                id='combo-box-demo'
+                fullWidth
+                options={['Peserta Rapat BPS Kabupaten Bogor', 'Seluruh Pegawai BPS Kabupaten Bogor']}
+                value={values.ditujukan}
+                onChange={(event, newValue) => {
+                  setValues({ ...values, ['ditujukan']: newValue })
+                }}
+                renderInput={params => <TextField required fullWidth {...params} label='Ditujukan kepada' />}
               />
             </Grid>
 

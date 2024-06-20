@@ -316,9 +316,9 @@ const RapatApproveList = props => {
   return (
     <>
       <Grid container spacing={5}>
-        <Typography mb={4} variant={'h5'}>
-          Daftar Rapat yang Diajukan
-        </Typography>
+        {/* <Typography mb={4} variant={'h5'}>
+          Daftar Rapat
+        </Typography> */}
       </Grid>
       <Grid container spacing={5}>
         <Grid item md={12} xs={12}>
@@ -351,7 +351,11 @@ const RapatApproveList = props => {
                   width: '100%'
                 }}
                 columnVisibilityModel={{
-                  action: session.status === 'authenticated' && session.data.uid === 1099999 ? true : false
+                  action:
+                    session.status === 'authenticated' &&
+                    (session.data.uid === 1099999 || session.data.role == 'pimpinan')
+                      ? true
+                      : false
                 }}
               />
             </Box>

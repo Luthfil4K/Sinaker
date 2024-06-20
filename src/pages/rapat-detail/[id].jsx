@@ -36,6 +36,7 @@ export async function getServerSideProps(context) {
       meetId: parseInt(context.params.id)
     },
     select: {
+      id: true,
       user: true
     }
   })
