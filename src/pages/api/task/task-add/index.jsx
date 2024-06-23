@@ -83,7 +83,7 @@ export default async function handler(req, res) {
             notes,
             projectId: Number(projectId),
             userId,
-            importStatus: 0
+            importStatus: 1
           }
         })
         if (jenisKeg == 65 || jenisKeg == 67) {
@@ -112,7 +112,8 @@ export default async function handler(req, res) {
                 kol1: participant[kolomLP.kol1].toString(),
                 kol2: participant[kolomLP.kol2].toString(),
                 templateTable: templateTable.toString(),
-                duedate: new Date(duedate)
+                duedate: new Date(duedate),
+                month
               }
             })
             if (tpp) {
@@ -163,7 +164,8 @@ export default async function handler(req, res) {
             notes,
             projectId: Number(projectId),
             userId,
-            importStatus: 0
+            importStatus: 1,
+            month
           }
         })
       }

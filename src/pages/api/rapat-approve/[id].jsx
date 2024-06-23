@@ -1,4 +1,5 @@
 import prisma from '../../../services/db'
+import { mailOptions, sendMailMeetTerima, sendMailMeetTolak } from 'src/services/sendEmail'
 
 export default async function handler(req, res) {
   const id = req.query.id
@@ -18,8 +19,16 @@ export default async function handler(req, res) {
 
     return res.status(200).json({ success: true, data: ph })
   } else if (method === 'PUT') {
-    const { status } = req.body
+    const { namaRapat, meetDate, startTime, endTime, duration, tempatRapat, description, status } = req.body
+
     console.log(status)
+    console.log(namaRapat)
+    console.log(meetDate)
+    console.log(startTime)
+    console.log(endTime)
+    console.log(duration)
+    console.log(tempatRapat)
+    console.log(description)
     try {
       const rapat = await prisma.meet.update({
         where: {
@@ -30,6 +39,30 @@ export default async function handler(req, res) {
         }
       })
 
+      mailOptions.to = ['jelakora141516@gmail.com', 'luthfilkaa918@gmail.com']
+
+      mailOptions.subject = namaRapat
+      mailOptions.title = namaRapat
+      mailOptions.description = description
+      mailOptions.meetDate = new Date(meetDate).toLocaleDateString('id-ID')
+      mailOptions.starttime =
+        new Date(startTime).getHours() +
+        ':' +
+        (new Date(startTime).getMinutes() < 10 ? '0' : '') +
+        new Date(startTime).getMinutes()
+      mailOptions.endtime =
+        new Date(endTime).getHours() +
+        ':' +
+        (new Date(endTime).getMinutes() < 10 ? '0' : '') +
+        new Date(endTime).getMinutes() +
+        ' WIB'
+
+      mailOptions.endTime = new Date(meetDate).toLocaleDateString('id-ID')
+      mailOptions.link = tempatRapat
+      mailOptions.duration = duration
+      mailOptions.id = id
+
+      status === 'disetujui' ? sendMailMeetTerima(mailOptions) : sendMailMeetTolak(mailOptions)
       return res.status(200).json({ success: true, data: rapat })
     } catch (error) {
       return res.status(400).json({ success: false })

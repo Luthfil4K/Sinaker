@@ -122,7 +122,7 @@ const RapatDetailViews = props => {
         >
           <Grid container sx={{ height: 800 }}>
             <Grid item xs={12}>
-              <Grid ref={pdfRef2} container sx={{ height: 800 }}>
+              <Grid ref={pdfRef2} container sx={{ height: 1000 }}>
                 <Grid item xs={1}></Grid>
                 <Grid item xs={10}>
                   <Grid container>
@@ -267,7 +267,7 @@ const RapatDetailViews = props => {
         >
           <Grid container sx={{ height: 900 }}>
             <Grid item xs={12}>
-              <Grid ref={pdfRef} container sx={{ height: 800 }}>
+              <Grid ref={pdfRef} container sx={{ height: 1000 }}>
                 <Grid item xs={1}></Grid>
                 <Grid item xs={10}>
                   <Grid container>
@@ -368,7 +368,7 @@ const RapatDetailViews = props => {
                       </Grid>
                     </Grid>
                     {/* isi */}
-                    <Grid sx={{ height: 400 }} item xs={12}>
+                    <Grid sx={{ height: 650 }} item xs={12}>
                       <Grid container>
                         <Grid item xs={1}></Grid>
                         <Grid item xs={11}>
@@ -392,7 +392,7 @@ const RapatDetailViews = props => {
                         <Grid item xs={1}></Grid>
                         <Grid item xs={10}>
                           <Typography sx={{ marginLeft: 10 }} color={'black'} variant={'body2'}>
-                            Dalam rangka {props.dataRapat.description} saudara diundang untuk menghadiri rapat pada:
+                            {props.dataRapat.description}
                           </Typography>
                         </Grid>
                         <Grid item xs={1}></Grid>
@@ -474,17 +474,7 @@ const RapatDetailViews = props => {
                             <Typography textAlign={'center'} color={'black'} variant={'body2'}>
                               Kabupaten Bogor
                             </Typography>
-                            <Grid mt={5} height={50} container>
-                              {/* <Grid item xs={12} display={'flex'} justifyContent={'center'}>
-                                {props.dataRapat.status === 'disetujui' ? (
-                                  <>
-                                    <img alt='Stumptown Roasters' src='/images/logos/e-ttd.png' />
-                                  </>
-                                ) : (
-                                  ''
-                                )}
-                              </Grid> */}
-                            </Grid>
+                            <Grid mt={5} height={50} container></Grid>
                             <Typography mt={5} textAlign={'center'} color={'black'} variant={'body2'}>
                               Dr. Daryanto, S.ST, M.M
                             </Typography>
@@ -665,7 +655,7 @@ const RapatDetailViews = props => {
 
       pdf.addImage(imgData2, 'PNG', imgX2, imgY2, imgWidth2 * ratio2, imgHeight2 * ratio2)
 
-      pdf.save('invoice.pdf')
+      pdf.save(`Undangan${props.dataRapat.namaRapat}.pdf`)
     } catch (error) {
       console.error('Error while processing:', error)
     } finally {
@@ -759,12 +749,6 @@ const RapatDetailViews = props => {
   let button
   button = (
     <>
-      {/* <input accept='image/*' style={{ display: 'none' }} id='raised-button-file' multiple type='file' />
-      <label htmlFor='raised-button-file'>
-        <Button onClick={handleSubmitFile} size='medium' sx={{ mr: 2 }} variant='contained' component='span'>
-          Browse
-        </Button>
-      </label> */}
       <DragAndDrop dataMeet={props.dataRapat} dataUpdateUpload={handleUploadUpdate}></DragAndDrop>
     </>
   )
@@ -806,7 +790,6 @@ const RapatDetailViews = props => {
 
   const handleTampil = () => {
     tampil === 'none' ? setTampil('flex') : setTampil('none')
-    // console.log(tampil)
   }
   return (
     <>
@@ -945,12 +928,7 @@ const RapatDetailViews = props => {
               value='2'
               sx={{
                 p: 0,
-                height:
-                  tampil === 'flex'
-                    ? props.dataRapat.ditujukan != 'Seluruh Pegawai BPS Kabupaten Bogor'
-                      ? 1235
-                      : 2235
-                    : 335
+                height: tampil === 'flex' ? (props.dataRapatc ? 2235 : 1295) : 335
               }}
             >
               <Grid mt={4} container spacing={4}>

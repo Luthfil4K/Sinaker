@@ -44,6 +44,8 @@ import jsPDF from 'jspdf'
 
 const RapatCreateViews = props => {
   const pdfRef = useRef()
+  const pdfRef2 = useRef()
+
   const [selectedDate, setSelectedDate] = useState(new Date())
   const [selectedTimeS, setSelectedTimeS] = useState(new Date())
   const [selectedTimeE, setSelectedTimeE] = useState(new Date())
@@ -58,7 +60,8 @@ const RapatCreateViews = props => {
     lampiran: '',
     ditujukan: '',
     tempatRapat: '',
-    deskRapat: '-',
+    deskRapat:
+      ' .... , bersama ini kami mengundang Bapak/Ibu untuk menghadiri rapat perihal tersebut diatas yang akan dilaksanakan pada:',
     kegAnggotaId: '',
     kegAnggota: []
   })
@@ -89,13 +92,63 @@ const RapatCreateViews = props => {
         <Paper sx={{ display: 'flex' }}>
           <Grid container sx={{ height: 800 }}>
             <Grid item xs={12}>
-              <Grid ref={pdfRef} container sx={{ height: 800 }}>
+              <Grid ref={pdfRef} container sx={{ height: 1000 }}>
                 <Grid item xs={1}></Grid>
                 <Grid item xs={10}>
                   <Grid container>
-                    <Grid sx={{ height: 150 }} item xs={12}>
-                      <Img alt='Stumptown Roasters' src='/images/logos/logobpsBogor.png' />
+                    <Grid sx={{ height: 110 }} item xs={1}></Grid>
+                    <Grid
+                      sx={{
+                        height: 110,
+
+                        display: 'flex',
+                        justifyContent: 'center',
+                        alignItems: 'center'
+                      }}
+                      item
+                      xs={3}
+                    >
+                      <Img alt='BPS Logo' src='/images/logos/BPS1.png' sx={{ width: '70%', height: 'auto' }} />
                     </Grid>
+                    <Grid sx={{ height: 110 }} item xs={8}>
+                      <Grid container>
+                        <Grid sx={{}} item xs={12}>
+                          <Typography
+                            sx={{
+                              fontSize: 24,
+                              color: 'black',
+                              fontWeight: 900,
+                              fontStyle: 'italic',
+                              fontFamily: 'Times New Roman'
+                            }}
+                          >
+                            BADAN PUSAT STATISTIK
+                          </Typography>
+                          <Typography
+                            sx={{
+                              fontSize: 24,
+                              color: 'black',
+                              fontWeight: 900,
+                              fontStyle: 'italic',
+                              fontFamily: 'Times New Roman'
+                            }}
+                          >
+                            KABUPATEN BOGOR
+                          </Typography>
+                          <Typography sx={{ fontSize: 12, color: 'black', fontFamily: 'Times New Roman' }}>
+                            Jl.Bersih, Komplek Perkantoran Pemda Kabupaten Bogor, Cibinong
+                          </Typography>
+                          <Typography sx={{ fontSize: 12, color: 'black', fontFamily: 'Times New Roman' }}>
+                            Telp. 021 8751070, website:http://bogorkab.go.id, email : bps3201@bps.go.id
+                          </Typography>
+                        </Grid>
+                      </Grid>
+                    </Grid>
+                    <Grid sx={{ height: 5 }} item xs={12}></Grid>
+                    <Grid sx={{ height: 15 }} item xs={1}></Grid>
+                    <Grid sx={{ height: 2, backgroundColor: 'black' }} item xs={11}></Grid>
+
+                    <Grid sx={{ height: 20 }} item xs={12}></Grid>
                     {/* nomor dan perihal */}
                     <Grid sx={{ height: 100 }} item xs={12}>
                       <Grid container>
@@ -165,7 +218,7 @@ const RapatCreateViews = props => {
                         <Grid item xs={1}></Grid>
                         <Grid item xs={10}>
                           <Typography sx={{ marginLeft: 10 }} color={'black'} variant={'body2'}>
-                            Dalam rangka {values.deskRapat} saudara diundang untuk menghadiri rapat pada:
+                            {values.deskRapat}
                           </Typography>
                         </Grid>
                         <Grid item xs={1}></Grid>
@@ -278,6 +331,187 @@ const RapatCreateViews = props => {
     )
   }
 
+  const LampiranRapat = () => {
+    const Img = styled('img')(({ theme }) => ({ height: 110 }))
+    const styles = {
+      tableHeader: {
+        border: '1px solid black',
+        backgroundColor: '#E2EFD9',
+        padding: '8px',
+        textAlign: 'center',
+        color: 'black',
+        lineHeight: '1.5' // Mengatur tinggi baris untuk header
+      },
+      tableNo: {
+        border: '1px solid black',
+        padding: '8px',
+        textAlign: 'center',
+        fontSize: 14,
+        backgroundColor: '#E2EFD9',
+        color: 'black',
+        lineHeight: '0.5' // Mengatur tinggi baris untuk header
+      },
+      tableCell: {
+        border: '1px solid black',
+        padding: '8px',
+        textAlign: 'left',
+        fontSize: 14,
+        color: 'black',
+        lineHeight: '0.5' // Mengatur tinggi baris untuk sel
+      },
+      tableCellNo: {
+        border: '1px solid black',
+        padding: '8px',
+        textAlign: 'center',
+        fontSize: 14,
+        color: 'black',
+        lineHeight: '0.5' // Mengatur tinggi baris untuk sel
+      }
+    }
+
+    return (
+      <>
+        <Paper
+          sx={{
+            display: 'flex',
+            backgroundColor: '#FFFFFF',
+            paddingTop: 10,
+            boxShadow: '0px 0px 10px rgba(0, 0, 0, 0.1)' // Atur shadow dan blur di sini
+          }}
+        >
+          <Grid container sx={{ height: 800 }}>
+            <Grid item xs={12}>
+              <Grid ref={pdfRef2} container sx={{ height: 1000 }}>
+                <Grid item xs={1}></Grid>
+                <Grid item xs={10}>
+                  <Grid container>
+                    <Grid sx={{ height: 110 }} item xs={1}></Grid>
+                    <Grid
+                      sx={{
+                        height: 110,
+
+                        display: 'flex',
+                        justifyContent: 'center',
+                        alignItems: 'center'
+                      }}
+                      item
+                      xs={3}
+                    >
+                      <Img alt='BPS Logo' src='/images/logos/BPS1.png' sx={{ width: '70%', height: 'auto' }} />
+                    </Grid>
+                    <Grid sx={{ height: 110 }} item xs={8}>
+                      <Grid container>
+                        <Grid sx={{}} item xs={12}>
+                          <Typography
+                            sx={{
+                              fontSize: 24,
+                              color: 'black',
+                              fontWeight: 900,
+                              fontStyle: 'italic',
+                              fontFamily: 'Times New Roman'
+                            }}
+                          >
+                            BADAN PUSAT STATISTIK
+                          </Typography>
+                          <Typography
+                            sx={{
+                              fontSize: 24,
+                              color: 'black',
+                              fontWeight: 900,
+                              fontStyle: 'italic',
+                              fontFamily: 'Times New Roman'
+                            }}
+                          >
+                            KABUPATEN BOGOR
+                          </Typography>
+                          <Typography sx={{ fontSize: 12, color: 'black', fontFamily: 'Times New Roman' }}>
+                            Jl.Bersih, Komplek Perkantoran Pemda Kabupaten Bogor, Cibinong
+                          </Typography>
+                          <Typography sx={{ fontSize: 12, color: 'black', fontFamily: 'Times New Roman' }}>
+                            Telp. 021 8751070, website:http://bogorkab.go.id, email : bps3201@bps.go.id
+                          </Typography>
+                        </Grid>
+                      </Grid>
+                    </Grid>
+                    <Grid sx={{ height: 5 }} item xs={12}></Grid>
+                    <Grid sx={{ height: 15 }} item xs={1}></Grid>
+                    <Grid sx={{ height: 2, backgroundColor: 'black' }} item xs={11}></Grid>
+                    <Grid sx={{ height: 100 }} item xs={12}>
+                      <Grid container>
+                        <Grid item xs={1}></Grid>
+                        <Grid item xs={2}>
+                          <Typography color={'black'} variant={'body2'}>
+                            Nomor
+                          </Typography>
+                          <Typography color={'black'} variant={'body2'}>
+                            Lampiran
+                          </Typography>
+                          <Typography color={'black'} variant={'body2'}>
+                            Tanggal
+                          </Typography>
+                        </Grid>
+                        <Grid item xs={9}>
+                          <Typography color={'black'} variant={'body2'}>
+                            {/* : B-406/32010/PL.200/{(new Date().getMonth() + 1).toString().padStart(2, '0')}/
+                            {new Date().getFullYear()} */}
+                            : {values.nomor}
+                          </Typography>
+                          <Typography color={'black'} variant={'body2'}>
+                            : {values.lampiran}
+                          </Typography>
+                          <Typography color={'black'} variant={'body2'}>
+                            :{' '}
+                            {new Date().toLocaleDateString('id-ID', {
+                              year: 'numeric',
+                              month: 'long',
+                              day: 'numeric'
+                            })}
+                          </Typography>
+                        </Grid>
+                        <Grid item xs={1}></Grid>
+                        <Grid mt={10} item xs={8}>
+                          <Typography variant='body1' sx={{ marginBottom: 3.5, color: 'black', fontWeight: 900 }}>
+                            Daftar Peserta Rapat {values.namaRapat}
+                          </Typography>
+                          <div>
+                            <table style={{ borderCollapse: 'collapse', width: '100%' }}>
+                              <thead>
+                                <tr>
+                                  <th style={styles.tableHeader}>No</th>
+                                  <th style={styles.tableHeader}>Nama</th>
+                                </tr>
+                              </thead>
+                              <tbody>
+                                <tr>
+                                  <td style={styles.tableNo}>(1)</td>
+                                  <td style={styles.tableNo}>(2)</td>
+                                </tr>
+                              </tbody>
+                              <tbody>
+                                {values.kegAnggota.map((row, index) => (
+                                  <tr key={index}>
+                                    <td style={styles.tableCellNo}>{index + 1}</td>
+                                    <td style={styles.tableCell}>{row}</td>
+                                  </tr>
+                                ))}
+                              </tbody>
+                            </table>
+                          </div>
+                        </Grid>
+                      </Grid>
+                    </Grid>
+                    {/* <Grid sx={{ height: 150 }} item xs={12} bgcolor={'success.dark'}></Grid> */}
+                  </Grid>
+                </Grid>
+                <Grid item xs={5}></Grid>
+              </Grid>
+            </Grid>
+          </Grid>
+        </Paper>
+      </>
+    )
+  }
+
   const handleTempatRapat = e => {
     setValues(values => ({
       ...values,
@@ -295,7 +529,15 @@ const RapatCreateViews = props => {
   const handleChange = props => event => {
     setValues({ ...values, [props]: event.target.value })
   }
-
+  const kalimatTetap = ' kami mengundang untuk menghadiri rapat pada:'
+  useEffect(() => {
+    // Pada saat komponen pertama kali dirender,
+    // pastikan deskRapat diisi dengan kalimat tetap
+    setValues({
+      ...values,
+      deskRapat: ', kami mengundang untuk menghadiri rapat pada:'
+    })
+  }, [])
   const handleDateChange = date => {
     setSelectedDate(date)
   }
@@ -337,6 +579,21 @@ const RapatCreateViews = props => {
     setValues({ ...values, kegAnggota: userNames, kegKetuaId: ketuaTimId })
   }, [values.kegTim])
 
+  // const res = await axios.post('/rapat', {
+  //   namaRapat: values.namaRapat,
+  //   meetDate: selectedDate,
+  //   startTime: selectedTimeS,
+  //   endTime: selectedTimeE,
+  //   duration: selectedTimeE - selectedTimeS,
+  //   tempatRapat: values.tempatRapat,
+  //   description: values.deskRapat,
+  //   createdById: session.data.uid,
+  //   pesertaRapatId: values.kegAnggotaId,
+  //   nomor: values.nomor,
+  //   lampiran: values.lampiran,
+  //   perihal: values.perihal,
+  //   ditujukan: values.ditujukan
+  // })
   // masih nyambung sama atas, input autocomplete cuma handle berdasar dropdown tim kerja,
   // disini diatur lagi kalo misal ada inputan pegawai lain di luar anggota tim
   useEffect(() => {
@@ -353,27 +610,11 @@ const RapatCreateViews = props => {
   }, [values.kegAnggota])
   const router = useRouter()
 
-  const handleCreateRapat = async e => {
+  const handleCreateRapat1 = async e => {
     e.preventDefault()
     const input = pdfRef.current
     try {
       if (isiAll == '1') {
-        // const res = await axios.post('/rapat', {
-        //   namaRapat: values.namaRapat,
-        //   meetDate: selectedDate,
-        //   startTime: selectedTimeS,
-        //   endTime: selectedTimeE,
-        //   duration: selectedTimeE - selectedTimeS,
-        //   tempatRapat: values.tempatRapat,
-        //   description: values.deskRapat,
-        //   createdById: session.data.uid,
-        //   pesertaRapatId: values.kegAnggotaId,
-        //   nomor: values.nomor,
-        //   lampiran: values.lampiran,
-        //   perihal: values.perihal,
-        //   ditujukan: values.ditujukan
-        // })
-
         html2canvas(input).then(canvas => {
           const imgData = canvas.toDataURL('image/png')
           const pdf = new jsPDF('p', 'mm', 'a4', true)
@@ -474,6 +715,128 @@ const RapatCreateViews = props => {
       })
     }
   }
+  const handleCreateRapat = async e => {
+    e.preventDefault()
+    const input1 = pdfRef.current
+    const input2 = pdfRef2.current // Menambahkan referensi untuk input2
+
+    try {
+      if (isiAll === '1') {
+        const canvas1 = await html2canvas(input1, { scale: 2 })
+        const imgData1 = canvas1.toDataURL('image/png')
+        const pdf = new jsPDF('p', 'mm', 'a4', true)
+        const pdfWidth = epdf.internal.pageSize.getWidth()
+        const pdfHeight = pdf.internal.pageSize.getHeight()
+
+        const addImageToPdf = (canvas, imgData) => {
+          const imgWidth = canvas.width / 2
+          const imgHeight = canvas.height / 2
+          const ratio = Math.min(pdfWidth / imgWidth, pdfHeight / imgHeight)
+          // const imgX = (pdfWidth - imgWidth * ratio) / 2
+          const imgX = (pdfWidth - imgWidth * ratio) / 2
+          const imgY = 10
+          pdf.addImage(imgData, 'PNG', imgX, imgY, imgWidth * ratio, imgHeight * ratio)
+        }
+
+        // Menambahkan gambar pertama ke halaman pertama
+        addImageToPdf(canvas1, imgData1)
+
+        if (values.ditujukan != 'Seluruh Pegawai BPS Kabupaten Bogor') {
+          // Membuat canvas untuk input2
+          const canvas2 = await html2canvas(input2, { scale: 2 })
+          const imgData2 = canvas2.toDataURL('image/png')
+
+          // Menambahkan halaman baru dan gambar kedua
+          pdf.addPage()
+          addImageToPdf(canvas2, imgData2)
+        }
+
+        // Mengonversi PDF ke Blob
+        const blob = pdf.output('blob')
+        const file = new File([blob], `${values.namaRapat}`, { type: 'application/pdf' })
+
+        // Membuat FormData dan menambahkan file
+        const formData = new FormData()
+
+        formData.append('namaRapat', values.namaRapat)
+        formData.append('meetDate', selectedDate)
+        formData.append('startTime', selectedTimeS)
+        formData.append('endTime', selectedTimeE)
+        formData.append('duration', selectedTimeE - selectedTimeS)
+        formData.append('tempatRapat', values.tempatRapat)
+        formData.append('description', values.deskRapat)
+        formData.append('createdById', session.data.uid)
+        formData.append('pesertaRapatId', JSON.stringify(values.kegAnggotaId)) // Array needs to be stringified
+        formData.append('nomor', values.nomor)
+        formData.append('lampiran', values.lampiran)
+        formData.append('perihal', values.perihal)
+        formData.append('ditujukan', values.ditujukan)
+        formData.append('file', file) // Pastikan 'file' sesuai dengan atribut name di input Anda
+
+        // Mengunggah file PDF ke server
+        axios
+          .post('/rapat-create-rapat-undangan', formData, {
+            headers: {
+              'Content-Type': 'multipart/form-data'
+            }
+          })
+          .then(res => {
+            console.log(res.data)
+            Swal.fire({
+              position: 'center',
+              icon: 'success',
+              title: 'Rapat berhasil diajukan',
+              showConfirmButton: false,
+              timer: 1000,
+              width: 300
+            }).then(router.push('/rapat-create'))
+            setValues({
+              namaRapat: '',
+              nomor: '',
+              perihal: '',
+              ditujukan: '',
+              lampiran: '',
+              tempatRapat: '',
+              deskRapat: '-',
+              pesertaRapat: 7,
+              kegAnggota: []
+            })
+
+            setSelectedDate(new Date())
+            setSelectedTimeS(new Date())
+            setSelectedTimeE(new Date())
+          })
+          .catch(err => {
+            console.log(err)
+            Swal.fire({
+              title: 'Rapat gagal diajukan',
+              text: err,
+              icon: 'error',
+              confirmButtonColor: '#d33',
+              confirmButtonText: 'OK'
+            })
+          })
+      } else {
+        console.log('isikan')
+        Swal.fire({
+          title: 'Form belum lengkap',
+          text: 'Pastikan semua field telah terisi',
+          icon: 'warning',
+          confirmButtonColor: 'warning.main',
+          confirmButtonText: 'OK'
+        })
+      }
+    } catch (error) {
+      console.log(error)
+      Swal.fire({
+        title: 'Rapat gagal diajukan',
+        text: error,
+        icon: 'error',
+        confirmButtonColor: '#d33',
+        confirmButtonText: 'OK'
+      })
+    }
+  }
 
   // cek input isi all
   useEffect(() => {
@@ -513,6 +876,8 @@ const RapatCreateViews = props => {
   const CustomInputTimeEnd = forwardRef((props, ref) => {
     return <TextField fullWidth {...props} inputRef={ref} label='Waktu Selesai' autoComplete='off' />
   })
+
+  console.log(values.kegAnggota)
 
   return (
     <>
@@ -736,10 +1101,11 @@ const RapatCreateViews = props => {
           </Grid>
         </form>
       </Card>
-      <Card height={0}>
-        <Grid container sx={{ height: 0 }}>
-          <Grid mt={400} item xs={9} height={1}>
+      <Card mt={300} height={2000}>
+        <Grid container sx={{ height: 10 }}>
+          <Grid mt={1} item xs={9} height={1}>
             <UndanganRapat></UndanganRapat>
+            <LampiranRapat></LampiranRapat>
           </Grid>
         </Grid>
       </Card>
