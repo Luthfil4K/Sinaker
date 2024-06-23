@@ -38,16 +38,9 @@ export default async function handler(req, res) {
         }
       })
 
-      // mailOptions.to = participants.map(participant => {
-      //   if (participant.checked) {
-      //     return participant.email
-      //   }
-      // })
+      mailOptions.to = ['jelakora141516@gmail.com', 'luthfilka918@gmail.com']
+      // mailOptions.to = daftarEmail
 
-      mailOptions.to = ['jelakora141516@gmail.com', 'akaishuichi141516@gmail.com']
-      // mailOptions.to =daftarEmail
-
-      console.log(fileUndangan.file)
       mailOptions.subject = namaRapat
       mailOptions.title = namaRapat
       mailOptions.description = description
@@ -63,7 +56,7 @@ export default async function handler(req, res) {
         (new Date(endTime).getMinutes() < 10 ? '0' : '') +
         new Date(endTime).getMinutes() +
         ' WIB'
-      console.log(mailOptions.starttime)
+
       mailOptions.endTime = new Date(meetDate).toLocaleDateString('id-ID')
       mailOptions.link = tempatRapat
       mailOptions.duration = duration

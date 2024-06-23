@@ -725,7 +725,7 @@ const RapatCreateViews = props => {
         const canvas1 = await html2canvas(input1, { scale: 2 })
         const imgData1 = canvas1.toDataURL('image/png')
         const pdf = new jsPDF('p', 'mm', 'a4', true)
-        const pdfWidth = epdf.internal.pageSize.getWidth()
+        const pdfWidth = pdf.internal.pageSize.getWidth()
         const pdfHeight = pdf.internal.pageSize.getHeight()
 
         const addImageToPdf = (canvas, imgData) => {
@@ -1101,7 +1101,7 @@ const RapatCreateViews = props => {
           </Grid>
         </form>
       </Card>
-      <Card mt={300} height={2000}>
+      <Card mt={300} height={3000}>
         <Grid container sx={{ height: 10 }}>
           <Grid mt={1} item xs={9} height={1}>
             <UndanganRapat></UndanganRapat>

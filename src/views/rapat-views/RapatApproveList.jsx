@@ -44,8 +44,13 @@ const RapatApproveList = props => {
       status: rapat.status
     }))
   )
-  console.log(dataAjuan)
+
   const handleSetujui = id => () => {
+    const filteredData = dataAjuan.filter(rapat => rapat.id === id)
+    console.log('filteredData')
+    console.log(filteredData)
+    console.log('filteredData')
+    console.log(filteredData)
     const aidi = id
     Swal.fire({
       title: 'Setujui Rapat?',
@@ -59,6 +64,13 @@ const RapatApproveList = props => {
     }).then(result => {
       if (result.isConfirmed) {
         const data = {
+          namaRapat: filteredData[0].namaRapat,
+          meetDate: filteredData[0].meetDate,
+          startTime: filteredData[0].startTime,
+          endTime: filteredData[0].endTime,
+          duration: filteredData[0].namaRapat,
+          tempatRapat: filteredData[0].tempatRapat,
+          description: filteredData[0].description,
           status: 'disetujui'
         }
         axios
@@ -95,6 +107,8 @@ const RapatApproveList = props => {
   }
   const handleTolak = id => () => {
     const aidi = id
+    const filteredData = dataAjuan.filter(rapat => rapat.id === id)
+
     Swal.fire({
       title: 'Tolak Rapat?',
       icon: 'warning',
@@ -107,6 +121,13 @@ const RapatApproveList = props => {
     }).then(result => {
       if (result.isConfirmed) {
         const data = {
+          namaRapat: filteredData[0].namaRapat,
+          meetDate: filteredData[0].meetDate,
+          startTime: filteredData[0].startTime,
+          endTime: filteredData[0].endTime,
+          duration: filteredData[0].namaRapat,
+          tempatRapat: filteredData[0].tempatRapat,
+          description: filteredData[0].description,
           status: 'ditolak'
         }
         axios
@@ -138,7 +159,7 @@ const RapatApproveList = props => {
             return rapat
           })
         })
-        console.log(dataAjuan)
+        // console.log(dataAjuan)
       }
     })
   }

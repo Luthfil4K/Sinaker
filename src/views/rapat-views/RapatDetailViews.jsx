@@ -928,7 +928,12 @@ const RapatDetailViews = props => {
               value='2'
               sx={{
                 p: 0,
-                height: tampil === 'flex' ? (props.dataRapatc ? 2235 : 1295) : 335
+                height:
+                  tampil === 'flex'
+                    ? props.dataRapat.ditujukan != 'Seluruh Pegawai BPS Kabupaten Bogor'
+                      ? 2235
+                      : 1295
+                    : 335
               }}
             >
               <Grid mt={4} container spacing={4}>
