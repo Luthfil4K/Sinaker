@@ -742,7 +742,6 @@ const RapatDetailViews = props => {
     setFileTambahan(abc)
   }
 
-  useEffect(() => {}, [fileTambahan])
   useEffect(() => {
     fileTambahan.length > 0 ? setDokumenRapat(prevValues => [...prevValues, ...fileTambahan]) : 0
   }, [fileTambahan])

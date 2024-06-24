@@ -7,7 +7,7 @@ const RapatAjuanList = ({ data }) => {
   const [dataTimeline, setDataTimeline] = useState(JSON.parse(data))
   return (
     <>
-      <RapatApproveList dataRapat={dataTimeline.rapat}></RapatApproveList>
+      <RapatApproveList dataUndanganPersetujuan={dataTimeline.undangan_rapat} dataRapat={dataTimeline.rapat}></RapatApproveList>
     </>
   )
 }
@@ -32,8 +32,11 @@ export async function getServerSideProps(context) {
     }
   })
 
+  const undangan_rapat = await prisma.undangan_persetujuan_meet.findMany({})
+
   const data = {
-    rapat
+    rapat,
+    undangan_rapat
   }
 
   return {
