@@ -663,7 +663,7 @@ const Dashboard = ({ dataTask }) => {
   useEffect(() => {
     if (session.status === 'authenticated') {
       getUser()
-    }
+    } 
   }, [session])
   const [task, setTask] = useState(JSON.parse(dataTask))
 
@@ -1201,8 +1201,9 @@ const Dashboard = ({ dataTask }) => {
       : setTask(
           JSON.parse(dataTask).filter(
             item =>
-              new Date(item.duedate).getMonth() + 1 === valueDropDown.bulan ||
-              new Date(item.startDate).getMonth() + 1 === valueDropDown.bulan
+              new Date(item.duedate).getFullYear() === valueDropDown.tahun &&
+              (new Date(item.duedate).getMonth() + 1 === valueDropDown.bulan ||
+                new Date(item.startDate).getMonth() + 1 === valueDropDown.bulan)
           )
         )
     console.log(task)
