@@ -53,6 +53,10 @@ const StyledBox = styled(Box)(({ theme }) => ({
 }))
 
 const RapatDetailViews = props => {
+  console.log(props.dataUndanganPersetujuan[0].taskfile)
+  console.log(props.dataUndanganPersetujuan[0].taskfile)
+  console.log(props.dataUndanganPersetujuan[0].taskfile)
+  console.log(props.dataUndanganPersetujuan[0].taskfile)
   const styles = {
     tableHeader: {
       border: '1px solid black',
@@ -546,7 +550,8 @@ const RapatDetailViews = props => {
             perihal: props.dataRapat.perihal,
             ditujukan: props.dataRapat.ditujukan,
             pesertaRapatId: props.dataPesertaRapat,
-            fileUndangan: props.dataRapat.undangan_file ? props.dataRapat.undangan_file : 'tidak ada'
+            // fileUndangan: props.dataRapat.undangan_file ? props.dataRapat.undangan_file : 'tidak ada'
+            fileUndangan: props.dataUndanganPersetujuan[0] ? props.dataUndanganPersetujuan[0].taskfile : 'tidak ada'
           })
 
           if (res.status === 201) {
@@ -587,7 +592,8 @@ const RapatDetailViews = props => {
                 perihal: props.dataRapat.perihal,
                 ditujukan: props.dataRapat.ditujukan,
                 pesertaRapatId: props.dataPesertaRapat,
-                fileUndangan: props.dataRapat.undangan_file ? props.dataRapat.undangan_file : 'tidak ada'
+                // fileUndangan: props.dataRapat.undangan_file ? props.dataRapat.undangan_file : 'tidak ada'
+                fileUndangan: props.dataUndanganPersetujuan[0] ? props.dataUndanganPersetujuan[0].taskfile : 'tidak ada'
               })
               .then(async res => {
                 await Swal.fire({
@@ -966,15 +972,41 @@ const RapatDetailViews = props => {
                 <Grid item xs={7} height={330} bgcolor={'white'}>
                   <Grid container spacing={4}>
                     <Grid item xs={12}>
-                      <Typography variant='body2'>Peserta Rapat:</Typography>
+                      {/* <Typography variant='body2'>Peserta Rapat:</Typography>
                       <Typography variant='body2'>
                         {props.dataPesertaRapat.map(pr => {
                           return pr.user.name + ', '
                         })}
-                      </Typography>
+                      </Typography> */}
                     </Grid>
                     <Grid item xs={12}>
-                      <Button sx={{ width: 160 }} onClick={handleSendUndangan} size='small' variant='contained'>
+                      {props.dataUndanganPersetujuan.length > 0 ? (
+                        props.dataUndanganPersetujuan[0] ? (
+                          <>
+                            <Link
+                              href={`http://localhost:3000/uploads/persetujuan/${props.dataUndanganPersetujuan[0].taskfile}`}
+                              target='_blank'
+                            >
+                              <Typography sx={{ textDecoration: 'underline' }}>
+                                {props.dataUndanganPersetujuan[0].taskfile}
+                              </Typography>
+                            </Link>
+                          </>
+                        ) : (
+                          <Typography sx={{ textDecoration: 'underline' }}>Belum Ada Persetujuan Undangan</Typography>
+                        )
+                      ) : (
+                        <Typography sx={{ textDecoration: 'underline' }}>Belum Ada Persetujuan Undangan</Typography>
+                      )}
+                    </Grid>
+                    <Grid item xs={12}>
+                      <Button
+                        disabled={props.dataUndanganPersetujuan.length > 0 ? false : true}
+                        sx={{ width: 160 }}
+                        onClick={handleSendUndangan}
+                        size='small'
+                        variant='contained'
+                      >
                         Kirim undangan
                       </Button>
                     </Grid>

@@ -24,14 +24,14 @@ const sendMailMeetCreated = async payload => {
     to: payload.to,
     from: payload.from,
     subject: payload.subject,
-    html: mustache.render(template, { ...payload })
-    // attachments: [
-    //   {
-    //     filename: `${payload.undanganNama}`,
-    //     path: `${process.env.BASE_URL}/${correctedUrl}`,
-    //     cid: 'simantan228@gmail.com'
-    //   }
-    // ]
+    html: mustache.render(template, { ...payload }),
+    attachments: [
+      {
+        filename: `${payload.undanganNama}`,
+        path: `${process.env.BASE_URL}/uploads/persetujuan/${correctedUrl}`,
+        cid: 'simantan228@gmail.com'
+      }
+    ]
   }
 
   Gmail.sendMail(mail, function (error, info) {

@@ -7,7 +7,12 @@ const RapatDetail = ({ data }) => {
   const [dataR, setDataR] = useState(JSON.parse(data))
   return (
     <>
-      <RapatDetailViews dataPesertaRapat={dataR.userRapat} dataRapat={dataR.rapat} dataDokumen={dataR.dokumen} />
+      <RapatDetailViews
+        dataUndanganPersetujuan={dataR.undangan_rapat}
+        dataPesertaRapat={dataR.userRapat}
+        dataRapat={dataR.rapat}
+        dataDokumen={dataR.dokumen}
+      />
     </>
   )
 }
@@ -47,7 +52,13 @@ export async function getServerSideProps(context) {
     }
   })
 
-  const data = { rapat, userRapat, dokumen }
+  const undangan_rapat = await prisma.undangan_persetujuan_meet.findMany({
+    where: {
+      meetId: parseInt(context.params.id)
+    }
+  })
+  console.log(undangan_rapat)
+  const data = { rapat, userRapat, dokumen, undangan_rapat }
 
   return {
     props: {

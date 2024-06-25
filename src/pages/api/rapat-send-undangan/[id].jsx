@@ -61,9 +61,9 @@ export default async function handler(req, res) {
       mailOptions.link = tempatRapat
       mailOptions.duration = duration
       mailOptions.id = id
-      mailOptions.undanganNama = fileUndangan[0].filename
-      mailOptions.undanganPath = fileUndangan[0].path
-      mailOptions.undanganId = fileUndangan[0].id
+      mailOptions.undanganNama = fileUndangan
+      mailOptions.undanganPath = fileUndangan
+      mailOptions.undanganId = fileUndangan
 
       sendMailMeetCreated(mailOptions)
 
