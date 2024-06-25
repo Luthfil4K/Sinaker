@@ -19,9 +19,11 @@ const TaskManageEdit = ({ data }) => {
         dataPH={dataEdit.pekerjaanHarian}
         // dataMitraLimit={dataEdit.mitraLimitHonor}
         dataTpp={dataEdit.pekerjaanBulanIni}
+        dataLimitHonorTetap={dataEdit.limitHonorTetap}
         dataKriteriaP={dataEdit.kriteriaPegawai}
         dataKriteriaM={dataEdit.kriteriaMitra}
         dataResultTotalGaji={dataEdit.resultTotalGaji}
+        dataHonorTetap={dataEdit.honorTetap}
       ></TaskManageEditViews>
     </>
   )
@@ -156,14 +158,40 @@ export async function getServerSideProps(context) {
     where: { id: 1 }
   })
 
-  // const mitraTask = await prisma.sub_kegiatan_mitra.findMany({
-  //   where: {
-  //     taskId: parseInt(context.params.id)
-  //   },
-  //   include: {
-  //     mitra: true
-  //   }
-  // })
+  const honorTetap = await prisma.sub_kegiatan_mitra.findMany({
+    where: {
+      taskId: parseInt(context.params.id)
+    },
+    select: {
+      honor: true,
+      taskId: true,
+      mitraId: true,
+      mitra: {
+        select: {
+          name: true
+        }
+      }
+    }
+  })
+
+  const nowMonth = new Date().getMonth() + 1 // Mendapatkan bulan saat ini (mulai dari 1 untuk Januari)
+
+  const limitHonorTetap = await prisma.sub_kegiatan_mitra.findMany({
+    where: {
+      task: {
+        month: nowMonth - 1 // Mencocokkan bulan saat ini dengan kolom bulan
+      }
+    },
+    select: {
+      honor: true,
+      mitraId: true,
+      mitra: {
+        select: {
+          name: true
+        }
+      }
+    }
+  })
 
   const mitraTask = await prisma.mitra.findMany({
     where: {
@@ -298,6 +326,8 @@ export async function getServerSideProps(context) {
     pekerjaanHarian,
     pekerjaanBulanIni,
     // mitraLimitHonor,
+    limitHonorTetap,
+    honorTetap,
     kriteriaMitra,
     kriteriaPegawai,
     resultTotalGaji

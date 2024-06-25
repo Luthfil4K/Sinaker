@@ -18,6 +18,7 @@ import SaveIcon from '@mui/icons-material/Save'
 import Typography from '@mui/material/Typography'
 import CancelIcon from '@mui/icons-material/Close'
 import TextField from '@mui/material/TextField'
+import { List, ListItem, ListItemText, IconButton } from '@mui/material'
 
 // topsis
 import { create, all } from 'mathjs'
@@ -83,6 +84,9 @@ const TableGroupPerusahaan = props => {
   const [pclAutoComplete, setPclAutoComplete] = useState({})
   const [honorBulanIni, setHonorBulanIni] = useState(props.dataMitraLimitHonor)
 
+  console.log('props.dataMitraLimitHonorTetap')
+  console.log(props.dataMitraLimitHonorTetap)
+  console.log(props.dataMitraLimitHonorTetap)
   const templateTable = participants.length > 0 ? participants[0].templateTable : 5
   const [kolomLP, setKolomLP] = useState({
     kol1: 'nbs',
@@ -101,7 +105,7 @@ const TableGroupPerusahaan = props => {
   const hitungTotalGaji = dataMitraLimitHonor => {
     const totalGajiPerMitra = {}
     const bulanSekarang = new Date().getMonth()
-    const [pclAc, setPclAc] = useState()
+    const [pclAc, setPclAc] = useState({})
 
     dataMitraLimitHonor.forEach(mitra => {
       const { pmlId, pclId, gajiPml, gajiPcl, task } = mitra
@@ -110,8 +114,6 @@ const TableGroupPerusahaan = props => {
       const taskBulan = task?.dueDate ? new Date(task.dueDate).getMonth() : new Date().getMonth()
 
       if (taskBulan === bulanSekarang) {
-        // console.log('ini bulan sekarang : ' + new Date().getMonth())
-        // console.log('ini bulan dl subkeg: ' + new Date(taskBulan).getMonth())
         totalGajiPerMitra[pmlId] = (totalGajiPerMitra[pmlId] || 0) + gajiPml
         totalGajiPerMitra[pclId] = (totalGajiPerMitra[pclId] || 0) + gajiPcl
       }
@@ -136,8 +138,6 @@ const TableGroupPerusahaan = props => {
   // beban kerja
   const userAll = pml.map(row => {
     const jumlahKerjaanTpp = tpp.filter(tppRow => tppRow.pmlId === row.id).reduce((count, item) => count + 1, 0)
-
-    console.log(row.pekerjaan_harian)
 
     const jumlahJamKerja = row.pekerjaan_harian
       .filter(ph => ph.task.jenisKeg === 65)
@@ -185,12 +185,15 @@ const TableGroupPerusahaan = props => {
       .reduce((totalGaji, tppRow) => totalGaji + tppRow.gajiPml, 0)
 
     // Gabungkan total gaji dari kedua kasus
-    const gajiBulanIni = gajiBulanIniPCL + gajiBulanIniPML
+    const honorBulanIni = gajiBulanIniPCL + gajiBulanIniPML
 
     const jumlahKerjaanTppPML = tpp.filter(tppRow => tppRow.pmlId === row.id).reduce((count, item) => count + 1, 0)
 
     const jumlahKerjaanTppPCL = tpp.filter(tppRow => tppRow.pclId === row.id).reduce((count, item) => count + 1, 0)
     let jumlahKegiatan = jumlahKerjaanTppPCL + jumlahKerjaanTppPML
+    const honor = props.dataMitraLimitHonorTetap.find(item => item.mitraId === row.id)?.honor || 0
+    const gajiBulanIni = honor + honorBulanIni
+    console.log(gajiBulanIni)
 
     return {
       mitra_id: row.id,
@@ -201,8 +204,6 @@ const TableGroupPerusahaan = props => {
 
   const arrayUserM = userAllM.map(item => [item.jumlahKegiatan, item.gajiBulanIni])
   const arrayUserIdM = userAllM.map(item => item.mitra_id)
-
-  console.log(arrayUserM)
 
   // mitra
   let mm = math.matrix(arrayUserM)
@@ -221,20 +222,28 @@ const TableGroupPerusahaan = props => {
     }
   })
 
-  const optionPCL = useMemo(
-    () =>
-      dataBebanKerjaM.map(mi => ({
+  const optionPCL = useMemo(() => {
+    return dataBebanKerjaM.map(mi => {
+      // Temukan honor yang sesuai dengan mitraId saat ini dari dataLimitHonorTetap
+      const honor = props.dataMitraLimitHonorTetap.find(item => item.mitraId === mi.mitraId)?.honor || 0
+
+      // Format label dengan menambahkan honor
+      const label = `${mi.nama}, total Gaji :  Rp${mi.totalGaji.toLocaleString('id')} - Honor: Rp${honor}`
+
+      return {
         value: mi.mitraId,
-        // label: mi.nama + ', total Gaji :  Rp' + mi.totalGaji.toLocaleString('id')
-        label: mi.nama + ', total Gaji :  Rp' + mi.totalGaji + ', beban kerja: ' + mi.bebanKerja
-      })),
-    [honorBulanIni]
-  )
+        label,
+        name: mi.nama
+      }
+    })
+  }, [dataBebanKerjaM, props.dataMitraLimitHonorTetap])
   const optionPML = dataBebanKerjaPML.map(pml => ({
     value: pml.id,
     // label: pml.name + ' - Organik'
     label: pml.name + ' - Organik' + ', beban kerja: ' + pml.bebanKerja
   }))
+
+  console.log(optionPCL)
 
   const combinedOptions = [...optionPCL, ...optionPML]
   const apapa = props.dataProjectFungsi
@@ -269,12 +278,10 @@ const TableGroupPerusahaan = props => {
   }
 
   const handleEditClick = id => () => {
-    console.log('edit')
     setRowModesModel({ ...rowModesModel, [id]: { mode: GridRowModes.Edit } })
   }
 
   const handleSaveClick = id => () => {
-    console.log('handlesaveclick')
     setRowModesModel({ ...rowModesModel, [id]: { mode: GridRowModes.View } })
     const jenisSub = {
       64: { namaJenisSub: 'Persiapan', color: 'warning' },
@@ -305,7 +312,6 @@ const TableGroupPerusahaan = props => {
         axios
           .delete(`/task/task-tarel-progress/${id}`)
           .then(res => {
-            console.log(res.message)
             Swal.fire({
               position: 'bottom-end',
               icon: 'success',
@@ -341,15 +347,6 @@ const TableGroupPerusahaan = props => {
     }
   }
 
-  // useEffect(() => {
-  //   console.log('ini pcl autocomplete')
-  //   console.log(pclAutoComplete)
-  //   console.log('ini pcl autocomplete')
-  //   console.log(pclAutoComplete)
-  //   console.log('ini pcl autocomplete')
-  //   console.log(pclAutoComplete)
-  // }, [pclAutoComplete])
-
   // const processRowUpdate = newRow => {
   //   const updatedRow = { ...newRow, isNew: false }
   //   setRows(rows.map(row => (row.id === newRow.id ? updatedRow : row)))
@@ -365,37 +362,26 @@ const TableGroupPerusahaan = props => {
 
   const processRowUpdate = newRow => {
     const updatedRow = { ...newRow, isNew: false }
-    console.log('ini update row')
-    console.log(updatedRow)
 
     // Cari data mitra yang sesuai dengan pmlId dari updatedRow
     const mitraToUpdatePml = honorBulanIni.find(mitra => mitra.mitraId === updatedRow.pmlId)
-    console.log('ini mitra to update pml')
-    console.log(mitraToUpdatePml)
+
     // Hitung total gaji setelah update untuk pmlId
     const newTotalGajiPml = mitraToUpdatePml
       ? mitraToUpdatePml.totalGaji + (updatedRow.gajiPml || 0)
       : updatedRow.gajiPml // gajiPml dari updatedRow atau 0 jika tidak ada
-    console.log('ini gaji total pml')
-    console.log(newTotalGajiPml)
+
     // Cari data mitra yang sesuai dengan pclId dari updatedRow
     const mitraToUpdatePcl = updatedRow.pclId
       ? honorBulanIni.find(mitra => mitra.mitraId === updatedRow.pclId)
       : undefined
-    console.log('mitra to update pcl')
-    console.log(mitraToUpdatePcl)
 
     // Hitung total gaji setelah update untuk pclId
     const newTotalGajiPcl = mitraToUpdatePcl ? mitraToUpdatePcl.totalGaji + (updatedRow.gajiPcl || 0) : 0 // gajiPcl dari updatedRow atau 0 jika tidak ada
-    console.log('newTotalGajiPcl')
-    console.log(newTotalGajiPcl)
+
     // Validasi total gaji untuk pmlId dan pclId
     const isPmlValid = newTotalGajiPml ? newTotalGajiPml <= 4000000 : true
     const isPclValid = newTotalGajiPcl <= 4000000
-    // console.log('isPmlValid')
-    // console.log(isPmlValid)
-    // console.log('isPclValid')
-    // console.log(isPclValid)
 
     // Lakukan pengecekan dan pengiriman permintaan AJAX di sini
     const data = {
@@ -424,7 +410,6 @@ const TableGroupPerusahaan = props => {
           axios
             .put(`/task/task-tarel-progress/${updatedRow.id}`, data)
             .then(res => {
-              console.log(res.message)
               Swal.fire({
                 position: 'bottom-end',
                 icon: 'success',
@@ -500,7 +485,6 @@ const TableGroupPerusahaan = props => {
               }
             })
             .catch(err => {
-              console.log(err)
               Swal.fire({
                 title: 'Error!',
                 text: err,
@@ -937,6 +921,64 @@ const TableGroupPerusahaan = props => {
     }
   ]
 
+  const [rowsGaji, setRowsGaji] = useState([{ mitra: null, honor: '' }])
+  const [savedData, setSavedData] = useState(props.dataMitraHonorTetap)
+  // const [savedData, setSavedData] = useState([])
+
+  const handleInputChange = (index, field, value) => {
+    const newRows = [...rowsGaji]
+    newRows[index][field] = value
+    setRowsGaji(newRows)
+
+    if (field === 'mitra' || field === 'honor') {
+      if (index === rowsGaji.length - 1) {
+        setRowsGaji([...rowsGaji, { mitra: null, honor: 0 }])
+      }
+    }
+  }
+
+  const handleSave = () => {
+    const dataToSave = rowsGaji.filter(row => row.mitra && row.honor) // Filter untuk hanya menyimpan baris yang sudah diisi
+
+    const dataToSaveList = dataToSave.map(row => ({
+      honor: parseInt(row.honor, 10),
+      mitra: {
+        name: row.mitra.name // Pastikan ini benar berdasarkan struktur data Anda
+      },
+      taskId: props.dataSubKegId,
+      mitraId: row.mitra.value
+    }))
+
+    setRowsGaji([{ mitra: null, honor: '' }])
+    setSavedData([...savedData, ...dataToSaveList])
+    axios
+      .post(`task/task-honor-mitra-tetap/${props.dataSubKegId}`, dataToSave)
+      .then(response => {
+        console.log('Data berhasil disimpan:', response.data)
+      })
+      .catch(error => {
+        console.error('Terjadi kesalahan saat menyimpan data:', error)
+      })
+  }
+  const handleDelete = (taskId, mitraId) => {
+    const data = {
+      taskId,
+      mitraId
+    }
+
+    axios
+      .put(`task/task-honor-mitra-tetap/${props.dataSubKegId}`, data)
+      .then(response => {
+        console.log('Data berhasil dihapus:', response.data)
+
+        const newSavedData = savedData.filter(data => data.taskId !== taskId || data.mitraId !== mitraId)
+        setSavedData(newSavedData)
+      })
+      .catch(error => {
+        console.error('Terjadi kesalahan saat menghapus data:', error)
+      })
+  }
+
   return (
     <>
       {' '}
@@ -1026,6 +1068,57 @@ const TableGroupPerusahaan = props => {
             />
           </Box>
         </Card>
+
+        <Grid container>
+          <Grid item xs={6}>
+            {' '}
+            <Box sx={{ width: '100%', padding: '20px' }}>
+              {rowsGaji.map((row, index) => (
+                <Box key={index} sx={{ display: 'flex', alignItems: 'center', marginBottom: '10px' }}>
+                  <Autocomplete
+                    disablePortal
+                    id={`combo-box-${index}`}
+                    options={optionPCL.sort((a, b) => a.label.localeCompare(b.label))}
+                    getOptionLabel={option => option.label}
+                    sx={{ width: 300, marginRight: '10px' }}
+                    value={row.mitra}
+                    onChange={(event, newValue) => handleInputChange(index, 'mitra', newValue)}
+                    renderInput={params => <TextField {...params} label='Nama Mitra' />}
+                  />
+                  <TextField
+                    id={`outlined-basic-${index}`}
+                    type='number'
+                    label='Honor Tetap'
+                    variant='outlined'
+                    value={row.honor}
+                    onChange={event => handleInputChange(index, 'honor', parseInt(event.target.value))}
+                  />
+                </Box>
+              ))}
+            </Box>
+            <Button variant='contained' color='primary' onClick={handleSave}>
+              Simpan
+            </Button>
+          </Grid>
+          <Grid item xs={6}>
+            <Box>
+              <Typography variant='h6'>Data yang Disimpan</Typography>
+              <List>
+                {savedData.map((data, index) => (
+                  <ListItem key={index} sx={{ display: 'flex', alignItems: 'center' }}>
+                    <ListItemText primary={`Mitra: ${data.mitra.name}, Honor: ${data.honor}`} />
+                    <IconButton edge='end' aria-label='edit'>
+                      <EditIcon />
+                    </IconButton>
+                    <IconButton edge='end' aria-label='delete' onClick={() => handleDelete(data.taskId, data.mitraId)}>
+                      <DeleteIcon />
+                    </IconButton>
+                  </ListItem>
+                ))}
+              </List>
+            </Box>
+          </Grid>
+        </Grid>
       </Grid>{' '}
     </>
   )

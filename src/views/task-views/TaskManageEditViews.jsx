@@ -82,6 +82,19 @@ const TaskManageEditViews = props => {
     kol2: 'nks'
   })
 
+  const top10Films = [
+    { title: 'The Shawshank Redemption', year: 1994 },
+    { title: 'The Godfather', year: 1972 },
+    { title: 'The Godfather: Part II', year: 1974 },
+    { title: 'The Dark Knight', year: 2008 },
+    { title: '12 Angry Men', year: 1957 },
+    { title: "Schindler's List", year: 1993 },
+    { title: 'Pulp Fiction', year: 1994 },
+    { title: 'The Lord of the Rings: The Return of the King', year: 2003 },
+    { title: 'The Good, the Bad and the Ugly', year: 1966 },
+    { title: 'Fight Club', year: 1999 }
+  ]
+
   const dataTemplatePerusahaan = props.dataT.filter(TP => TP.jenisSample === 1)
   const dataTemplateNonPerusahaan = props.dataT.filter(TP => TP.jenisSample === 0)
 
@@ -254,6 +267,10 @@ const TaskManageEditViews = props => {
     {
       id: 70,
       nama: 'Pengolahan-Validasi '
+    },
+    {
+      id: 71,
+      nama: 'Listing'
     },
 
     {
@@ -673,12 +690,17 @@ const TaskManageEditViews = props => {
     })
   )
 
-  const kriteria1P = parseFloat(props.dataKriteriaP.kriteria1)
-  const kriteria2P = parseFloat(props.dataKriteriaP.kriteria2)
+  const kriteria1P = parseFloat(0.1)
+  const kriteria2P = parseFloat(0.9)
+  // const kriteria1P = parseFloat(props.dataKriteriaP.kriteria1)
+  // const kriteria2P = parseFloat(props.dataKriteriaP.kriteria2)
   const arrayBebanPegawai = [kriteria1P, kriteria2P]
 
-  const kriteria1M = parseFloat(props.dataKriteriaM.kriteria1)
-  const kriteria2M = parseFloat(props.dataKriteriaM.kriteria2)
+  // const kriteria1M = parseFloat(props.dataKriteriaM.kriteria1)
+  // const kriteria2M = parseFloat(props.dataKriteriaM.kriteria2)
+
+  const kriteria1M = parseFloat(0.1)
+  const kriteria2M = parseFloat(0.9)
   const arrayBebanMitra = [kriteria1M, kriteria2M]
 
   const [lineTarel, setLineTaRel] = useState({
@@ -932,6 +954,8 @@ const TaskManageEditViews = props => {
                         dataKriteriaM={arrayBebanMitra}
                         dataTemplateKolom={props.dataTK}
                         dataSubKegId={values.subKegId}
+                        dataMitraHonorTetap={props.dataHonorTetap}
+                        dataMitraLimitHonorTetap={props.dataLimitHonorTetap}
                       ></TablePerusahaanTaskDetails>
                     </>
                     // <Button type='submit' variant={'contained'} onClick={handleSimpan} fullWidth>
