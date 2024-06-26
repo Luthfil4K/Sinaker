@@ -1091,7 +1091,7 @@ const RapatDetailViews = props => {
                                   <FolderIcon />
                                 </Avatar>
                               </ListItemAvatar>
-                              <Link href={`http://localhost:3000/uploads/${dok.taskfile}`} target='_blank'>
+                              <Link href={`https://sinaker-tapv.onrender.com/uploads/${dok.taskfile}`} target='_blank'>
                                 {/* <Link
                                 href={`http://localhost:3000/public/uploads/1715757780583-xe9nj6-bab III (2).pdf`}
                                 target='_blank'
