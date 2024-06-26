@@ -332,7 +332,7 @@ const TablePeople = props => {
           <>
             <FormControl fullWidth>
               <InputLabel id='form-layouts-separator-select-label'>role</InputLabel>
-              {params.row.role == 'superAdmin' ? (
+              {params.row.role == 'superAdmin' || params.row.role == 'admin' ? (
                 <Select
                   sx={{ height: 50 }}
                   value={params.row.role}
@@ -351,7 +351,7 @@ const TablePeople = props => {
                   labelId='form-layouts-separator-role-label'
                   onChange={e => handleChangeRole(e, params.row.id, e.target.value)}
                 >
-                  <MenuItem value='superAdmin'>Kepala BPS</MenuItem>
+                  <MenuItem value='pimpinan'>Kepala BPS</MenuItem>
                   <MenuItem value='teamleader'>PJK</MenuItem>
                   <MenuItem value='employee'>Pegawai</MenuItem>
                   <MenuItem value='verifikator'>Verifikator</MenuItem>

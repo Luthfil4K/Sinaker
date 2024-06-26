@@ -16,6 +16,7 @@ import AccountPlusOutline from 'mdi-material-ui/AccountPlusOutline'
 import AlertCircleOutline from 'mdi-material-ui/AlertCircleOutline'
 import GoogleCirclesExtended from 'mdi-material-ui/GoogleCirclesExtended'
 import Rapat from 'mdi-material-ui/CalendarClock'
+import CalendarMonthIcon from '@mui/icons-material/CalendarMonth'
 
 // ** Type import
 import { VerticalNavItemsType } from 'src/@core/layouts/types'
@@ -23,8 +24,8 @@ import { SettingsConsumer } from 'src/@core/context/settingsContext'
 import { useSession } from 'next-auth/react'
 
 const navigation = () => {
-  const [userRole, setUserRole] = useState('')
-  const session = useSession()
+  const [userRole, setUserRole] = useState({})
+  const session = useSession({})
 
   const getUserRole = async () => {
     setUserRole(session?.data?.role)
@@ -39,7 +40,7 @@ const navigation = () => {
   // console.log(userRole)
   // console.log('asdasdasdasdasdsa')
 
-  if (userRole === 'teamleader') {
+  if (userRole === 'teamleader' || userRole === 'pjk') {
     return [
       {
         title: 'Dashboard',
@@ -48,7 +49,7 @@ const navigation = () => {
       },
       {
         title: 'Timeline',
-        icon: CubeOutline,
+        icon: CalendarMonthIcon,
         path: '/timeline'
       },
       {
@@ -68,7 +69,7 @@ const navigation = () => {
         sectionTitle: 'Kegiatan'
       },
       {
-        title: 'Buat Kegiatan',
+        title: 'Tambah Kegiatan',
         icon: CreditCardOutline,
         path: '/create-project'
       },
@@ -136,7 +137,7 @@ const navigation = () => {
 
       {
         title: 'Timeline',
-        icon: CubeOutline,
+        icon: CalendarMonthIcon,
         path: '/timeline'
       },
 
@@ -185,7 +186,7 @@ const navigation = () => {
         path: '/mitra'
       }
     ]
-  } else if (userRole == 'admin') {
+  } else if (userRole == 'admin2') {
     return [
       {
         title: 'Dashboard',
@@ -232,7 +233,7 @@ const navigation = () => {
       // },
       {
         title: 'Timeline',
-        icon: CubeOutline,
+        icon: CalendarMonthIcon,
         path: '/timeline'
       },
       {
@@ -252,7 +253,7 @@ const navigation = () => {
         sectionTitle: 'Kegiatan'
       },
       {
-        title: 'Buat Kegiatan',
+        title: 'Tambah Kegiatan',
         icon: CreditCardOutline,
         path: '/create-project'
       },
@@ -318,11 +319,11 @@ const navigation = () => {
         icon: Account,
         path: '/pegawai'
       },
-      {
-        title: 'Daftar Perusahaan',
-        icon: GoogleCirclesExtended,
-        path: '/perusahaan'
-      },
+      // {
+      //   title: 'Daftar Perusahaan',
+      //   icon: GoogleCirclesExtended,
+      //   path: '/perusahaan'
+      // },
       {
         title: 'Daftar Mitra',
         icon: FormatLetterCase,
@@ -400,7 +401,7 @@ const navigation = () => {
 
       {
         title: 'Timeline',
-        icon: CubeOutline,
+        icon: CalendarMonthIcon,
         path: '/timeline'
       },
 
@@ -457,6 +458,131 @@ const navigation = () => {
         icon: FormatLetterCase,
         path: '/mitra'
       }
+    ]
+  } else if (userRole == 'pimpinan') {
+    return [
+      {
+        title: 'Dashboard',
+        icon: HomeOutline,
+        path: '/'
+      },
+
+      {
+        title: 'Timeline',
+        icon: CalendarMonthIcon,
+        path: '/timeline'
+      },
+
+      {
+        title: 'Daftar Rapat',
+        icon: Rapat,
+        path: '/rapat-ajuan-list'
+      },
+      {
+        sectionTitle: 'Kegiatan'
+      },
+
+      {
+        title: 'List Kegiatan',
+        icon: Table,
+        path: '/project-list'
+      },
+
+      {
+        sectionTitle: 'Pustaka'
+      },
+
+      {
+        title: 'Daftar Pegawai',
+        icon: Account,
+        path: '/pegawai'
+      },
+
+      {
+        title: 'Daftar Mitra',
+        icon: FormatLetterCase,
+        path: '/mitra'
+      }
+    ]
+  } else if (userRole == 'superAdmin') {
+    return [
+      {
+        title: 'Dashboard',
+        icon: HomeOutline,
+        path: '/'
+      },
+
+      {
+        title: 'Timeline',
+        icon: CalendarMonthIcon,
+        path: '/timeline'
+      },
+
+      {
+        title: 'Daftar Rapat',
+        icon: Rapat,
+        path: '/rapat-ajuan-list'
+      },
+      {
+        sectionTitle: 'Kegiatan'
+      },
+
+      {
+        title: 'List Kegiatan',
+        icon: Table,
+        path: '/project-list'
+      },
+
+      {
+        sectionTitle: 'Pustaka'
+      },
+
+      {
+        title: 'Daftar Pegawai',
+        icon: Account,
+        path: '/pegawai'
+      },
+
+      {
+        title: 'Daftar Mitra',
+        icon: FormatLetterCase,
+        path: '/mitra'
+      }
+    ]
+  } else if (userRole == 'admin') {
+    return [
+      {
+        sectionTitle: 'Pustaka'
+      },
+      // {
+      //   title: 'Beban Kerja',
+      //   icon: Elevator,
+      //   path: '/beban-kerja'
+      // },
+      {
+        title: 'Daftar Pegawai',
+        icon: Account,
+        path: '/pegawai'
+      },
+
+      {
+        title: 'Daftar Mitra',
+        icon: FormatLetterCase,
+        path: '/mitra'
+      }
+      // {
+      //   sectionTitle: 'Pengaturan'
+      // },
+      // // {
+      // //   title: 'Pengaturan Bobot Kriteria',
+      // //   icon: FilterSettings,
+      // //   path: '/pengaturan-rekomendasi'
+      // // },
+      // {
+      //   title: 'Table Kegiatan',
+      //   icon: Table,
+      //   path: '/template-table-list'
+      // }
     ]
   }
 }

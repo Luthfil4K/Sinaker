@@ -53,10 +53,6 @@ const StyledBox = styled(Box)(({ theme }) => ({
 }))
 
 const RapatDetailViews = props => {
-  console.log(props.dataUndanganPersetujuan[0].taskfile)
-  console.log(props.dataUndanganPersetujuan[0].taskfile)
-  console.log(props.dataUndanganPersetujuan[0].taskfile)
-  console.log(props.dataUndanganPersetujuan[0].taskfile)
   const styles = {
     tableHeader: {
       border: '1px solid black',
