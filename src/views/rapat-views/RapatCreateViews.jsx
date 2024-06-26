@@ -1083,7 +1083,9 @@ const RapatCreateViews = props => {
                 }}
                 filterSelectedOptions
                 renderTags={(value, getTagProps) =>
-                  value.map((option, index) => <Chip variant='outlined' label={option} {...getTagProps({ index })} />)
+                  value.map((option, index) => (
+                    <Chip key={index} variant='outlined' label={option} {...getTagProps({ index })} />
+                  ))
                 }
                 renderInput={params => (
                   <TextField {...params} variant='outlined' label='Peserta Rapat' placeholder='Tambah Peserta Rapat' />
@@ -1101,7 +1103,7 @@ const RapatCreateViews = props => {
           </Grid>
         </form>
       </Card>
-      <Card mt={300} height={3000}>
+      <Card mt={400} height={4000}>
         <Grid container sx={{ height: 10 }}>
           <Grid mt={1} item xs={9} height={1}>
             <UndanganRapat></UndanganRapat>
