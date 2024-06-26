@@ -624,7 +624,10 @@ const RapatApproveList = props => {
                       : false,
                   uploadPersetujuan:
                     session.status === 'authenticated' &&
-                    (session.data.uid === 1099999 || session.data.role == 'pimpinan')
+                    (session.data.uid === 1099999 ||
+                      session.data.role == 'kepalaBPS' ||
+                      session.data.role == 'pimpinan' ||
+                      session.data.role == 'superAdmin')
                       ? true
                       : false
                 }}
