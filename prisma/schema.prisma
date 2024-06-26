@@ -235,10 +235,11 @@ model Mitra {
 
 model sub_kegiatan_mitra  {
  id                         Int                         @id @default(autoincrement())
- task                       sub_kegiatan                       @relation(fields: [taskId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+ task                       sub_kegiatan                @relation(fields: [taskId], references: [id], onDelete: Cascade, onUpdate: Cascade)
  taskId                     Int
  mitra                      Mitra                       @relation(fields: [mitraId], references: [id], onDelete: Cascade, onUpdate: Cascade)
  mitraId                    Int
+ honor                      Int
 }
 
 model sub_kegiatan_user  {
@@ -335,9 +336,9 @@ model meet {
   statusSendEmail           Int
   user_meet                 user_meet[]
   notulensi_meet            notulensi_meet[]
+  undangan_persetujuan_meet undangan_persetujuan_meet[]
   undangan_file             undangan_file[]
   status                    String                      @db.VarChar(128)
-
 }
 
 model user_meet {
@@ -349,6 +350,13 @@ model user_meet {
 }
 
 model notulensi_meet {
+  id                        Int                         @id @default(autoincrement())
+  taskfile                  String?                     @db.VarChar(255)
+  meet                      meet                        @relation(fields: [meetId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  meetId                    Int
+}
+
+model undangan_persetujuan_meet {
   id                        Int                         @id @default(autoincrement())
   taskfile                  String?                     @db.VarChar(255)
   meet                      meet                        @relation(fields: [meetId], references: [id], onDelete: Cascade, onUpdate: Cascade)
