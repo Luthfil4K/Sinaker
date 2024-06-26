@@ -94,6 +94,37 @@ const TaskManageAddViews = propss => {
     subKegGajiPerPerusahaan: 0
   })
 
+  const [fieldFilled, setFieldFilled] = useState({})
+  const [isiAll, setIsiAll] = useState('0')
+
+  useEffect(() => {
+    setFieldFilled({
+      ...fieldFilled,
+      fieldNama: values.subKegNama,
+      fieldDateS: new Date(values.subKegStart).getMonth(),
+      fieldDateE: new Date(values.subKegDl).getMonth(),
+      fieldJenisKeg: values.subKegJenis,
+      fieldUnitTarget: values.subKegUnitTarget
+    })
+  }, [values])
+
+  console.log(fieldFilled)
+
+  useEffect(() => {
+    const allFilled = Object.values(fieldFilled).every(
+      value =>
+        (typeof value === 'string' && value.trim() !== '') ||
+        (Array.isArray(value) && value.length != 0) ||
+        (typeof value === 'number' && value !== null)
+    )
+    console.log('allFilled')
+    console.log('allFilled')
+    console.log('allFilled')
+    console.log(allFilled)
+    console.log(allFilled)
+    console.log(allFilled)
+    setIsiAll(allFilled ? '1' : '0')
+  }, [fieldFilled])
   const kriteria1M = parseFloat(bobotMitra.kriteria1)
   const kriteria2M = parseFloat(bobotMitra.kriteria2)
   const kriteria3M = parseFloat(bobotMitra.kriteria3)
@@ -348,62 +379,71 @@ const TaskManageAddViews = propss => {
 
     try {
       while (true) {
-        const res = await axios.post('/task/task-add', {
-          title: values.subKegNama,
-          jenisKeg: values.subKegJenis,
-          targetTotal: parseInt(values.subKegTarget),
-          startDate: new Date(selectedDateS),
-          deadLaneAwal: new Date(selectedDateE),
-          unitTarget: values.subKegUnitTarget,
-          duedate: new Date(values.subKegDl),
-          bulan: new Date(values.subKegDl).getMonth(),
-          jenisSample: values.subKegJenis == 65 || values.subKegJenis == 67 ? values.subKegJenisSample : 0,
-          participants: data,
-          fungsi: fungsi,
-          peserta: dataPCL,
-          arrayUser: arrayUser,
-          arrayMitra: arrayMitra,
-          arrayUserId: arrayUserId,
-          arrayMitraId: arrayMitraId,
-          arrayBebanPegawai: arrayBebanPegawai,
-          arrayBebanMitra: arrayBebanMitra,
-          persertaOrganik: pegawaiOrganik,
-          description: values.subKegDesk,
-          realisasi: 0,
-          month: parseInt(values.subKegMonth),
-          year: parseInt(values.subKegYear),
-          projectId: project.id,
-          userId: values.subKegUserId,
-          notes: '-',
-          gaji: values.subKegJenisSample == 1 ? parseInt(values.subKegGajiPerPerusahaan) : 0,
-          templateTable: values.templateTable,
-          kolomLP: kolomLP,
-          importStatus: 1
-        })
+        if (isiAll == '1' || isiAll == '0') {
+          const res = await axios.post('/task/task-add', {
+            title: values.subKegNama,
+            jenisKeg: values.subKegJenis,
+            targetTotal: parseInt(values.subKegTarget),
+            startDate: new Date(selectedDateS),
+            deadLaneAwal: new Date(selectedDateE),
+            unitTarget: values.subKegUnitTarget,
+            duedate: new Date(values.subKegDl),
+            bulan: new Date(values.subKegDl).getMonth(),
+            jenisSample: values.subKegJenis == 65 || values.subKegJenis == 67 ? values.subKegJenisSample : 0,
+            participants: data,
+            fungsi: fungsi,
+            peserta: dataPCL,
+            arrayUser: arrayUser,
+            arrayMitra: arrayMitra,
+            arrayUserId: arrayUserId,
+            arrayMitraId: arrayMitraId,
+            arrayBebanPegawai: arrayBebanPegawai,
+            arrayBebanMitra: arrayBebanMitra,
+            persertaOrganik: pegawaiOrganik,
+            description: values.subKegDesk,
+            realisasi: 0,
+            month: parseInt(values.subKegMonth),
+            year: parseInt(values.subKegYear),
+            projectId: project.id,
+            userId: values.subKegUserId,
+            notes: '-',
+            gaji: values.subKegJenisSample == 1 ? parseInt(values.subKegGajiPerPerusahaan) : 0,
+            templateTable: values.templateTable,
+            kolomLP: kolomLP,
+            importStatus: 1
+          })
 
-        if (res.status === 201) {
+          if (res.status === 201) {
+            Swal.fire({
+              title: 'Tambah Sub Kegiatan Berhasil',
+              text: '',
+              icon: 'success',
+              confirmButtonColor: '#68B92E',
+              confirmButtonText: 'OK'
+            }).then(router.push(`/project-detail/${values.subKegProjectId}`))
+
+            setValues({
+              subKegNama: '',
+              subKegJenis: '',
+              subKegTarget: '',
+              subKegUnitTarget: '',
+              subKegDl: '',
+              subKegDesk: '',
+              subKegProjectId: project.id,
+              subKegUserId: project.projectLeaderId,
+              subKegMonth: '',
+              subKegYear: ''
+            })
+          }
+        } else {
           Swal.fire({
-            title: 'Tambah Sub Kegiatan Berhasil',
-            text: '',
-            icon: 'success',
-            confirmButtonColor: '#68B92E',
+            title: 'Form belum lengkap',
+            text: 'Pastikan semua field telah terisi',
+            icon: 'warning',
+            confirmButtonColor: 'warning.main',
             confirmButtonText: 'OK'
-          }).then(router.push(`/project-detail/${values.subKegProjectId}`))
-
-          setValues({
-            subKegNama: '',
-            subKegJenis: '',
-            subKegTarget: '',
-            subKegUnitTarget: '',
-            subKegDl: '',
-            subKegDesk: '',
-            subKegProjectId: project.id,
-            subKegUserId: project.projectLeaderId,
-            subKegMonth: '',
-            subKegYear: ''
           })
         }
-
         break
       }
     } catch (error) {
@@ -1247,8 +1287,8 @@ const TaskManageAddViews = propss => {
 
     setKolomLP(kolomLP => ({
       ...kolomLP,
-      kol1: camelCase(findKolomLV[0].kolomTable), //kol1
-      kol2: camelCase(findKolomLV[1].kolomTable) // kol2
+      kol1: camelCase(findKolomLV[0] ? findKolomLV[0].kolomTable : ''), //kol1
+      kol2: camelCase(findKolomLV[1] ? findKolomLV[1].kolomTable : '') // kol2
     }))
   }, [values.templateTable])
 
@@ -1543,7 +1583,7 @@ const TaskManageAddViews = propss => {
                   </Grid>
                 </>
               )}
-            {session.status === 'authenticated' &&
+            {/* {session.status === 'authenticated' &&
               (session.data.uid === 9988 || values.subKegJenis === 65 || values.subKegJenis === 67) && (
                 <>
                   <Grid item md={6} xs={12}>
@@ -1591,7 +1631,7 @@ const TaskManageAddViews = propss => {
                       </Grid>
                     </Grid>
                   </Grid>
-                  {/* <Grid item md={6} xs={12}>
+                 <Grid item md={6} xs={12}>
                     <Typography variant={'h6'} mb={4}>
                       Tim Kerja
                     </Typography>
@@ -1616,7 +1656,7 @@ const TaskManageAddViews = propss => {
                         ))}
                       </Select>
                     </FormControl>
-                  </Grid> */}
+                  </Grid> 
                   <Grid item md={12} xs={12}>
                     <Typography variant={'h6'} mb={4}></Typography>
                   </Grid>
@@ -1657,7 +1697,7 @@ const TaskManageAddViews = propss => {
                     </Grid>
                   </Grid>
                 </>
-              )}
+              )} */}
           </Grid>
 
           {/* <TableAddParticipant></TableAddParticipant> */}
