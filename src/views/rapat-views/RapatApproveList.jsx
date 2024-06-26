@@ -505,7 +505,7 @@ const RapatApproveList = props => {
         params.row.undanganPersetujuan.length > 0 ? (
           params.row.undanganPersetujuan[0] ? (
             <>
-              <Link href={`http://localhost:3000/upload${params.row.undanganPersetujuan[0].taskfile}`} target='_blank'>
+              <Link href={`https://sinaker-tapv.onrender.com/upload/${params.row.undanganPersetujuan[0].taskfile}`} target='_blank'>
                 <Typography sx={{ textDecoration: 'underline' }}>
                   {params.row.undanganPersetujuan[0].taskfile}
                 </Typography>
