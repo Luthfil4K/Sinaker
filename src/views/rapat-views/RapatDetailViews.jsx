@@ -1091,12 +1091,19 @@ const RapatDetailViews = props => {
                                   <FolderIcon />
                                 </Avatar>
                               </ListItemAvatar>
-                              <Link href={`https://sinaker-tapv.onrender.com/uploads/${dok.taskfile}`} target='_blank'>
+                              {/* <Link href={`https://sinaker-tapv.onrender.com/uploads/${dok.taskfile}`} target='_blank'>
                                 {/* <Link
                                 href={`http://localhost:3000/public/uploads/1715757780583-xe9nj6-bab III (2).pdf`}
                                 target='_blank'
-                              > */}
+                              > 
 
+                                <ListItemText sx={{ textDecoration: 'underline' }} primary={dok.taskfile} />
+                              </Link> */}
+                              <Link
+                                href={`https://sinaker-tapv.onrender.com/uploads/${dok.taskfile}`}
+                                target='_blank'
+                                download
+                              >
                                 <ListItemText sx={{ textDecoration: 'underline' }} primary={dok.taskfile} />
                               </Link>
                               {/* <Button onClick={handleDownloadDokumen('1715757780583-xe9nj6-bab III (2).pdf')}>
