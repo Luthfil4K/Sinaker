@@ -18,7 +18,7 @@ export default async function handler(req, res) {
 
     const upload = multer({
       storage: multer.diskStorage({
-        destination: './public/uploads/persetujuan',
+        destination: './public/upload',
         filename: (req, file, cb) => {
           cb(null, `${b}${file.originalname}`)
         }

@@ -7,7 +7,7 @@ import prisma from '../../../services/db'
 
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
-    cb(null, './public/uploads/')
+    cb(null, './public/upload/')
   },
   filename: (req, file, cb) => {
     const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1e9)
@@ -89,7 +89,7 @@ apiRoute.post(async (req, res) => {
     const savedFile = await prisma.undangan_file.create({
       data: {
         filename: file.originalname,
-        path: path.join('uploads/', file.filename), // Path relative to the public directory
+        path: path.join('upload/', file.filename), // Path relative to the public directory
         meetId: rapat.id
       }
     })

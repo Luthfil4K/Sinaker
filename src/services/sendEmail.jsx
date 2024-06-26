@@ -28,7 +28,7 @@ const sendMailMeetCreated = async payload => {
     attachments: [
       {
         filename: `${payload.undanganNama}`,
-        path: `${process.env.BASE_URL}/uploads/persetujuan/${correctedUrl}`,
+        path: `${process.env.BASE_URL}/upload${correctedUrl}`,
         cid: 'simantan228@gmail.com'
       }
     ]

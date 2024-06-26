@@ -980,7 +980,7 @@ const RapatDetailViews = props => {
                         props.dataUndanganPersetujuan[0] ? (
                           <>
                             <Link
-                              href={`http://localhost:3000/uploads/persetujuan/${props.dataUndanganPersetujuan[0].taskfile}`}
+                              href={`http://localhost:3000/upload/${props.dataUndanganPersetujuan[0].taskfile}`}
                               target='_blank'
                             >
                               <Typography sx={{ textDecoration: 'underline' }}>
@@ -1100,7 +1100,7 @@ const RapatDetailViews = props => {
                                 <ListItemText sx={{ textDecoration: 'underline' }} primary={dok.taskfile} />
                               </Link> */}
                               <Link
-                                href={`https://sinaker-tapv.onrender.com/uploads/${dok.taskfile}`}
+                                href={`https://sinaker-tapv.onrender.com/upload/${dok.taskfile}`}
                                 target='_blank'
                                 download
                               >

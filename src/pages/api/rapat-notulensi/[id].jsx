@@ -5,10 +5,10 @@ import { NextApiRequest, NextApiResponse } from 'next'
 import nextConnect from 'next-connect'
 import prisma from '../../../services/db'
 
-let b = `${new Date().getTime()}-${Math.random().toString(36).substring(7)}-`
+let b = `${new Date().getFullYear()}-${new Date().getMonth()}-${new Date().getDay()}`
 const upload = multer({
   storage: multer.diskStorage({
-    destination: './public/uploads',
+    destination: './public/upload',
     filename: (req, file, cb) => {
       cb(null, `${b}${file.originalname}`)
     }
