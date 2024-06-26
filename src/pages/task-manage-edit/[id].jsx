@@ -174,12 +174,12 @@ export async function getServerSideProps(context) {
     }
   })
 
-  const nowMonth = new Date().getMonth() + 1 // Mendapatkan bulan saat ini (mulai dari 1 untuk Januari)
+  const nowMonth = new Date().getMonth() // Mendapatkan bulan saat ini (mulai dari 1 untuk Januari)
 
   const limitHonorTetap = await prisma.sub_kegiatan_mitra.findMany({
     where: {
       task: {
-        month: nowMonth - 1 // Mencocokkan bulan saat ini dengan kolom bulan
+        month: nowMonth // Mencocokkan bulan saat ini dengan kolom bulan
       }
     },
     select: {

@@ -30,7 +30,7 @@ import ChevronDown from 'mdi-material-ui/ChevronDown'
 
 const MitraDetailGajiViews = props => {
   const [selectedYear, setSelectedYear] = useState(2024)
-  console.log(props.dataKolom)
+  console.log(props.dataHonorTetap)
 
   const [totalGajiTahun, setTotalGajiTahun] = useState(0)
 
@@ -92,6 +92,13 @@ const MitraDetailGajiViews = props => {
     const updatedBulanData = []
     const honorTahunIni = []
     for (let bulan = 0; bulan < 12; bulan++) {
+      const HonorTetapBulan = props.dataHonorTetap
+        .filter(data => {
+          const tppDueDate = new Date(data.task.duedate)
+          return tppDueDate.getMonth() === bulan && tppDueDate.getFullYear() === selectedYear
+        })
+        .reduce((totalGaji, data) => totalGaji + data.honor, 0)
+
       const totalGajiBulanPCL = tpp
         .filter(tppRow => tppRow.pclId === values.id)
         .filter(tppRow => {
@@ -107,7 +114,7 @@ const MitraDetailGajiViews = props => {
           return tppDueDate.getMonth() === bulan && tppDueDate.getFullYear() === selectedYear
         })
         .reduce((totalGaji, tppRow) => totalGaji + tppRow.gajiPml, 0)
-      const totalGajiBulan = totalGajiBulanPCL + totalGajiBulanPML
+      const totalGajiBulan = totalGajiBulanPCL + totalGajiBulanPML + HonorTetapBulan
 
       const subKeg = tpp
         .filter(tppRow => tppRow.pclId === values.id || tppRow.pmlId === values.id)
@@ -141,10 +148,12 @@ const MitraDetailGajiViews = props => {
               nama: data.task.title,
               taskId: data.taskId,
               taskTotalGaji: gajiType === 'PCL' ? data.gajiPcl : data.gajiPml,
+              honorTetap: 0,
               listPerusahaan: [
                 {
                   kol1: data.kol1,
                   kol2: data.kol2,
+
                   labelKol: data.templateTable
                 }
               ],
@@ -159,12 +168,17 @@ const MitraDetailGajiViews = props => {
 
           return uniqueItems
         }, [])
+      props.dataHonorTetap.forEach(honorItem => {
+        const matchingTask = subKeg.find(task => task.taskId === honorItem.taskId)
+        if (matchingTask) {
+          matchingTask.taskTotalGaji += honorItem.honor
+          matchingTask.honorTetap += honorItem.honor // Add honor to honorTetap
+        }
+      })
       updatedBulanData.push({ totalGajiBulan, subKeg })
       honorTahunIni.push(totalGajiBulan)
     }
-    console.log(honorTahunIni)
-    console.log('honorTahunIni')
-    setBulanData(updatedBulanData)
+    ;-setBulanData(updatedBulanData)
     setTotalGajiTahun(honorTahunIni.reduce((a, b) => a + b, 0))
   }, [selectedYear])
 
@@ -187,7 +201,7 @@ const MitraDetailGajiViews = props => {
             </Typography>
             <Typography textAlign={'end'} variant={'body1'}>
               Total Honor Bulan :{' '}
-              <span style={{ fontWeight: 500, color: `${totalGaji < 3000000 ? '#804BDF' : '#FF6166'}` }}>
+              <span style={{ fontWeight: 500, color: `${totalGaji < 4000000 ? '#804BDF' : '#FF6166'}` }}>
                 {' '}
                 Rp{totalGaji.toLocaleString('id-ID')}
               </span>
@@ -220,9 +234,9 @@ const MitraDetailGajiViews = props => {
                           </Link>
                           : Rp
                           {subKeg.taskTotalGaji.toLocaleString('id-ID')}
-                        </Typography>
-                        <Typography display={'inline'} variant={'body2'}></Typography>
-
+                        </Typography>{' '}
+                        <br></br>
+                        <Typography variant={'body2'}></Typography>
                         <IconButton size='small' onClick={() => handleClick(index)}>
                           {collapseStates[index] ? (
                             <ChevronUp sx={{ fontSize: '1.875rem' }} />
@@ -234,14 +248,19 @@ const MitraDetailGajiViews = props => {
                     </CardActions>
                     <Collapse in={collapseStates[index]}>
                       <CardContent>
+                        <Typography variant={'caption'}>
+                          {subKeg.honorTetap != 0 ? ` Honor Tetap: Rp${subKeg.honorTetap.toLocaleString('id-ID')}` : ``}
+                        </Typography>
+
                         {subKeg.listPerusahaan.map((perusahaan, index) => (
                           <div key={index}>
                             <Typography variant={'caption'}>
                               {/* {props.dataKolom.filter(tppRow => {
                                 tppRow.templateTableId = perusahaan.labelKolom
-                                console.log(tppRow.kolomTable)
+                                -
                                 return tppRow.kolomTable
                               })}{' '} */}
+
                               {props.dataKolom.find(item => item.templateTableId == perusahaan.labelKol)?.kolomTable}
                               {': '}
                               {perusahaan.kol1}
@@ -252,7 +271,6 @@ const MitraDetailGajiViews = props => {
                               Honor ({subKeg.gajiPerusahaan[index].type}): Rp
                               {subKeg.gajiPerusahaan[index].value.toLocaleString('id-ID')}
                             </Typography>
-                            <br />
                             <br />
                           </div>
                         ))}

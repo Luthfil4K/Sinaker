@@ -19,6 +19,7 @@ import Typography from '@mui/material/Typography'
 import CancelIcon from '@mui/icons-material/Close'
 import TextField from '@mui/material/TextField'
 import { List, ListItem, ListItemText, IconButton } from '@mui/material'
+import Divider from '@mui/material/Divider'
 
 // topsis
 import { create, all } from 'mathjs'
@@ -324,7 +325,7 @@ const TableGroupPerusahaan = props => {
           })
 
           .catch(err => {
-            Swal.fire('Error', 'Something went wrong. Please try again.', 'error')
+            Swal.fire('Error', 'Something went wrong. Please try again.', 'warning')
           })
       } else if (
         /* Read more about handling dismissals below */
@@ -965,18 +966,48 @@ const TableGroupPerusahaan = props => {
       taskId,
       mitraId
     }
+    Swal.fire({
+      title: '',
+      text: 'Hapus mitra dari kegiatan?',
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#68B92E',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Hapus',
+      cancelButtonText: 'Batal',
+      reverseButtons: true
+    }).then(result => {
+      if (result.isConfirmed) {
+        axios
+          .put(`task/task-honor-mitra-tetap/${props.dataSubKegId}`, data)
+          .then(res => {
+            Swal.fire('Berhasil terhapus', 'success')
 
-    axios
-      .put(`task/task-honor-mitra-tetap/${props.dataSubKegId}`, data)
-      .then(response => {
-        console.log('Data berhasil dihapus:', response.data)
+            const newSavedData = savedData.filter(data => data.taskId !== taskId || data.mitraId !== mitraId)
+            setSavedData(newSavedData)
+          })
+          .catch(err => {
+            Swal.fire('Error', 'Something went wrong. Please try again.', 'error')
+          })
+      } else if (
+        /* Read more about handling dismissals below */
+        result.dismiss === Swal.DismissReason.cancel
+      ) {
+        Swal.fire('Cancelled!', ' Press "OK" to continue.', 'warning')
+      }
+    })
 
-        const newSavedData = savedData.filter(data => data.taskId !== taskId || data.mitraId !== mitraId)
-        setSavedData(newSavedData)
-      })
-      .catch(error => {
-        console.error('Terjadi kesalahan saat menghapus data:', error)
-      })
+    // axios
+    //   .put(`task/task-honor-mitra-tetap/${props.dataSubKegId}`, data)
+    //   .then(response => {
+    //     console.log('Data berhasil dihapus:', response.data)
+
+    //     const newSavedData = savedData.filter(data => data.taskId !== taskId || data.mitraId !== mitraId)
+    //     setSavedData(newSavedData)
+    //   })
+    //   .catch(error => {
+    //     console.error('Terjadi kesalahan saat menghapus data:', error)
+    //   })
   }
 
   return (
@@ -1069,56 +1100,63 @@ const TableGroupPerusahaan = props => {
           </Box>
         </Card>
 
-        <Grid container>
-          <Grid item xs={6}>
-            {' '}
-            <Box sx={{ width: '100%', padding: '20px' }}>
-              {rowsGaji.map((row, index) => (
-                <Box key={index} sx={{ display: 'flex', alignItems: 'center', marginBottom: '10px' }}>
-                  <Autocomplete
-                    disablePortal
-                    id={`combo-box-${index}`}
-                    options={optionPCL.sort((a, b) => a.label.localeCompare(b.label))}
-                    getOptionLabel={option => option.label}
-                    sx={{ width: 300, marginRight: '10px' }}
-                    value={row.mitra}
-                    onChange={(event, newValue) => handleInputChange(index, 'mitra', newValue)}
-                    renderInput={params => <TextField {...params} label='Nama Mitra' />}
-                  />
-                  <TextField
-                    id={`outlined-basic-${index}`}
-                    type='number'
-                    label='Honor Tetap'
-                    variant='outlined'
-                    value={row.honor}
-                    onChange={event => handleInputChange(index, 'honor', parseInt(event.target.value))}
-                  />
-                </Box>
-              ))}
-            </Box>
-            <Button variant='contained' color='primary' onClick={handleSave}>
-              Simpan
-            </Button>
-          </Grid>
-          <Grid item xs={6}>
-            <Box>
-              <Typography variant='h6'>Data yang Disimpan</Typography>
-              <List>
-                {savedData.map((data, index) => (
-                  <ListItem key={index} sx={{ display: 'flex', alignItems: 'center' }}>
-                    <ListItemText primary={`Mitra: ${data.mitra.name}, Honor: ${data.honor}`} />
-                    <IconButton edge='end' aria-label='edit'>
-                      <EditIcon />
-                    </IconButton>
-                    <IconButton edge='end' aria-label='delete' onClick={() => handleDelete(data.taskId, data.mitraId)}>
-                      <DeleteIcon />
-                    </IconButton>
-                  </ListItem>
+        <Card sx={{ marginTop: 10, padding: 3 }}>
+          <Grid container>
+            <Grid item xs={6}>
+              {' '}
+              <Box sx={{ width: '100%', padding: '20px', height: '320px', overflowY: 'scroll' }}>
+                {rowsGaji.map((row, index) => (
+                  <Box key={index} sx={{ display: 'flex', alignItems: 'center', marginBottom: '10px' }}>
+                    <Autocomplete
+                      disablePortal
+                      id={`combo-box-${index}`}
+                      options={optionPCL.sort((a, b) => a.label.localeCompare(b.label))}
+                      getOptionLabel={option => option.label}
+                      sx={{ width: 300, marginRight: '10px' }}
+                      value={row.mitra}
+                      onChange={(event, newValue) => handleInputChange(index, 'mitra', newValue)}
+                      renderInput={params => <TextField {...params} label='Nama Mitra' />}
+                    />
+                    <TextField
+                      id={`outlined-basic-${index}`}
+                      type='number'
+                      label='Honor Tetap'
+                      variant='outlined'
+                      value={row.honor}
+                      onChange={event => handleInputChange(index, 'honor', parseInt(event.target.value))}
+                    />
+                  </Box>
                 ))}
-              </List>
-            </Box>
+              </Box>
+              <Divider />
+              <Button variant='contained' color='primary' onClick={handleSave}>
+                Simpan
+              </Button>
+            </Grid>
+            <Grid item xs={6}>
+              <Box sx={{ width: '100%', height: '320px', overflowY: 'scroll' }}>
+                <Typography variant='h6'>Daftar Mitra Kegiatan </Typography>
+                <List>
+                  {savedData.map((data, index) => (
+                    <ListItem key={index} sx={{ display: 'flex', alignItems: 'center' }}>
+                      <ListItemText
+                        primary={`Mitra: ${data.mitra.name}, Honor: Rp${data.honor.toLocaleString('id-ID')}`}
+                      />
+
+                      <IconButton
+                        edge='end'
+                        aria-label='delete'
+                        onClick={() => handleDelete(data.taskId, data.mitraId)}
+                      >
+                        <DeleteIcon />
+                      </IconButton>
+                    </ListItem>
+                  ))}
+                </List>
+              </Box>
+            </Grid>
           </Grid>
-        </Grid>
+        </Card>
       </Grid>{' '}
     </>
   )

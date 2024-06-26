@@ -55,6 +55,50 @@ const TableMitra = props => {
   const session = useSession()
 
   const rows = mitra.map(row => {
+    let honorTetapBulanIni = 0
+    let honorTetapBulanLalu = 0
+    let honorTetapBulanDepan = 0
+
+    if (props.dataMitraHonorTetap && props.dataMitraHonorTetap.length > 0) {
+      const HonorTetapBulan = props.dataMitraHonorTetap
+        .filter(tppRow => tppRow.mitraId === row.id)
+        .filter(data => {
+          const tppDueDate = new Date(data.task.duedate)
+          const currentDate = new Date()
+          return (
+            tppDueDate.getFullYear() === currentDate.getFullYear() && tppDueDate.getMonth() === currentDate.getMonth()
+          )
+        })
+        .reduce((totalGaji, data) => totalGaji + data.honor, 0)
+      const honorLalu = props.dataMitraHonorTetap
+        .filter(tppRow => tppRow.mitraId === row.id)
+        .filter(data => {
+          const tppDueDate = new Date(data.task.duedate)
+          const currentDate = new Date()
+          return currentDate.getMonth != 0
+            ? tppDueDate.getFullYear() === currentDate.getFullYear() &&
+                tppDueDate.getMonth() === currentDate.getMonth() - 1
+            : tppDueDate.getFullYear() === currentDate.getFullYear() - 1 && tppDueDate.getMonth() === 12
+        })
+        .reduce((totalGaji, data) => totalGaji + data.honor, 0)
+
+      const honorDepan = props.dataMitraHonorTetap
+        .filter(tppRow => tppRow.mitraId === row.id)
+        .filter(data => {
+          const tppDueDate = new Date(data.task.duedate)
+          const currentDate = new Date()
+          return currentDate.getMonth != 11
+            ? tppDueDate.getFullYear() === currentDate.getFullYear() &&
+                tppDueDate.getMonth() === currentDate.getMonth() + 1
+            : tppDueDate.getFullYear() === currentDate.getFullYear() + 1 && tppDueDate.getMonth() === 0
+        })
+        .reduce((totalGaji, data) => totalGaji + data.honor, 0)
+
+      honorTetapBulanIni += HonorTetapBulan // Tambahkan HonorTetapBulanIni ke gajiBulanIni
+      honorTetapBulanLalu += honorLalu // Tambahkan HonorTetapBulanIni ke gajiBulanIni
+      honorTetapBulanDepan += honorDepan // Tambahkan HonorTetapBulanIni ke gajiBulanIni
+    }
+
     const gajiBulanIniPCL = tpp
       .filter(tppRow => tppRow.pclId === row.id)
       .filter(tppRow => {
@@ -78,7 +122,7 @@ const TableMitra = props => {
       .reduce((totalGaji, tppRow) => totalGaji + tppRow.gajiPml, 0)
 
     // Gabungkan total gaji dari kedua kasus
-    const gajiBulanIni = gajiBulanIniPCL + gajiBulanIniPML
+    const gajiBulanIni = gajiBulanIniPCL + gajiBulanIniPML + honorTetapBulanIni
 
     const gajiBulanSblmPCL = tpp
       .filter(tppRow => tppRow.pclId === row.id)
@@ -103,7 +147,7 @@ const TableMitra = props => {
           : tppDueDate.getFullYear() === currentDate.getFullYear() - 1 && tppDueDate.getMonth() === 12
       })
       .reduce((totalGaji, tppRow) => totalGaji + tppRow.gajiPcl, 0)
-    const gajiBulanSblm = gajiBulanSblmPML + gajiBulanSblmPCL
+    const gajiBulanSblm = gajiBulanSblmPML + gajiBulanSblmPCL + honorTetapBulanLalu
 
     const gajiBulanDepanPCL = tpp
       .filter(tppRow => tppRow.pclId === row.id)
@@ -129,7 +173,7 @@ const TableMitra = props => {
       })
       .reduce((totalGaji, tppRow) => totalGaji + tppRow.gajiPcl, 0)
 
-    const gajiBulanDepan = gajiBulanDepanPCL + gajiBulanDepanPML
+    const gajiBulanDepan = gajiBulanDepanPCL + gajiBulanDepanPML + honorTetapBulanDepan
 
     const bebanKerja = row.beban_kerja_mitra.length == mitra.length ? row.beban_kerja_mitra[0].bebanKerja : 0
     const nilaiBebanKerja = Number(bebanKerja).toFixed(2)

@@ -34,7 +34,7 @@ const MitraListViews = props => {
         {/* <Typography>{gaji.toLocaleString('id-ID', { currency: 'IDR' })}</Typography> */}
         <Grid item md={12} xs={12}>
           <Box sx={{ width: '100%' }}>
-            <TableMitra data={mitra} dataTpp={tpp}></TableMitra>
+            <TableMitra dataMitraHonorTetap={props.dataHonorTetap} data={mitra} dataTpp={tpp}></TableMitra>
           </Box>
         </Grid>
       </Grid>

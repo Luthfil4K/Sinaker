@@ -11,6 +11,7 @@ const Mitra = ({ data }) => {
         dataKolom={mitra.templateKolom}
         data={mitra.mitra}
         dataTpp={mitra.perusahaanTask}
+        dataHonorTetap={mitra.honorTetap}
       ></MitraDetailGajiViews>
     </>
   )
@@ -47,13 +48,30 @@ export async function getServerSideProps(context) {
     }
   })
 
+  const honorTetap = await prisma.sub_kegiatan_mitra.findMany({
+    where: {
+      mitraId: parseInt(context.params.id)
+    },
+    select: {
+      task: {
+        select: {
+          duedate: true
+        }
+      },
+      honor: true,
+      taskId: true,
+      mitraId: true
+    }
+  })
+
   const template = await prisma.template_table.findMany({})
   const templateKolom = await prisma.template_table_kolom.findMany({})
   const data = {
     perusahaanTask,
     mitra,
     template,
-    templateKolom
+    templateKolom,
+    honorTetap
   }
 
   return {
