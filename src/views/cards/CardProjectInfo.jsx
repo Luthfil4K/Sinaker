@@ -386,8 +386,9 @@ const CardProjectDetail = props => {
                   display={'flex'}
                   // bgcolor={'secondary.light'}
                 >
-                  {project.UserProject_member.map(projek => (
+                  {project.UserProject_member.map((projek, index) => (
                     <Grid
+                      key={index}
                       item
                       md={3}
                       xs={6}
@@ -431,6 +432,7 @@ const CardProjectDetail = props => {
                         router.push(`/task-manage-add/${project.id}`)
                       }}
                       variant={'contained'}
+                      disabled={arrId.includes(session.data.uid) ? false : true}
                     >
                       Tambah Sub Kegiatan
                     </Button>

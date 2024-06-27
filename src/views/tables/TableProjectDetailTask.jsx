@@ -14,7 +14,7 @@ import * as React from 'react'
 import { DataGrid } from '@mui/x-data-grid'
 import { useState } from 'react'
 import Swal from 'sweetalert2'
-
+import { useSession } from 'next-auth/react'
 // icon
 import PencilOutline from 'mdi-material-ui/PencilOutline'
 import DeleteOutline from 'mdi-material-ui/DeleteOutline'
@@ -84,7 +84,9 @@ const statusObj = {
 }
 const TableProjectDetailTask = props => {
   const router = useRouter()
+  const session = useSession()
   const [subkeg, setSubKeg] = useState(props.data)
+  const [arrId, setArrId] = useState(props.dataArrayIdProjectMember)
 
   const rows = subkeg.map(row => ({
     id: row.id,
@@ -227,6 +229,7 @@ const TableProjectDetailTask = props => {
           </Link>
 
           <Button
+            disabled={session.data ? (arrId.includes(session.data.uid) ? false : true) : false}
             onClick={() => {
               Swal.fire({
                 title: 'Hapus Sub Kegiatan?',
