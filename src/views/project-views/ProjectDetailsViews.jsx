@@ -108,64 +108,71 @@ const ProjectDetailsViews = props => {
       }
     })
   }
-  return (
-    <>
-      <Grid container spacing={4}>
-        <Grid item xs={12} md={8}>
-          <CardProjectInfo dataArrayIdProjectMember={arridForpass} data={project}></CardProjectInfo>
-        </Grid>
-        <Grid item xs={12} md={4}>
-          <CardProjectDetailProgress
-            dataArrayIdProjectMember={arridForpass}
-            data={project.Task}
-          ></CardProjectDetailProgress>
-        </Grid>
-        <Grid item xs={12} md={12}>
-          <TableProjectDetailTask dataArrayIdProjectMember={arridForpass} data={project.Task}></TableProjectDetailTask>
-        </Grid>
-      </Grid>
-      {/* {session.status === 'authenticated' && (arrId.includes(session.data.uid) || session.data.uid === 1099999) && ( */}
-      {session.status === 'authenticated' &&
-        (session.data.role == 'teamleader' || session.data.role == 'pjk' || session.data.role == 'admin') && (
-          <>
-            <Grid mt={2} container>
-              <Grid item md={12} display={'flex'} justifyContent={'end'} flexDirection={'row'}>
-                <Button
-                  onClick={e => {
-                    router.push(`/project-edit/${project.id}`)
-                  }}
-                  size='medium'
-                  variant={'contained'}
-                  sx={{ margin: 2 }}
-                  disabled={arrId.includes(session.data.uid) ? false : true}
-                >
-                  Edit
-                </Button>
+  return session
+    ? session.status === 'authenticated' && (
+        <>
+          <Grid container spacing={4}>
+            <Grid item xs={12} md={8}>
+              <CardProjectInfo dataArrayIdProjectMember={arridForpass} data={project}></CardProjectInfo>
+            </Grid>
+            <Grid item xs={12} md={4}>
+              <CardProjectDetailProgress
+                dataArrayIdProjectMember={arridForpass}
+                data={project.Task}
+              ></CardProjectDetailProgress>
+            </Grid>
+            <Grid item xs={12} md={12}>
+              <TableProjectDetailTask
+                dataArrayIdProjectMember={arridForpass}
+                data={project.Task}
+              ></TableProjectDetailTask>
+            </Grid>
+          </Grid>
+          {/* {session.status === 'authenticated' && (arrId.includes(session.data.uid) || session.data.uid === 1099999) && ( */}
+          {session.status === 'authenticated' &&
+            (session.data.role == 'teamleader' || session.data.role == 'pjk' || session.data.role == 'admin') && (
+              <>
+                <Grid mt={2} container>
+                  <Grid item md={12} display={'flex'} justifyContent={'end'} flexDirection={'row'}>
+                    <Button
+                      onClick={e => {
+                        router.push(`/project-edit/${project.id}`)
+                      }}
+                      size='medium'
+                      variant={'contained'}
+                      sx={{ margin: 2 }}
+                      disabled={arrId.includes(session.data.uid) ? false : true}
+                    >
+                      Edit
+                    </Button>
 
-                {/* <Link onClick={e => router.push('/project-edit')}>
+                    {/* <Link onClick={e => router.push('/project-edit')}>
      <Button onClick={handleEdit} size='medium' variant={'contained'} sx={{ margin: 2 }}>
        Edit
      </Button>
    </Link> */}
-                <Button
-                  disabled={arrId.includes(session.data.uid) ? false : true}
-                  color={'error'}
-                  onClick={handleDelete}
-                  size='medium'
-                  variant={'contained'}
-                  sx={{ margin: 2 }}
-                >
-                  Delete
-                </Button>
-                {/* <Button onClick={handleArchieve} size='medium' variant={'contained'} sx={{ margin: 2 }}>
+                    <Button
+                      disabled={
+                        session.status === 'authenticated' ? (arrId.includes(session.data.uid) ? false : true) : true
+                      }
+                      color={'error'}
+                      onClick={handleDelete}
+                      size='medium'
+                      variant={'contained'}
+                      sx={{ margin: 2 }}
+                    >
+                      Delete
+                    </Button>
+                    {/* <Button onClick={handleArchieve} size='medium' variant={'contained'} sx={{ margin: 2 }}>
      Archieve
    </Button> */}
-              </Grid>
-            </Grid>
-          </>
-        )}
-    </>
-  )
+                  </Grid>
+                </Grid>
+              </>
+            )}
+        </>
+      )
+    : console.log('no session')
 }
 
 export default ProjectDetailsViews

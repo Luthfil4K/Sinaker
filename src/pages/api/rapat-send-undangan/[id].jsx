@@ -38,7 +38,7 @@ export default async function handler(req, res) {
         }
       })
 
-      mailOptions.to = ['jelakora141516@gmail.com', 'luthfilka918@gmail.com']
+      mailOptions.to = ['jelakora141516@gmail.com', 'luthfilkaa918@gmail.com']
       // mailOptions.to = daftarEmail
 
       mailOptions.subject = namaRapat
