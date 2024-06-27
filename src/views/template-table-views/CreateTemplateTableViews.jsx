@@ -232,7 +232,7 @@ const TemplateTableDetailViews = props => {
       <form action='post' onSubmit={e => e.preventDefault()}>
         <Grid container spacing={4} sx={{ padding: '32px' }}>
           <Grid item xs={12}>
-            <Typography variant='h5'>Buat Template Table</Typography>
+            {/* <Typography variant='h5'>Tambah Table Kegiatan</Typography> */}
           </Grid>
           <Grid item xs={12} md={6}>
             <TextField

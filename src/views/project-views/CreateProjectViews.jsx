@@ -533,7 +533,7 @@ const CreateProjectViews = props => {
             />
           </Grid>
           <Grid item xs={6}>
-            <FormLabel component='legend'>Ada dibulan apa saja</FormLabel>
+            <FormLabel component='legend'>Bulan Kegiatan</FormLabel>
             <FormGroup sx={{ minHeight: 150, padding: 2, border: 1, borderColor: '#DCDCDC', borderRadius: 1 }} row>
               <FormControlLabel
                 value='Januari'
@@ -810,7 +810,9 @@ const CreateProjectViews = props => {
               }}
               filterSelectedOptions
               renderTags={(value, getTagProps) =>
-                value.map((option, index) => <Chip variant='outlined' label={option} {...getTagProps({ index })} />)
+                value.map((option, index) => (
+                  <Chip key={index} variant='outlined' label={option} {...getTagProps({ index })} />
+                ))
               }
               renderInput={params => (
                 <TextField {...params} variant='outlined' label='Anggota Tim' placeholder='Tambah Anggota Tim' />

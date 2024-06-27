@@ -171,9 +171,9 @@ const TableMitra = props => {
               tppDueDate.getMonth() === currentDate.getMonth() + 1
           : tppDueDate.getFullYear() === currentDate.getFullYear() + 1 && tppDueDate.getMonth() === 0
       })
-      .reduce((totalGaji, tppRow) => totalGaji + tppRow.gajiPcl, 0)
+      .reduce((totalGaji, tppRow) => totalGaji + tppRow.gajiPml, 0)
 
-    const gajiBulanDepan = gajiBulanDepanPCL + gajiBulanDepanPML + honorTetapBulanDepan
+    const gajiBulanDepan = gajiBulanDepanPCL + gajiBulanDepanPML + 0
 
     const bebanKerja = row.beban_kerja_mitra.length == mitra.length ? row.beban_kerja_mitra[0].bebanKerja : 0
     const nilaiBebanKerja = Number(bebanKerja).toFixed(2)

@@ -7,7 +7,7 @@ import prisma from '../../../services/db'
 
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
-    cb(null, './public/upload/')
+    cb(null, './public/uploads/')
   },
   filename: (req, file, cb) => {
     const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1e9)
@@ -43,24 +43,21 @@ apiRoute.post(async (req, res) => {
         meetId: Number(rapatId)
       }
     })
-    console.log('getIfExist')
-    console.log(getIfExist[0])
-    console.log('getIfExist')
-    console.log(getIfExist[0].path)
+    
 
-    const deleteFile = filePath => {
-      fs.unlink(filePath, err => {
-        if (err) {
-          console.error(`Failed to delete file ${filePath}: ${err}`)
-          console.log(`Failed to delete file ${filePath}: ${err}`)
-        } else {
-          console.log(`Successfully deleted file ${filePath}`)
-        }
-      })
-    }
-    if (getIfExist[0]) {
-      deleteFile(path.join('public/', getIfExist[0].path))
-    }
+    // const deleteFile = filePath => {
+    //   fs.unlink(filePath, err => {
+    //     if (err) {
+    //       console.error(`Failed to delete file ${filePath}: ${err}`)
+    //       console.log(`Failed to delete file ${filePath}: ${err}`)
+    //     } else {
+    //       console.log(`Successfully deleted file ${filePath}`)
+    //     }
+    //   })
+    // }
+    // if (getIfExist[0]) {
+    //   deleteFile(path.join('public/', getIfExist[0].path))
+    // }
     const deleteIfExist = await prisma.undangan_file.deleteMany({
       where: {
         meetId: Number(rapatId)
@@ -71,7 +68,7 @@ apiRoute.post(async (req, res) => {
     const savedFile = await prisma.undangan_file.create({
       data: {
         filename: file.originalname,
-        path: path.join('upload/', file.filename), // Path relative to the public directory
+        path: path.join('uploads/', file.filename), // Path relative to the public directory
         meetId: Number(rapatId)
       }
     })

@@ -1,4 +1,3 @@
-
 import { useState, useEffect, forwardRef } from 'react'
 
 // axios
@@ -113,7 +112,7 @@ const TaskManageEditViews = props => {
   })
 
   const router = useRouter()
-  const [value, setValue] = useState('1')
+  const [value, setValue] = useState('2')
   const [value2, setValue2] = useState('1')
   const [selectedDateE, setSelectedDateE] = useState(new Date(props.data.duedate))
   const [selectedDateS, setSelectedDateS] = useState(new Date(props.data.startDate))
@@ -755,9 +754,11 @@ const TaskManageEditViews = props => {
       <TabContext value={value}>
         <TabList variant='fullWidth' onChange={handleChangeTab} aria-label='card navigation example'>
           {session.status === 'authenticated' &&
-            (session.data.role == 'teamleader' || session.data.role == 'admin') && (
-              <Tab value='1' label='Progres Sub Kegiatan' />
-            )}
+            (session.data.role == 'teamleader' || session.data.role == 'admin') &&
+            (values.subKegJenis == 65 ||
+              values.subKegJenis == 66 ||
+              values.subKegJenis == 67 ||
+              values.subKegJenis == 70) && <Tab value='1' label='Progres Sub Kegiatan' />}
           <Tab value='2' label='Informasi Sub Kegiatan' />
           <Tab value='3' label='Pekerjaan Harian' />
           {(values.subKegJenis == 65 ||
