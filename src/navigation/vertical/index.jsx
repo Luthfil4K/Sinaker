@@ -108,11 +108,11 @@ const navigation = () => {
       {
         sectionTitle: 'Pengaturan'
       },
-      {
-        title: 'Pengaturan Bobot Kriteria',
-        icon: FilterSettings,
-        path: '/pengaturan-rekomendasi'
-      },
+      // {
+      //   title: 'Pengaturan Bobot Kriteria',
+      //   icon: FilterSettings,
+      //   path: '/pengaturan-rekomendasi'
+      // },
       {
         title: 'Table Kegiatan',
         icon: Table,
@@ -547,6 +547,28 @@ const navigation = () => {
         title: 'Daftar Mitra',
         icon: FormatLetterCase,
         path: '/mitra'
+      },
+      {
+        title: 'Beban Kerja',
+        icon: Elevator,
+        path: '/beban-kerja'
+      },
+
+      {
+        sectionTitle: 'Pengaturan'
+      },
+      {
+        title: 'Pengaturan Bobot Kriteria',
+        icon: FilterSettings,
+        path: '/pengaturan-rekomendasi'
+      },
+      {
+        sectionTitle: 'Pencairan'
+      },
+      {
+        title: 'Pencairan',
+        icon: Cash,
+        path: '/pencairan'
       }
     ]
   } else if (userRole == 'admin') {
@@ -569,6 +591,14 @@ const navigation = () => {
         title: 'Daftar Mitra',
         icon: FormatLetterCase,
         path: '/mitra'
+      },
+      {
+        sectionTitle: 'Pengaturan'
+      },
+      {
+        title: 'Pengaturan Bobot Kriteria',
+        icon: FilterSettings,
+        path: '/pengaturan-rekomendasi'
       }
       // {
       //   sectionTitle: 'Pengaturan'

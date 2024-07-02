@@ -1053,10 +1053,10 @@ const ProjectDetailsViews = props => {
                         )
                       )
                     : null}
-                  {(Math.ceil((tanggalNow - tanggalSPM) / (1000 * 60 * 60 * 24)) > 3 &&
-                    session?.data?.role === 'bendahara') ||
-                  session?.data?.role === 'admin' ||
-                  session?.data?.role === 'superAdmin' ? (
+                  {Math.ceil((tanggalNow - tanggalSPM) / (1000 * 60 * 60 * 24)) > 0 &&
+                  (session?.data?.role === 'bendahara' ||
+                    session?.data?.role === 'admin' ||
+                    session?.data?.role === 'superAdmin') ? (
                     <Collapse sx={{ mt: 5 }} in={openBendahara}>
                       <Alert
                         severity='error'

@@ -49,9 +49,11 @@ const TablePeople = props => {
     const jumlahKerjaanTpp = tpp
       .filter(tppRow => tppRow.pmlId === row.id)
       .filter(tppRow => {
-        const tppDueDate = new Date(tppRow.task.duedate)
+        const tppDueDate = new Date(tppRow.duedate)
         const currentDate = new Date()
-        return tppDueDate.getFullYear() === currentDate.getFullYear()
+        return (
+          tppDueDate.getFullYear() === currentDate.getFullYear() && tppDueDate.getMonth() === currentDate.getMonth()
+        )
       })
       .reduce((count, item) => count + 1, 0)
 
@@ -61,14 +63,14 @@ const TablePeople = props => {
     //   jumlahKegiatan = row.TaskOrganik.length
     // }
 
-    console.log(row.pekerjaan_harian)
-
     const jumlahJamKerja = row.pekerjaan_harian
       .filter(ph => ph.task.jenisKeg === 65)
       .filter(hari => {
         const tppDueDate = new Date(hari.tanggalSubmit)
         const currentDate = new Date()
-        return tppDueDate.getFullYear() === currentDate.getFullYear()
+        return (
+          tppDueDate.getFullYear() === currentDate.getFullYear() && tppDueDate.getMonth() === currentDate.getMonth()
+        )
       })
       .reduce((total, item) => total + item.durasi, 0)
 
@@ -88,6 +90,7 @@ const TablePeople = props => {
 
   // pegawai
   let m = math.matrix(arrayUser)
+  console.log(m)
   let w = kriteria
   let ia = ['min', 'min']
   let id = arrayUserId
@@ -143,9 +146,11 @@ const TablePeople = props => {
     const jumlahKerjaanTpp = tpp
       .filter(tppRow => tppRow.pmlId === row.id)
       .filter(tppRow => {
-        const tppDueDate = new Date(tppRow.task.duedate)
+        const tppDueDate = new Date(tppRow.duedate)
         const currentDate = new Date()
-        return tppDueDate.getFullYear() === currentDate.getFullYear()
+        return (
+          tppDueDate.getFullYear() === currentDate.getFullYear() && tppDueDate.getMonth() === currentDate.getMonth()
+        )
       })
       .reduce((count, item) => count + 1, 0)
 
@@ -160,7 +165,9 @@ const TablePeople = props => {
       .filter(hari => {
         const tppDueDate = new Date(hari.tanggalSubmit)
         const currentDate = new Date()
-        return tppDueDate.getFullYear() === currentDate.getFullYear()
+        return (
+          tppDueDate.getFullYear() === currentDate.getFullYear() && tppDueDate.getMonth() === currentDate.getMonth()
+        )
       })
       .reduce((total, item) => total + item.durasi, 0)
 
