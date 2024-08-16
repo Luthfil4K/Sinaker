@@ -2,7 +2,7 @@ import axios from 'axios'
 import url from 'url'
 
 const baseURL = `${process.env.BASE_URL}/api/`
-const baseURL2 = `https://sinaker-tapv.onrender.com/`
+const baseURL2 = `https://simantan.onrender.com/`
 const apiEndPoint = `/api`
 const fullUrl = url.resolve(baseURL2, apiEndPoint)
 
