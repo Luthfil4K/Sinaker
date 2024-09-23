@@ -17,6 +17,9 @@ import Link from '@mui/material/Link'
 import LinearProgress from '@mui/material/LinearProgress'
 import * as React from 'react'
 
+// tabel
+import { DataGrid, GridToolbar } from '@mui/x-data-grid'
+
 // next
 import { useRouter } from 'next/dist/client/router'
 
@@ -214,6 +217,9 @@ const CardProjectDetail = props => {
   const [project, setProject] = useState(props.data)
   const [userProject, setUserProject] = useState(props.data.UserProject)
   const [arrId, setArrId] = useState(props.dataArrayIdProjectMember)
+
+  // kegiatan harian
+  const [dataPHreal, setDataPHreal] = useState(props.dataPH)
   const session = useSession()
 
   console.log(session)
@@ -238,6 +244,125 @@ const CardProjectDetail = props => {
   const a = [1, 2, 3, 4, 5]
   const b = 3
 
+  // pekerjaan harian
+  const rowsPH = dataPHreal.map(row => {
+    const dateObjectTanggal = new Date(row.tanggalSubmit)
+
+    // Ambil nilai tanggal (tahun, bulan, hari)
+    const tanggal = dateObjectTanggal.toISOString().split('T')[0]
+
+    // Waktu Mulai
+    const dateObjectMulai = new Date(row.mulai)
+
+    // Ambil nilai jam dan menit (UTC)
+    const jamMulai = String(dateObjectMulai.getUTCHours()).padStart(2, '0') // Tambah leading zero jika diperlukan
+    const menitMulai = String(dateObjectMulai.getUTCMinutes()).padStart(2, '0')
+
+    const waktuMulai = jamMulai + '.' + menitMulai
+
+    // Waktu Selesai
+    const dateObjectSelesai = new Date(row.selesai)
+
+    // Ambil nilai jam dan menit (UTC)
+    const jamSelesai = String(dateObjectSelesai.getUTCHours()).padStart(2, '0') // Tambah leading zero jika diperlukan
+    const menitSelesai = String(dateObjectSelesai.getUTCMinutes()).padStart(2, '0')
+
+    const waktuSelesai = jamSelesai + '.' + menitSelesai
+
+    // durasi
+    const selisihWaktu = new Date(row.selesai) - new Date(row.mulai)
+
+    // Konversi selisih waktu ke dalam jam dan menit
+    const durasiJam = Math.floor(selisihWaktu / (1000 * 60 * 60)) // Konversi ke jam
+    const durasiMenit = Math.floor((selisihWaktu % (1000 * 60 * 60)) / (1000 * 60)) // Sisanya ke menit
+
+    const durasi = durasiJam + ' jam ' + durasiMenit + ' menit'
+
+    return {
+      id: row.id,
+      pegawai: row.user.name,
+      nama: row.namaKegiatan,
+      mulai: waktuMulai,
+      selesai: waktuSelesai,
+      durasi: durasi,
+      tanggalSubmit: tanggal
+    }
+  })
+
+  const columnsPH = [
+    {
+      field: 'pegawai',
+      headerName: 'Pegawai',
+      renderHeader: () => (
+        <Typography sx={{ fontWeight: 900, fontSize: '0.875rem !important', textAlign: 'center' }}>Pegawai</Typography>
+      ),
+
+      minWidth: 150
+    },
+    {
+      field: 'nama',
+      renderHeader: () => (
+        <Typography sx={{ fontWeight: 900, fontSize: '0.875rem !important', textAlign: 'center' }}>
+          Nama Pekerjaan
+        </Typography>
+      ),
+      headerName: 'Nama Pekerjaan',
+      width: 200
+      // renderCell: params => (
+      //   <Link
+      //     onClick={async e => {
+      //       router.push(`/pegawai-detail-gaji/${params.row.id}`)
+      //     }}
+      //     sx={{ cursor: 'pointer' }}
+      //   >
+      //     <Typography sx={{ fontWeight: 500, textDecoration: 'underline', fontSize: '0.875rem !important' }}>
+      //       {params.row.nama}
+      //     </Typography>
+      //   </Link>
+      // )
+    },
+    {
+      field: 'tanggalSubmit',
+      headerName: 'Tanggal',
+      renderHeader: () => (
+        <Typography sx={{ fontWeight: 900, fontSize: '0.875rem !important', textAlign: 'center' }}>Tanggal</Typography>
+      ),
+
+      minWidth: 150
+    },
+    {
+      field: 'mulai',
+      headerName: 'Waktu Mulai',
+      renderHeader: () => (
+        <Typography sx={{ fontWeight: 900, fontSize: '0.875rem !important', textAlign: 'center' }}>
+          Waktu Mulai
+        </Typography>
+      ),
+
+      minWidth: 150
+    },
+    {
+      field: 'selesai',
+      headerName: 'Waktu Selesai',
+      renderHeader: () => (
+        <Typography sx={{ fontWeight: 900, fontSize: '0.875rem !important', textAlign: 'center' }}>
+          Waktu Selesai
+        </Typography>
+      ),
+
+      minWidth: 150
+    },
+    {
+      field: 'durasi',
+      headerName: 'Durasi',
+      renderHeader: () => (
+        <Typography sx={{ fontWeight: 900, fontSize: '0.875rem !important', textAlign: 'center' }}>Durasi</Typography>
+      ),
+
+      minWidth: 150
+    }
+  ]
+
   return (
     <>
       <Card sx={{ height: 350 }}>
@@ -247,6 +372,9 @@ const CardProjectDetail = props => {
             <Tab value='2' label='Timeline' />
             <Tab value='3' label='Deskripsi' />
             <Tab value='4' label='Pegawai' />
+            {session.status === 'authenticated' &&
+              (session.data.role == 'teamleader' || session.data.role == 'admin') &&
+              arrId.includes(session.data.uid) && <Tab value='5' label='Pekerjaan Pegawai' />}
           </TabList>
           <CardContent>
             <TabPanel value='1' sx={{ p: 0, height: 170, overflowY: 'scroll' }}>
@@ -416,6 +544,72 @@ const CardProjectDetail = props => {
                 </Grid>
               </>
             </TabPanel>
+            {session.status === 'authenticated' &&
+              (session.data.role == 'teamleader' || session.data.role == 'admin') &&
+              arrId.includes(session.data.uid) && (
+                <TabPanel value='5' sx={{ p: 0, height: 170, overflowY: 'scroll' }}>
+                  {dataPHreal.length > 0 ? (
+                    <DataGrid
+                      rowHeight={65}
+                      initialState={{
+                        sorting: {
+                          sortModel: [{ field: 'nama', sort: 'asc' }]
+                        }
+                      }}
+                      rows={rowsPH}
+                      columns={columnsPH}
+                      sx={{
+                        height: rowsPH.length > 3 ? '80vh' : '45vh',
+                        // overflowY: 'auto',
+                        width: '100%'
+                      }}
+                    />
+                  ) : (
+                    // dataPHreal.map(ph => (
+                    //   <>
+                    //     {' '}
+                    //     <List key={ph.id}>
+                    //       <ListItem
+                    //         secondaryAction={
+                    //           <IconButton
+                    //             onClick={() => {
+                    //               Swal.fire({
+                    //                 title: 'Hapus Kegiatan Harian?',
+                    //                 text: '',
+                    //                 icon: 'warning',
+                    //                 showCancelButton: true,
+                    //                 confirmButtonColor: '#3085d6',
+                    //                 cancelButtonColor: '#d33',
+                    //                 confirmButtonText: 'Yes'
+                    //               }).then(result => {
+                    //                 if (result.isConfirmed) {
+                    //                   handleDeleteKegiatanHarian(ph.id)
+                    //                 }
+                    //               })
+                    //             }}
+                    //             edge='end'
+                    //             aria-label='delete'
+                    //           >
+                    //             <DeleteIcon />
+                    //           </IconButton>
+                    //         }
+                    //       >
+                    //         <ListItemAvatar>
+                    //           <Avatar>
+                    //             <FolderIcon />
+                    //           </Avatar>
+                    //         </ListItemAvatar>
+                    //         <ListItemText primary={ph.namaKegiatan + ' (' + ph.mulai + ' jam)'} />
+                    //       </ListItem>
+                    //     </List>
+                    //   </>
+                    // ))
+                    <>
+                      <Typography>Belum Ada Pekerjaan Harian Pada Kegiatan Ini</Typography>
+                    </>
+                  )}
+                </TabPanel>
+              )}
             <Divider sx={{ marginTop: 3.5 }} />
             {/* {session.status === 'authenticated' && (arrId.includes(session.data.uid) || session.data.uid === 1099999) && ( */}
             {session.status === 'authenticated' && (session.data.role == 'teamleader' || session.data.role == 'admin') && (

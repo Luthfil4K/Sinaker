@@ -174,9 +174,9 @@ const CreateProjectViews = props => {
   }, [bulan])
 
   useEffect(() => {
-    const dataAnggota = {}
+    let dataAnggota = {}
     const dataAnggotaId = []
-    const ketuaTimId = 0
+    let ketuaTimId = 0
 
     timKerja.map(data => {
       data.id === values.kegTim ? (dataAnggota = data.timKerjaPegawai) : 0

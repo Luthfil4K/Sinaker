@@ -151,6 +151,7 @@ const TableGroupPerusahaan = props => {
         if (isInEditMode) {
           return [
             <GridActionsCellItem
+              key={`save_${id}`}
               icon={<SaveIcon />}
               label='Save'
               sx={{
@@ -159,6 +160,7 @@ const TableGroupPerusahaan = props => {
               onClick={handleSaveClick(id)}
             />,
             <GridActionsCellItem
+              key={`cancel_${id}`}
               icon={<CancelIcon />}
               label='Cancel'
               className='textPrimary'

@@ -376,8 +376,10 @@ model pekerjaan_harian {
   id                        Int                         @id @default(autoincrement())
   namaKegiatan              String                      @db.VarChar(128)
   durasi                    Int
+  mulai                     DateTime                    @db.Time
+  selesai                   DateTime                    @db.Time
   tanggalSubmit             DateTime                    @db.Date
-  task                      sub_kegiatan                       @relation(fields: [taskId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  task                      sub_kegiatan                @relation(fields: [taskId], references: [id], onDelete: Cascade, onUpdate: Cascade)
   taskId                    Int
   user                      User                        @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: Cascade)
   userId                    Int

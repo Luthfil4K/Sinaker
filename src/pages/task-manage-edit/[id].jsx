@@ -24,6 +24,7 @@ const TaskManageEdit = ({ data }) => {
         dataKriteriaM={dataEdit.kriteriaMitra}
         dataResultTotalGaji={dataEdit.resultTotalGaji}
         dataHonorTetap={dataEdit.honorTetap}
+        dataUpm={dataEdit.upm}
       ></TaskManageEditViews>
     </>
   )
@@ -303,16 +304,33 @@ export async function getServerSideProps(context) {
 
   // const ada993 = mitraLimitHonor.find(entry => entry.pclId === 993)
 
-  // console.log(ada993)
+  // console.log(mulai)
+  const userId = token?.uid
+
   const pekerjaanHarian = await prisma.pekerjaan_harian.findMany({
     where: {
-      taskId: parseInt(context.params.id)
+      taskId: parseInt(context.params.id),
+      userId: parseInt(userId)
     },
     select: {
       id: true,
       namaKegiatan: true,
-      durasi: true,
+      mulai: true,
+      selesai: true,
+      tanggalSubmit: true,
       userId: true
+    }
+  })
+
+  const upm = await prisma.kegiatan_user_member.findMany({
+    where: {
+      project: {
+        Task: {
+          some: {
+            id: parseInt(context.params.id)
+          }
+        }
+      }
     }
   })
 
@@ -325,6 +343,7 @@ export async function getServerSideProps(context) {
     pegawai,
     pekerjaanHarian,
     pekerjaanBulanIni,
+    upm,
     // mitraLimitHonor,
     limitHonorTetap,
     honorTetap,

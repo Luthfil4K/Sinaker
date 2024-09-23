@@ -16,12 +16,25 @@ export default async function handler(req, res) {
   }
 
   if (method === 'POST') {
-    const { namaKegiatan, durasi, userId, taskId, tanggalSubmit, arrayUser, arrayUserId, arrayBebanPegawai } = req.body
+    const {
+      namaKegiatan,
+      mulai,
+      selesai,
+      durasi,
+      userId,
+      taskId,
+      tanggalSubmit,
+      arrayUser,
+      arrayUserId,
+      arrayBebanPegawai
+    } = req.body
 
     try {
       const kh = await prisma.pekerjaan_harian.create({
         data: {
           namaKegiatan,
+          mulai,
+          selesai,
           durasi,
           userId,
           taskId,

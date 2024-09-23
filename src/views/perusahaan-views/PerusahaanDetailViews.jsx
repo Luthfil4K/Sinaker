@@ -172,6 +172,7 @@ const PerusahaanDetailViews = props => {
                   <ul>
                     {Object.entries(totalKegiatan.namaKegiatan).map(([taskId, namaKegiatan]) => (
                       <Link
+                        key={`surat_tugas_${taskId}`}
                         onClick={async e => {
                           router.push(`/task-detail/${taskId}`)
                         }}

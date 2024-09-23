@@ -23,6 +23,7 @@ import CardProjectDetailProgress from 'src/views/cards/CardProjectDetailProgress
 const ProjectDetailsViews = props => {
   const router = useRouter()
   const [project, setProject] = useState(props.data)
+  const [ph, setPh] = useState(props.dataPH)
   const [upmId, setUpmId] = useState(
     props.dataUpm.map(dupm => ({
       id: dupm.userId
@@ -113,7 +114,7 @@ const ProjectDetailsViews = props => {
         <>
           <Grid container spacing={4}>
             <Grid item xs={12} md={8}>
-              <CardProjectInfo dataArrayIdProjectMember={arridForpass} data={project}></CardProjectInfo>
+              <CardProjectInfo dataArrayIdProjectMember={arridForpass} data={project} dataPH={ph}></CardProjectInfo>
             </Grid>
             <Grid item xs={12} md={4}>
               <CardProjectDetailProgress

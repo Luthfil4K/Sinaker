@@ -81,12 +81,32 @@ const TaskDetailViews = props => {
   const [valuesHarian, setValuesHarian] = useState({
     namaKegiatan: '',
     durasi: '',
+    mulai: '',
+    selesai: '',
     userId: '',
     taskId: props.data.id,
     tanggalSubmit: new Date()
   })
 
   const [secondary, setSecondary] = useState(false)
+
+  const [selectedTimeS, setSelectedTimeS] = useState(new Date())
+  const [selectedTimeE, setSelectedTimeE] = useState(new Date())
+
+  const CustomInputTimeStart = forwardRef((props, ref) => {
+    return <TextField fullWidth {...props} inputRef={ref} label='Waktu Mulai' autoComplete='off' />
+  })
+
+  const CustomInputTimeEnd = forwardRef((props, ref) => {
+    return <TextField fullWidth {...props} inputRef={ref} label='Waktu Selesai' autoComplete='off' />
+  })
+
+  const handleTimeChangeS = date => {
+    setSelectedTimeS(date)
+  }
+  const handleTimeChangeE = date => {
+    setSelectedTimeE(date)
+  }
 
   const [templateTable2, setTemplateTable2] = useState(
     Number(props.dataPerusahaan.length > 0 ? props.dataPerusahaan[0].templateTable : 5)
@@ -293,7 +313,7 @@ const TaskDetailViews = props => {
     )
   })
 
-  useEffect(() => {}, [valuesHarian])
+  // useEffect(() => {}, [valuesHarian])
 
   const dataLine = {
     labels: lineTarel.label,
@@ -482,17 +502,44 @@ const TaskDetailViews = props => {
                                   placeholder='Nama Kegiatan'
                                 />
                               </Grid>
-                              <Grid item xs={4}>
-                                {' '}
-                                <TextField
-                                  value={valuesHarian.durasi}
-                                  size='small'
-                                  fullWidth
-                                  multiline
-                                  type={'number'}
-                                  onChange={handleChangeHarian('durasi')}
-                                  placeholder='Durasi Pengerjaan '
-                                />
+                              <Grid item xs={12} sm={12} lg={4}>
+                                <DatePickerWrapper>
+                                  <DatePicker
+                                    selected={selectedTimeS}
+                                    sx={{ width: 1000 }}
+                                    showTimeSelect
+                                    showTimeSelectOnly
+                                    timeFormat='HH:mm'
+                                    timeIntervals={15}
+                                    dateFormat='HH:mm'
+                                    value={selectedTimeS}
+                                    onChange={handleTimeChangeS}
+                                    className='custom-datepicker'
+                                    customInput={<CustomInputTimeStart />}
+                                    name='tanggalBerakhir'
+                                    required
+                                  />
+                                </DatePickerWrapper>
+                              </Grid>
+                              <Grid item xs={12} sm={12} lg={4}>
+                                <DatePickerWrapper>
+                                  <DatePicker
+                                    selected={selectedTimeE}
+                                    sx={{ width: 1000 }}
+                                    showTimeSelect
+                                    showTimeSelectOnly
+                                    timeFormat='HH:mm'
+                                    timeIntervals={15}
+                                    dateFormat='HH:mm'
+                                    placeholderText='Waktu Selesai'
+                                    value={selectedTimeE}
+                                    onChange={handleTimeChangeE}
+                                    className='custom-datepicker'
+                                    customInput={<CustomInputTimeEnd />}
+                                    name='tanggalBerakhir'
+                                    required
+                                  />
+                                </DatePickerWrapper>
                               </Grid>
                               <Grid item mt={5} xs={1}>
                                 {' '}

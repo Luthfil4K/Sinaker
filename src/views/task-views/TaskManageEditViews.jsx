@@ -58,7 +58,7 @@ import ListItemAvatar from '@mui/material/ListItemAvatar'
 import ListItemIcon from '@mui/material/ListItemIcon'
 import ListItemText from '@mui/material/ListItemText'
 import Avatar from '@mui/material/Avatar'
-import FolderIcon from '@mui/icons-material/Folder'
+import FolderIcon from '@mui/icons-material/Work'
 import DeleteIcon from '@mui/icons-material/Delete'
 import OutlinedInput from '@mui/material/OutlinedInput'
 import InputAdornment from '@mui/material/InputAdornment'
@@ -116,8 +116,30 @@ const TaskManageEditViews = props => {
   const [value2, setValue2] = useState('1')
   const [selectedDateE, setSelectedDateE] = useState(new Date(props.data.duedate))
   const [selectedDateS, setSelectedDateS] = useState(new Date(props.data.startDate))
+
+  // upm
+  const [upmId, setUpmId] = useState(
+    props.dataUpm.map(dupm => ({
+      id: dupm.userId
+    }))
+  )
+
+  const [arridForpass, setArridForpass] = useState(props.dataUpm.map(dupm => dupm.userId))
+  const [arrId, setArrId] = useState([])
+
+  // console.log(session)
+  useEffect(() => {
+    let ar = []
+    // let idUserLogin = session.data.uid
+    upmId.map(p => {
+      ar.push(p.id)
+    })
+    setArrId(ar)
+    //   // idUserLogin in ar || idUserLogin === 1099999 ? setTampil(true) : setTampil(false)
+  }, [])
+
   // kegiatan harian
-  const [dataPHreal, setDataPHrealn] = useState(1)
+  const [dataPHreal, setDataPHreal] = useState(props.dataPH)
   const [valuesHarian, setValuesHarian] = useState({
     namaKegiatan: '',
     durasi: '',
@@ -130,6 +152,24 @@ const TaskManageEditViews = props => {
   }
   const handleTaskUpdate = (realisasi, trgt) => {
     setValues({ ...values, target: trgt, realisasi })
+  }
+
+  const [selectedTimeS, setSelectedTimeS] = useState(new Date())
+  const [selectedTimeE, setSelectedTimeE] = useState(new Date())
+
+  const CustomInputTimeStart = forwardRef((props, ref) => {
+    return <TextField {...props} inputRef={ref} label='Waktu Mulai' autoComplete='off' />
+  })
+
+  const CustomInputTimeEnd = forwardRef((props, ref) => {
+    return <TextField {...props} inputRef={ref} label='Waktu Selesai' autoComplete='off' />
+  })
+
+  const handleTimeChangeS = date => {
+    setSelectedTimeS(date)
+  }
+  const handleTimeChangeE = date => {
+    setSelectedTimeE(date)
   }
 
   const [values, setValues] = useState({
@@ -523,9 +563,13 @@ const TaskManageEditViews = props => {
         )
   }
   const handleKegiatanHarian = e => {
+    const waktuMulaiWIB = new Date(selectedTimeS.getTime() + 7 * 60 * 60 * 1000) // Tambah 7 jam
+    const waktuSelesaiWIB = new Date(selectedTimeE.getTime() + 7 * 60 * 60 * 1000) // Tambah 7 jam
     const data = {
       namaKegiatan: valuesHarian.namaKegiatan,
-      durasi: Number(valuesHarian.durasi),
+      mulai: waktuMulaiWIB,
+      selesai: waktuSelesaiWIB,
+      durasi: (selectedTimeE - selectedTimeS) / (1000 * 60),
       userId: session.data.uid,
       taskId: props.data.id,
       tanggalSubmit: new Date()
@@ -709,6 +753,26 @@ const TaskManageEditViews = props => {
     label: props.dataPerusahaan.map(pr => pr.kol1 + '/' + pr.kol2)
   })
 
+  const handleDeleteKegiatanHarian = async id => {
+    axios
+      .delete(`kegiatan-harian/${id}`)
+      .then(async res => {
+        await Swal.fire({
+          icon: 'success',
+          title: '',
+          text: 'Berhasil dihapus'
+        })
+        router.reload()
+      })
+      .catch(err => {
+        Swal.fire({
+          icon: 'error',
+          title: 'Error',
+          text: 'Something went wrong'
+        })
+      })
+  }
+
   const dataLine = {
     labels: lineTarel.label,
     datasets: [
@@ -740,6 +804,135 @@ const TaskManageEditViews = props => {
     )
   }, [props.dataPerusahaan])
 
+  const rowsPH = dataPHreal.map(row => {
+    const dateObjectTanggal = new Date(row.tanggalSubmit)
+
+    // Ambil nilai tanggal (tahun, bulan, hari)
+    const tanggal = dateObjectTanggal.toISOString().split('T')[0]
+
+    // Waktu Mulai
+    const dateObjectMulai = new Date(row.mulai)
+
+    // Ambil nilai jam dan menit (UTC)
+    const jamMulai = String(dateObjectMulai.getUTCHours()).padStart(2, '0') // Tambah leading zero jika diperlukan
+    const menitMulai = String(dateObjectMulai.getUTCMinutes()).padStart(2, '0')
+
+    const waktuMulai = jamMulai + '.' + menitMulai
+
+    // Waktu Selesai
+    const dateObjectSelesai = new Date(row.selesai)
+
+    // Ambil nilai jam dan menit (UTC)
+    const jamSelesai = String(dateObjectSelesai.getUTCHours()).padStart(2, '0') // Tambah leading zero jika diperlukan
+    const menitSelesai = String(dateObjectSelesai.getUTCMinutes()).padStart(2, '0')
+
+    const waktuSelesai = jamSelesai + '.' + menitSelesai
+
+    // durasi
+    const selisihWaktu = new Date(row.selesai) - new Date(row.mulai)
+
+    // Konversi selisih waktu ke dalam jam dan menit
+    const durasiJam = Math.floor(selisihWaktu / (1000 * 60 * 60)) // Konversi ke jam
+    const durasiMenit = Math.floor((selisihWaktu % (1000 * 60 * 60)) / (1000 * 60)) // Sisanya ke menit
+
+    const durasi = durasiJam + ' jam ' + durasiMenit + ' menit'
+
+    return {
+      id: row.id,
+      nama: row.namaKegiatan,
+      mulai: waktuMulai,
+      selesai: waktuSelesai,
+      durasi: durasi,
+      tanggalSubmit: tanggal
+    }
+  })
+
+  const columnsPH = [
+    {
+      field: 'nama',
+      renderHeader: () => (
+        <Typography sx={{ fontWeight: 900, fontSize: '0.875rem !important', textAlign: 'center' }}>
+          Nama Pekerjaan
+        </Typography>
+      ),
+      headerName: 'Nama Pekerjaan',
+      width: 200
+      // renderCell: params => (
+      //   <Link
+      //     onClick={async e => {
+      //       router.push(`/pegawai-detail-gaji/${params.row.id}`)
+      //     }}
+      //     sx={{ cursor: 'pointer' }}
+      //   >
+      //     <Typography sx={{ fontWeight: 500, textDecoration: 'underline', fontSize: '0.875rem !important' }}>
+      //       {params.row.nama}
+      //     </Typography>
+      //   </Link>
+      // )
+    },
+    {
+      field: 'tanggalSubmit',
+      headerName: 'Tanggal',
+      renderHeader: () => (
+        <Typography sx={{ fontWeight: 900, fontSize: '0.875rem !important', textAlign: 'center' }}>Tanggal</Typography>
+      ),
+
+      minWidth: 150
+    },
+    {
+      field: 'mulai',
+      headerName: 'Waktu Mulai',
+      renderHeader: () => (
+        <Typography sx={{ fontWeight: 900, fontSize: '0.875rem !important', textAlign: 'center' }}>
+          Waktu Mulai
+        </Typography>
+      ),
+
+      minWidth: 150
+    },
+    {
+      field: 'selesai',
+      headerName: 'Waktu Selesai',
+      renderHeader: () => (
+        <Typography sx={{ fontWeight: 900, fontSize: '0.875rem !important', textAlign: 'center' }}>
+          Waktu Selesai
+        </Typography>
+      ),
+
+      minWidth: 150
+    },
+    {
+      field: 'durasi',
+      headerName: 'Durasi',
+      renderHeader: () => (
+        <Typography sx={{ fontWeight: 900, fontSize: '0.875rem !important', textAlign: 'center' }}>Durasi</Typography>
+      ),
+
+      minWidth: 150
+    },
+    {
+      field: 'action',
+      headerName: 'Aksi',
+      renderHeader: () => (
+        <Typography sx={{ fontWeight: 900, fontSize: '0.875rem !important', textAlign: 'center' }}>Aksi</Typography>
+      ),
+      minWidth: 150,
+      renderCell: params => (
+        <>
+          <Button
+            onClick={() => handleDeleteKegiatanHarian(params.row.id)}
+            type='submit'
+            sx={{ mr: 1 }}
+            color='error'
+            variant='text'
+          >
+            <DeleteIcon />
+          </Button>
+        </>
+      )
+    }
+  ]
+
   return (
     <>
       <Grid container spacing={4}>
@@ -760,7 +953,9 @@ const TaskManageEditViews = props => {
               values.subKegJenis == 67 ||
               values.subKegJenis == 70) && <Tab value='1' label='Progres Sub Kegiatan' />}
           <Tab value='2' label='Informasi Sub Kegiatan' />
-          <Tab value='3' label='Pekerjaan Harian' />
+          {session.status === 'authenticated' && arrId.includes(session.data.uid) && (
+            <Tab value='3' label='Pekerjaan Harian' />
+          )}
           {(values.subKegJenis == 65 ||
             values.subKegJenis == 66 ||
             values.subKegJenis == 67 ||
@@ -1099,46 +1294,61 @@ const TaskManageEditViews = props => {
           <Grid container spacing={4}>
             <Grid xs={12} mt={5} item height={200} overflow={'auto'}>
               {dataPHreal.length > 0 ? (
-                dataPHreal.map(ph => (
-                  <>
-                    {' '}
-                    <List key={ph.id}>
-                      <ListItem
-                        secondaryAction={
-                          <IconButton
-                            onClick={() => {
-                              Swal.fire({
-                                title: 'Hapus Kegiatan Harian?',
-                                text: '',
-                                icon: 'warning',
-                                showCancelButton: true,
-                                confirmButtonColor: '#3085d6',
-                                cancelButtonColor: '#d33',
-                                confirmButtonText: 'Yes'
-                              }).then(result => {
-                                if (result.isConfirmed) {
-                                  handleDeleteKegiatanHarian(ph.id)
-                                }
-                              })
-                            }}
-                            edge='end'
-                            aria-label='delete'
-                          >
-                            <DeleteIcon />
-                          </IconButton>
-                        }
-                      >
-                        <ListItemAvatar>
-                          <Avatar>
-                            <FolderIcon />
-                          </Avatar>
-                        </ListItemAvatar>
-                        <ListItemText primary={ph.namaKegiatan} />
-                      </ListItem>
-                    </List>
-                  </>
-                ))
+                <DataGrid
+                  rowHeight={65}
+                  initialState={{
+                    sorting: {
+                      sortModel: [{ field: 'nama', sort: 'asc' }]
+                    }
+                  }}
+                  rows={rowsPH}
+                  columns={columnsPH}
+                  sx={{
+                    height: rowsPH.length > 3 ? '80vh' : '45vh',
+                    // overflowY: 'auto',
+                    width: '100%'
+                  }}
+                />
               ) : (
+                // dataPHreal.map(ph => (
+                //   <>
+                //     {' '}
+                //     <List key={ph.id}>
+                //       <ListItem
+                //         secondaryAction={
+                //           <IconButton
+                //             onClick={() => {
+                //               Swal.fire({
+                //                 title: 'Hapus Kegiatan Harian?',
+                //                 text: '',
+                //                 icon: 'warning',
+                //                 showCancelButton: true,
+                //                 confirmButtonColor: '#3085d6',
+                //                 cancelButtonColor: '#d33',
+                //                 confirmButtonText: 'Yes'
+                //               }).then(result => {
+                //                 if (result.isConfirmed) {
+                //                   handleDeleteKegiatanHarian(ph.id)
+                //                 }
+                //               })
+                //             }}
+                //             edge='end'
+                //             aria-label='delete'
+                //           >
+                //             <DeleteIcon />
+                //           </IconButton>
+                //         }
+                //       >
+                //         <ListItemAvatar>
+                //           <Avatar>
+                //             <FolderIcon />
+                //           </Avatar>
+                //         </ListItemAvatar>
+                //         <ListItemText primary={ph.namaKegiatan + ' (' + ph.mulai + ' jam)'} />
+                //       </ListItem>
+                //     </List>
+                //   </>
+                // ))
                 <>
                   <Typography>Belum Ada Pekerjaan Harian Pada Kegiatan Ini, Silahkan Input Dibawah</Typography>
                 </>
@@ -1149,25 +1359,50 @@ const TaskManageEditViews = props => {
                 <Grid item xs={7}>
                   <TextField
                     value={valuesHarian.namaKegiatan}
-                    size='small'
                     fullWidth
                     multiline
-                    type={'string'}
+                    required
                     onChange={handleChangeHarian('namaKegiatan')}
                     placeholder='Nama Kegiatan'
+                    label='Nama Kegiatan'
                   />
                 </Grid>
-                <Grid item xs={4}>
-                  {' '}
-                  <TextField
-                    value={valuesHarian.durasi}
-                    size='small'
-                    fullWidth
-                    multiline
-                    type={'number'}
-                    onChange={handleChangeHarian('durasi')}
-                    placeholder='Durasi Pengerjaan '
-                  />
+                <Grid item xs={2}>
+                  <DatePickerWrapper>
+                    <DatePicker
+                      selected={selectedTimeS}
+                      showTimeSelect
+                      showTimeSelectOnly
+                      timeFormat='HH:mm'
+                      timeIntervals={10}
+                      dateFormat='HH:mm'
+                      value={selectedTimeS}
+                      onChange={handleTimeChangeS}
+                      customInput={<CustomInputTimeStart />}
+                      className='custom-datepicker'
+                      name='tanggalBerakhir'
+                      required
+                    />
+                  </DatePickerWrapper>
+                </Grid>
+                <Grid item xs={2}>
+                  <DatePickerWrapper>
+                    <DatePicker
+                      selected={selectedTimeE}
+                      showTimeSelect
+                      showTimeSelectOnly
+                      timeFormat='HH:mm'
+                      timeIntervals={10}
+                      dateFormat='HH:mm'
+                      placeholderText='Waktu Selesai'
+                      value={selectedTimeE}
+                      onChange={handleTimeChangeE}
+                      customInput={<CustomInputTimeEnd />}
+                      className='custom-datepicker'
+                      name='tanggalBerakhir'
+                      required
+                    />
+                  </DatePickerWrapper>
                 </Grid>
                 <Grid item mt={5} xs={1}>
                   {' '}

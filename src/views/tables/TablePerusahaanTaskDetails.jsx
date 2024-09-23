@@ -103,7 +103,7 @@ const TableGroupPerusahaan = props => {
     }))
   }, [])
 
-  const hitungTotalGaji = dataMitraLimitHonor => {
+  const HitungTotalGaji = dataMitraLimitHonor => {
     const totalGajiPerMitra = {}
     const bulanSekarang = new Date().getMonth()
     const [pclAc, setPclAc] = useState({})
@@ -893,6 +893,7 @@ const TableGroupPerusahaan = props => {
         if (isInEditMode) {
           return [
             <GridActionsCellItem
+              key={`save_${id}`}
               icon={<SaveIcon />}
               label='Save'
               sx={{
@@ -901,6 +902,7 @@ const TableGroupPerusahaan = props => {
               onClick={handleSaveClick(id)}
             />,
             <GridActionsCellItem
+              key={`cancel_${id}`}
               icon={<CancelIcon />}
               label='Cancel'
               className='textPrimary'
@@ -912,13 +914,20 @@ const TableGroupPerusahaan = props => {
 
         return [
           <GridActionsCellItem
+            key={`edit${id}`}
             icon={<EditIcon />}
             label='Edit'
             className='textPrimary'
             onClick={handleEditClick(id)}
             color='inherit'
           />,
-          <GridActionsCellItem icon={<DeleteIcon />} label='Delete' onClick={handleDeleteClick(id)} color='inherit' />
+          <GridActionsCellItem
+            key={`delete${id}`}
+            icon={<DeleteIcon />}
+            label='Delete'
+            onClick={handleDeleteClick(id)}
+            color='inherit'
+          />
         ]
       }
     }

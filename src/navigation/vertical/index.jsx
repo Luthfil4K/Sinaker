@@ -17,13 +17,14 @@ import AlertCircleOutline from 'mdi-material-ui/AlertCircleOutline'
 import GoogleCirclesExtended from 'mdi-material-ui/GoogleCirclesExtended'
 import Rapat from 'mdi-material-ui/CalendarClock'
 import CalendarMonthIcon from '@mui/icons-material/CalendarMonth'
+import AccessibilityIcon from '@mui/icons-material/Accessibility'
 
 // ** Type import
 import { VerticalNavItemsType } from 'src/@core/layouts/types'
 import { SettingsConsumer } from 'src/@core/context/settingsContext'
 import { useSession } from 'next-auth/react'
 
-const navigation = () => {
+const Navigation = () => {
   const [userRole, setUserRole] = useState({})
   const session = useSession({})
 
@@ -502,6 +503,11 @@ const navigation = () => {
         title: 'Daftar Mitra',
         icon: FormatLetterCase,
         path: '/mitra'
+      },
+      {
+        title: 'Pekerjaan Harian',
+        icon: AccessibilityIcon,
+        path: '/pekerjaan-harian'
       }
     ]
   } else if (userRole == 'superAdmin') {
@@ -552,6 +558,11 @@ const navigation = () => {
         title: 'Beban Kerja',
         icon: Elevator,
         path: '/beban-kerja'
+      },
+      {
+        title: 'Pekerjaan Harian',
+        icon: AccessibilityIcon,
+        path: '/pekerjaan-harian'
       },
 
       {
@@ -617,4 +628,4 @@ const navigation = () => {
   }
 }
 
-export default navigation
+export default Navigation

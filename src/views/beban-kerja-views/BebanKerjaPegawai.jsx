@@ -3,38 +3,18 @@ import { useState, useEffect, useRef } from 'react'
 // ** MUI Imports
 import Typography from '@mui/material/Typography'
 import Card from '@mui/material/Card'
-import Chip from '@mui/material/Chip'
-import Button from '@mui/material/Button'
-import Grid from '@mui/material/Grid'
-import FormControl from '@mui/material/FormControl'
-import InputLabel from '@mui/material/InputLabel'
-import Select from '@mui/material/Select'
-import MenuItem from '@mui/material/MenuItem'
 import Link from '@mui/material/Link'
 
 // other, swall
 import { DataGrid } from '@mui/x-data-grid'
 import Swal from 'sweetalert2'
-import { useRouter } from 'next/dist/client/router'
 import { useSession } from 'next-auth/react'
 
-// icon
-import PencilOutline from 'mdi-material-ui/PencilOutline'
-import DeleteOutline from 'mdi-material-ui/DeleteOutline'
 import router from 'next/router'
 
 // topsis
 import { create, all } from 'mathjs'
 import { getBest } from '../../function/topsis'
-
-const jenisFungsi = {
-  2: { bagFungsi: 'Bagian Umum', color: 'warning' },
-  3: { bagFungsi: 'Statistik Sosial', color: 'warning' },
-  4: { bagFungsi: 'Statistik Produksi', color: 'warning' },
-  5: { bagFungsi: 'Statistik Distribusi', color: 'warning' },
-  6: { bagFungsi: 'Neraca Wilayah dan Analisis Statistik', color: 'warning' },
-  7: { bagFungsi: 'Integrasi Pengolahan dan Diseminasi Statistik', color: 'warning' }
-}
 
 const TablePeople = props => {
   const session = useSession()
@@ -366,10 +346,10 @@ const TablePeople = props => {
     },
     {
       field: 'jamKerja',
-      headerName: 'Jam Kerja',
+      headerName: 'Menit Kerja',
       renderHeader: () => (
         <Typography sx={{ fontWeight: 900, fontSize: '0.875rem !important', textAlign: 'center' }}>
-          Jam Kerja
+          Menit Kerja
         </Typography>
       ),
 
