@@ -685,7 +685,7 @@ const CreateProjectViews = props => {
               filterSelectedOptions
               renderTags={(value, getTagProps) =>
                 value.map((option, index) => (
-                  <Chip key={index} variant='outlined' label={option} {...getTagProps({ index })} />
+                  <Chip key={`save_${index}`} variant='outlined' label={option} {...getTagProps({ index })} />
                 ))
               }
               renderInput={params => (

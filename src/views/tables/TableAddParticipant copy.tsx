@@ -26,7 +26,7 @@ const columns = [
     renderCell: () => (
       <Checkbox
         onChange={e => {
-          let checked = e.target.checked
+          const checked = e.target.checked
         }}
       />
     ),

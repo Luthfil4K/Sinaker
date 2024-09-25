@@ -40,7 +40,7 @@ const TableMitra = props => {
     const gajiBulanIniPCL = tpp
       .filter(tppRow => tppRow.pclId === row.id)
       .filter(tppRow => {
-        const tppDueDate = new Date(tppRow.task.duedate)
+        const tppDueDate = new Date(tppRow.duedate)
         const currentDate = new Date()
         return (
           tppDueDate.getFullYear() === currentDate.getFullYear() && tppDueDate.getMonth() === currentDate.getMonth()
@@ -51,7 +51,7 @@ const TableMitra = props => {
     const gajiBulanIniPML = tpp
       .filter(tppRow => tppRow.pmlId === row.id)
       .filter(tppRow => {
-        const tppDueDate = new Date(tppRow.task.duedate)
+        const tppDueDate = new Date(tppRow.duedate)
         const currentDate = new Date()
         return (
           tppDueDate.getFullYear() === currentDate.getFullYear() && tppDueDate.getMonth() === currentDate.getMonth()
@@ -65,18 +65,22 @@ const TableMitra = props => {
     const jumlahKerjaanTppPML = tpp
       .filter(tppRow => tppRow.pmlId === row.id)
       .filter(tppRow => {
-        const tppDueDate = new Date(tppRow.task.duedate)
+        const tppDueDate = new Date(tppRow.duedate)
         const currentDate = new Date()
-        return tppDueDate.getFullYear() === currentDate.getFullYear()
+        return (
+          tppDueDate.getFullYear() === currentDate.getFullYear() && tppDueDate.getMonth() === currentDate.getMonth()
+        )
       })
       .reduce((count, item) => count + 1, 0)
 
     const jumlahKerjaanTppPCL = tpp
       .filter(tppRow => tppRow.pclId === row.id)
       .filter(tppRow => {
-        const tppDueDate = new Date(tppRow.task.duedate)
+        const tppDueDate = new Date(tppRow.duedate)
         const currentDate = new Date()
-        return tppDueDate.getFullYear() === currentDate.getFullYear()
+        return (
+          tppDueDate.getFullYear() === currentDate.getFullYear() && tppDueDate.getMonth() === currentDate.getMonth()
+        )
       })
       .reduce((count, item) => count + 1, 0)
     let jumlahKegiatan = jumlahKerjaanTppPCL + jumlahKerjaanTppPML
@@ -91,8 +95,6 @@ const TableMitra = props => {
   const arrayUserM = userAllM.map(item => [item.jumlahKegiatan, item.gajiBulanIni])
   const arrayUserIdM = userAllM.map(item => item.mitra_id)
 
-  console.log(arrayUserM)
-
   // topsis
   const config = {}
   const math = create(all, config)
@@ -104,7 +106,7 @@ const TableMitra = props => {
   let idm = arrayUserIdM
   let resultm = getBest(mm, wm, ia, idm)
 
-  console.log(resultm)
+  console.log(mm)
 
   const resultBaruM = resultm.map(item => {
     return { bebanKerja: item.ps }
@@ -121,7 +123,7 @@ const TableMitra = props => {
     const gajiBulanIniPCL = tpp
       .filter(tppRow => tppRow.pclId === row.id)
       .filter(tppRow => {
-        const tppDueDate = new Date(tppRow.task.duedate)
+        const tppDueDate = new Date(tppRow.duedate)
         const currentDate = new Date()
         return (
           tppDueDate.getFullYear() === currentDate.getFullYear() && tppDueDate.getMonth() === currentDate.getMonth()
@@ -132,7 +134,7 @@ const TableMitra = props => {
     const gajiBulanIniPML = tpp
       .filter(tppRow => tppRow.pmlId === row.id)
       .filter(tppRow => {
-        const tppDueDate = new Date(tppRow.task.duedate)
+        const tppDueDate = new Date(tppRow.duedate)
         const currentDate = new Date()
         return (
           tppDueDate.getFullYear() === currentDate.getFullYear() && tppDueDate.getMonth() === currentDate.getMonth()
@@ -149,18 +151,22 @@ const TableMitra = props => {
     const jumlahKerjaanTppPML = tpp
       .filter(tppRow => tppRow.pmlId === row.id)
       .filter(tppRow => {
-        const tppDueDate = new Date(tppRow.task.duedate)
+        const tppDueDate = new Date(tppRow.duedate)
         const currentDate = new Date()
-        return tppDueDate.getFullYear() === currentDate.getFullYear()
+        return (
+          tppDueDate.getFullYear() === currentDate.getFullYear() && tppDueDate.getMonth() === currentDate.getMonth()
+        )
       })
       .reduce((count, item) => count + 1, 0)
 
     const jumlahKerjaanTppPCL = tpp
       .filter(tppRow => tppRow.pclId === row.id)
       .filter(tppRow => {
-        const tppDueDate = new Date(tppRow.task.duedate)
+        const tppDueDate = new Date(tppRow.duedate)
         const currentDate = new Date()
-        return tppDueDate.getFullYear() === currentDate.getFullYear()
+        return (
+          tppDueDate.getFullYear() === currentDate.getFullYear() && tppDueDate.getMonth() === currentDate.getMonth()
+        )
       })
       .reduce((count, item) => count + 1, 0)
     const jumlahKegiatan = jumlahKerjaanTppPCL + jumlahKerjaanTppPML

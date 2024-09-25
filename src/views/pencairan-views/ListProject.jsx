@@ -40,7 +40,7 @@ const ListProject = props => {
   //   kategori: 0
   // })
 
-  const [viewData, setViewData] = useState(0)
+  const [viewData, setViewData] = useState(1)
 
   const handleViewDataGrid = params => {
     setViewData(1)
@@ -232,7 +232,7 @@ const ListProject = props => {
     <>
       <Grid container spacing={4}>
         <Grid item md={6}>
-          <Button
+          {/* <Button
             onClick={handleViewDataTable}
             sx={{
               width: 10,
@@ -253,7 +253,7 @@ const ListProject = props => {
             size='medium'
             variant='contained'
             startIcon={<GridViewIcon />}
-          ></Button>
+          ></Button> */}
         </Grid>
         <Grid item md={6} display={'flex'} justifyContent={'end'}>
           <FormControl sx={{ m: 1, minWidth: 120 }}>

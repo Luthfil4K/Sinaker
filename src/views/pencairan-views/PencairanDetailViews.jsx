@@ -898,7 +898,7 @@ const ProjectDetailsViews = props => {
                     ? props.data.pencairan[0].surat_pencairan.map((surat, index) =>
                         surat.jenisId === 1 ? (
                           <Chip
-                            key={index}
+                            key={`surat_tugas_${index}`}
                             sx={{ mb: 2, mt: 7, width: '100%' }}
                             label='Lihat Surat Tugas'
                             component='a'
@@ -908,6 +908,7 @@ const ProjectDetailsViews = props => {
                           />
                         ) : surat.jenisId === 2 ? (
                           <Chip
+                            key={`sk_${index}`}
                             sx={{ mb: 2, mt: 4, width: '100%' }}
                             label='Lihat SK'
                             component='a'
@@ -926,6 +927,7 @@ const ProjectDetailsViews = props => {
                           />
                         ) : surat.jenisId === 4 ? (
                           <Chip
+                            key={`spj${index}`}
                             sx={{ mb: 2, mt: 4, width: '100%' }}
                             label='Lihat SPJ'
                             component='a'
@@ -935,6 +937,7 @@ const ProjectDetailsViews = props => {
                           />
                         ) : (
                           <Chip
+                            key={`form${index}`}
                             sx={{ mb: 2, mt: 4, width: '100%' }}
                             label='Lihat Form Permintaan Pencairan'
                             component='a'
@@ -999,7 +1002,6 @@ const ProjectDetailsViews = props => {
                     ? props.data.pencairan[0].surat_pencairan.map((surat, index) =>
                         surat.jenisId === 1 ? (
                           <Chip
-                            key={index}
                             sx={{ mb: 2, mt: 7, width: '100%' }}
                             label='Lihat Surat Tugas'
                             component='a'
@@ -1009,6 +1011,7 @@ const ProjectDetailsViews = props => {
                           />
                         ) : surat.jenisId === 2 ? (
                           <Chip
+                            key={`sk_${index}`}
                             sx={{ mb: 2, mt: 4, width: '100%' }}
                             label='Lihat SK'
                             component='a'
@@ -1018,6 +1021,7 @@ const ProjectDetailsViews = props => {
                           />
                         ) : surat.jenisId === 3 ? (
                           <Chip
+                            key={`kak_${index}`}
                             sx={{ mb: 2, mt: 4, width: '100%' }}
                             label='Lihat KAK'
                             component='a'
@@ -1027,6 +1031,7 @@ const ProjectDetailsViews = props => {
                           />
                         ) : surat.jenisId === 4 ? (
                           <Chip
+                            key={`spj_${index}`}
                             sx={{ mb: 2, mt: 4, width: '100%' }}
                             label='Lihat SPJ'
                             component='a'
@@ -1036,6 +1041,7 @@ const ProjectDetailsViews = props => {
                           />
                         ) : surat.jenisId === 5 ? (
                           <Chip
+                            key={`form_${index}`}
                             sx={{ mb: 2, mt: 4, width: '100%' }}
                             label='Lihat Form Permintaan Pencairan'
                             component='a'
@@ -1055,10 +1061,10 @@ const ProjectDetailsViews = props => {
                         )
                       )
                     : null}
-                  {(Math.ceil((tanggalNow - tanggalSPM) / (1000 * 60 * 60 * 24)) > 3 &&
-                    session?.data?.role === 'bendahara') ||
-                  session?.data?.role === 'admin' ||
-                  session?.data?.role === 'superAdmin' ? (
+                  {Math.ceil((tanggalNow - tanggalSPM) / (1000 * 60 * 60 * 24)) > 0 &&
+                  (session?.data?.role === 'bendahara' ||
+                    session?.data?.role === 'admin' ||
+                    session?.data?.role === 'superAdmin') ? (
                     <Collapse sx={{ mt: 5 }} in={openBendahara}>
                       <Alert
                         severity='error'

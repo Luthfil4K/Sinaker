@@ -63,21 +63,38 @@ export async function getServerSideProps(context) {
     }
   })
 
-  const perusahaanTask = await prisma.taskPerusahaanProduksi.findMany({
-    include: {
-      perusahaan: true,
-      task: true
-    }
+  const perusahaanTask = await prisma.data_target_realisasi.findMany({
+    // include: {
+    //   perusahaan: true,
+    //   task: true
+    // }
   })
 
   const kriteria = await prisma.kriteria_beban_kerja_pegawai.findUnique({
     where: { id: 1 }
   })
 
+  const user = await prisma.user.findMany({
+    where: {
+      id: {
+        not: 99
+      }
+    },
+    include: {
+      TimKerjaPegawai: true,
+      pekerjaan_harian: {
+        include: {
+          task: true
+        }
+      }
+    }
+  })
+
   const data = {
     perusahaanTask,
     kriteria,
-    timkerja
+    timkerja,
+    user
   }
   return {
     props: {

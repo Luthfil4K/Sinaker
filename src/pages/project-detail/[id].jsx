@@ -8,7 +8,7 @@ const ProjectDetail = ({ data }) => {
   // console.log(project)
   return (
     <>
-      <ProjectDetailsViews data={dataPd.project} dataUpm={dataPd.upm} />
+      <ProjectDetailsViews data={dataPd.project} dataUpm={dataPd.upm} dataPH={dataPd.pekerjaanHarian} />
     </>
   )
 }
@@ -48,13 +48,30 @@ export async function getServerSideProps(context) {
     }
   })
 
+  const pekerjaanHarian = await prisma.pekerjaan_harian.findMany({
+    where: {
+      task: {
+        projectId: parseInt(context.params.id)
+      }
+    },
+    select: {
+      id: true,
+      namaKegiatan: true,
+      mulai: true,
+      selesai: true,
+      tanggalSubmit: true,
+      userId: true,
+      user: true
+    }
+  })
+
   const upm = await prisma.kegiatan_user_member.findMany({
     where: {
       projectId: parseInt(context.params.id)
     }
   })
 
-  const dataPd = { project, upm }
+  const dataPd = { project, upm, pekerjaanHarian }
 
   return {
     props: {

@@ -103,7 +103,7 @@ const TableGroupPerusahaan = props => {
     }))
   }, [])
 
-  const hitungTotalGaji = dataMitraLimitHonor => {
+  const HitungTotalGaji = dataMitraLimitHonor => {
     const totalGajiPerMitra = {}
     const bulanSekarang = new Date().getMonth()
     const [pclAc, setPclAc] = useState({})
@@ -229,8 +229,9 @@ const TableGroupPerusahaan = props => {
       const honor = props.dataMitraLimitHonorTetap.find(item => item.mitraId === mi.mitraId)?.honor || 0
 
       // Format label dengan menambahkan honor
-      const label = `${mi.nama}, total Gaji :  Rp${Math.round(honor + mi.totalGaji).toLocaleString('id')} `
-      // const label = `${mi.nama}, total Gaji :  Rp${mi.totalGaji.toLocaleString('id')} - Honor: Rp${honor}`
+      const label = `${mi.nama}, total Gaji :  Rp${mi.totalGaji.toLocaleString(
+        'id'
+      )} - Honor: Rp${honor}, beban kerja: ${mi.bebanKerja.toFixed(2)}`
 
       return {
         value: mi.mitraId,
@@ -242,7 +243,7 @@ const TableGroupPerusahaan = props => {
   const optionPML = dataBebanKerjaPML.map(pml => ({
     value: pml.id,
     // label: pml.name + ' - Organik'
-    label: pml.name + ' - Organik' + ', beban kerja: ' + pml.bebanKerja
+    label: pml.name + ' - Organik' + ', beban kerja: ' + pml.bebanKerja.toFixed(2)
   }))
 
   console.log(optionPCL)
@@ -892,6 +893,7 @@ const TableGroupPerusahaan = props => {
         if (isInEditMode) {
           return [
             <GridActionsCellItem
+              key={`save_${id}`}
               icon={<SaveIcon />}
               label='Save'
               sx={{
@@ -900,6 +902,7 @@ const TableGroupPerusahaan = props => {
               onClick={handleSaveClick(id)}
             />,
             <GridActionsCellItem
+              key={`cancel_${id}`}
               icon={<CancelIcon />}
               label='Cancel'
               className='textPrimary'
@@ -911,13 +914,20 @@ const TableGroupPerusahaan = props => {
 
         return [
           <GridActionsCellItem
+            key={`edit${id}`}
             icon={<EditIcon />}
             label='Edit'
             className='textPrimary'
             onClick={handleEditClick(id)}
             color='inherit'
           />,
-          <GridActionsCellItem icon={<DeleteIcon />} label='Delete' onClick={handleDeleteClick(id)} color='inherit' />
+          <GridActionsCellItem
+            key={`delete${id}`}
+            icon={<DeleteIcon />}
+            label='Delete'
+            onClick={handleDeleteClick(id)}
+            color='inherit'
+          />
         ]
       }
     }

@@ -149,7 +149,25 @@ const TableGroupPerusahaan = props => {
         const isInEditMode = rowModesModel[id]?.mode === GridRowModes.Edit
 
         if (isInEditMode) {
-          return [<></>]
+          return [
+            <GridActionsCellItem
+              key={`save_${id}`}
+              icon={<SaveIcon />}
+              label='Save'
+              sx={{
+                color: 'primary.main'
+              }}
+              onClick={handleSaveClick(id)}
+            />,
+            <GridActionsCellItem
+              key={`cancel_${id}`}
+              icon={<CancelIcon />}
+              label='Cancel'
+              className='textPrimary'
+              onClick={handleCancelClick(id)}
+              color='inherit'
+            />
+          ]
         }
 
         return [

@@ -75,6 +75,10 @@ const CreateKegiatanPerusahaanViews = props => {
     })
   )
 
+  const kriteria1P = parseFloat(kriteria.kriteria1)
+  const kriteria2P = parseFloat(kriteria.kriteria2)
+  const arrayBebanPegawai = [kriteria1P, kriteria2P]
+
   const [tpp, setTpp] = useState(props.dataTpp)
 
   const handlePJ = event => {
@@ -93,9 +97,11 @@ const CreateKegiatanPerusahaanViews = props => {
     const jumlahKerjaanTpp = tpp
       .filter(tppRow => tppRow.pmlId === row.id)
       .filter(tppRow => {
-        const tppDueDate = new Date(tppRow.task.duedate)
+        const tppDueDate = new Date(tppRow.duedate)
         const currentDate = new Date()
-        return tppDueDate.getFullYear() === currentDate.getFullYear()
+        return (
+          tppDueDate.getFullYear() === currentDate.getFullYear() && tppDueDate.getMonth() === currentDate.getMonth()
+        )
       })
       .reduce((count, item) => count + 1, 0)
 
@@ -104,7 +110,9 @@ const CreateKegiatanPerusahaanViews = props => {
       .filter(hari => {
         const tppDueDate = new Date(hari.tanggalSubmit)
         const currentDate = new Date()
-        return tppDueDate.getFullYear() === currentDate.getFullYear()
+        return (
+          tppDueDate.getFullYear() === currentDate.getFullYear() && tppDueDate.getMonth() === currentDate.getMonth()
+        )
       })
       .reduce((total, item) => total + item.durasi, 0)
 
@@ -124,7 +132,7 @@ const CreateKegiatanPerusahaanViews = props => {
 
   // pegawai
   let m = math.matrix(arrayUser)
-  let w = kriteria
+  let w = arrayBebanPegawai
   let ia = ['min', 'min']
   let id = arrayUserId
   let result = getBest(m, w, ia, id)
@@ -146,9 +154,11 @@ const CreateKegiatanPerusahaanViews = props => {
     const jumlahKerjaanTpp = tpp
       .filter(tppRow => tppRow.pmlId === row.id)
       .filter(tppRow => {
-        const tppDueDate = new Date(tppRow.task.duedate)
+        const tppDueDate = new Date(tppRow.duedate)
         const currentDate = new Date()
-        return tppDueDate.getFullYear() === currentDate.getFullYear()
+        return (
+          tppDueDate.getFullYear() === currentDate.getFullYear() && tppDueDate.getMonth() === currentDate.getMonth()
+        )
       })
       .reduce((count, item) => count + 1, 0)
 
@@ -157,7 +167,9 @@ const CreateKegiatanPerusahaanViews = props => {
       .filter(hari => {
         const tppDueDate = new Date(hari.tanggalSubmit)
         const currentDate = new Date()
-        return tppDueDate.getFullYear() === currentDate.getFullYear()
+        return (
+          tppDueDate.getFullYear() === currentDate.getFullYear() && tppDueDate.getMonth() === currentDate.getMonth()
+        )
       })
       .reduce((total, item) => total + item.durasi, 0)
 
@@ -168,7 +180,7 @@ const CreateKegiatanPerusahaanViews = props => {
       jumlahKegiatan: jumlahKerjaanTpp,
       jumlahTimKerja: row.TimKerjaPegawai.length,
       jumlahJamKerja: jumlahJamKerja,
-      bebanKerja: row.bebanKerja,
+      bebanKerja: row.bebanKerja.toFixed(2),
       checked: row.checked
     }
   })

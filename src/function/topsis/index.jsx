@@ -1,44 +1,18 @@
 'use strict'
-// import linearAlgebra from 'linear-algebra'
-
-// const Matrix = linearAlgebra.Matrix
-
-import { create, all } from 'mathjs'
-import { useState, useEffect } from 'react'
-import Grid from '@mui/material/Grid'
-
-const config = {}
-const math = create(all, config)
-
-function sortedBy(elm) {
-  return function order(a, b) {
-    if (b[elm] > a[elm]) {
-      return -1
-    }
-    if (b[elm] < a[elm]) {
-      return 1
-    }
-    return 0
-  }
-}
-
-function getBest(m, w, ia, id) {
-  let i = 0
-
-  // Hitung jumlah kuadrat masing-masing kolom
+function hitungAkarJumlahKolomKuadrat(matrix) {
   const columnSumsSquared = []
-
-  // Hitung jumlah kuadrat masing-masing kolom
-  for (let j = 0; j < m._size[1]; j++) {
+  for (let j = 0; j < matrix._size[1]; j++) {
     let sumSquared = 0
-    for (let i = 0; i < m._size[0]; i++) {
-      sumSquared += m._data[i][j] * m._data[i][j]
+    for (let i = 0; i < matrix._size[0]; i++) {
+      sumSquared += matrix._data[i][j] * matrix._data[i][j]
     }
     columnSumsSquared.push(Math.sqrt(sumSquared))
   }
+  return columnSumsSquared
+}
 
-  // Normalisasi matriks
-  const nm = m._data.map(row => {
+function normalisasiMatriks(matrix, columnSumsSquared) {
+  return matrix._data.map(row => {
     return row.map((value, columnIndex) => {
       if (columnSumsSquared[columnIndex] === 0) {
         return 0
@@ -47,48 +21,46 @@ function getBest(m, w, ia, id) {
       }
     })
   })
+}
 
-  console.log(nm)
-
-  // Weighted normalised alternative matrix
-  const wnm = nm.map(row => {
+function matriksNormalisasiTertimbang(normalizedMatrix, weights) {
+  return normalizedMatrix.map(row => {
     return row.map((value, columnIndex) => {
-      return value * w[columnIndex]
+      return value * weights[columnIndex]
     })
   })
+}
 
-  console.log(wnm)
-
-  // Hitung solusi ideal dan anti ideal
-  const numberOfColumns = m._size[1]
-  const idealSolutions = new Array(numberOfColumns).fill(0)
-  for (let columnIndex = 0; columnIndex < numberOfColumns; columnIndex++) {
-    let values = wnm.map(row => row[columnIndex])
-    if (ia[columnIndex] == 'max') {
+function solusiPositif(weightedMatrix, ia) {
+  const idealSolutions = new Array(weightedMatrix[0].length).fill(0)
+  for (let columnIndex = 0; columnIndex < weightedMatrix[0].length; columnIndex++) {
+    let values = weightedMatrix.map(row => row[columnIndex])
+    if (ia[columnIndex] === 'max') {
       idealSolutions[columnIndex] = Math.max(...values)
     } else {
       idealSolutions[columnIndex] = Math.min(...values)
     }
   }
+  return idealSolutions
+}
 
-  const aidealSolutions = new Array(numberOfColumns).fill(0)
-  for (let columnIndex = 0; columnIndex < numberOfColumns; columnIndex++) {
-    let values = wnm.map(row => row[columnIndex])
-    if (ia[columnIndex] == 'max') {
+function solusiNegatif(weightedMatrix, ia) {
+  const aidealSolutions = new Array(weightedMatrix[0].length).fill(0)
+  for (let columnIndex = 0; columnIndex < weightedMatrix[0].length; columnIndex++) {
+    let values = weightedMatrix.map(row => row[columnIndex])
+    if (ia[columnIndex] === 'max') {
       aidealSolutions[columnIndex] = Math.min(...values)
     } else {
       aidealSolutions[columnIndex] = Math.max(...values)
     }
   }
+  return aidealSolutions
+}
 
-  console.log(idealSolutions)
-  console.log(aidealSolutions)
-
-  // Hitung jarak dari solusi ideal dan anti ideal
+function hitungJarak(weightedMatrix, idealSolutions, aidealSolutions) {
   const idistances = []
   const aidistances = []
-
-  for (let row of wnm) {
+  for (let row of weightedMatrix) {
     let idistance = 0
     let aidistance = 0
     for (let columnIndex = 0; columnIndex < row.length; columnIndex++) {
@@ -100,42 +72,55 @@ function getBest(m, w, ia, id) {
     aidistance = Math.sqrt(aidistance)
     aidistances.push(aidistance)
   }
-
-  console.log(idistances)
-  console.log(aidistances)
-
-  // Hitung kedekatan relatif
-  const proximityScores = []
-
-  for (let i = 0; i < idistances.length; i++) {
-    const positiveDistance = idistances[i]
-    const negativeDistance = aidistances[i]
-
-    const proximityScore = negativeDistance / (positiveDistance + negativeDistance)
-    if (isNaN(proximityScore)) {
-      proximityScores.push(1)
-    } else {
-      proximityScores.push(proximityScore)
-    }
-  }
-
-  console.log(proximityScores)
-
-  const indexedPerformanceScore = []
-  for (i = 1; i <= m._size[0]; i += 1) {
-    const dp = {
-      index: i,
-      petugasId: id[i - 1],
-      ps: 1 - proximityScores[i - 1]
-    }
-    indexedPerformanceScore.push(dp)
-  }
-
-  const rankedPerformanceScore = indexedPerformanceScore.sort(sortedBy('index'))
-
-  console.log(rankedPerformanceScore)
-
-  return rankedPerformanceScore
+  return { idistances, aidistances }
 }
 
-export { getBest }
+function hitungCi(idistances, aidistances) {
+  return idistances.map((positiveDistance, i) => {
+    const negativeDistance = aidistances[i]
+    const proximityScore = negativeDistance / (positiveDistance + negativeDistance)
+    return isNaN(proximityScore) ? 1 : proximityScore
+  })
+}
+
+function bebanKerja(proximityScores, ids) {
+  return proximityScores
+    .map((ps, i) => ({
+      index: i + 1,
+      petugasId: ids[i],
+      ps: 1 - ps
+    }))
+    .sort((a, b) => a.index - b.index)
+}
+
+function getBest(matrix, weights, ia, ids) {
+  const columnSumsSquared = hitungAkarJumlahKolomKuadrat(matrix)
+  const normalizedMatrix = normalisasiMatriks(matrix, columnSumsSquared)
+  const weightedMatrix = matriksNormalisasiTertimbang(normalizedMatrix, weights)
+  const idealSolutions = solusiPositif(weightedMatrix, ia)
+  const aidealSolutions = solusiNegatif(weightedMatrix, ia)
+  const { idistances, aidistances } = hitungJarak(weightedMatrix, idealSolutions, aidealSolutions)
+  const proximityScores = hitungCi(idistances, aidistances)
+
+  console.log(columnSumsSquared)
+  console.log(normalizedMatrix)
+  console.log(weightedMatrix)
+  console.log(idealSolutions)
+  console.log(aidealSolutions)
+  console.log(idistances)
+  console.log(aidistances)
+  console.log(proximityScores)
+  return bebanKerja(proximityScores, ids)
+}
+
+export {
+  getBest,
+  hitungAkarJumlahKolomKuadrat,
+  normalisasiMatriks,
+  matriksNormalisasiTertimbang,
+  solusiPositif,
+  solusiNegatif,
+  hitungJarak,
+  hitungCi,
+  bebanKerja
+}

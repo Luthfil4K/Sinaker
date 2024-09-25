@@ -70,24 +70,32 @@ const CreateKegiatanPerusahaanViews = props => {
     kegKetua: props.data.userId_fkey.name
   })
 
+  const kriteria1P = parseFloat(kriteria.kriteria1)
+  const kriteria2P = parseFloat(kriteria.kriteria2)
+  const arrayBebanPegawai = [kriteria1P, kriteria2P]
+
   // console.log(props.data)
 
-  const userAll = timMember.map(row => {
+  const userAll = props.dataUser.map(row => {
     const jumlahKerjaanTpp = tpp
       .filter(tppRow => tppRow.pmlId === row.id)
       .filter(tppRow => {
-        const tppDueDate = new Date(tppRow.task.duedate)
+        const tppDueDate = new Date(tppRow.duedate)
         const currentDate = new Date()
-        return tppDueDate.getFullYear() === currentDate.getFullYear()
+        return (
+          tppDueDate.getFullYear() === currentDate.getFullYear() && tppDueDate.getMonth() === currentDate.getMonth()
+        )
       })
       .reduce((count, item) => count + 1, 0)
 
-    const jumlahJamKerja = row.userId_fkey.pekerjaan_harian
+    const jumlahJamKerja = row.pekerjaan_harian
       .filter(ph => ph.task.jenisKeg === 65)
       .filter(hari => {
         const tppDueDate = new Date(hari.tanggalSubmit)
         const currentDate = new Date()
-        return tppDueDate.getFullYear() === currentDate.getFullYear()
+        return (
+          tppDueDate.getFullYear() === currentDate.getFullYear() && tppDueDate.getMonth() === currentDate.getMonth()
+        )
       })
       .reduce((total, item) => total + item.durasi, 0)
 
@@ -107,7 +115,7 @@ const CreateKegiatanPerusahaanViews = props => {
 
   // pegawai
   let m = math.matrix(arrayUser)
-  let w = kriteria
+  let w = arrayBebanPegawai
   let ia = ['min', 'min']
   let id = arrayUserId
   let result = getBest(m, w, ia, id)
@@ -116,20 +124,32 @@ const CreateKegiatanPerusahaanViews = props => {
     return { bebanKerja: item.ps }
   })
 
-  const dataBebanKerja = timMember.map((item, index) => {
+  const dataBebanKerja = props.dataUser.map((item, index) => {
     return {
       ...item,
       ...resultBaru[index]
     }
   })
 
-  const rows = dataBebanKerja.map(row => {
+  const dataBebanKerjaTimMember = timMember
+    .map(d2 => {
+      const found = dataBebanKerja.find(d1 => d1.id === d2.userId_fkey.id)
+      if (found) {
+        return { ...d2, bebanKerja: found.bebanKerja }
+      }
+      return null
+    })
+    .filter(item => item !== null)
+
+  const rows = dataBebanKerjaTimMember.map(row => {
     const jumlahKerjaanTpp = tpp
-      .filter(tppRow => tppRow.pmlId === row.id)
+      .filter(tppRow => tppRow.pmlId === row.userId_fkey.id)
       .filter(tppRow => {
-        const tppDueDate = new Date(tppRow.task.duedate)
+        const tppDueDate = new Date(tppRow.duedate)
         const currentDate = new Date()
-        return tppDueDate.getFullYear() === currentDate.getFullYear()
+        return (
+          tppDueDate.getFullYear() === currentDate.getFullYear() && tppDueDate.getMonth() === currentDate.getMonth()
+        )
       })
       .reduce((count, item) => count + 1, 0)
 
@@ -138,7 +158,9 @@ const CreateKegiatanPerusahaanViews = props => {
       .filter(hari => {
         const tppDueDate = new Date(hari.tanggalSubmit)
         const currentDate = new Date()
-        return tppDueDate.getFullYear() === currentDate.getFullYear()
+        return (
+          tppDueDate.getFullYear() === currentDate.getFullYear() && tppDueDate.getMonth() === currentDate.getMonth()
+        )
       })
       .reduce((total, item) => total + item.durasi, 0)
 
@@ -148,7 +170,7 @@ const CreateKegiatanPerusahaanViews = props => {
       fungsi: row.userId_fkey.fungsi,
       jumlahKegiatan: jumlahKerjaanTpp,
       jumlahJamKerja: jumlahJamKerja,
-      bebanKerjaO: row.bebanKerja
+      bebanKerjaO: row.bebanKerja.toFixed(2)
     }
   })
 

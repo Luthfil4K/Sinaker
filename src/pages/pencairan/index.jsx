@@ -122,6 +122,11 @@ export async function getServerSideProps(context) {
         // listing
         {
           jenisKeg: {
+            equals: 71
+          }
+        },
+        {
+          jenisKeg: {
             equals: 66
           }
         },

@@ -37,25 +37,7 @@ export async function getServerSideProps(context) {
       }
     },
     include: {
-      UserProject: {
-        select: {
-          id: true,
-          project: true
-        }
-      },
-      TaskOrganik: {
-        select: {
-          id: true,
-          task: true
-        }
-      },
       TimKerjaPegawai: true,
-      taskToDo: true,
-      beban_kerja_pegawai: {
-        select: {
-          bebanKerja: true
-        }
-      },
       pekerjaan_harian: {
         include: {
           task: true
@@ -64,11 +46,11 @@ export async function getServerSideProps(context) {
     }
   })
 
-  const perusahaanTask = await prisma.taskPerusahaanProduksi.findMany({
-    include: {
-      perusahaan: true,
-      task: true
-    }
+  const perusahaanTask = await prisma.data_target_realisasi.findMany({
+    // include: {
+    //   perusahaan: true,
+    //   task: true
+    // }
   })
 
   const kriteria = await prisma.kriteria_beban_kerja_pegawai.findUnique({

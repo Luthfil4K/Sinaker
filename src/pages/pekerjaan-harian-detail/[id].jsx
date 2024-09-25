@@ -3,13 +3,13 @@ import { useState, useEffect } from 'react'
 import prisma from '../../services/db'
 import { getToken } from 'next-auth/jwt'
 
-import PekerjaanHarianViews from 'src/views/pekerjaan-harian-views/PekerjaanHarianViews'
+import PekerjaanHarianDetailViews from 'src/views/pekerjaan-harian-views/PekerjaanHarianDetailViews'
 
 const PekerjaanHarian = ({ data }) => {
   const [user, setUser] = useState(JSON.parse(data))
   return (
     <>
-      <PekerjaanHarianViews data={user} />
+      <PekerjaanHarianDetailViews data={user} />
     </>
   )
 }
@@ -48,30 +48,24 @@ export async function getServerSideProps(context) {
   //   }
   // })
 
-  const organik = await prisma.user.findMany({
+  const pekerjaanHarianDetail = await prisma.pekerjaan_harian.findMany({
     where: {
-      id: {
-        not: 99
-      }
+      userId: parseInt(context.params.id)
     },
-    include: {
-      pekerjaan_harian: {
-        select: {
-          user: true,
-          tanggalSubmit: true,
-          mulai: true,
-          selesai: true,
-          durasi: true,
-          taskId: true,
-          task: true
-        }
-      }
+    select: {
+      id: true,
+      namaKegiatan: true,
+      mulai: true,
+      selesai: true,
+      tanggalSubmit: true,
+      userId: true,
+      user: true
     }
   })
 
   return {
     props: {
-      data: JSON.stringify(organik)
+      data: JSON.stringify(pekerjaanHarianDetail)
     }
   }
 }
