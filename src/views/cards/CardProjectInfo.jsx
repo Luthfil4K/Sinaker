@@ -438,9 +438,16 @@ const CardProjectDetail = props => {
                     </Button>
                   </Grid>
                   <Grid item>
-                    {/* <Button component='div' variant='contained'>
-                  Buat rapat
-                </Button> */}
+                    <Button
+                      onClick={e => {
+                        router.push(`/project-ckp-pegawai/${project.id}`)
+                      }}
+                      component='div'
+                      variant={'contained'}
+                      disabled={arrId.includes(session.data.uid) ? false : true}
+                    >
+                      CKP Pegawai
+                    </Button>
                   </Grid>
                 </Grid>
               </>

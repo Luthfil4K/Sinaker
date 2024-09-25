@@ -86,15 +86,16 @@ const TimKerjaViews = props => {
           </FormControl>
         </Grid> */}
 
-        {session.status === 'authenticated' && session.data.role == 'teamleader' && (
-          <>
-            <Grid item md={6} xs={12} display={'flex'} justifyContent={'end'}>
-              <Link onClick={e => router.push(`/create-tim-kerja`)}>
-                <Button variant={'contained'}>Buat Tim Kerja</Button>
-              </Link>
-            </Grid>
-          </>
-        )}
+        {(session.status === 'authenticated' && session.data.role == 'teamleader') ||
+          (session.data.role == 'admin' && (
+            <>
+              <Grid item md={6} xs={12} display={'flex'} justifyContent={'end'}>
+                <Link onClick={e => router.push(`/create-tim-kerja`)}>
+                  <Button variant={'contained'}>Buat Tim Kerja</Button>
+                </Link>
+              </Grid>
+            </>
+          ))}
         <Grid item md={12}>
           {' '}
           <Grid container spacing={6}>

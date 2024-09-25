@@ -64,8 +64,9 @@ model kegiatan_user_member {
   id                        Int                         @id @default(autoincrement())
   user                      User                        @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: Cascade)
   userId                    Int
-  project                  kegiatan                    @relation(fields: [projectId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  project                   kegiatan                    @relation(fields: [projectId], references: [id], onDelete: Cascade, onUpdate: Cascade)
   projectId                 Int
+  ckpKegiatan               Int
   isLeader                  Int
 }
 
@@ -415,6 +416,7 @@ model kriteria_beban_kerja_mitra{
   id                        Int                         @id @default(autoincrement())
   kriteria1                 Decimal
   kriteria2                 Decimal
+  kriteria3                 Decimal
 }
 
 model pencairan{

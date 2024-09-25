@@ -285,30 +285,10 @@ const TaskManageEditViews = props => {
   // dari sini kebawah buat keperluan import excel,csv
   const columnsNew = [
     {
-      field: 'kodeDesa',
-      renderHeader: () => (
-        <Typography sx={{ fontWeight: 900, fontSize: '0.875rem !important', textAlign: 'center' }}>
-          Kode Desa
-        </Typography>
-      ),
-      minWidth: 200,
-      flex: 1
-    },
-    {
       field: 'kodeKecamatan',
       renderHeader: () => (
         <Typography sx={{ fontWeight: 900, fontSize: '0.875rem !important', textAlign: 'center' }}>
           Kode Kecamatan
-        </Typography>
-      ),
-      minWidth: 200,
-      flex: 1
-    },
-    {
-      field: 'namaDesa',
-      renderHeader: () => (
-        <Typography sx={{ fontWeight: 900, fontSize: '0.875rem !important', textAlign: 'center' }}>
-          Nama Desa
         </Typography>
       ),
       minWidth: 200,
@@ -324,6 +304,28 @@ const TaskManageEditViews = props => {
       minWidth: 200,
       flex: 1
     },
+    {
+      field: 'kodeDesa',
+      renderHeader: () => (
+        <Typography sx={{ fontWeight: 900, fontSize: '0.875rem !important', textAlign: 'center' }}>
+          Kode Desa
+        </Typography>
+      ),
+      minWidth: 200,
+      flex: 1
+    },
+   
+    {
+      field: 'namaDesa',
+      renderHeader: () => (
+        <Typography sx={{ fontWeight: 900, fontSize: '0.875rem !important', textAlign: 'center' }}>
+          Nama Desa
+        </Typography>
+      ),
+      minWidth: 200,
+      flex: 1
+    },
+   
     {
       field: camelCase(kolomLP.kol1),
 

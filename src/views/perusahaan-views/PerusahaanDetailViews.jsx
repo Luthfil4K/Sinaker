@@ -170,8 +170,9 @@ const PerusahaanDetailViews = props => {
                 <div>
                   <p>Perusahaan Masuk Kedalam Kegiatan: {totalKegiatan.totalKegiatanUnik}</p>
                   <ul>
-                    {Object.entries(totalKegiatan.namaKegiatan).map(([taskId, namaKegiatan]) => (
+                    {Object.entries(totalKegiatan.namaKegiatan).map(([taskId, namaKegiatan], index) => (
                       <Link
+                        key={index}
                         onClick={async e => {
                           router.push(`/task-detail/${taskId}`)
                         }}

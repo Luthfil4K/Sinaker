@@ -229,7 +229,8 @@ const TableGroupPerusahaan = props => {
       const honor = props.dataMitraLimitHonorTetap.find(item => item.mitraId === mi.mitraId)?.honor || 0
 
       // Format label dengan menambahkan honor
-      const label = `${mi.nama}, total Gaji :  Rp${mi.totalGaji.toLocaleString('id')} - Honor: Rp${honor}`
+      const label = `${mi.nama}, total Gaji :  Rp${Math.round(honor + mi.totalGaji).toLocaleString('id')} `
+      // const label = `${mi.nama}, total Gaji :  Rp${mi.totalGaji.toLocaleString('id')} - Honor: Rp${honor}`
 
       return {
         value: mi.mitraId,

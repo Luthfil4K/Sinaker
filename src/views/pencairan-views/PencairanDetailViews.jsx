@@ -895,9 +895,10 @@ const ProjectDetailsViews = props => {
               ) : activeStep == 1 ? (
                 <React.Fragment>
                   {props.data.pencairan[0].surat_pencairan
-                    ? props.data.pencairan[0].surat_pencairan.map(surat =>
+                    ? props.data.pencairan[0].surat_pencairan.map((surat, index) =>
                         surat.jenisId === 1 ? (
                           <Chip
+                            key={index}
                             sx={{ mb: 2, mt: 7, width: '100%' }}
                             label='Lihat Surat Tugas'
                             component='a'
@@ -995,9 +996,10 @@ const ProjectDetailsViews = props => {
               ) : (
                 <React.Fragment>
                   {props.data.pencairan[0].surat_pencairan
-                    ? props.data.pencairan[0].surat_pencairan.map(surat =>
+                    ? props.data.pencairan[0].surat_pencairan.map((surat, index) =>
                         surat.jenisId === 1 ? (
                           <Chip
+                            key={index}
                             sx={{ mb: 2, mt: 7, width: '100%' }}
                             label='Lihat Surat Tugas'
                             component='a'

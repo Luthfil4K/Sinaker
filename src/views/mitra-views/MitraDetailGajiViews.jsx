@@ -178,7 +178,7 @@ const MitraDetailGajiViews = props => {
       updatedBulanData.push({ totalGajiBulan, subKeg })
       honorTahunIni.push(totalGajiBulan)
     }
-    ;-setBulanData(updatedBulanData)
+    setBulanData(updatedBulanData)
     setTotalGajiTahun(honorTahunIni.reduce((a, b) => a + b, 0))
   }, [selectedYear])
 

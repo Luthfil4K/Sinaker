@@ -145,30 +145,10 @@ const TemplateTableDetailViews = props => {
 
   const columnsNew = [
     {
-      field: 'kodeDesa',
-      renderHeader: () => (
-        <Typography sx={{ fontWeight: 900, fontSize: '0.875rem !important', textAlign: 'center' }}>
-          Kode Desa
-        </Typography>
-      ),
-      minWidth: 200,
-      flex: 1
-    },
-    {
       field: 'kodeKecamatan',
       renderHeader: () => (
         <Typography sx={{ fontWeight: 900, fontSize: '0.875rem !important', textAlign: 'center' }}>
           Kode Kecamatan
-        </Typography>
-      ),
-      minWidth: 200,
-      flex: 1
-    },
-    {
-      field: 'namaDesa',
-      renderHeader: () => (
-        <Typography sx={{ fontWeight: 900, fontSize: '0.875rem !important', textAlign: 'center' }}>
-          Nama Desa
         </Typography>
       ),
       minWidth: 200,
@@ -184,6 +164,28 @@ const TemplateTableDetailViews = props => {
       minWidth: 200,
       flex: 1
     },
+    {
+      field: 'kodeDesa',
+      renderHeader: () => (
+        <Typography sx={{ fontWeight: 900, fontSize: '0.875rem !important', textAlign: 'center' }}>
+          Kode Desa
+        </Typography>
+      ),
+      minWidth: 200,
+      flex: 1
+    },
+
+    {
+      field: 'namaDesa',
+      renderHeader: () => (
+        <Typography sx={{ fontWeight: 900, fontSize: '0.875rem !important', textAlign: 'center' }}>
+          Nama Desa
+        </Typography>
+      ),
+      minWidth: 200,
+      flex: 1
+    },
+
     {
       field: camelCase(values.kol1),
       renderHeader: () => (

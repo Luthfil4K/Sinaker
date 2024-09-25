@@ -62,7 +62,7 @@ const navigation = () => {
       },
       {
         title: 'Daftar Rapat',
-        icon: Login,
+        icon: Rapat,
         path: '/rapat-ajuan-list'
       },
       {
@@ -497,7 +497,11 @@ const navigation = () => {
         icon: Account,
         path: '/pegawai'
       },
-
+      {
+        title: 'Daftar CKP Pegawai',
+        icon: Account,
+        path: '/ckp-pegawai-pp'
+      },
       {
         title: 'Daftar Mitra',
         icon: FormatLetterCase,

@@ -9,6 +9,9 @@ import { useRouter } from 'next/router'
 
 import Swal from 'sweetalert2'
 
+// axios
+import axios from 'src/pages/api/axios'
+
 // ** MUI Components
 import Card from '@mui/material/Card'
 import Box from '@mui/material/Box'
@@ -73,6 +76,12 @@ const PeopleAddViews = props => {
 
   const router = useRouter()
   const handleEdit = () => {
+    const data = {
+      namaPegawai: values.pegawaiNama,
+      nipPegawai: values.pegawaiNIP,
+      emailPegawai: values.pegawaiEmail
+    }
+
     Swal.fire({
       title: 'Apa Anda Yakin?',
       text: 'Untuk menyimpan perubahan',
@@ -80,12 +89,28 @@ const PeopleAddViews = props => {
       showCancelButton: true,
       confirmButtonColor: '#3085d6',
       cancelButtonColor: '#d33',
-      confirmButtonText: 'Yes, simpan '
+      confirmButtonText: 'Simpan '
     }).then(result => {
       if (result.isConfirmed) {
-        router.push('/pegawai')
-      } else {
-        router.push('/pegawai')
+        axios
+          .put(`/user/up/${props.data.id}`, data)
+          .then(res => {
+            Swal.fire({
+              title: 'Berhasil tersimpan',
+              text: '',
+              icon: 'success',
+              confirmButtonText: 'Ok'
+            })
+            router.push(`/pegawai`)
+          })
+          .catch(err => {
+            Swal.fire({
+              title: 'Error!',
+              text: 'Something went wrong',
+              icon: 'error',
+              confirmButtonText: 'Ok'
+            })
+          })
       }
     })
   }

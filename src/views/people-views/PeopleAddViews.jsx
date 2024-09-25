@@ -62,7 +62,9 @@ const PeopleAddViews = () => {
 
   const handleTambah = () => {
     console.log(values)
-    router.push('/pegawai')
+    router.push('/pegawai').then(() => {
+      router.reload()
+    })
   }
 
   const handleAddPegawai = async e => {

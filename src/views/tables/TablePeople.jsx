@@ -47,6 +47,9 @@ const TablePeople = props => {
   const [tpp, setTpp] = useState(props.dataTpp)
   const { dataUser } = props
   // console.log(tpp)
+  console.log(props)
+  console.log(props)
+  console.log(props)
 
   const handleChangeRole = async (e, id, role) => {
     e.preventDefault()
@@ -77,58 +80,70 @@ const TablePeople = props => {
     }
   }
 
-  const rows = dataUser.map(row => {
-    // const gajiBulanIni = tpp
-    //   .filter(tppRow => tppRow.pmlId === row.id)
-    //   .filter(tppRow => {
-    //     const tppDueDate = new Date(tppRow.task.duedate)
-    //     const currentDate = new Date()
-    //     return (
-    //       tppDueDate.getFullYear() === currentDate.getFullYear() && tppDueDate.getMonth() === currentDate.getMonth()
-    //     )
-    //   })
-    //   .reduce((totalGaji, tppRow) => totalGaji + tppRow.gajiPml, 0)
+  const rows = dataUser
+    .filter(row => row.role !== 'admin' && row.role !== 'superAdmin') // Filter role selain admin atau superadmin
+    .map(row => {
+      return {
+        id: row.id,
+        nama: row.name,
+        fungsi: row.fungsi,
+        jumlahKegiatan: row.TaskOrganik.length,
+        role: row.role
+      }
+    })
 
-    // const gajiBulanSblm = tpp
-    //   .filter(tppRow => tppRow.pmlId === row.id)
-    //   .filter(tppRow => {
-    //     const tppDueDate = new Date(tppRow.task.duedate)
-    //     const currentDate = new Date()
-    //     return currentDate.getMonth != 0
-    //       ? tppDueDate.getFullYear() === currentDate.getFullYear() &&
-    //           tppDueDate.getMonth() === currentDate.getMonth() - 1
-    //       : tppDueDate.getFullYear() === currentDate.getFullYear() - 1 && tppDueDate.getMonth() === 12
-    //   })
-    //   .reduce((totalGaji, tppRow) => totalGaji + tppRow.gajiPml, 0)
+  // const rows = dataUser.map(row => {
+  //   // const gajiBulanIni = tpp
+  //   //   .filter(tppRow => tppRow.pmlId === row.id)
+  //   //   .filter(tppRow => {
+  //   //     const tppDueDate = new Date(tppRow.task.duedate)
+  //   //     const currentDate = new Date()
+  //   //     return (
+  //   //       tppDueDate.getFullYear() === currentDate.getFullYear() && tppDueDate.getMonth() === currentDate.getMonth()
+  //   //     )
+  //   //   })
+  //   //   .reduce((totalGaji, tppRow) => totalGaji + tppRow.gajiPml, 0)
 
-    // const gajiBulanDepan = tpp
-    //   .filter(tppRow => tppRow.pmlId === row.id)
-    //   .filter(tppRow => {
-    //     const tppDueDate = new Date(tppRow.task.duedate)
-    //     const currentDate = new Date()
-    //     return currentDate.getMonth != 11
-    //       ? tppDueDate.getFullYear() === currentDate.getFullYear() &&
-    //           tppDueDate.getMonth() === currentDate.getMonth() + 1
-    //       : tppDueDate.getFullYear() === currentDate.getFullYear() + 1 && tppDueDate.getMonth() === 0
-    //   })
-    //   .reduce((totalGaji, tppRow) => totalGaji + tppRow.gajiPml, 0)
+  //   // const gajiBulanSblm = tpp
+  //   //   .filter(tppRow => tppRow.pmlId === row.id)
+  //   //   .filter(tppRow => {
+  //   //     const tppDueDate = new Date(tppRow.task.duedate)
+  //   //     const currentDate = new Date()
+  //   //     return currentDate.getMonth != 0
+  //   //       ? tppDueDate.getFullYear() === currentDate.getFullYear() &&
+  //   //           tppDueDate.getMonth() === currentDate.getMonth() - 1
+  //   //       : tppDueDate.getFullYear() === currentDate.getFullYear() - 1 && tppDueDate.getMonth() === 12
+  //   //   })
+  //   //   .reduce((totalGaji, tppRow) => totalGaji + tppRow.gajiPml, 0)
 
-    // const bebanKerja = row.beban_kerja_pegawai[0].bebanKerja
-    // const nilaiBebanKerja = Number(bebanKerja).toFixed(2)
+  //   // const gajiBulanDepan = tpp
+  //   //   .filter(tppRow => tppRow.pmlId === row.id)
+  //   //   .filter(tppRow => {
+  //   //     const tppDueDate = new Date(tppRow.task.duedate)
+  //   //     const currentDate = new Date()
+  //   //     return currentDate.getMonth != 11
+  //   //       ? tppDueDate.getFullYear() === currentDate.getFullYear() &&
+  //   //           tppDueDate.getMonth() === currentDate.getMonth() + 1
+  //   //       : tppDueDate.getFullYear() === currentDate.getFullYear() + 1 && tppDueDate.getMonth() === 0
+  //   //   })
+  //   //   .reduce((totalGaji, tppRow) => totalGaji + tppRow.gajiPml, 0)
 
-    return {
-      id: row.id,
-      nama: row.name,
-      fungsi: row.fungsi,
-      jumlahKegiatan: row.TaskOrganik.length,
-      role: row.role
-      // bebanKerja: nilaiBebanKerja,
-      // gajiBulanIni,
-      // gajiBulanSblm,
-      // gajiBulanDepan,
-      // over: nilaiBebanKerja
-    }
-  })
+  //   // const bebanKerja = row.beban_kerja_pegawai[0].bebanKerja
+  //   // const nilaiBebanKerja = Number(bebanKerja).toFixed(2)
+
+  //   return {
+  //     id: row.id,
+  //     nama: row.name,
+  //     fungsi: row.fungsi,
+  //     jumlahKegiatan: row.TaskOrganik.length,
+  //     role: row.role
+  //     // bebanKerja: nilaiBebanKerja,
+  //     // gajiBulanIni,
+  //     // gajiBulanSblm,
+  //     // gajiBulanDepan,
+  //     // over: nilaiBebanKerja
+  //   }
+  // })
   //   id: row.id,
   //   nama: row.name,
   //   fungsi: row.fungsi,
@@ -387,9 +402,9 @@ const TablePeople = props => {
             <PencilOutline />
           </Button>
 
-          {/* <Button onClick={handleDelete} type='submit' sx={{ mr: 1 }} color='error' variant='text'>
+          <Button onClick={() => handleDelete(params.row.id)} type='submit' sx={{ mr: 1 }} color='error' variant='text'>
             <DeleteOutline />
-          </Button> */}
+          </Button>
         </>
       ),
       hide: true
@@ -598,16 +613,15 @@ const TablePeople = props => {
           >
             <PencilOutline />
           </Button>
-
-          {/* <Button onClick={handleDelete} type='submit' sx={{ mr: 1 }} color='error' variant='text'>
+          <Button onClick={() => handleDelete(params.row.id)} type='submit' sx={{ mr: 1 }} color='error' variant='text'>
             <DeleteOutline />
-          </Button> */}
+          </Button>
         </>
       ),
       hide: true
     }
   ]
-  const handleDelete = () => {
+  const handleDelete = id => {
     Swal.fire({
       title: 'Apa Anda Yakin?',
       text: 'Untuk menghapus akun ini!',
@@ -618,9 +632,25 @@ const TablePeople = props => {
       confirmButtonText: 'Hapus'
     }).then(result => {
       if (result.isConfirmed) {
-        router.push('/people')
-      } else {
-        router.push('/people')
+        axios
+          .delete(`/user/up/${id}`)
+          .then(res => {
+            Swal.fire({
+              title: 'Berhasil terhapus',
+              text: '',
+              icon: 'success',
+              confirmButtonText: 'Ok'
+            })
+            router.reload()
+          })
+          .catch(err => {
+            Swal.fire({
+              title: 'Error!',
+              text: 'Something went wrong',
+              icon: 'error',
+              confirmButtonText: 'Ok'
+            })
+          })
       }
     })
   }
@@ -647,7 +677,7 @@ const TablePeople = props => {
             width: '100%'
           }}
           columnVisibilityModel={{
-            action: session.status === 'authenticated' && session.data.uid === 1099999 ? true : false
+            action: session.status === 'authenticated' ? true : false
           }}
           slots={{
             toolbar: GridToolbar
